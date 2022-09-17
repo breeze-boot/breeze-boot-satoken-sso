@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "spring.security.ignore",
+      "type": "com.breeze.boot.jwtlogin.config.IgnoreUrlProperties",
+      "sourceType": "com.breeze.boot.jwtlogin.config.IgnoreUrlProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring.security.ignore.exclude-urls",
+      "type": "java.util.List<java.lang.String>",
+      "description": "排除url",
+      "sourceType": "com.breeze.boot.jwtlogin.config.IgnoreUrlProperties"
+    }
+  ],
+  "hints": []
+}

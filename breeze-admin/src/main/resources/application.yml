@@ -1,0 +1,41 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /admin
+
+spring:
+  application:
+    name: ${project.artifactId}
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  main:
+    allow-circular-references: true
+  security:
+    ignore:
+      excludeUrls:
+        - "/admin/token"
+        - "/admin/email"
+        - "/admin/login"
+        - "/admin/sms"
+        - "/admin/**/*.js"
+        - "/admin/**/*.css"
+        - "/admin/**/*.png"
+        - "/admin/**/*.ico"
+
+  profiles:
+    active: dev
+
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+
+# ??????
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  config:
+    classpath: logback-spring.xml

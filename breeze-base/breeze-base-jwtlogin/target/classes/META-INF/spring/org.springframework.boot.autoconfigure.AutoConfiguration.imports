@@ -1,0 +1,7 @@
+com.breeze.boot.jwtlogin.config.JwtAuthenticationTokenFilter
+com.breeze.boot.jwtlogin.config.SecurityConfig
+com.breeze.boot.jwtlogin.config.JwtConfig
+com.breeze.boot.jwtlogin.config.PwdConfig
+com.breeze.boot.jwtlogin.config.IgnoreUrlProperties
+com.breeze.boot.jwtlogin.config.RedisConfig
+com.breeze.boot.jwtlogin.config.BreezeJoinTheWhiteAspect

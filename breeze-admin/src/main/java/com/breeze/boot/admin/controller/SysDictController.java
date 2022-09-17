@@ -1,0 +1,108 @@
+/*
+ * Copyright 2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.breeze.boot.admin.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.admin.dto.DictDTO;
+import com.breeze.boot.admin.entity.SysDictEntity;
+import com.breeze.boot.admin.service.SysDictService;
+import com.breeze.boot.core.Result;
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+
+/**
+ * 系统字典控制器
+ *
+ * @author breeze
+ * @date 2022-09-02
+ */
+@Api(tags = "字典管理模块", value = "字典管理模块")
+@RestController
+@RequestMapping("/sys/dict")
+public class SysDictController {
+
+    /**
+     * 系统字典服务
+     */
+    @Autowired
+    private SysDictService sysDictService;
+
+    /**
+     * 列表
+     *
+     * @param dictDTO 字典dto
+     * @return {@link Result}<{@link Page}<{@link SysDictEntity}>>
+     */
+    @PostMapping("/list")
+    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    public Result<Page<SysDictEntity>> list(@RequestBody DictDTO dictDTO) {
+        return Result.ok(this.sysDictService.listDict(dictDTO));
+    }
+
+    /**
+     * 保存
+     *
+     * @param dictEntity 字典保存DTO
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyAuthority('sys:dict:save')")
+    public Result<Boolean> save(@RequestBody SysDictEntity dictEntity) {
+        return Result.ok(sysDictService.save(dictEntity));
+    }
+
+    /**
+     * 更新
+     *
+     * @param dictEntity 字典更新 实体
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @PutMapping("/update")
+    @PreAuthorize("hasAnyAuthority('sys:dict:update')")
+    public Result<Boolean> update(@RequestBody SysDictEntity dictEntity) {
+        return Result.ok(this.sysDictService.updateById(dictEntity));
+    }
+
+    /**
+     * 开关
+     *
+     * @param dictDTO 字典dto
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @PutMapping("/open")
+    @PreAuthorize("hasAnyAuthority('sys:dict:update')")
+    public Result<Boolean> open(@RequestBody DictDTO dictDTO) {
+        return Result.ok(this.sysDictService.open(dictDTO));
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids ids
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
+        return this.sysDictService.deleteByIds(Arrays.asList(ids));
+    }
+
+}
