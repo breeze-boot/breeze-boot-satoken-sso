@@ -63,13 +63,13 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()
                 .formLogin().disable()
-                .csrf((csrf) -> csrf.ignoringAntMatchers("/token"))
+                .csrf().disable()
                 // 不使用session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 // 只有没有登录可以访问
-                .antMatchers("/token", "/sms", "/email").anonymous()
+                .antMatchers("/token", "/sms", "/email","/captcha/getCode", "/captcha/checkCode").anonymous()
                 // 其余的必须登录
                 .anyRequest().authenticated()
                 .and()
