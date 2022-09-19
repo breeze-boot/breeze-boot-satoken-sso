@@ -125,9 +125,9 @@ public class LoginController {
                 .subject(authentication.getName())
                 .claim("username", currentLoginUser.getUsername())
                 .claim("userCode", currentLoginUser.getUserCode())
-//                .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
-//                        .orElseGet(ArrayList::new).stream().collect(Collectors.joining(",")))
-//                .claim("scope", scope)
+                // .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
+                //         .orElseGet(ArrayList::new).stream().collect(Collectors.joining(",")))
+                // .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJWT = new SignedJWT(header, claims);

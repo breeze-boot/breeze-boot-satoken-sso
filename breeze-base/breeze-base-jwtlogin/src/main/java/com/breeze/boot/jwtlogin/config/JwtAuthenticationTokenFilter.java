@@ -21,6 +21,7 @@ import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.breeze.boot.jwtlogin.entity.CurrentLoginUser;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -51,6 +53,7 @@ import java.util.Objects;
  * @author breeze
  * @date 2022-08-31
  */
+@Slf4j
 @Configuration
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
@@ -89,6 +92,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("URL {} ", request.getRequestURL());
         if (!requireAuthentication(request)) {
             filterChain.doFilter(request, response);
             return;
@@ -123,7 +127,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            throw new BadJwtException("token非法");
         }
         //从redis中获取用户信息
         LoginUserDTO loginUser = (LoginUserDTO) this.redisTemplate.opsForHash().get("sys:login_user", String.valueOf(usernameObj));

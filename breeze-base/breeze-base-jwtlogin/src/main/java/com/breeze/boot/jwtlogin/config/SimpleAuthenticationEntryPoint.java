@@ -20,6 +20,7 @@ import com.breeze.boot.core.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.jwt.BadJwtException;
@@ -71,6 +72,13 @@ public class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 errMsg = "账户已过期";
             } else if (cause instanceof LockedException) {
                 errMsg = "账户已被锁定";
+            } else if (throwable instanceof InsufficientAuthenticationException) {
+                String message = throwable.getMessage();
+                if (message.contains("Invalid token does not contain resource id")) {
+                    errMsg = "未经授权的资源服务器";
+                } else if (message.contains("Full authentication is required to access this resource")) {
+                    errMsg = "访问需要身份验证";
+                }
             } else {
                 errMsg = "验证异常";
             }
