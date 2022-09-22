@@ -22,28 +22,26 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
-
 /**
- * 系统平台作用实体
+ * 系统部门实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_platform_role")
-public class SysPlatformRoleEntity extends BaseModel<SysPlatformRoleEntity> implements Serializable {
+@TableName("sys_dept")
+public class SysDept extends BaseModel<SysDept> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 平台Id
+     * 部门名称
      */
-    private Long platformId;
-
+    private String deptName;
     /**
-     * 角色Id
+     * 父id
      */
-    private Long roleId;
+    private Long parentId;
 
 }

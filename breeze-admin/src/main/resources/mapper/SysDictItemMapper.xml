@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysDictItemMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysDictItemEntity" id="sysDictItemMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysDictItem" id="sysDictItemMap">
         <id property="id" column="id" javaType="java.lang.Long"/>
         <result property="dictId" column="dict_id" javaType="java.lang.Long"/>
         <result property="value" column="value"/>

@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.RoleDTO;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysRole;
 import com.breeze.boot.core.Result;
 
 import java.util.List;
@@ -30,23 +30,23 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysRoleService extends IService<SysRoleEntity> {
+public interface SysRoleService extends IService<SysRole> {
 
     /**
      * 用户角色列表
      *
      * @param id id
-     * @return {@link List}<{@link SysRoleEntity}>
+     * @return {@link List}<{@link SysRole}>
      */
-    List<SysRoleEntity> listUserRole(Long id);
+    List<SysRole> listUserRole(Long id);
 
     /**
      * 列表页面
      *
      * @param roleDTO 角色dto
-     * @return {@link Page}<{@link SysRoleEntity}>
+     * @return {@link Page}<{@link SysRole}>
      */
-    Page<SysRoleEntity> listPage(RoleDTO roleDTO);
+    Page<SysRole> listPage(RoleDTO roleDTO);
 
     /**
      * 删除由ids

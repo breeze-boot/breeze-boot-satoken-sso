@@ -23,8 +23,8 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.RoleDTO;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysMenuRole;
+import com.breeze.boot.admin.entity.SysRole;
 import com.breeze.boot.admin.mapper.SysRoleMapper;
 import com.breeze.boot.admin.service.SysMenuRoleService;
 import com.breeze.boot.admin.service.SysRoleService;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     @Autowired
     private SysMenuRoleService sysMenuRoleService;
@@ -51,10 +51,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * 用户角色列表
      *
      * @param id id
-     * @return {@link List}<{@link SysRoleEntity}>
+     * @return {@link List}<{@link SysRole}>
      */
     @Override
-    public List<SysRoleEntity> listUserRole(Long id) {
+    public List<SysRole> listUserRole(Long id) {
         return this.baseMapper.listUserRole(id);
     }
 
@@ -62,28 +62,28 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * 列表页面
      *
      * @param roleDTO 角色dto
-     * @return {@link Page}<{@link SysRoleEntity}>
+     * @return {@link Page}<{@link SysRole}>
      */
     @Override
-    public Page<SysRoleEntity> listPage(RoleDTO roleDTO) {
-        Page<SysRoleEntity> platformEntityPage = new Page<>(roleDTO.getCurrent(), roleDTO.getSize());
+    public Page<SysRole> listPage(RoleDTO roleDTO) {
+        Page<SysRole> platformEntityPage = new Page<>(roleDTO.getCurrent(), roleDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(roleDTO.getRoleName()), SysRoleEntity::getRoleName, roleDTO.getRoleName())
-                .like(StrUtil.isAllNotBlank(roleDTO.getRoleCode()), SysRoleEntity::getRoleCode, roleDTO.getRoleCode())
+                .like(StrUtil.isAllNotBlank(roleDTO.getRoleName()), SysRole::getRoleName, roleDTO.getRoleName())
+                .like(StrUtil.isAllNotBlank(roleDTO.getRoleCode()), SysRole::getRoleCode, roleDTO.getRoleCode())
                 .page(platformEntityPage);
     }
 
     @Override
     public Result deleteByIds(List<Long> ids) {
-        List<SysRoleEntity> roleEntityList = this.listByIds(ids);
+        List<SysRole> roleEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(roleEntityList)) {
             return Result.fail(Boolean.FALSE, "角色不存在");
         }
         boolean remove = this.removeByIds(ids);
         if (remove) {
             // 删除用户角色关系
-            this.sysMenuRoleService.remove(Wrappers.<SysMenuRoleEntity>lambdaQuery()
-                    .eq(SysMenuRoleEntity::getRoleId, roleEntityList.stream().map(SysRoleEntity::getId).collect(Collectors.toList())));
+            this.sysMenuRoleService.remove(Wrappers.<SysMenuRole>lambdaQuery()
+                    .eq(SysMenuRole::getRoleId, roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }

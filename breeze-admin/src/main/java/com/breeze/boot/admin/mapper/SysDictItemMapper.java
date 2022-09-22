@@ -1,7 +1,7 @@
 package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.admin.entity.SysDictItemEntity;
+import com.breeze.boot.admin.entity.SysDictItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,14 +14,14 @@ import java.util.List;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysDictItemMapper extends BaseMapper<SysDictItemEntity> {
+public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
 
     /**
      * 字典列表项
      *
      * @param pdictId 字典ID
-     * @return {@link List}<{@link SysDictItemEntity}>
+     * @return {@link List}<{@link SysDictItem}>
      */
-    List<SysDictItemEntity> listDictDetailByDictId(@Param("pdictId") Long pdictId);
+    List<SysDictItem> listDictDetailByDictId(@Param("pdictId") Long pdictId);
 
 }

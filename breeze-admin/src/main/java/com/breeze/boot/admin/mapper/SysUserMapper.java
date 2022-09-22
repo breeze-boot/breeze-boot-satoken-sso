@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.admin.dto.UserDTO;
-import com.breeze.boot.admin.entity.SysUserEntity;
+import com.breeze.boot.admin.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,15 +31,15 @@ import org.apache.ibatis.annotations.Param;
  * @date 2022-08-31
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
      * 选择用户
      *
      * @param page    对象页面
      * @param userDTO 用户dto
-     * @return {@link IPage}<{@link SysUserEntity}>
+     * @return {@link IPage}<{@link SysUser}>
      */
-    IPage<SysUserEntity> listPage(Page<Object> page, @Param("userDTO") UserDTO userDTO);
+    IPage<SysUser> listPage(Page<Object> page, @Param("userDTO") UserDTO userDTO);
 
 }

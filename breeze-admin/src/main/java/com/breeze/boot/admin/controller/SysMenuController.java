@@ -17,11 +17,11 @@
 package com.breeze.boot.admin.controller;
 
 import com.breeze.boot.admin.dto.MenuDTO;
-import com.breeze.boot.admin.entity.SysMenuEntity;
+import com.breeze.boot.admin.entity.SysMenu;
 import com.breeze.boot.admin.service.SysMenuService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Api(tags = "菜单管理模块", value = "菜单管理模块")
+@Tag(name = "菜单管理模块", description = "菜单管理模块")
 @RestController
 @RequestMapping("/sys/menu")
 public class SysMenuController {
@@ -49,7 +49,7 @@ public class SysMenuController {
      * @param menuDTO 菜单dto
      * @return {@link Result}
      */
-    @ApiOperation(value = "列表")
+    @Operation(summary = "列表", description = "")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result list(@RequestBody MenuDTO menuDTO) {
@@ -62,7 +62,6 @@ public class SysMenuController {
      * @param platformCode 平台标识
      * @return {@link Result}
      */
-    @ApiOperation(value = "树形菜单列表")
     @GetMapping("/listTreeMenu")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result listTreeMenu(@RequestParam(required = false) String platformCode) {
@@ -74,7 +73,7 @@ public class SysMenuController {
      *
      * @return {@link Result}
      */
-    @ApiOperation(value = "树形菜单列表")
+    @Operation(method = "树形菜单列表")
     @GetMapping("/listTreePermission")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result listTreePermission() {
@@ -101,7 +100,7 @@ public class SysMenuController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:menu:save')")
-    public Result<Boolean> save(@RequestBody SysMenuEntity menuEntity) {
+    public Result<Boolean> save(@RequestBody SysMenu menuEntity) {
         return Result.ok(sysMenuService.save(menuEntity));
     }
 
@@ -113,7 +112,7 @@ public class SysMenuController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:menu:update')")
-    public Result<Boolean> update(@RequestBody SysMenuEntity menuEntity) {
+    public Result<Boolean> update(@RequestBody SysMenu menuEntity) {
         return Result.ok(sysMenuService.updateById(menuEntity));
     }
 

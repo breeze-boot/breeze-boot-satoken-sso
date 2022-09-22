@@ -23,7 +23,7 @@ spring:
       filter:
         stat:
           db-type: mysql
-          # 开启慢sql监控，超过2s 就认为是慢sql，记录到日志中
+          # 开启慢sql监控，超过()s 就认为是慢sql，记录到日志中
           enabled: true
           log-slow-sql: true
           slow-sql-millis: 10
@@ -40,12 +40,6 @@ spring:
         login-username: admin
         login-password: admin
         deny:
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8888
 
 # mybatis-plus 配置
 mybatis-plus:

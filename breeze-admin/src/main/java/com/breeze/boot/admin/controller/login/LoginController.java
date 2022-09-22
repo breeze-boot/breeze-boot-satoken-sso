@@ -30,6 +30,8 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +39,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
@@ -52,6 +55,7 @@ import java.util.stream.Collectors;
  */
 @JoinWhiteList
 @RestController
+@RequestMapping("/jwt")
 public class LoginController {
 
     /**
@@ -72,7 +76,8 @@ public class LoginController {
      * @param userLoginBody 登录
      * @return {@link Result}
      */
-    @PostMapping("/token")
+    @Operation(security = {@SecurityRequirement(name = "bearer")})
+    @PostMapping("/login")
     public Result login(@RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();
         // 用户验证

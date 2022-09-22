@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysUserEntity" id="sysUserMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysUser" id="sysUserMap">
         <id property="id" column="id"/>
         <result property="userCode" column="user_code"/>
         <result property="username" column="username"/>
@@ -28,7 +28,7 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.admin.entity.SysUserEntity">
+    <select id="listPage" resultType="com.breeze.boot.admin.entity.SysUser">
         SELECT
         a.id,
         a.dept_id,

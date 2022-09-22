@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysLogMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysLogEntity" id="sysLogMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysLog" id="sysLogMap">
         <id property="id" column="id"/>
         <result property="systemModule" column="system_module"/>
         <result property="logTitle" column="log_title"/>

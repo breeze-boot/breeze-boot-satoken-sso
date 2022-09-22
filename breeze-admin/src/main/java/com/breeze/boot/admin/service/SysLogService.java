@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.LogDTO;
-import com.breeze.boot.admin.entity.SysLogEntity;
+import com.breeze.boot.admin.entity.SysLog;
 
 /**
  * 系统日志服务
@@ -27,15 +27,15 @@ import com.breeze.boot.admin.entity.SysLogEntity;
  * @author breeze
  * @date 2022-09-02
  */
-public interface SysLogService extends IService<SysLogEntity> {
+public interface SysLogService extends IService<SysLog> {
 
     /**
      * 日志列表
      *
      * @param logDTO 日志dto
-     * @return {@link Page}<{@link SysLogEntity}>
+     * @return {@link Page}<{@link SysLog}>
      */
-    Page<SysLogEntity> listLog(LogDTO logDTO);
+    Page<SysLog> listLog(LogDTO logDTO);
 
 }
 

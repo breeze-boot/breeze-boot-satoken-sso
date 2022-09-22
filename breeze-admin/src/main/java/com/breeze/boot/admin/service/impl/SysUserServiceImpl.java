@@ -24,10 +24,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.UserDTO;
 import com.breeze.boot.admin.dto.UserOpenDTO;
-import com.breeze.boot.admin.entity.SysDeptEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
-import com.breeze.boot.admin.entity.SysRoleUserEntity;
-import com.breeze.boot.admin.entity.SysUserEntity;
+import com.breeze.boot.admin.entity.SysDept;
+import com.breeze.boot.admin.entity.SysRole;
+import com.breeze.boot.admin.entity.SysRoleUser;
+import com.breeze.boot.admin.entity.SysUser;
 import com.breeze.boot.admin.mapper.SysUserMapper;
 import com.breeze.boot.admin.service.*;
 import com.breeze.boot.core.Result;
@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     /**
      * 密码编码器
@@ -91,39 +91,39 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      */
     @Override
     public LoginUserDTO loadUserByUsername(String username) {
-        SysUserEntity sysUserEntity = this.getOne(Wrappers.<SysUserEntity>lambdaQuery().eq(SysUserEntity::getUsername, username));
-        if (Objects.isNull(sysUserEntity)) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
+        if (Objects.isNull(sysUser)) {
             throw new RuntimeException("用户名错误或不存在");
         }
-        return getLoginUserDTO(sysUserEntity);
+        return getLoginUserDTO(sysUser);
     }
 
     @Override
     public LoginUserDTO loadUserByEmail(String email) {
-        SysUserEntity sysUserEntity = this.getOne(Wrappers.<SysUserEntity>lambdaQuery().eq(SysUserEntity::getEmail, email));
-        if (Objects.isNull(sysUserEntity)) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
+        if (Objects.isNull(sysUser)) {
             throw new RuntimeException("此邮箱未注册");
         }
-        return getLoginUserDTO(sysUserEntity);
+        return getLoginUserDTO(sysUser);
     }
 
     @Override
     public LoginUserDTO loadUserByPhone(String phone) {
-        SysUserEntity sysUserEntity = this.getOne(Wrappers.<SysUserEntity>lambdaQuery().eq(SysUserEntity::getPhone, phone));
-        if (Objects.isNull(sysUserEntity)) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+        if (Objects.isNull(sysUser)) {
             throw new RuntimeException("此手机号未注册");
         }
-        return getLoginUserDTO(sysUserEntity);
+        return getLoginUserDTO(sysUser);
     }
 
     /**
      * 列表页面
      *
      * @param userDTO 用户dto
-     * @return {@link Page}<{@link SysUserEntity}>
+     * @return {@link Page}<{@link SysUser}>
      */
     @Override
-    public IPage<SysUserEntity> listPage(UserDTO userDTO) {
+    public IPage<SysUser> listPage(UserDTO userDTO) {
         return this.baseMapper.listPage(new Page<>(userDTO.getCurrent(), userDTO.getSize()), userDTO);
     }
 
@@ -134,7 +134,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return {@link Boolean}
      */
     @Override
-    public Boolean saveUser(SysUserEntity sysUser) {
+    public Boolean saveUser(SysUser sysUser) {
         sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
         return this.save(sysUser);
     }
@@ -146,7 +146,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return {@link Boolean}
      */
     @Override
-    public Boolean updateUserById(SysUserEntity sysUser) {
+    public Boolean updateUserById(SysUser sysUser) {
         return this.updateById(sysUser);
     }
 
@@ -158,9 +158,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      */
     @Override
     public Boolean open(UserOpenDTO openDTO) {
-        return this.update(Wrappers.<SysUserEntity>lambdaUpdate()
-                .set(SysUserEntity::getIsLock, openDTO.getIsLock())
-                .eq(SysUserEntity::getId, openDTO.getId()));
+        return this.update(Wrappers.<SysUser>lambdaUpdate()
+                .set(SysUser::getIsLock, openDTO.getIsLock())
+                .eq(SysUser::getId, openDTO.getId()));
     }
 
     /**
@@ -170,9 +170,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetPass(SysUserEntity userEntity) {
+    public Boolean resetPass(SysUser userEntity) {
         userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
-        return this.update(Wrappers.<SysUserEntity>lambdaUpdate().set(SysUserEntity::getPassword, userEntity.getPassword()).eq(SysUserEntity::getId, userEntity.getId()));
+        return this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userEntity.getPassword()).eq(SysUser::getId, userEntity.getId()));
     }
 
     /**
@@ -183,15 +183,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      */
     @Override
     public Result deleteByIds(List<Long> ids) {
-        List<SysUserEntity> userEntityList = this.listByIds(ids);
+        List<SysUser> userEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(userEntityList)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
         boolean remove = this.removeByIds(ids);
         if (remove) {
             // 删除用户角色关系
-            this.sysRoleUserService.remove(Wrappers.<SysRoleUserEntity>lambdaQuery()
-                    .eq(SysRoleUserEntity::getUserId, userEntityList.stream().map(SysUserEntity::getId).collect(Collectors.toList())));
+            this.sysRoleUserService.remove(Wrappers.<SysRoleUser>lambdaQuery()
+                    .eq(SysRoleUser::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
@@ -199,15 +199,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     /**
      * 获取登录用户dto
      *
-     * @param sysUserEntity 系统用户实体
+     * @param sysUser 系统用户实体
      * @return {@link LoginUserDTO}
      */
-    private LoginUserDTO getLoginUserDTO(SysUserEntity sysUserEntity) {
+    private LoginUserDTO getLoginUserDTO(SysUser sysUser) {
         LoginUserDTO loginUserDTO = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUserEntity, loginUserDTO);
-        SysDeptEntity dept = this.sysDeptService.getById(sysUserEntity.getDeptId());
+        BeanUtil.copyProperties(sysUser, loginUserDTO);
+        SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
         loginUserDTO.setDeptName(dept.getDeptName());
-        List<SysRoleEntity> roleList = this.sysRoleService.listUserRole(sysUserEntity.getId());
+        List<SysRole> roleList = this.sysRoleService.listUserRole(sysUser.getId());
         if (CollUtil.isEmpty(roleList)) {
             loginUserDTO.setAuthorities(Lists.newArrayList());
             return loginUserDTO;
@@ -219,8 +219,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             return userRoleDTO;
         }).collect(Collectors.toList());
         loginUserDTO.setUserRoleDTOList(roleDTOList);
-        loginUserDTO.setUserRoleIds(roleList.stream().map(SysRoleEntity::getId).collect(Collectors.toList()));
-        loginUserDTO.setUserRoleCodes(roleList.stream().map(SysRoleEntity::getRoleCode).collect(Collectors.toList()));
+        loginUserDTO.setUserRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+        loginUserDTO.setUserRoleCodes(roleList.stream().map(SysRole::getRoleCode).collect(Collectors.toList()));
         List<String> permissionList = Optional.ofNullable(this.sysMenuService.listUserMenuPermission(roleList)).orElseGet(ArrayList::new);
         loginUserDTO.setAuthorities(permissionList);
         return loginUserDTO;

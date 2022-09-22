@@ -18,10 +18,10 @@ package com.breeze.boot.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictEntity;
+import com.breeze.boot.admin.entity.SysDict;
 import com.breeze.boot.admin.service.SysDictService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ import java.util.Arrays;
  * @author breeze
  * @date 2022-09-02
  */
-@Api(tags = "字典管理模块", value = "字典管理模块")
+@Tag(name = "字典管理模块", description = "字典管理模块")
 @RestController
 @RequestMapping("/sys/dict")
 public class SysDictController {
@@ -49,11 +49,11 @@ public class SysDictController {
      * 列表
      *
      * @param dictDTO 字典dto
-     * @return {@link Result}<{@link Page}<{@link SysDictEntity}>>
+     * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDictEntity>> list(@RequestBody DictDTO dictDTO) {
+    public Result<Page<SysDict>> list(@RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictService.listDict(dictDTO));
     }
 
@@ -65,7 +65,7 @@ public class SysDictController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result<Boolean> save(@RequestBody SysDictEntity dictEntity) {
+    public Result<Boolean> save(@RequestBody SysDict dictEntity) {
         return Result.ok(sysDictService.save(dictEntity));
     }
 
@@ -77,7 +77,7 @@ public class SysDictController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result<Boolean> update(@RequestBody SysDictEntity dictEntity) {
+    public Result<Boolean> update(@RequestBody SysDict dictEntity) {
         return Result.ok(this.sysDictService.updateById(dictEntity));
     }
 

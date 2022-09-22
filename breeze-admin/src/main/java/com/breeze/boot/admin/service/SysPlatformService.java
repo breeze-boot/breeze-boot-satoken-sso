@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.PlatformDTO;
-import com.breeze.boot.admin.entity.SysPlatformEntity;
+import com.breeze.boot.admin.entity.SysPlatform;
 
 /**
  * 系统平台服务
@@ -27,14 +27,14 @@ import com.breeze.boot.admin.entity.SysPlatformEntity;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysPlatformService extends IService<SysPlatformEntity> {
+public interface SysPlatformService extends IService<SysPlatform> {
 
     /**
      * 列表页面
      *
      * @param platformDTO 平台dto
-     * @return {@link Page}<{@link SysPlatformEntity}>
+     * @return {@link Page}<{@link SysPlatform}>
      */
-    Page<SysPlatformEntity> listPage(PlatformDTO platformDTO);
+    Page<SysPlatform> listPage(PlatformDTO platformDTO);
 
 }

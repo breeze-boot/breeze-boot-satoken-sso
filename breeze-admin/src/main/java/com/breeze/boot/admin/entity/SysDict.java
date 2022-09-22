@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict")
-public class SysDictEntity extends BaseModel<SysDictEntity> implements Serializable {
+public class SysDict extends BaseModel<SysDict> implements Serializable {
 
     /**
      * 字典名称
@@ -38,5 +38,5 @@ public class SysDictEntity extends BaseModel<SysDictEntity> implements Serializa
      * 字典项列表
      */
     @TableField(exist = false)
-    private List<SysDictItemEntity> sysDictDetailList;
+    private List<SysDictItem> sysDictDetailList;
 }

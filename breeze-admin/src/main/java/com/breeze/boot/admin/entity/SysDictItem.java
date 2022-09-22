@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict_item")
-public class SysDictItemEntity extends BaseModel<SysDictItemEntity> implements Serializable {
+public class SysDictItem extends BaseModel<SysDictItem> implements Serializable {
 
     private Long dictId;
 

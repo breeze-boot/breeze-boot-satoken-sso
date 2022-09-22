@@ -18,7 +18,7 @@ package com.breeze.boot.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictItemEntity;
+import com.breeze.boot.admin.entity.SysDictItem;
 import com.breeze.boot.admin.mapper.SysDictItemMapper;
 import com.breeze.boot.admin.service.SysDictItemService;
 import org.springframework.stereotype.Service;
@@ -32,16 +32,16 @@ import java.util.List;
  * @date 2022-09-02
  */
 @Service
-public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItemEntity> implements SysDictItemService {
+public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
 
     /**
      * 字典列表项
      *
      * @param dictDTO dict dto
-     * @return {@link List}<{@link SysDictItemEntity}>
+     * @return {@link List}<{@link SysDictItem}>
      */
     @Override
-    public List<SysDictItemEntity> listDictItem(DictDTO dictDTO) {
+    public List<SysDictItem> listDictItem(DictDTO dictDTO) {
         return this.baseMapper.listDictDetailByDictId(dictDTO.getId());
     }
 }

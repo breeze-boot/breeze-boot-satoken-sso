@@ -18,10 +18,10 @@ package com.breeze.boot.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.admin.dto.FileDTO;
-import com.breeze.boot.admin.entity.SysFileEntity;
+import com.breeze.boot.admin.entity.SysFile;
 import com.breeze.boot.admin.service.SysFileService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Api(tags = "文件管理模块", value = "文件管理模块")
+@Tag(name = "文件管理模块", description = "文件管理模块")
 @RestController
 @RequestMapping("/sys/file")
 public class SysFileController {
@@ -50,11 +50,11 @@ public class SysFileController {
      * 列表
      *
      * @param fileDTO 文件dto
-     * @return {@link Result}<{@link List}<{@link SysFileEntity}>>
+     * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
-    public Result<Page<SysFileEntity>> list(@RequestBody FileDTO fileDTO) {
+    public Result<Page<SysFile>> list(@RequestBody FileDTO fileDTO) {
         return Result.ok(this.sysFileService.listFile(fileDTO));
     }
 
@@ -66,7 +66,7 @@ public class SysFileController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:file:save')")
-    public Result save(@RequestBody SysFileEntity fileEntity) {
+    public Result save(@RequestBody SysFile fileEntity) {
         return Result.ok(sysFileService.save(fileEntity));
     }
 
@@ -78,7 +78,7 @@ public class SysFileController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:file:update')")
-    public Result update(@RequestBody SysFileEntity fileEntity) {
+    public Result update(@RequestBody SysFile fileEntity) {
         return Result.ok(sysFileService.updateById(fileEntity));
     }
 

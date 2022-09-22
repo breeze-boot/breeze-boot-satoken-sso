@@ -17,7 +17,7 @@
 package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.admin.entity.SysDeptEntity;
+import com.breeze.boot.admin.entity.SysDept;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -27,6 +27,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2021-12-06 22:03:39
  */
 @Mapper
-public interface SysDeptMapper extends BaseMapper<SysDeptEntity> {
+public interface SysDeptMapper extends BaseMapper<SysDept> {
 
 }

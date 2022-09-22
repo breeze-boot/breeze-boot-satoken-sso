@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysMenuMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysMenuEntity" id="sysMenuMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysMenu" id="sysMenuMap">
         <id property="id" column="id"/>
         <result property="platformId" column="platform_id"/>
         <result property="title" column="title"/>
@@ -36,7 +36,7 @@
         </foreach>
     </select>
 
-    <select id="listMenu" resultType="com.breeze.boot.admin.entity.SysMenuEntity">
+    <select id="listMenu" resultType="com.breeze.boot.admin.entity.SysMenu">
         SELECT a.id,
         a.name,
         a.icon,

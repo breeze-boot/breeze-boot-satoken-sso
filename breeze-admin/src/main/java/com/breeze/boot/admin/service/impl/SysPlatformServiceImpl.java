@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.PlatformDTO;
-import com.breeze.boot.admin.entity.SysPlatformEntity;
+import com.breeze.boot.admin.entity.SysPlatform;
 import com.breeze.boot.admin.mapper.SysPlatformMapper;
 import com.breeze.boot.admin.service.SysPlatformService;
 import org.springframework.stereotype.Service;
@@ -33,20 +33,20 @@ import org.springframework.stereotype.Service;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPlatformEntity> implements SysPlatformService {
+public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPlatform> implements SysPlatformService {
 
     /**
      * 列表
      *
      * @param platformDTO 平台dto
-     * @return {@link Page}<{@link SysPlatformEntity}>
+     * @return {@link Page}<{@link SysPlatform}>
      */
     @Override
-    public Page<SysPlatformEntity> listPage(PlatformDTO platformDTO) {
-        Page<SysPlatformEntity> platformEntityPage = new Page<>(platformDTO.getCurrent(), platformDTO.getSize());
+    public Page<SysPlatform> listPage(PlatformDTO platformDTO) {
+        Page<SysPlatform> platformEntityPage = new Page<>(platformDTO.getCurrent(), platformDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(platformDTO.getPlatformName()), SysPlatformEntity::getPlatformCode, platformDTO.getPlatformName())
-                .like(StrUtil.isAllNotBlank(platformDTO.getPlatformCode()), SysPlatformEntity::getPlatformCode, platformDTO.getPlatformCode())
+                .like(StrUtil.isAllNotBlank(platformDTO.getPlatformName()), SysPlatform::getPlatformCode, platformDTO.getPlatformName())
+                .like(StrUtil.isAllNotBlank(platformDTO.getPlatformCode()), SysPlatform::getPlatformCode, platformDTO.getPlatformCode())
                 .page(platformEntityPage);
     }
 

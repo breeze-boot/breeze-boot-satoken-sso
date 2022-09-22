@@ -25,10 +25,10 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.MenuDTO;
-import com.breeze.boot.admin.entity.SysMenuEntity;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
-import com.breeze.boot.admin.entity.SysPlatformEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysMenu;
+import com.breeze.boot.admin.entity.SysMenuRole;
+import com.breeze.boot.admin.entity.SysPlatform;
+import com.breeze.boot.admin.entity.SysRole;
 import com.breeze.boot.admin.mapper.SysMenuMapper;
 import com.breeze.boot.admin.service.SysMenuRoleService;
 import com.breeze.boot.admin.service.SysMenuService;
@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity> implements SysMenuService {
+public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     /**
      * 平台服务
@@ -73,7 +73,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @return {@link List}<{@link String}>
      */
     @Override
-    public List<String> listUserMenuPermission(List<SysRoleEntity> roleEntityList) {
+    public List<String> listUserMenuPermission(List<SysRole> roleEntityList) {
         return this.baseMapper.listUserMenuPermission(roleEntityList);
     }
 
@@ -90,15 +90,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
-        List<SysMenuRoleEntity> menuRoleList = this.menuRoleService.list(Wrappers.<SysMenuRoleEntity>lambdaQuery()
-                .in(SysMenuRoleEntity::getRoleId, currentLoginUser.getUserRoleIds()));
+        List<SysMenuRole> menuRoleList = this.menuRoleService.list(Wrappers.<SysMenuRole>lambdaQuery()
+                .in(SysMenuRole::getRoleId, currentLoginUser.getUserRoleIds()));
         if (CollUtil.isEmpty(menuRoleList)) {
             return Result.ok();
         }
-        List<Long> menuIdList = menuRoleList.stream().map(SysMenuRoleEntity::getMenuId).collect(Collectors.toList());
+        List<Long> menuIdList = menuRoleList.stream().map(SysMenuRole::getMenuId).collect(Collectors.toList());
         // 使用CODE显示前端菜单
-        SysPlatformEntity platformEntity = this.platformService.getOne(Wrappers.<SysPlatformEntity>lambdaQuery()
-                .eq(SysPlatformEntity::getPlatformCode, platformCode));
+        SysPlatform platformEntity = this.platformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
+                .eq(SysPlatform::getPlatformCode, platformCode));
         if (Objects.isNull(platformEntity)) {
             return Result.ok();
         }
@@ -111,11 +111,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     private Result<List<Tree<Long>>> listTreeRolePermissionData() {
-        List<SysMenuEntity> menuList = this.list(Wrappers.<SysMenuEntity>lambdaQuery()
-                .in(SysMenuEntity::getType, 1, 2)
+        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
+                .in(SysMenu::getType, 1, 2)
                 .or()
-                .eq(SysMenuEntity::getType, 3)
-                .orderByAsc(SysMenuEntity::getSort));
+                .eq(SysMenu::getType, 3)
+                .orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
@@ -129,12 +129,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @param menuIdList     菜单id列表
      * @return {@link Result}
      */
-    private Result listTreeMenuData(List<Long> menuIdList, SysPlatformEntity platformEntity) {
-        List<SysMenuEntity> menuList = this.list(Wrappers.<SysMenuEntity>lambdaQuery()
-                .in(SysMenuEntity::getId, menuIdList)
-                .eq(SysMenuEntity::getPlatformId, platformEntity.getId())
-                .in(SysMenuEntity::getType, 1, 2)
-                .orderByAsc(SysMenuEntity::getSort));
+    private Result listTreeMenuData(List<Long> menuIdList, SysPlatform platformEntity) {
+        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
+                .in(SysMenu::getId, menuIdList)
+                .eq(SysMenu::getPlatformId, platformEntity.getId())
+                .in(SysMenu::getType, 1, 2)
+                .orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
@@ -150,10 +150,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
     @Override
     public Result<? extends Object> listMenu(MenuDTO menuDTO) {
         if (StrUtil.isAllNotBlank(menuDTO.getName()) || StrUtil.isAllNotBlank(menuDTO.getTitle())) {
-            List<SysMenuEntity> entityList = this.baseMapper.listMenu(menuDTO);
+            List<SysMenu> entityList = this.baseMapper.listMenu(menuDTO);
             return Result.ok(entityList);
         }
-        List<SysMenuEntity> menuEntityList = this.baseMapper.listMenu(menuDTO);
+        List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuDTO);
         List<Tree<Long>> build = getTrees(menuEntityList, 0L);
         return Result.ok(build);
     }
@@ -181,7 +181,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      */
     @Override
     public Result deleteById(Long id) {
-        List<SysMenuEntity> menuEntityList = this.list(Wrappers.<SysMenuEntity>lambdaQuery().eq(SysMenuEntity::getParentId, id));
+        List<SysMenu> menuEntityList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
         if (CollUtil.isNotEmpty(menuEntityList)) {
             return Result.warning(Boolean.FALSE, "存在子菜单, 不可删除");
         }
@@ -199,7 +199,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity
      * @param id
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
-    private List<Tree<Long>> getTrees(List<SysMenuEntity> menuEntityList, Long id) {
+    private List<Tree<Long>> getTrees(List<SysMenu> menuEntityList, Long id) {
         List<TreeNode<Long>> collect = menuEntityList.stream().map(menu -> {
             TreeNode<Long> node = new TreeNode<>();
             node.setId(menu.getId());

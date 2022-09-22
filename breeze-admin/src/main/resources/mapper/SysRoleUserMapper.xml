@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysRoleUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysRoleUserEntity" id="sysRoleUserMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysRoleUser" id="sysRoleUserMap">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="roleId" column="role_id"/>

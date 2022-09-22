@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.MenuPermissionDTO;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
+import com.breeze.boot.admin.entity.SysMenuRole;
 import com.breeze.boot.admin.mapper.SysMenuRoleMapper;
 import com.breeze.boot.admin.service.SysMenuRoleService;
 import com.breeze.boot.core.Result;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysMenuRoleServiceImpl extends ServiceImpl<SysMenuRoleMapper, SysMenuRoleEntity> implements SysMenuRoleService {
+public class SysMenuRoleServiceImpl extends ServiceImpl<SysMenuRoleMapper, SysMenuRole> implements SysMenuRoleService {
 
     /**
      * 编辑权限
@@ -45,15 +45,15 @@ public class SysMenuRoleServiceImpl extends ServiceImpl<SysMenuRoleMapper, SysMe
      */
     @Override
     public Result<Boolean> editPermission(MenuPermissionDTO menuPermissionDTO) {
-        boolean remove = this.remove(Wrappers.<SysMenuRoleEntity>lambdaQuery().eq(SysMenuRoleEntity::getRoleId, menuPermissionDTO.getRoleId()));
+        boolean remove = this.remove(Wrappers.<SysMenuRole>lambdaQuery().eq(SysMenuRole::getRoleId, menuPermissionDTO.getRoleId()));
         if (remove) {
-            List<SysMenuRoleEntity> sysMenuRoleEntityList = menuPermissionDTO.getPermissionIds().stream().map(menuId -> {
-                SysMenuRoleEntity sysMenuRoleEntity = new SysMenuRoleEntity();
-                sysMenuRoleEntity.setMenuId(menuId);
-                sysMenuRoleEntity.setRoleId(menuPermissionDTO.getRoleId());
-                return sysMenuRoleEntity;
+            List<SysMenuRole> sysMenuRoleList = menuPermissionDTO.getPermissionIds().stream().map(menuId -> {
+                SysMenuRole sysMenuRole = new SysMenuRole();
+                sysMenuRole.setMenuId(menuId);
+                sysMenuRole.setRoleId(menuPermissionDTO.getRoleId());
+                return sysMenuRole;
             }).collect(Collectors.toList());
-            this.saveBatch(sysMenuRoleEntityList);
+            this.saveBatch(sysMenuRoleList);
             return Result.ok(Boolean.TRUE);
         }
         return Result.ok(Boolean.FALSE, "修改失败");

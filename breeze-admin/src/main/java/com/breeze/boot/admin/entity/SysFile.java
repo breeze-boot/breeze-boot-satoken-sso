@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_file")
-public class SysFileEntity extends BaseModel<SysFileEntity> implements Serializable {
+public class SysFile extends BaseModel<SysFile> implements Serializable {
     /**
      * 旧文件名称
      */

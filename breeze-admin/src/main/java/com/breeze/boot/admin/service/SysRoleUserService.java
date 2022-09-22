@@ -17,7 +17,7 @@
 package com.breeze.boot.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.admin.entity.SysRoleUserEntity;
+import com.breeze.boot.admin.entity.SysRoleUser;
 
 /**
  * 系统用户角色服务
@@ -25,7 +25,7 @@ import com.breeze.boot.admin.entity.SysRoleUserEntity;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysRoleUserService extends IService<SysRoleUserEntity> {
+public interface SysRoleUserService extends IService<SysRoleUser> {
 
 }
 

@@ -19,12 +19,12 @@ package com.breeze.boot.admin.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.admin.dto.MenuPermissionDTO;
 import com.breeze.boot.admin.dto.RoleDTO;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysMenuRole;
+import com.breeze.boot.admin.entity.SysRole;
 import com.breeze.boot.admin.service.SysMenuRoleService;
 import com.breeze.boot.admin.service.SysRoleService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ import java.util.Arrays;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Api(tags = "角色管理模块", value = "角色管理模块")
+@Tag(name = "角色管理模块", description = "角色管理模块")
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController {
@@ -72,7 +72,7 @@ public class SysRoleController {
     @GetMapping("/listRolesPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     public Result listRolesPermission(@RequestParam Long roleId) {
-        return Result.ok(this.sysMenuRoleService.list(Wrappers.<SysMenuRoleEntity>lambdaQuery().eq(SysMenuRoleEntity::getRoleId, roleId)));
+        return Result.ok(this.sysMenuRoleService.list(Wrappers.<SysMenuRole>lambdaQuery().eq(SysMenuRole::getRoleId, roleId)));
     }
 
     /**
@@ -107,7 +107,7 @@ public class SysRoleController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:role:save')")
-    public Result save(@RequestBody SysRoleEntity roleEntity) {
+    public Result save(@RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.save(roleEntity));
     }
 
@@ -119,7 +119,7 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
-    public Result update(@RequestBody SysRoleEntity roleEntity) {
+    public Result update(@RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.updateById(roleEntity));
     }
 

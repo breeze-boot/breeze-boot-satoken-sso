@@ -16,6 +16,7 @@
 
 package com.breeze.boot.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,25 +24,66 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * 系统部门实体
+ * 系统菜单实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_dept")
-public class SysDeptEntity extends BaseModel<SysDeptEntity> implements Serializable {
-
+@TableName("sys_menu")
+public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 部门名称
+     * 名字
      */
-    private String deptName;
+    private String name;
+
     /**
-     * 父id
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 平台id
+     */
+    private Long platformId;
+
+    /**
+     * 平台名称
+     */
+    @TableField(exist = false)
+    private String platformName;
+    /**
+     * 排序
+     */
+    private Integer sort;
+    /**
+     * 上一级的菜单ID
      */
     private Long parentId;
+    /**
+     * 权限
+     */
+    private String permission;
+    /**
+     * 路径
+     */
+    private String path;
+
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
+     * 组件
+     */
+    private String component;
+    /**
+     * 类型
+     */
+    private Integer type;
 
 }

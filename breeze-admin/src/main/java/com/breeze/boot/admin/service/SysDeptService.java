@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.DeptDTO;
-import com.breeze.boot.admin.entity.SysDeptEntity;
+import com.breeze.boot.admin.entity.SysDept;
 import com.breeze.boot.core.Result;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysDeptService extends IService<SysDeptEntity> {
+public interface SysDeptService extends IService<SysDept> {
 
     /**
      * 部门列表

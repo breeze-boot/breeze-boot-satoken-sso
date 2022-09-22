@@ -4,13 +4,13 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysDictMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysDictEntity" id="sysDictMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysDict" id="sysDictMap">
         <id property="id" column="id"/>
         <result property="dictName" column="dict_name"/>
         <result property="dictCode" column="dict_code"/>
         <result property="isOpen" column="is_open"/>
         <collection property="sysDictDetailList" javaType="java.util.List"
-                    ofType="com.breeze.boot.admin.entity.SysDictItemEntity"
+                    ofType="com.breeze.boot.admin.entity.SysDictItem"
                     column="{pdictId=id}"
                     select="com.breeze.boot.admin.mapper.SysDictItemMapper.listDictDetailByDictId">
         </collection>

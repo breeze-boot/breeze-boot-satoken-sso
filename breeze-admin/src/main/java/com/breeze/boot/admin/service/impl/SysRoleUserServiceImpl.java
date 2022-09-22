@@ -17,7 +17,7 @@
 package com.breeze.boot.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.admin.entity.SysRoleUserEntity;
+import com.breeze.boot.admin.entity.SysRoleUser;
 import com.breeze.boot.admin.mapper.SysRoleUserMapper;
 import com.breeze.boot.admin.service.SysRoleUserService;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,6 @@ import org.springframework.stereotype.Service;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRoleUserEntity> implements SysRoleUserService {
+public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRoleUser> implements SysRoleUserService {
 
 }

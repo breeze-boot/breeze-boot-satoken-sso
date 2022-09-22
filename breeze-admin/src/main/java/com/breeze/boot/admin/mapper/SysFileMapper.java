@@ -1,7 +1,7 @@
 package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.admin.entity.SysFileEntity;
+import com.breeze.boot.admin.entity.SysFile;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysFileMapper extends BaseMapper<SysFileEntity> {
+public interface SysFileMapper extends BaseMapper<SysFile> {
 
 }

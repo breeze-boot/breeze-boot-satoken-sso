@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.FileDTO;
-import com.breeze.boot.admin.entity.SysFileEntity;
+import com.breeze.boot.admin.entity.SysFile;
 import com.breeze.boot.admin.mapper.SysFileMapper;
 import com.breeze.boot.admin.service.SysFileService;
 import org.springframework.stereotype.Service;
@@ -33,23 +33,23 @@ import org.springframework.stereotype.Service;
  * @date 2022-09-02
  */
 @Service
-public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFileEntity> implements SysFileService {
+public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
 
     /**
      * 列表文件
      *
      * @param fileDTO 日志dto
-     * @return {@link Page}<{@link SysFileEntity}>
+     * @return {@link Page}<{@link SysFile}>
      */
     @Override
-    public Page<SysFileEntity> listFile(FileDTO fileDTO) {
-        Page<SysFileEntity> logEntityPage = new Page<>(fileDTO.getCurrent(), fileDTO.getSize());
+    public Page<SysFile> listFile(FileDTO fileDTO) {
+        Page<SysFile> logEntityPage = new Page<>(fileDTO.getCurrent(), fileDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(fileDTO.getNewFileName()), SysFileEntity::getNewFileName, fileDTO.getNewFileName())
-                .like(StrUtil.isAllNotBlank(fileDTO.getOldFileName()), SysFileEntity::getOldFileName, fileDTO.getOldFileName())
-                .like(StrUtil.isAllNotBlank(fileDTO.getUrl()), SysFileEntity::getUrl, fileDTO.getUrl())
-                .like(StrUtil.isAllNotBlank(fileDTO.getUserCode()), SysFileEntity::getUserCode, fileDTO.getUserCode())
-                .like(StrUtil.isAllNotBlank(fileDTO.getUsername()), SysFileEntity::getUsername, fileDTO.getUsername())
+                .like(StrUtil.isAllNotBlank(fileDTO.getNewFileName()), SysFile::getNewFileName, fileDTO.getNewFileName())
+                .like(StrUtil.isAllNotBlank(fileDTO.getOldFileName()), SysFile::getOldFileName, fileDTO.getOldFileName())
+                .like(StrUtil.isAllNotBlank(fileDTO.getUrl()), SysFile::getUrl, fileDTO.getUrl())
+                .like(StrUtil.isAllNotBlank(fileDTO.getUserCode()), SysFile::getUserCode, fileDTO.getUserCode())
+                .like(StrUtil.isAllNotBlank(fileDTO.getUsername()), SysFile::getUsername, fileDTO.getUsername())
                 .page(logEntityPage);
     }
 }

@@ -18,7 +18,7 @@ package com.breeze.boot.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.MenuPermissionDTO;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
+import com.breeze.boot.admin.entity.SysMenuRole;
 import com.breeze.boot.core.Result;
 
 /**
@@ -27,7 +27,7 @@ import com.breeze.boot.core.Result;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysMenuRoleService extends IService<SysMenuRoleEntity> {
+public interface SysMenuRoleService extends IService<SysMenuRole> {
 
     /**
      * 编辑权限

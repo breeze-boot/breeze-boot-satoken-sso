@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysMenuRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysPlatformRoleEntity" id="sysPlatformRoleMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysPlatformRole" id="sysPlatformRoleMap">
         <id property="id" column="id"/>
         <result property="platformId" column="platform_id"/>
         <result property="roleId" column="role_id"/>

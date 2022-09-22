@@ -23,3 +23,6 @@
 hs_err_pid*
 /.idea/
 /target/
+/breeze-admin/target/
+/breeze-base/breeze-base-core/target/
+/breeze-base/breeze-base-jwtlogin/target/

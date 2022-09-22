@@ -18,10 +18,10 @@ package com.breeze.boot.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.admin.dto.LogDTO;
-import com.breeze.boot.admin.entity.SysLogEntity;
+import com.breeze.boot.admin.entity.SysLog;
 import com.breeze.boot.admin.service.SysLogService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ import java.util.Arrays;
  * @author breeze
  * @date 2022-09-02
  */
-@Api(tags = "日志管理模块", value = "日志管理模块")
+@Tag(name = "日志管理模块", description = "日志管理模块")
 @RestController
 @RequestMapping("/sys/log")
 public class SysLogController {
@@ -49,11 +49,11 @@ public class SysLogController {
      * 列表
      *
      * @param logDTO 日志dto
-     * @return {@link Result}<{@link Page}<{@link SysLogEntity}>>
+     * @return {@link Result}<{@link Page}<{@link SysLog}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLogEntity>> list(@RequestBody LogDTO logDTO) {
+    public Result<Page<SysLog>> list(@RequestBody LogDTO logDTO) {
         return Result.ok(this.sysLogService.listLog(logDTO));
     }
 

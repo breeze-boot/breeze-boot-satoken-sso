@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.LogDTO;
-import com.breeze.boot.admin.entity.SysLogEntity;
+import com.breeze.boot.admin.entity.SysLog;
 import com.breeze.boot.admin.mapper.SysLogMapper;
 import com.breeze.boot.admin.service.SysLogService;
 import org.springframework.stereotype.Service;
@@ -35,25 +35,25 @@ import java.util.Objects;
  * @date 2022-09-02
  */
 @Service
-public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLogEntity> implements SysLogService {
+public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     /**
      * 日志列表
      *
      * @param logDTO 日志dto
-     * @return {@link Page}<{@link SysLogEntity}>
+     * @return {@link Page}<{@link SysLog}>
      */
     @Override
-    public Page<SysLogEntity> listLog(LogDTO logDTO) {
-        Page<SysLogEntity> logEntityPage = new Page<>(logDTO.getCurrent(), logDTO.getSize());
+    public Page<SysLog> listLog(LogDTO logDTO) {
+        Page<SysLog> logEntityPage = new Page<>(logDTO.getCurrent(), logDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(logDTO.getSystemModule()), SysLogEntity::getSystemModule, logDTO.getSystemModule())
-                .like(StrUtil.isAllNotBlank(logDTO.getLogTitle()), SysLogEntity::getLogTitle, logDTO.getLogTitle())
-                .eq(Objects.nonNull(logDTO.getDoType()), SysLogEntity::getDoType, logDTO.getDoType())
-                .eq(Objects.nonNull(logDTO.getRequestType()), SysLogEntity::getRequestType, logDTO.getRequestType())
-                .eq(Objects.nonNull(logDTO.getResult()), SysLogEntity::getResult, logDTO.getResult())
-                .ge(Objects.nonNull(logDTO.getStartDate()), SysLogEntity::getCreateTime, logDTO.getStartDate())
-                .le(Objects.nonNull(logDTO.getEndDate()), SysLogEntity::getCreateTime, logDTO.getEndDate())
+                .like(StrUtil.isAllNotBlank(logDTO.getSystemModule()), SysLog::getSystemModule, logDTO.getSystemModule())
+                .like(StrUtil.isAllNotBlank(logDTO.getLogTitle()), SysLog::getLogTitle, logDTO.getLogTitle())
+                .eq(Objects.nonNull(logDTO.getDoType()), SysLog::getDoType, logDTO.getDoType())
+                .eq(Objects.nonNull(logDTO.getRequestType()), SysLog::getRequestType, logDTO.getRequestType())
+                .eq(Objects.nonNull(logDTO.getResult()), SysLog::getResult, logDTO.getResult())
+                .ge(Objects.nonNull(logDTO.getStartDate()), SysLog::getCreateTime, logDTO.getStartDate())
+                .le(Objects.nonNull(logDTO.getEndDate()), SysLog::getCreateTime, logDTO.getEndDate())
                 .page(logEntityPage);
     }
 }

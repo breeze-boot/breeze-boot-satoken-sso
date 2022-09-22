@@ -17,7 +17,7 @@
 package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.admin.entity.SysMenuRoleEntity;
+import com.breeze.boot.admin.entity.SysMenuRole;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -27,6 +27,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2021-12-06 22:03:39
  */
 @Mapper
-public interface SysMenuRoleMapper extends BaseMapper<SysMenuRoleEntity> {
+public interface SysMenuRoleMapper extends BaseMapper<SysMenuRole> {
 
 }

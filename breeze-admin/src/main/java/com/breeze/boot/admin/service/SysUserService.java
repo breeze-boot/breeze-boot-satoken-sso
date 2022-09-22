@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.UserDTO;
 import com.breeze.boot.admin.dto.UserOpenDTO;
-import com.breeze.boot.admin.entity.SysUserEntity;
+import com.breeze.boot.admin.entity.SysUser;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysUserService extends IService<SysUserEntity> {
+public interface SysUserService extends IService<SysUser> {
 
     /**
      * 负载登录用户名
@@ -47,9 +47,9 @@ public interface SysUserService extends IService<SysUserEntity> {
      * 列表页面
      *
      * @param userDTO 用户dto
-     * @return {@link Page}<{@link SysUserEntity}>
+     * @return {@link Page}<{@link SysUser}>
      */
-    IPage<SysUserEntity> listPage(UserDTO userDTO);
+    IPage<SysUser> listPage(UserDTO userDTO);
 
     /**
      * 保存用户
@@ -57,7 +57,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param sysUser 系统用户
      * @return {@link Boolean}
      */
-    Boolean saveUser(SysUserEntity sysUser);
+    Boolean saveUser(SysUser sysUser);
 
     /**
      * 更新用户id
@@ -65,7 +65,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param sysUser 系统用户
      * @return {@link Boolean}
      */
-    Boolean updateUserById(SysUserEntity sysUser);
+    Boolean updateUserById(SysUser sysUser);
 
     /**
      * 开启关闭锁定
@@ -97,7 +97,7 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param userEntity 用户实体
      * @return {@link Boolean}
      */
-    Boolean resetPass(SysUserEntity userEntity);
+    Boolean resetPass(SysUser userEntity);
 
     /**
      * 删除由ids

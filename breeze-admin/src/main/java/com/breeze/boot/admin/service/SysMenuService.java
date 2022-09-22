@@ -19,8 +19,8 @@ package com.breeze.boot.admin.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.MenuDTO;
-import com.breeze.boot.admin.entity.SysMenuEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysMenu;
+import com.breeze.boot.admin.entity.SysRole;
 import com.breeze.boot.core.Result;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysMenuService extends IService<SysMenuEntity> {
+public interface SysMenuService extends IService<SysMenu> {
 
     /**
      * 用户菜单权限列表
@@ -39,7 +39,7 @@ public interface SysMenuService extends IService<SysMenuEntity> {
      * @param roleEntityList 角色实体列表
      * @return {@link List}<{@link String}>
      */
-    List<String> listUserMenuPermission(List<SysRoleEntity> roleEntityList);
+    List<String> listUserMenuPermission(List<SysRole> roleEntityList);
 
     /**
      * 树菜单列表

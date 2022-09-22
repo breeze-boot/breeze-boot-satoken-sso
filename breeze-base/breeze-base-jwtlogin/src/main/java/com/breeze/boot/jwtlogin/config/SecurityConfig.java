@@ -69,11 +69,11 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 只有没有登录可以访问
-                .antMatchers("/token", "/sms", "/email","/captcha/getCode", "/captcha/checkCode").anonymous()
+                .antMatchers("/captcha/**", "/jwt/**").anonymous()
                 // 其余的必须登录
                 .anyRequest().authenticated()
                 .and()
-                // 自定义过滤器
+                // 自定义过滤器`
                 .addFilterAfter(jwtAuthenticationTokenFilter, ExceptionTranslationFilter.class)
                 // 异常处理类
                 .exceptionHandling()

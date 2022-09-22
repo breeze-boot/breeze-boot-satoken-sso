@@ -3,7 +3,7 @@ package com.breeze.boot.admin.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictEntity;
+import com.breeze.boot.admin.entity.SysDict;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,15 +14,15 @@ import org.apache.ibatis.annotations.Param;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysDictMapper extends BaseMapper<SysDictEntity> {
+public interface SysDictMapper extends BaseMapper<SysDict> {
 
     /**
      * 字典列表
      *
      * @param page    分页
      * @param dictDto 字典 dto
-     * @return {@link Page}<{@link SysDictEntity}>
+     * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDictEntity> listDict(Page<SysDictEntity> page, @Param("dictDto") DictDTO dictDto);
+    Page<SysDict> listDict(Page<SysDict> page, @Param("dictDto") DictDTO dictDto);
 
 }

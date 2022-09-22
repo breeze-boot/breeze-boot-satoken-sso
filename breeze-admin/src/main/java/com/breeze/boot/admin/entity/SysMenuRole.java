@@ -23,25 +23,24 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * 系统角色实体
+ * 系统菜单角色实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_role")
-public class SysRoleEntity extends BaseModel<SysRoleEntity> implements Serializable {
+@TableName("sys_menu_role")
+public class SysMenuRole extends BaseModel<SysMenuRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色代码
+     * 菜单id
      */
-    private String roleCode;
+    private Long menuId;
     /**
-     * 角色名
+     * 角色id
      */
-    private String roleName;
-
+    private Long roleId;
 }

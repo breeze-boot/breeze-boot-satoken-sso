@@ -24,8 +24,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.DeptDTO;
-import com.breeze.boot.admin.entity.SysDeptEntity;
-import com.breeze.boot.admin.entity.SysUserEntity;
+import com.breeze.boot.admin.entity.SysDept;
+import com.breeze.boot.admin.entity.SysUser;
 import com.breeze.boot.admin.mapper.SysDeptMapper;
 import com.breeze.boot.admin.service.SysDeptService;
 import com.breeze.boot.admin.service.SysUserService;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDeptEntity> implements SysDeptService {
+public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
 
     @Autowired
     private SysUserService sysUserService;
@@ -58,7 +58,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDeptEntity
      */
     @Override
     public List<Tree<Long>> listDept(DeptDTO deptDTO) {
-        List<SysDeptEntity> deptEntityList = this.list(Wrappers.<SysDeptEntity>lambdaQuery().eq(StrUtil.isAllNotBlank(deptDTO.getDeptName()), SysDeptEntity::getDeptName, deptDTO.getDeptName()));
+        List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(StrUtil.isAllNotBlank(deptDTO.getDeptName()), SysDept::getDeptName, deptDTO.getDeptName()));
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
                 sysDeptEntity -> {
                     TreeNode<Long> treeNode = new TreeNode<>();
@@ -84,11 +84,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDeptEntity
      */
     @Override
     public Result deleteById(Long id) {
-        List<SysDeptEntity> deptEntityList = this.list(Wrappers.<SysDeptEntity>lambdaQuery().eq(SysDeptEntity::getParentId, id));
+        List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
         if (CollUtil.isNotEmpty(deptEntityList)) {
             return Result.warning(Boolean.FALSE, "此部门存在下级部门,不允许删除");
         }
-        List<SysUserEntity> userEntityList = this.sysUserService.list(Wrappers.<SysUserEntity>lambdaQuery().eq(SysUserEntity::getDeptId, id));
+        List<SysUser> userEntityList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id));
         if (CollUtil.isNotEmpty(userEntityList)) {
             return Result.warning(Boolean.FALSE, "此部门内有在职员工,不允许删除");
         }

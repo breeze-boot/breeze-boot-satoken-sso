@@ -1,7 +1,7 @@
 package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.admin.entity.SysLogEntity;
+import com.breeze.boot.admin.entity.SysLog;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysLogMapper extends BaseMapper<SysLogEntity> {
+public interface SysLogMapper extends BaseMapper<SysLog> {
 
 }

@@ -24,67 +24,75 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * 系统菜单实体
+ * 系统用户实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_menu")
-public class SysMenuEntity extends BaseModel<SysMenuEntity> implements Serializable {
+@TableName("sys_user")
+public class SysUser extends BaseModel<SysUser> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 名字
+     * 部门ID
      */
-    private String name;
-
+    private Long deptId;
     /**
-     * 图标
-     */
-    private String icon;
-
-    /**
-     * 平台id
-     */
-    private Long platformId;
-
-    /**
-     * 平台名称
+     * 部门名称
      */
     @TableField(exist = false)
-    private String platformName;
+    private String deptName;
     /**
-     * 排序
+     * 用户code
      */
-    private Integer sort;
+    private String userCode;
     /**
-     * 上一级的菜单ID
+     * 用户名
      */
-    private Long parentId;
+    private String username;
     /**
-     * 权限
+     * 登录密码
      */
-    private String permission;
-    /**
-     * 路径
-     */
-    private String path;
+    private String password;
 
     /**
-     * 标题
+     * 登录账户
      */
-    private String title;
-
-    /**
-     * 组件
-     */
-    private String component;
+    private String amountName;
     /**
      * 类型
      */
-    private Integer type;
+    private Integer amountType;
+    /**
+     * 头像地址
+     */
+    private String avatar;
+    /**
+     * 手机号
+     */
+    private String phone;
+    /**
+     * 性别
+     */
+    private Integer sex;
+    /**
+     * 身份证
+     */
+    private String idCard;
+    /**
+     * 锁定
+     */
+    private Integer isLock;
+    /**
+     * 微信ID
+     */
+    private Integer openId;
+    /**
+     * 邮件
+     */
+    private String email;
 
 }

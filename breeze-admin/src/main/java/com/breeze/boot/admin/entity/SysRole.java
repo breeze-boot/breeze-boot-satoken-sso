@@ -14,29 +14,34 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.admin.service;
+package com.breeze.boot.admin.entity;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictItem;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * 系统字典项服务
+ * 系统角色实体
  *
  * @author breeze
- * @date 2022-09-02
+ * @date 2021-12-06 22:03:39
  */
-public interface SysDictItemService extends IService<SysDictItem> {
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("sys_role")
+public class SysRole extends BaseModel<SysRole> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 字典列表项
-     *
-     * @param dictDTO dict dto
-     * @return {@link List}<{@link SysDictItem}>
+     * 角色代码
      */
-    List<SysDictItem> listDictItem(DictDTO dictDTO);
+    private String roleCode;
+    /**
+     * 角色名
+     */
+    private String roleName;
 
 }
-

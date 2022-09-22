@@ -24,31 +24,26 @@ import java.io.Serializable;
 
 
 /**
- * 系统平台实体
+ * 系统平台作用实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_platform")
-public class SysPlatformEntity extends BaseModel<SysPlatformEntity> implements Serializable {
+@TableName("sys_platform_role")
+public class SysPlatformRole extends BaseModel<SysPlatformRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 平台标识
+     * 平台Id
      */
-    private String platformCode;
+    private Long platformId;
 
     /**
-     * 平台名称
+     * 角色Id
      */
-    private String platformName;
-
-    /**
-     * 描述
-     */
-    private String description;
+    private Long roleId;
 
 }

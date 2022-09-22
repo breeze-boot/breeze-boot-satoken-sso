@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.admin.mapper.SysFileMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.admin.entity.SysFileEntity" id="sysFileMap">
+    <resultMap type="com.breeze.boot.admin.entity.SysFile" id="sysFileMap">
         <id property="id" column="id"/>
         <result property="newFileName" column="new_file_name"/>
         <result property="oldFileName" column="old_file_name"/>

@@ -19,7 +19,7 @@ package com.breeze.boot.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictEntity;
+import com.breeze.boot.admin.entity.SysDict;
 import com.breeze.boot.core.Result;
 
 import java.util.List;
@@ -30,15 +30,15 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-public interface SysDictService extends IService<SysDictEntity> {
+public interface SysDictService extends IService<SysDict> {
 
     /**
      * 字典类型列表
      *
      * @param dictDto 字典 dto
-     * @return {@link Page}<{@link SysDictEntity}>
+     * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDictEntity> listDict(DictDTO dictDto);
+    Page<SysDict> listDict(DictDTO dictDto);
 
     /**
      * 开关

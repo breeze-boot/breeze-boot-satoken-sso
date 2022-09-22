@@ -18,10 +18,10 @@ package com.breeze.boot.admin.controller;
 
 import com.breeze.boot.admin.dto.UserDTO;
 import com.breeze.boot.admin.dto.UserOpenDTO;
-import com.breeze.boot.admin.entity.SysUserEntity;
+import com.breeze.boot.admin.entity.SysUser;
 import com.breeze.boot.admin.service.SysUserService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -38,7 +38,7 @@ import java.util.Arrays;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@Api(tags = "用户管理模块", value = "用户管理模块")
+@Tag(name = "用户管理模块", description = "用户管理模块")
 @RequestMapping("/sys/user")
 public class SysUserController {
 
@@ -101,7 +101,7 @@ public class SysUserController {
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
     public Result info(@PathVariable("id") Long id) {
-        SysUserEntity sysUser = sysUserService.getById(id);
+        SysUser sysUser = sysUserService.getById(id);
         return Result.ok(sysUser);
     }
 
@@ -113,7 +113,7 @@ public class SysUserController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:user:save')")
-    public Result save(@RequestBody SysUserEntity userEntity) {
+    public Result save(@RequestBody SysUser userEntity) {
         return Result.ok(sysUserService.saveUser(userEntity));
     }
 
@@ -125,7 +125,7 @@ public class SysUserController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result update(@RequestBody SysUserEntity userEntity) {
+    public Result update(@RequestBody SysUser userEntity) {
         return Result.ok(sysUserService.updateUserById(userEntity));
     }
 
@@ -137,7 +137,7 @@ public class SysUserController {
      */
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result resetPass(@RequestBody SysUserEntity userEntity) {
+    public Result resetPass(@RequestBody SysUser userEntity) {
         return Result.ok(sysUserService.resetPass(userEntity));
     }
 

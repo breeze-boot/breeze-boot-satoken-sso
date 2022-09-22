@@ -14,18 +14,32 @@ spring:
   security:
     ignore:
       excludeUrls:
-        - "/captcha/getCode"
-        - "/captcha/checkCode"
-        - "/token"
-        - "/email"
-        - "/login"
-        - "/sms"
+        - "/captcha/**"
+        - "/jwt/**"
         - "/**/*.js"
         - "/**/*.css"
         - "/**/*.png"
         - "/**/*.ico"
+        - "/"
+        - "/swagger-ui.html"
+        - "/swagger-ui/"
+        - "/*.html"
+        - "/**/*.html"
+        - "/swagger-resources/**"
+        - "/v3/api-docs/**"
   profiles:
     active: dev
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    # 修改api-docs路径
+    path: /v3/api-docs
+    # 开启api-docs
+    enabled: true
+    # 配置需要生成接口文档的扫描包
+    # packages-to-scan: com.breeze.boot.*.controller
 
 # 滑动验证，底图路径，不配置将使用默认图片
 # 支持全路径

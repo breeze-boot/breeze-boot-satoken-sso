@@ -17,11 +17,11 @@
 package com.breeze.boot.admin.controller;
 
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictItemEntity;
-import com.breeze.boot.admin.entity.SysFileEntity;
+import com.breeze.boot.admin.entity.SysDictItem;
+import com.breeze.boot.admin.entity.SysFile;
 import com.breeze.boot.admin.service.SysDictItemService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Api(tags = "字典管理模块", value = "字典管理模块")
+@Tag(name = "字典管理模块", description = "字典管理模块")
 @RestController
 @RequestMapping("/sys/dictItem")
 public class SysDictItemController {
@@ -50,7 +50,7 @@ public class SysDictItemController {
      * 列表
      *
      * @param dictDTO 字典dto
-     * @return {@link Result}<{@link List}<{@link SysFileEntity}>>
+     * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
@@ -66,7 +66,7 @@ public class SysDictItemController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result save(@RequestBody SysDictItemEntity dictItemEntity) {
+    public Result save(@RequestBody SysDictItem dictItemEntity) {
         return Result.ok(sysDictItemService.save(dictItemEntity));
     }
 
@@ -78,7 +78,7 @@ public class SysDictItemController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result update(@RequestBody SysDictItemEntity dictItemEntity) {
+    public Result update(@RequestBody SysDictItem dictItemEntity) {
         return Result.ok(this.sysDictItemService.updateById(dictItemEntity));
     }
 

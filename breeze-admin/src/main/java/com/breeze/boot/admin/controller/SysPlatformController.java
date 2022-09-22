@@ -19,12 +19,12 @@ package com.breeze.boot.admin.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.admin.dto.PlatformDTO;
-import com.breeze.boot.admin.entity.SysMenuEntity;
-import com.breeze.boot.admin.entity.SysPlatformEntity;
+import com.breeze.boot.admin.entity.SysMenu;
+import com.breeze.boot.admin.entity.SysPlatform;
 import com.breeze.boot.admin.service.SysMenuService;
 import com.breeze.boot.admin.service.SysPlatformService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +39,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@Api(tags = "平台管理模块", value = "平台管理模块")
+@Tag(name = "平台管理模块", description = "平台管理模块")
 @RequestMapping("/sys/platform")
 @AllArgsConstructor
 public class SysPlatformController {
@@ -86,7 +86,7 @@ public class SysPlatformController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:platform:save')")
-    public Result save(@RequestBody SysPlatformEntity platformEntity) {
+    public Result save(@RequestBody SysPlatform platformEntity) {
         return Result.ok(this.sysPlatformService.save(platformEntity));
     }
 
@@ -98,7 +98,7 @@ public class SysPlatformController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:platform:update')")
-    public Result update(@RequestBody SysPlatformEntity platformEntity) {
+    public Result update(@RequestBody SysPlatform platformEntity) {
         return Result.ok(this.sysPlatformService.updateById(platformEntity));
     }
 
@@ -111,7 +111,7 @@ public class SysPlatformController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
     public Result delete(@RequestBody Long[] ids) {
-        List<SysMenuEntity> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenuEntity>lambdaQuery().in(SysMenuEntity::getPlatformId, ids));
+        List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {
             return Result.warning(Boolean.FALSE, "该平台有菜单配置");
         }

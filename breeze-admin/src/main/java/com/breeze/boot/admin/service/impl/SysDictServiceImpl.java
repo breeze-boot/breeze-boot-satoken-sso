@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.admin.dto.DictDTO;
-import com.breeze.boot.admin.entity.SysDictEntity;
-import com.breeze.boot.admin.entity.SysDictItemEntity;
+import com.breeze.boot.admin.entity.SysDict;
+import com.breeze.boot.admin.entity.SysDictItem;
 import com.breeze.boot.admin.mapper.SysDictMapper;
 import com.breeze.boot.admin.service.SysDictItemService;
 import com.breeze.boot.admin.service.SysDictService;
@@ -38,13 +38,13 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity> implements SysDictService {
+public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     @Autowired
     private SysDictItemService sysDictItemService;
 
     @Override
-    public Page<SysDictEntity> listDict(DictDTO dictDto) {
+    public Page<SysDict> listDict(DictDTO dictDto) {
         return this.baseMapper.listDict(new Page<>(dictDto.getCurrent(), dictDto.getSize()), dictDto);
     }
 
@@ -56,14 +56,14 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDictEntity
      */
     @Override
     public Boolean open(DictDTO dictDTO) {
-        return this.update(Wrappers.<SysDictEntity>lambdaUpdate()
-                .set(SysDictEntity::getIsOpen, dictDTO.getIsOpen())
-                .eq(SysDictEntity::getId, dictDTO.getId()));
+        return this.update(Wrappers.<SysDict>lambdaUpdate()
+                .set(SysDict::getIsOpen, dictDTO.getIsOpen())
+                .eq(SysDict::getId, dictDTO.getId()));
     }
 
     @Override
     public Result deleteByIds(List<Long> ids) {
-        boolean remove = this.sysDictItemService.remove(Wrappers.<SysDictItemEntity>lambdaQuery().in(SysDictItemEntity::getDictId, ids));
+        boolean remove = this.sysDictItemService.remove(Wrappers.<SysDictItem>lambdaQuery().in(SysDictItem::getDictId, ids));
         if (remove) {
             this.removeByIds(ids);
         }

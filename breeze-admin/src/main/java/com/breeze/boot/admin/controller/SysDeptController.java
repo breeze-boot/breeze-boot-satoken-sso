@@ -18,10 +18,10 @@ package com.breeze.boot.admin.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.admin.dto.DeptDTO;
-import com.breeze.boot.admin.entity.SysDeptEntity;
+import com.breeze.boot.admin.entity.SysDept;
 import com.breeze.boot.admin.service.SysDeptService;
 import com.breeze.boot.core.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Api(tags = "部门管理模块", value = "部门管理模块")
+@Tag(name = "部门管理模块", description = "部门管理模块")
 @RestController
 @RequestMapping("/sys/dept")
 public class SysDeptController {
@@ -77,7 +77,7 @@ public class SysDeptController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dept:save')")
-    public Result save(@RequestBody SysDeptEntity deptEntity) {
+    public Result save(@RequestBody SysDept deptEntity) {
         return Result.ok(sysDeptService.save(deptEntity));
     }
 
@@ -89,7 +89,7 @@ public class SysDeptController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dept:update')")
-    public Result update(@RequestBody SysDeptEntity deptEntity) {
+    public Result update(@RequestBody SysDept deptEntity) {
         return Result.ok(this.sysDeptService.updateById(deptEntity));
     }
 

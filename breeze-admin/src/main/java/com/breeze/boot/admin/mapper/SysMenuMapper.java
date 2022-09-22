@@ -18,8 +18,8 @@ package com.breeze.boot.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.breeze.boot.admin.dto.MenuDTO;
-import com.breeze.boot.admin.entity.SysMenuEntity;
-import com.breeze.boot.admin.entity.SysRoleEntity;
+import com.breeze.boot.admin.entity.SysMenu;
+import com.breeze.boot.admin.entity.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Mapper
-public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
+public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     /**
      * 用户菜单权限列表
@@ -40,14 +40,14 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      * @param roleEntityList 角色实体列表
      * @return {@link List}<{@link String}>
      */
-    List<String> listUserMenuPermission(@Param("roleList") List<SysRoleEntity> roleEntityList);
+    List<String> listUserMenuPermission(@Param("roleList") List<SysRole> roleEntityList);
 
     /**
      * 菜单列表
      *
      * @param menuDTO 菜单dto
-     * @return {@link List}<{@link SysMenuEntity}>
+     * @return {@link List}<{@link SysMenu}>
      */
-    List<SysMenuEntity> listMenu(@Param("menuDTO") MenuDTO menuDTO);
+    List<SysMenu> listMenu(@Param("menuDTO") MenuDTO menuDTO);
 
 }
