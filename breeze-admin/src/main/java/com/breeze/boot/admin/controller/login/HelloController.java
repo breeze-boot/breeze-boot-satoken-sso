@@ -19,11 +19,17 @@ package com.breeze.boot.admin.controller.login;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.jwtlogin.entity.CurrentLoginUser;
 import com.breeze.boot.jwtlogin.utils.SecurityUtils;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * 你好控制器
@@ -47,6 +53,49 @@ public class HelloController {
         CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
         currentLoginUser.getAuthorities().forEach((x) -> System.out.println(x.toString()));
         return Result.ok("Hello, " + authentication.getName() + "!");
+    }
+
+    /**
+     * 获取用户
+     *
+     * @return {@link Authentication}
+     */
+    @GetMapping("/v1/getUser")
+    public Authentication getUser() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 得到user
+     *
+     * @param principal 主要
+     * @return {@link Principal}
+     */
+    @GetMapping("/v2/getUser")
+    public Principal getUser2(Principal principal) {
+        return principal;
+    }
+
+    /**
+     * 得到user
+     * 文档 「https://springdoc.org/#how-can-i-ignore-authenticationprincipal-parameter-from-spring-security」
+     *
+     * @return {@link Principal}
+     */
+    @GetMapping("/v3/getUser")
+    public User getUser3(@AuthenticationPrincipal @Parameter(hidden = true) User user) {
+        return user;
+    }
+
+    /**
+     * 得到user4
+     *
+     * @param authentication 身份验证
+     * @return {@link Object}
+     */
+    @GetMapping("/v4/getUser")
+    public Object getUser4(Authentication authentication) {
+        return authentication.getPrincipal();
     }
 
 }

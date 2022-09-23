@@ -24,11 +24,8 @@ import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 /**
@@ -47,38 +44,6 @@ public class SysUserController {
      */
     @Autowired
     private SysUserService sysUserService;
-
-    /**
-     * 获取用户
-     *
-     * @return {@link Authentication}
-     */
-    @GetMapping("/v1/getUser")
-    public Authentication getUser() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    /**
-     * 得到user2
-     *
-     * @param principal 主要
-     * @return {@link Principal}
-     */
-    @GetMapping("/v2/getUser")
-    public Principal getUser2(Principal principal) {
-        return principal;
-    }
-
-    /**
-     * 得到user3
-     *
-     * @param authentication 身份验证
-     * @return {@link Object}
-     */
-    @GetMapping("/v3/getUser")
-    public Object getUser3(Authentication authentication) {
-        return authentication.getPrincipal();
-    }
 
     /**
      * 列表
