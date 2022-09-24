@@ -11,11 +11,25 @@ import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * spring文档配置
+ *
+ * @author gaoweixuan
+ * @date 2022/09/24
+ */
 @Configuration
-public class SpringDoc {
+public class SpringDocConfig {
 
+    /**
+     * 安全计划名称
+     */
     private static final String SECURITY_SCHEME_NAME = "bearer";
 
+    /**
+     * 信息
+     *
+     * @return {@link Info}
+     */
     public Info info() {
         return new Info().title("晴风 API 文档")
                 .description("SpringDoc API 演示")
@@ -23,12 +37,22 @@ public class SpringDoc {
                 .license(new License().name("Apache 2.0").url(""));
     }
 
+    /**
+     * 外部文档
+     *
+     * @return {@link ExternalDocumentation}
+     */
     public ExternalDocumentation externalDocumentation() {
         return new ExternalDocumentation()
                 .description("")
                 .url("http://www..com");
     }
 
+    /**
+     * sys api
+     *
+     * @return {@link GroupedOpenApi}
+     */
     @Bean
     public GroupedOpenApi sysApi() {
         return GroupedOpenApi.builder()
@@ -37,6 +61,11 @@ public class SpringDoc {
                 .build();
     }
 
+    /**
+     * 测试api
+     *
+     * @return {@link GroupedOpenApi}
+     */
     @Bean
     public GroupedOpenApi testApi() {
         return GroupedOpenApi.builder()
@@ -45,6 +74,11 @@ public class SpringDoc {
                 .build();
     }
 
+    /**
+     * 登录api
+     *
+     * @return {@link GroupedOpenApi}
+     */
     @Bean
     public GroupedOpenApi loginApi() {
         return GroupedOpenApi.builder()
@@ -53,6 +87,11 @@ public class SpringDoc {
                 .build();
     }
 
+    /**
+     * 微风开放api
+     *
+     * @return {@link OpenAPI}
+     */
     @Bean
     public OpenAPI breezeOpenAPI() {
         return new OpenAPI().info(info())
