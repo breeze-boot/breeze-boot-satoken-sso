@@ -28,7 +28,7 @@
     </organization>
 
     <modules>
-        <module>breeze-admin</module>
+        <module>breeze-system</module>
         <module>breeze-base</module>
     </modules>
 
