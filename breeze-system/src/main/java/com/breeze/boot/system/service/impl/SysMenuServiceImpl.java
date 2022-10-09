@@ -195,7 +195,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result saveMenu(SysMenu menuEntity) {
         SysMenu sysMenu = this.getById(menuEntity.getParentId());
-        if (Objects.isNull(sysMenu)) {
+        if (!Objects.equals(0L, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
             return Result.fail("上一层组件不存在");
         }
         return Result.ok(this.save(menuEntity));
