@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+# security
+spring:
+  application:
+    name: breeze-boot-admin-server
+  boot:
+    admin:
+      context-path: /
+  security:
+    user:
+      name: admin
+      password: admin

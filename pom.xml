@@ -30,12 +30,14 @@
     <modules>
         <module>breeze-system</module>
         <module>breeze-base</module>
+        <module>breeze-boot-admin-server</module>
     </modules>
 
     <properties>
         <breeze-boot.version>1.0</breeze-boot.version>
         <java.version>1.8</java.version>
         <spring-boot.version>2.7.2</spring-boot.version>
+        <spring-boot-admin.version>2.7.3</spring-boot-admin.version>
 
         <!--Swagger Resources-->
         <knife4j.version>2.0.9</knife4j.version>
@@ -70,14 +72,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>5.7.3</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

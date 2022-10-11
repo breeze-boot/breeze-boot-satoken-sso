@@ -46,7 +46,7 @@ public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
         log.error("{}", accessDeniedException.getMessage());
-        ResponseUtil.response(response, ResultCode.UNAUTHORIZED.getDesc());
+        ResponseUtil.response(response, ResultCode.UNAUTHORIZED.getMsg());
     }
 
 }

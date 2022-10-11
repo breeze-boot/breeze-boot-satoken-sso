@@ -1,13 +1,13 @@
 spring:
   redis:
-    host: breeze-redis
-    port: 6379
-    password: breeze
+    host: ${BREEZE_REDIS_HOST:breeze-redis}
+    port: ${BREEZE_REDIS_PORT:6379}
+    password: ${BREEZE_REDIS_PASSWORD:breeze}
   datasource:
-    url: jdbc:mysql://breeze-mysql:3306/breeze_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql}:${BREEZE_MYSQL_PORT:3306}/${BREEZE_MYSQL_DB_NAME:breeze_admin}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    username: ${BREEZE_MYSQL_USERNAME:root}
+    password: ${BREEZE_MYSQL_PASSWORD:root}
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 启用内置过滤器（第一个 stat必须，否则监控不到SQL）
@@ -37,8 +37,8 @@ spring:
         reset-enable: false
         allow: "127.0.0.1"
         url-pattern: /druid/*
-        login-username: admin
-        login-password: admin
+        login-username: ${BREEZE-DRUID-USERNAME:admin}
+        login-password: ${BREEZE-DRUID-PASSWORD:admin}
         deny:
 
 # mybatis-plus 配置

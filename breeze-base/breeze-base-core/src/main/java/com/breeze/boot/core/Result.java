@@ -60,11 +60,11 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> ok(T data) {
-        Result<T> Result = new Result();
-        Result.setCode(ResultCode.OK.getCode());
-        Result.setMessage(ResultCode.OK.getDesc());
-        Result.setData(data);
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(ResultCode.OK.getCode());
+        result.setMessage(ResultCode.OK.getMsg());
+        result.setData(data);
+        return result;
     }
 
     /**
@@ -73,10 +73,10 @@ public class Result<T> implements Serializable {
      * @return {@link Result}
      */
     public static Result ok() {
-        Result Result = new Result();
-        Result.setCode(ResultCode.OK.getCode());
-        Result.setMessage(ResultCode.OK.getDesc());
-        return Result;
+        Result result = new Result();
+        result.setCode(ResultCode.OK.getCode());
+        result.setMessage(ResultCode.OK.getMsg());
+        return result;
     }
 
     /**
@@ -87,11 +87,11 @@ public class Result<T> implements Serializable {
      * @return {@link Result}
      */
     public static <T> Result ok(T data, String msg) {
-        Result Result = new Result();
-        Result.setCode(ResultCode.OK.getCode());
-        Result.setMessage(msg);
-        Result.setData(data);
-        return Result;
+        Result result = new Result();
+        result.setCode(ResultCode.OK.getCode());
+        result.setMessage(msg);
+        result.setData(data);
+        return result;
     }
 
     /**
@@ -101,10 +101,10 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(String message) {
-        Result<T> Result = new Result();
-        Result.setCode(ResultCode.FAIL.getCode());
-        Result.setMessage(message);
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(ResultCode.FAIL.getCode());
+        result.setMessage(message);
+        return result;
     }
 
     /**
@@ -114,10 +114,10 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> warning(String message) {
-        Result<T> Result = new Result();
-        Result.setCode(ResultCode.FAIL.getCode());
-        Result.setMessage(message);
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(ResultCode.FAIL.getCode());
+        result.setMessage(message);
+        return result;
     }
 
     /**
@@ -128,11 +128,11 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> warning(T data, String message) {
-        Result<T> Result = new Result();
-        Result.setCode(ResultCode.WARNING.getCode());
-        Result.setMessage(message);
-        Result.setData(data);
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(ResultCode.WARNING.getCode());
+        result.setMessage(message);
+        result.setData(data);
+        return result;
     }
 
     /**
@@ -143,11 +143,27 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(T data, String message) {
-        Result<T> Result = new Result();
-        Result.setCode(ResultCode.FAIL.getCode());
-        Result.setMessage(message);
-        Result.setData(data);
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(ResultCode.FAIL.getCode());
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
+    /**
+     * 失败
+     *
+     * @param data    数据
+     * @param message 消息
+     * @param code    代码
+     * @return {@link Result}<{@link T}>
+     */
+    public static <T> Result<T> fail(Integer code, T data, String message) {
+        Result<T> result = new Result();
+        result.setCode(code);
+        result.setData(data);
+        result.setMessage(message);
+        return result;
     }
 
     /**
@@ -157,10 +173,25 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(ResultCode resultCode) {
-        Result<T> Result = new Result();
-        Result.setCode(resultCode.getCode());
-        Result.setMessage(resultCode.getDesc());
-        return Result;
+        Result<T> result = new Result();
+        result.setCode(resultCode.getCode());
+        result.setMessage(resultCode.getMsg());
+        return result;
+    }
+
+    /**
+     * 失败
+     *
+     * @param resultCode 结果代码
+     * @param msg        味精
+     * @return {@link Result}<{@link String}>
+     */
+    public static Result<String> fail(ResultCode resultCode, String msg) {
+        Result<String> result = new Result();
+        result.setCode(resultCode.getCode());
+        result.setMessage(resultCode.getMsg());
+        result.setData(msg);
+        return result;
     }
 
     /**

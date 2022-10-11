@@ -14,6 +14,7 @@ spring:
   security:
     ignore:
       excludeUrls:
+        - "/actuator/**"
         - "/captcha/**"
         - "/jwt/**"
         - "/**/*.js"
@@ -29,6 +30,34 @@ spring:
         - "/v3/api-docs/**"
   profiles:
     active: dev
+
+  boot:
+    admin:
+      client:
+        # Admin 服务端地址
+        url: http://192.168.2.157:8081
+        instance:
+          prefer-ip: true
+        # server 用户名
+        username: admin
+        # server 密码
+        password: admin
+
+# 开放端点
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    info:
+      enabled: false
+    metrics:
+      enabled: true
 
 springdoc:
   swagger-ui:
@@ -112,11 +141,5 @@ jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
 logging:
-  config:
-    classpath: logback-spring.xml
+  config: classpath:logback-spring.xml

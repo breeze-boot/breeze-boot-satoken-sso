@@ -54,7 +54,7 @@ public enum ResultCode {
      */
     UNAUTHORIZED(401, "未获取访问权限"),
     /**
-     * 内部服务器错误
+     * 服务器错误
      */
     INTERNAL_SERVER_ERROR(500, "服务器错误"),
     /**
@@ -76,19 +76,19 @@ public enum ResultCode {
     private int code;
 
     /**
-     * desc
+     * msg
      */
-    private String desc;
+    private String msg;
 
     /**
      * 结果代码
      *
      * @param code 代码
-     * @param desc desc
+     * @param msg  msg
      */
-    ResultCode(int code, String desc) {
+    ResultCode(int code, String msg) {
         this.code = code;
-        this.desc = desc;
+        this.msg = msg;
     }
 
     /**
@@ -110,21 +110,21 @@ public enum ResultCode {
     }
 
     /**
-     * 得到desc
+     * 得到Msg
      *
      * @return {@link String}
      */
-    public String getDesc() {
-        return desc;
+    public String getMsg() {
+        return msg;
     }
 
     /**
-     * 设置desc
+     * 设置Msg
      *
-     * @param desc desc
+     * @param msg msg
      */
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
 }
