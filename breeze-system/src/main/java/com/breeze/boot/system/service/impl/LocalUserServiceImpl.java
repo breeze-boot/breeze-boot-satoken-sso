@@ -1,9 +1,9 @@
 package com.breeze.boot.system.service.impl;
 
-import com.breeze.boot.system.service.SysUserService;
 import com.breeze.boot.jwtlogin.entity.CurrentLoginUser;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 import com.breeze.boot.jwtlogin.service.IUserDetailsService;
+import com.breeze.boot.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;

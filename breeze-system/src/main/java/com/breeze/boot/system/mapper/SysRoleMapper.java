@@ -17,8 +17,8 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.system.entity.SysRole;
 import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
+import com.breeze.boot.system.entity.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

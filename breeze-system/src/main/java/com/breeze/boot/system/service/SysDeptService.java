@@ -18,9 +18,9 @@ package com.breeze.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.entity.SysDept;
-import com.breeze.boot.core.Result;
 
 import java.util.List;
 

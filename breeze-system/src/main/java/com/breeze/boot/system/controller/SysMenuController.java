@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.controller;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.MenuDTO;
 import com.breeze.boot.system.entity.SysMenu;
@@ -25,6 +26,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 系统菜单控制器
@@ -52,7 +55,7 @@ public class SysMenuController {
     @Operation(summary = "列表", description = "")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result list(@RequestBody MenuDTO menuDTO) {
+    public Result<? extends Object> list(@RequestBody MenuDTO menuDTO) {
         return this.sysMenuService.listMenu(menuDTO);
     }
 
@@ -64,19 +67,19 @@ public class SysMenuController {
      */
     @GetMapping("/listTreeMenu")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result listTreeMenu(@RequestParam(required = false) String platformCode) {
+    public Result<List<Tree<Long>>> listTreeMenu(@RequestParam(required = false) String platformCode) {
         return this.sysMenuService.listTreeMenu(platformCode);
     }
 
     /**
-     * 列表树许可
+     * 树形权限列表
      *
      * @return {@link Result}
      */
-    @Operation(method = "树形菜单列表")
+    @Operation(method = "树形权限列表")
     @GetMapping("/listTreePermission")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result listTreePermission() {
+    public Result<List<Tree<Long>>> listTreePermission() {
         return this.sysMenuService.listTreePermission();
     }
 
@@ -88,7 +91,7 @@ public class SysMenuController {
      */
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
-    public Result info(@PathVariable("id") Long id) {
+    public Result<SysMenu> info(@PathVariable("id") Long id) {
         return Result.ok(sysMenuService.getById(id));
     }
 
@@ -100,7 +103,7 @@ public class SysMenuController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:menu:save')")
-    public Result<? extends Object> save(@RequestBody SysMenu menuEntity) {
+    public Result<Boolean> save(@RequestBody SysMenu menuEntity) {
         return this.sysMenuService.saveMenu(menuEntity);
     }
 
@@ -124,7 +127,7 @@ public class SysMenuController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
-    public Result delete(@RequestBody Long id) {
+    public Result<Boolean> delete(@RequestBody Long id) {
         return this.sysMenuService.deleteById(id);
     }
 

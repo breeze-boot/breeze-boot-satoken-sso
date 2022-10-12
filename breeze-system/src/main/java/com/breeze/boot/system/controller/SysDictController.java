@@ -17,13 +17,14 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.entity.SysDict;
 import com.breeze.boot.system.service.SysDictService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class SysDictController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result<Boolean> save(@RequestBody SysDict dictEntity) {
+    public Result<Boolean> save(@Validated @RequestBody SysDict dictEntity) {
         return Result.ok(sysDictService.save(dictEntity));
     }
 

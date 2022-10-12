@@ -17,9 +17,9 @@
 package com.breeze.boot.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 
@@ -31,6 +31,9 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("sys_platform")
 public class SysPlatform extends BaseModel<SysPlatform> implements Serializable {
 
@@ -39,11 +42,13 @@ public class SysPlatform extends BaseModel<SysPlatform> implements Serializable 
     /**
      * 平台标识
      */
+    @NotBlank(message = "平台编码不可为空")
     private String platformCode;
 
     /**
      * 平台名称
      */
+    @NotBlank(message = "平台名称不可为空")
     private String platformName;
 
     /**

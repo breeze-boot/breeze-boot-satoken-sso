@@ -22,6 +22,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.Result;
+import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
+import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.entity.SysDept;
@@ -30,9 +33,6 @@ import com.breeze.boot.system.entity.SysRoleUser;
 import com.breeze.boot.system.entity.SysUser;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
-import com.breeze.boot.core.Result;
-import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
-import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -195,7 +195,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (remove) {
             // 删除用户角色关系
             this.sysRoleUserService.remove(Wrappers.<SysRoleUser>lambdaQuery()
-                    .eq(SysRoleUser::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
+                    .in(SysRoleUser::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
@@ -210,6 +210,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUserDTO loginUserDTO = new LoginUserDTO();
         BeanUtil.copyProperties(sysUser, loginUserDTO);
         SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
+        // TOOD
         loginUserDTO.setDeptName(dept.getDeptName());
         List<SysRole> roleList = this.sysRoleService.listUserRole(sysUser.getId());
         if (CollUtil.isEmpty(roleList)) {

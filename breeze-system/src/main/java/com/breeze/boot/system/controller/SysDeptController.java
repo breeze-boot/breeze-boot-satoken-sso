@@ -17,10 +17,10 @@
 package com.breeze.boot.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.entity.SysDept;
 import com.breeze.boot.system.service.SysDeptService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

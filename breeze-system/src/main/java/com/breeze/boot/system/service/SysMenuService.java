@@ -18,10 +18,10 @@ package com.breeze.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.MenuDTO;
 import com.breeze.boot.system.entity.SysMenu;
 import com.breeze.boot.system.entity.SysRole;
-import com.breeze.boot.core.Result;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param id id
      * @return {@link Result}
      */
-    Result deleteById(Long id);
+    Result<Boolean> deleteById(Long id);
 
     /**
      * 保存菜单
@@ -78,7 +78,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param menuEntity 菜单实体
      * @return {@link Result}
      */
-    Result saveMenu(SysMenu menuEntity);
+    Result<Boolean> saveMenu(SysMenu menuEntity);
 
 }
 

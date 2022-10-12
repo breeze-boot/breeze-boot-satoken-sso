@@ -16,6 +16,8 @@
 
 package com.breeze.boot.core.enums;
 
+import lombok.Getter;
+
 /**
  * 结果代码
  * 返回code枚举
@@ -23,6 +25,7 @@ package com.breeze.boot.core.enums;
  * @author breeze
  * @date 2021/10/1
  */
+@Getter
 public enum ResultCode {
 
     /**
@@ -54,6 +57,10 @@ public enum ResultCode {
      */
     UNAUTHORIZED(401, "未获取访问权限"),
     /**
+     * 400
+     */
+    PARAMETER_IS_INCORRECT(400, "参数不正确"),
+    /**
      * 服务器错误
      */
     INTERNAL_SERVER_ERROR(500, "服务器错误"),
@@ -73,12 +80,12 @@ public enum ResultCode {
     /**
      * 代码
      */
-    private int code;
+    private final int code;
 
     /**
      * msg
      */
-    private String msg;
+    private final String msg;
 
     /**
      * 结果代码
@@ -88,42 +95,6 @@ public enum ResultCode {
      */
     ResultCode(int code, String msg) {
         this.code = code;
-        this.msg = msg;
-    }
-
-    /**
-     * 获取代码
-     *
-     * @return int
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * 设置代码
-     *
-     * @param code 代码
-     */
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    /**
-     * 得到Msg
-     *
-     * @return {@link String}
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 设置Msg
-     *
-     * @param msg msg
-     */
-    public void setMsg(String msg) {
         this.msg = msg;
     }
 

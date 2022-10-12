@@ -73,7 +73,6 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * createdTime
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(name = "创建人", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
@@ -99,7 +98,6 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改人
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(name = "修改人", hidden = true)
     @TableField(fill = FieldFill.UPDATE)
     private String updateName;
@@ -109,7 +107,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(name = "修改时间", hidden = true)
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
 }

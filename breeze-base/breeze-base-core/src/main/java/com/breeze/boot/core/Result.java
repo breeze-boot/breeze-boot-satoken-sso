@@ -17,6 +17,8 @@
 package com.breeze.boot.core;
 
 import com.breeze.boot.core.enums.ResultCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -27,6 +29,8 @@ import java.io.Serializable;
  * @author breeze
  * @date 2021/10/1
  */
+@Getter
+@Setter
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,10 +51,15 @@ public class Result<T> implements Serializable {
     private T data;
 
     /**
+     * 返回时的 时间戳
+     */
+    private long timestamp;
+
+    /**
      * 结果
      */
     private Result() {
-
+        this.timestamp = System.currentTimeMillis();
     }
 
     /**
@@ -60,7 +69,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> ok(T data) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.OK.getCode());
         result.setMessage(ResultCode.OK.getMsg());
         result.setData(data);
@@ -72,8 +81,8 @@ public class Result<T> implements Serializable {
      *
      * @return {@link Result}
      */
-    public static Result ok() {
-        Result result = new Result();
+    public static <T> Result<T> ok() {
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.OK.getCode());
         result.setMessage(ResultCode.OK.getMsg());
         return result;
@@ -86,8 +95,8 @@ public class Result<T> implements Serializable {
      * @param msg  味精
      * @return {@link Result}
      */
-    public static <T> Result ok(T data, String msg) {
-        Result result = new Result();
+    public static <T> Result<T> ok(T data, String msg) {
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.OK.getCode());
         result.setMessage(msg);
         result.setData(data);
@@ -101,7 +110,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(String message) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.FAIL.getCode());
         result.setMessage(message);
         return result;
@@ -114,8 +123,8 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> warning(String message) {
-        Result<T> result = new Result();
-        result.setCode(ResultCode.FAIL.getCode());
+        Result<T> result = new Result<>();
+        result.setCode(ResultCode.WARNING.getCode());
         result.setMessage(message);
         return result;
     }
@@ -128,7 +137,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> warning(T data, String message) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.WARNING.getCode());
         result.setMessage(message);
         result.setData(data);
@@ -143,7 +152,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(T data, String message) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.FAIL.getCode());
         result.setMessage(message);
         result.setData(data);
@@ -159,7 +168,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(Integer code, T data, String message) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(code);
         result.setData(data);
         result.setMessage(message);
@@ -173,7 +182,7 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(ResultCode resultCode) {
-        Result<T> result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(resultCode.getCode());
         result.setMessage(resultCode.getMsg());
         return result;
@@ -187,64 +196,10 @@ public class Result<T> implements Serializable {
      * @return {@link Result}<{@link String}>
      */
     public static Result<String> fail(ResultCode resultCode, String msg) {
-        Result<String> result = new Result();
+        Result<String> result = new Result<>();
         result.setCode(resultCode.getCode());
-        result.setMessage(resultCode.getMsg());
-        result.setData(msg);
+        result.setMessage(msg);
         return result;
     }
 
-    /**
-     * 获取代码
-     *
-     * @return int
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * 设置代码
-     *
-     * @param code 代码
-     */
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    /**
-     * 得到消息
-     *
-     * @return {@link String}
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * 设置消息
-     *
-     * @param message 消息
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     * 获取数据
-     *
-     * @return {@link T}
-     */
-    public T getData() {
-        return data;
-    }
-
-    /**
-     * 集数据
-     *
-     * @param data 数据
-     */
-    public void setData(T data) {
-        this.data = data;
-    }
 }

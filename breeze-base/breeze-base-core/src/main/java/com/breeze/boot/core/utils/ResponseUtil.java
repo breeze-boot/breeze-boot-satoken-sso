@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 响应实效
  * response 返回JSON工具类
  *
  * @author breeze
@@ -38,7 +37,7 @@ public class ResponseUtil {
      * 响应
      *
      * @param response  响应
-     * @param resultMsg 结果味精
+     * @param resultMsg 结果信息
      */
     public static void response(HttpServletResponse response, String resultMsg) {
         ServletOutputStream out = null;

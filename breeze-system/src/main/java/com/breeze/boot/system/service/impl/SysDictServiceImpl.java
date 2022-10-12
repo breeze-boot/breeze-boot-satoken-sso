@@ -19,13 +19,13 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.entity.SysDict;
 import com.breeze.boot.system.entity.SysDictItem;
 import com.breeze.boot.system.mapper.SysDictMapper;
 import com.breeze.boot.system.service.SysDictItemService;
 import com.breeze.boot.system.service.SysDictService;
-import com.breeze.boot.core.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

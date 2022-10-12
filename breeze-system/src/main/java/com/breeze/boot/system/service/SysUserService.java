@@ -19,11 +19,11 @@ package com.breeze.boot.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.Result;
+import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.entity.SysUser;
-import com.breeze.boot.core.Result;
-import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 
 import java.util.List;
 

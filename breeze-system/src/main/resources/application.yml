@@ -22,6 +22,7 @@ spring:
         - "/**/*.png"
         - "/**/*.ico"
         - "/"
+        - "/druid/**"
         - "/swagger-ui.html"
         - "/swagger-ui/"
         - "/*.html"
@@ -35,7 +36,7 @@ spring:
     admin:
       client:
         # Admin 服务端地址
-        url: http://192.168.2.157:8081
+        url: http://127.0.0.1:8081
         instance:
           prefer-ip: true
         # server 用户名

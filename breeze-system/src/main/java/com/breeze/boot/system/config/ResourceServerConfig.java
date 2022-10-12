@@ -36,7 +36,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @date 2022-08-31
  */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig {
 

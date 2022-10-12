@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Objects;
+
 /**
  * 安全跑龙套
  *
@@ -41,6 +43,32 @@ public class SecurityUtils {
         } catch (Exception e) {
             throw new AcessException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    /**
+     * 得到用户代码
+     *
+     * @return {@link String}
+     */
+    public static String getUserCode() {
+        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        if (Objects.isNull(currentLoginUser)) {
+            return "";
+        }
+        return currentLoginUser.getUserCode();
+    }
+
+    /**
+     * 获得用户名
+     *
+     * @return {@link String}
+     */
+    public static String getUserName() {
+        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        if (Objects.isNull(currentLoginUser)) {
+            return "";
+        }
+        return currentLoginUser.getUsername();
     }
 
     /**

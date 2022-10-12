@@ -86,7 +86,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Override
-    public Result listTreeMenu(String platformCode) {
+    public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
         CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
         log.info("用户信息 ===> {}", JSONUtil.parse(currentLoginUser));
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
@@ -129,7 +129,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @param menuIdList     菜单id列表
      * @return {@link Result}
      */
-    private Result listTreeMenuData(List<Long> menuIdList, SysPlatform platformEntity) {
+    private Result<List<Tree<Long>>> listTreeMenuData(List<Long> menuIdList, SysPlatform platformEntity) {
         List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
                 .in(SysMenu::getId, menuIdList)
                 .eq(SysMenu::getPlatformId, platformEntity.getId())
@@ -180,20 +180,20 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return {@link Result}
      */
     @Override
-    public Result deleteById(Long id) {
+    public Result<Boolean> deleteById(Long id) {
         List<SysMenu> menuEntityList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
         if (CollUtil.isNotEmpty(menuEntityList)) {
             return Result.warning(Boolean.FALSE, "存在子菜单, 不可删除");
         }
         boolean remove = this.removeById(id);
         if (remove) {
-            return Result.ok("删除成功");
+            return Result.ok(Boolean.TRUE, "删除成功");
         }
         return Result.fail(Boolean.FALSE, "删除失败");
     }
 
     @Override
-    public Result saveMenu(SysMenu menuEntity) {
+    public Result<Boolean> saveMenu(SysMenu menuEntity) {
         SysMenu sysMenu = this.getById(menuEntity.getParentId());
         if (!Objects.equals(0L, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
             return Result.fail("上一层组件不存在");

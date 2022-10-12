@@ -34,8 +34,8 @@
     </modules>
 
     <properties>
-        <breeze-boot.version>1.0</breeze-boot.version>
         <java.version>1.8</java.version>
+        <breeze-boot.version>1.0</breeze-boot.version>
         <spring-boot.version>2.7.2</spring-boot.version>
         <spring-boot-admin.version>2.7.3</spring-boot-admin.version>
 
@@ -47,7 +47,7 @@
         <hutool.version>5.7.21</hutool.version>
         <guava.version>24.1.1-jre</guava.version>
 
-        <mybatis-plus.version>3.4.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <druid.version>1.2.8</druid.version>
 
         <docker.registry>127.0.0.1</docker.registry>
@@ -78,17 +78,18 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>spring-boot-starter-tomcat</artifactId>
-                        <groupId>org.springframework.boot</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
 

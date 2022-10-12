@@ -17,13 +17,13 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.dto.RoleDTO;
 import com.breeze.boot.system.entity.SysMenuRole;
 import com.breeze.boot.system.entity.SysRole;
 import com.breeze.boot.system.service.SysMenuRoleService;
 import com.breeze.boot.system.service.SysRoleService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

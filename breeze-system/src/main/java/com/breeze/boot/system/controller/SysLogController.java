@@ -17,10 +17,10 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.LogDTO;
 import com.breeze.boot.system.entity.SysLog;
 import com.breeze.boot.system.service.SysLogService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

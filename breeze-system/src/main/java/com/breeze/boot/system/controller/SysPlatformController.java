@@ -18,15 +18,16 @@ package com.breeze.boot.system.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.PlatformDTO;
 import com.breeze.boot.system.entity.SysMenu;
 import com.breeze.boot.system.entity.SysPlatform;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -81,13 +82,13 @@ public class SysPlatformController {
     /**
      * 保存
      *
-     * @param platformEntity 平台实体
+     * @param platform 平台实体入参
      * @return {@link Result}
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:platform:save')")
-    public Result save(@RequestBody SysPlatform platformEntity) {
-        return Result.ok(this.sysPlatformService.save(platformEntity));
+    public Result save(@Validated @RequestBody SysPlatform platform) {
+        return Result.ok(this.sysPlatformService.save(platform));
     }
 
     /**

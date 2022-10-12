@@ -34,28 +34,6 @@ public class BreezeCaptchaController {
     }
 
     /**
-     * 获取代码
-     *
-     * @param data    数据
-     * @param request 请求
-     * @return {@link ResponseModel}
-     */
-    @PostMapping({"/getCode"})
-    public ResponseModel getCode(@RequestBody CaptchaVO data, HttpServletRequest request) {
-        assert request.getRemoteHost() != null;
-        data.setCaptchaType("blockPuzzle");
-        data.setBrowserInfo(getRemoteId(request));
-        return this.captchaService.get(data);
-    }
-
-    @PostMapping({"/checkCode"})
-    public ResponseModel check(@RequestBody CaptchaVO data, HttpServletRequest request) {
-        data.setBrowserInfo(getRemoteId(request));
-        data.setCaptchaType("blockPuzzle");
-        return this.captchaService.check(data);
-    }
-
-    /**
      * 获取远程id
      *
      * @param request 请求
@@ -81,5 +59,27 @@ public class BreezeCaptchaController {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 获取代码
+     *
+     * @param data    数据
+     * @param request 请求
+     * @return {@link ResponseModel}
+     */
+    @PostMapping({"/getCode"})
+    public ResponseModel getCode(@RequestBody CaptchaVO data, HttpServletRequest request) {
+        assert request.getRemoteHost() != null;
+        data.setCaptchaType("blockPuzzle");
+        data.setBrowserInfo(getRemoteId(request));
+        return this.captchaService.get(data);
+    }
+
+    @PostMapping({"/checkCode"})
+    public ResponseModel check(@RequestBody CaptchaVO data, HttpServletRequest request) {
+        data.setBrowserInfo(getRemoteId(request));
+        data.setCaptchaType("blockPuzzle");
+        return this.captchaService.check(data);
     }
 }

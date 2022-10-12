@@ -16,11 +16,11 @@
 
 package com.breeze.boot.system.controller;
 
+import com.breeze.boot.core.Result;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.entity.SysDictItem;
 import com.breeze.boot.system.entity.SysFile;
 import com.breeze.boot.system.service.SysDictItemService;
-import com.breeze.boot.core.Result;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
