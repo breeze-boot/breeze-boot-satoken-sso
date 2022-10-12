@@ -4,10 +4,10 @@ spring:
     port: ${BREEZE_REDIS_PORT:6379}
     password: ${BREEZE_REDIS_PASSWORD:breeze}
   datasource:
-    url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql}:${BREEZE_MYSQL_PORT:3306}/${BREEZE_MYSQL_DB_NAME:breeze_admin}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql}:${BREEZE_MYSQL_PORT:3366}/${BREEZE_MYSQL_DB_NAME:breeze}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${BREEZE_MYSQL_USERNAME:root}
-    password: ${BREEZE_MYSQL_PASSWORD:root}
+    password: ${BREEZE_MYSQL_PASSWORD:Breeze@123.com}
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
