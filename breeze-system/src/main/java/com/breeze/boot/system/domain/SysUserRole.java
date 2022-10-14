@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,10 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -45,9 +44,12 @@ import java.io.Serializable;
  * @date 2021-12-06 22:03:39
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_role_user")
-public class SysRoleUser extends BaseModel<SysRoleUser> implements Serializable {
+@TableName("sys_user_role")
+public class SysUserRole extends BaseModel<SysUserRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

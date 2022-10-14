@@ -14,102 +14,99 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.jwtlogin.entity;
+package com.breeze.boot.system.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
 
 /**
+ * 系统用户实体
+ *
  * @author breeze
- * @date 2022-01-28
+ * @date 2021-12-06 22:03:39
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginUserDTO implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+@TableName("sys_user")
+public class SysUser extends BaseModel<SysUser> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户ID
-     */
-    private Long id;
-
-    /**
      * 部门ID
      */
+    @NotBlank(message = "部门ID不可为空")
     private Long deptId;
 
     /**
      * 部门名称
      */
+    @TableField(exist = false)
     private String deptName;
 
-    /**
-     * userCode
-     */
-    private String userCode;
-
-    /**
-     * 登录后显示的账户名称
-     */
-    private String amountName;
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 登录密码
-     */
-    private String password;
     /**
      * 头像地址
      */
     private String avatar;
+
+    /**
+     * 登录账户名称
+     */
+    @NotBlank(message = "登录账户名称不可为空")
+    private String amountName;
+
+    /**
+     * 用户编码
+     */
+    private String userCode;
+
+    /**
+     * 用户名
+     */
+    @NotBlank(message = "用户名不可为空")
+    private String username;
+
+    /**
+     * 用户密码
+     */
+    @NotBlank(message = "用户密码不可为空")
+    private String password;
+
+    /**
+     * 性别 0 女性 1 男性
+     */
+    private Integer sex;
+
+    /**
+     * 身份证号
+     */
+    private String idCard;
+
     /**
      * 手机号
      */
     private String phone;
+
     /**
-     * 性别
-     */
-    private Integer sex;
-    /**
-     * 身份证号 备用
-     */
-    private String idCard;
-    /**
-     * 类型
-     */
-    private Integer amountType;
-    /**
-     * 锁定
-     */
-    private Integer isLock;
-    /**
-     * 微信ID
+     * 微信OpenID
      */
     private Integer openId;
+
     /**
      * 邮件
      */
     private String email;
 
     /**
-     * 用户角色集合
+     * 锁定
      */
-    private List<UserRoleDTO> userRoleDTOList;
-
-    private List<String> userRoleCodes;
-
-    private List<Long> userRoleIds;
-
-    private List<String> authorities;
+    private Integer isLock;
 
 }

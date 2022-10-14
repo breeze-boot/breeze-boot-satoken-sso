@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,28 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
- * 系统日志实体
+ * 系统日志
+ * 日志
  *
  * @author breeze
- * @date 2022-09-02
+ * @date 2022-10-14
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("sys_log")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@TableName(value = "sys_log")
 public class SysLog extends BaseModel<SysLog> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,24 +44,45 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
      * 系统模块
      */
     private String systemModule;
+
     /**
      * 日志标题
      */
     private String logTitle;
+
     /**
      * 日志类型 0 普通日志 1 登录日志
      */
-    private Long logType;
+    private Integer logType;
+
     /**
      * 请求类型 0 GET 1 POST 2 PUT 3 DELETE
      */
-    private Long requestType;
+    private Integer requestType;
+
+    /**
+     * IP
+     */
+    private String ip;
+
     /**
      * 操作类型 0 添加 1 删除 2 修改 3 查询
      */
-    private Long doType;
+    private Integer doType;
+
+    /**
+     * 浏览器名称
+     */
+    private String browser;
+
+    /**
+     * 操作系统类型
+     */
+    private String system;
+
     /**
      * 结果 0 失败 1 成功
      */
-    private Long result;
+    private Integer result;
+
 }

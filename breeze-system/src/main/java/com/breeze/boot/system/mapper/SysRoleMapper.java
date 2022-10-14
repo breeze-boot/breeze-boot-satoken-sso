@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
-import com.breeze.boot.system.entity.SysRole;
+import com.breeze.boot.system.domain.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

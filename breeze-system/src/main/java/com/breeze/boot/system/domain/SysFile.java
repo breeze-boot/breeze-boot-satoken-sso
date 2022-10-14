@@ -1,8 +1,7 @@
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -13,31 +12,43 @@ import java.io.Serializable;
  * @date 2022-09-02
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_file")
 public class SysFile extends BaseModel<SysFile> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
-     * 旧文件名称
+     * 原文件名称
      */
     private String oldFileName;
+
     /**
      * 新文件名字
      */
     private String newFileName;
+
     /**
-     * 用户id
+     * 用户ID
      */
     private String userId;
+
     /**
-     * 用户代码
+     * 用户编码
      */
     private String userCode;
+
     /**
      * 用户名
      */
     private String username;
+
     /**
      * url
      */
     private String url;
+
 }

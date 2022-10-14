@@ -1,7 +1,7 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.system.entity.SysDictItem;
+import com.breeze.boot.system.domain.SysDictItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

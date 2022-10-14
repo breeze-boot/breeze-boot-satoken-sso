@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.*;
@@ -46,7 +46,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     private Long id;
 
     /**
-     * 是否删除 1 已删除 0 未删除
+     * 是否删除 0 未删除 1 已删除
      */
     @JsonIgnore
     @Schema(name = "是否删除 1 已删除 0 未删除", hidden = true)
@@ -58,14 +58,14 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
      * 删除人 工号
      */
     @JsonIgnore
-    @Schema(name = "删除人 工号", hidden = true)
+    @Schema(name = "删除人 编码", hidden = true)
     @ExcelIgnore
     private String deleteBy;
 
     /**
      * createdBy
      */
-    @Schema(name = "创建人", hidden = true)
+    @Schema(name = "创建人编码", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
     private String createBy;
@@ -73,7 +73,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * createdTime
      */
-    @Schema(name = "创建人", hidden = true)
+    @Schema(name = "创建人姓名", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
     private String createName;
@@ -90,7 +90,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改人
      */
-    @Schema(name = "修改人", hidden = true)
+    @Schema(name = "修改人 编码", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.UPDATE)
     private String updateBy;
@@ -98,7 +98,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改人
      */
-    @Schema(name = "修改人", hidden = true)
+    @Schema(name = "修改人姓名", hidden = true)
     @TableField(fill = FieldFill.UPDATE)
     private String updateName;
 

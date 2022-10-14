@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictDTO;
-import com.breeze.boot.system.entity.SysDictItem;
 import com.breeze.boot.system.mapper.SysDictItemMapper;
 import com.breeze.boot.system.service.SysDictItemService;
 import org.springframework.stereotype.Service;

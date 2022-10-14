@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.system.domain.SysRole;
+import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.dto.RoleDTO;
-import com.breeze.boot.system.entity.SysMenuRole;
-import com.breeze.boot.system.entity.SysRole;
-import com.breeze.boot.system.service.SysMenuRoleService;
+import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
 
     @Autowired
-    private SysMenuRoleService sysMenuRoleService;
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 列表
@@ -72,7 +72,7 @@ public class SysRoleController {
     @GetMapping("/listRolesPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     public Result listRolesPermission(@RequestParam Long roleId) {
-        return Result.ok(this.sysMenuRoleService.list(Wrappers.<SysMenuRole>lambdaQuery().eq(SysMenuRole::getRoleId, roleId)));
+        return Result.ok(this.sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, roleId)));
     }
 
     /**
@@ -84,7 +84,7 @@ public class SysRoleController {
     @PutMapping("/editPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     public Result editPermission(@RequestBody MenuPermissionDTO menuRoleDTO) {
-        return this.sysMenuRoleService.editPermission(menuRoleDTO);
+        return this.sysRoleMenuService.editPermission(menuRoleDTO);
     }
 
     /**

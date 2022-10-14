@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
+import com.breeze.boot.system.domain.SysDept;
+import com.breeze.boot.system.domain.SysRole;
+import com.breeze.boot.system.domain.SysUser;
+import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
-import com.breeze.boot.system.entity.SysDept;
-import com.breeze.boot.system.entity.SysRole;
-import com.breeze.boot.system.entity.SysRoleUser;
-import com.breeze.boot.system.entity.SysUser;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Lists;
@@ -75,7 +75,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 系统用户角色服务
      */
     @Autowired
-    private SysRoleUserService sysRoleUserService;
+    private SysUserRoleService sysUserRoleService;
 
     /**
      * 系统部门服务
@@ -194,8 +194,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean remove = this.removeByIds(ids);
         if (remove) {
             // 删除用户角色关系
-            this.sysRoleUserService.remove(Wrappers.<SysRoleUser>lambdaQuery()
-                    .in(SysRoleUser::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
+            this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
+                    .in(SysUserRole::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }

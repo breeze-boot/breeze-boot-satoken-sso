@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,85 +14,88 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * 系统用户实体
+ * 系统菜单实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_user")
-public class SysUser extends BaseModel<SysUser> implements Serializable {
+@TableName("sys_menu")
+public class SysMenu extends BaseModel<SysMenu> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 部门ID
+     * 平台ID
      */
-    private Long deptId;
-    /**
-     * 部门名称
-     */
-    @TableField(exist = false)
-    private String deptName;
-    /**
-     * 用户code
-     */
-    private String userCode;
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 登录密码
-     */
-    private String password;
+    @NotBlank(message = "平台ID不可为空")
+    private Long platformId;
 
     /**
-     * 登录账户
+     * 平台名称
      */
-    private String amountName;
+    @TableField(exist = false)
+    private String platformName;
+
     /**
-     * 类型
+     * 上一级的菜单ID
      */
-    private Integer amountType;
+    @NotBlank(message = "上一级的菜单ID不可为空")
+    private Long parentId;
+
     /**
-     * 头像地址
+     * 标题
      */
-    private String avatar;
+    @NotBlank(message = "标题不可为空")
+    private String title;
+
     /**
-     * 手机号
+     * 组件名称
      */
-    private String phone;
+    private String name;
+
     /**
-     * 性别
+     * 类型 0 文件夹 1 菜单 2 按钮
      */
-    private Integer sex;
+    private Integer type;
+
     /**
-     * 身份证
+     * 图标
      */
-    private String idCard;
+    private String icon;
+
     /**
-     * 锁定
+     * 菜单路径
      */
-    private Integer isLock;
+    private String path;
+
     /**
-     * 微信ID
+     * 组件路径
      */
-    private Integer openId;
+    private String component;
+
     /**
-     * 邮件
+     * 权限标识
      */
-    private String email;
+    private String permission;
+
+    /**
+     * 顺序
+     */
+    private Integer sort;
 
 }

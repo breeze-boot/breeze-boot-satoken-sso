@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysMenuMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.entity.SysMenu" id="sysMenuMap">
+    <resultMap type="com.breeze.boot.system.domain.SysMenu" id="sysMenuMap">
         <id property="id" column="id"/>
         <result property="platformId" column="platform_id"/>
         <result property="title" column="title"/>
@@ -26,7 +26,7 @@
     <select id="listUserMenuPermission" resultType="java.lang.String">
         SELECT DISTINCT menu.permission
         FROM sys_menu AS menu
-        LEFT JOIN sys_menu_role AS mr ON menu.id = mr.menu_id
+        LEFT JOIN sys_role_menu AS mr ON menu.id = mr.menu_id
         AND mr.is_delete = 0
         WHERE menu.is_delete = 0
         AND menu.permission != ''
@@ -36,7 +36,7 @@
         </foreach>
     </select>
 
-    <select id="listMenu" resultType="com.breeze.boot.system.entity.SysMenu">
+    <select id="listMenu" resultType="com.breeze.boot.system.domain.SysMenu">
         SELECT
         a.id,
         a.name,

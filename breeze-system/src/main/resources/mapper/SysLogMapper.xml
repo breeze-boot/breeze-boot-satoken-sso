@@ -3,22 +3,37 @@
 
 <mapper namespace="com.breeze.boot.system.mapper.SysLogMapper">
 
-    <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.entity.SysLog" id="sysLogMap">
-        <id property="id" column="id"/>
-        <result property="systemModule" column="system_module"/>
-        <result property="logTitle" column="log_title"/>
-        <result property="logType" column="log_type"/>
-        <result property="doType" column="do_type"/>
-        <result property="requestType" column="request_type"/>
-        <result property="result" column="result"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createTime" column="create_time"/>
-        <result property="createName" column="create_name"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="isDelete" column="is_delete"/>
-        <result property="deleteBy" column="delete_by"/>
+    <resultMap id="sysLogResultMap" type="com.breeze.boot.system.domain.SysLog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="systemModule" column="system_module" jdbcType="VARCHAR"/>
+        <result property="logTitle" column="log_title" jdbcType="VARCHAR"/>
+        <result property="logType" column="log_type" jdbcType="TINYINT"/>
+        <result property="requestType" column="request_type" jdbcType="TINYINT"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="doType" column="do_type" jdbcType="TINYINT"/>
+        <result property="browser" column="browser" jdbcType="VARCHAR"/>
+        <result property="system" column="system" jdbcType="VARCHAR"/>
+        <result property="result" column="result" jdbcType="TINYINT"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createName" column="create_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateName" column="update_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+        <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
+        <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,system_module,log_title,
+        log_type,request_type,ip,
+        do_type,browser,system,
+        result,create_by,create_name,
+        create_time,update_by,update_name,
+        update_time,is_delete,delete_by,
+        tenant_id
+    </sql>
 
 </mapper>

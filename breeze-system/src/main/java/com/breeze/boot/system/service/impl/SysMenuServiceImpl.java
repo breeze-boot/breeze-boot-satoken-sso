@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,15 +27,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.jwtlogin.entity.CurrentLoginUser;
 import com.breeze.boot.jwtlogin.utils.SecurityUtils;
+import com.breeze.boot.system.domain.SysMenu;
+import com.breeze.boot.system.domain.SysPlatform;
+import com.breeze.boot.system.domain.SysRole;
+import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuDTO;
-import com.breeze.boot.system.entity.SysMenu;
-import com.breeze.boot.system.entity.SysMenuRole;
-import com.breeze.boot.system.entity.SysPlatform;
-import com.breeze.boot.system.entity.SysRole;
 import com.breeze.boot.system.mapper.SysMenuMapper;
-import com.breeze.boot.system.service.SysMenuRoleService;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
+import com.breeze.boot.system.service.SysRoleMenuService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 服务菜单作用
      */
     @Autowired
-    private SysMenuRoleService menuRoleService;
+    private SysRoleMenuService menuRoleService;
 
     /**
      * 用户菜单权限列表
@@ -92,12 +92,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
-        List<SysMenuRole> menuRoleList = this.menuRoleService.list(Wrappers.<SysMenuRole>lambdaQuery()
-                .in(SysMenuRole::getRoleId, currentLoginUser.getUserRoleIds()));
+        List<SysRoleMenu> menuRoleList = this.menuRoleService.list(Wrappers.<SysRoleMenu>lambdaQuery()
+                .in(SysRoleMenu::getRoleId, currentLoginUser.getUserRoleIds()));
         if (CollUtil.isEmpty(menuRoleList)) {
             return Result.ok();
         }
-        List<Long> menuIdList = menuRoleList.stream().map(SysMenuRole::getMenuId).collect(Collectors.toList());
+        List<Long> menuIdList = menuRoleList.stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
         // 使用CODE显示前端菜单
         SysPlatform platformEntity = this.platformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
                 .eq(SysPlatform::getPlatformCode, platformCode));
@@ -114,7 +114,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private Result<List<Tree<Long>>> listTreeRolePermissionData() {
         List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
-                .in(SysMenu::getType, "folder", "menu", "btn")
+                .in(SysMenu::getType, 0, 1, 2)
                 .orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
@@ -133,7 +133,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
                 .in(SysMenu::getId, menuIdList)
                 .eq(SysMenu::getPlatformId, platformEntity.getId())
-                .in(SysMenu::getType, "folder", "menu")
+                .in(SysMenu::getType, 0, 1)
                 .orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();

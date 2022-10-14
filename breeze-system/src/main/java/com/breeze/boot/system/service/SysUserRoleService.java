@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,34 +14,18 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.service;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.system.domain.SysUserRole;
 
 /**
- * 系统部门实体
+ * 系统用户角色服务
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("sys_dept")
-public class SysDept extends BaseModel<SysDept> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 部门名称
-     */
-    private String deptName;
-    /**
-     * 父id
-     */
-    private Long parentId;
+public interface SysUserRoleService extends IService<SysUserRole> {
 
 }
+

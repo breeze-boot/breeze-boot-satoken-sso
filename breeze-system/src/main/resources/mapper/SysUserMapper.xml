@@ -4,14 +4,13 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.entity.SysUser" id="sysUserMap">
+    <resultMap type="com.breeze.boot.system.domain.SysUser" id="sysUserMap">
         <id property="id" column="id"/>
         <result property="userCode" column="user_code"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
         <result property="deptId" column="dept_id"/>
         <result property="amountName" column="amount_name"/>
-        <result property="amountType" column="amount_type"/>
         <result property="avatar" column="avatar"/>
         <result property="phone" column="phone"/>
         <result property="openId" column="open_id"/>
@@ -28,7 +27,7 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.system.entity.SysUser">
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysUser">
         SELECT
         a.id,
         a.dept_id,
@@ -39,7 +38,6 @@
         a.phone,
         a.sex,
         a.id_card,
-        a.amount_type,
         a.is_lock,
         a.open_id,
         a.email,

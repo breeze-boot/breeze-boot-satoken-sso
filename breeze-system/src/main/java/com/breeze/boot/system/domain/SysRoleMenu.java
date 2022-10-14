@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,35 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.mapper;
+package com.breeze.boot.system.domain;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.system.entity.SysRoleUser;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
- * 系统用户角色映射器
+ * 系统角色菜单实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Mapper
-public interface SysRoleUserMapper extends BaseMapper<SysRoleUser> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@TableName("sys_role_menu")
+public class SysRoleMenu extends BaseModel<SysRoleMenu> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 菜单id
+     */
+    private Long menuId;
+    /**
+     * 角色id
+     */
+    private Long roleId;
 }

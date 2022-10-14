@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
-import com.breeze.boot.system.entity.SysMenuRole;
-import com.breeze.boot.system.mapper.SysMenuRoleMapper;
-import com.breeze.boot.system.service.SysMenuRoleService;
+import com.breeze.boot.system.mapper.SysRoleMenuMapper;
+import com.breeze.boot.system.service.SysRoleMenuService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysMenuRoleServiceImpl extends ServiceImpl<SysMenuRoleMapper, SysMenuRole> implements SysMenuRoleService {
+public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
 
     /**
      * 编辑权限
@@ -45,14 +45,14 @@ public class SysMenuRoleServiceImpl extends ServiceImpl<SysMenuRoleMapper, SysMe
      */
     @Override
     public Result<Boolean> editPermission(MenuPermissionDTO menuPermissionDTO) {
-        this.remove(Wrappers.<SysMenuRole>lambdaQuery().eq(SysMenuRole::getRoleId, menuPermissionDTO.getRoleId()));
-        List<SysMenuRole> sysMenuRoleList = menuPermissionDTO.getPermissionIds().stream().map(menuId -> {
-            SysMenuRole sysMenuRole = new SysMenuRole();
-            sysMenuRole.setMenuId(menuId);
-            sysMenuRole.setRoleId(menuPermissionDTO.getRoleId());
-            return sysMenuRole;
+        this.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, menuPermissionDTO.getRoleId()));
+        List<SysRoleMenu> sysRoleMenuList = menuPermissionDTO.getPermissionIds().stream().map(menuId -> {
+            SysRoleMenu sysRoleMenu = new SysRoleMenu();
+            sysRoleMenu.setMenuId(menuId);
+            sysRoleMenu.setRoleId(menuPermissionDTO.getRoleId());
+            return sysRoleMenu;
         }).collect(Collectors.toList());
-        this.saveBatch(sysMenuRoleList);
+        this.saveBatch(sysRoleMenuList);
         return Result.ok(Boolean.TRUE);
     }
 

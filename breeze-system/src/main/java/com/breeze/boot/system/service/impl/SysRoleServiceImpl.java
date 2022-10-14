@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.system.domain.SysRole;
+import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.RoleDTO;
-import com.breeze.boot.system.entity.SysMenuRole;
-import com.breeze.boot.system.entity.SysRole;
 import com.breeze.boot.system.mapper.SysRoleMapper;
-import com.breeze.boot.system.service.SysMenuRoleService;
+import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     @Autowired
-    private SysMenuRoleService sysMenuRoleService;
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 用户角色列表
@@ -82,8 +82,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         boolean remove = this.removeByIds(ids);
         if (remove) {
             // 删除用户角色关系
-            this.sysMenuRoleService.remove(Wrappers.<SysMenuRole>lambdaQuery()
-                    .eq(SysMenuRole::getRoleId, roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
+            this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery()
+                    .eq(SysRoleMenu::getRoleId, roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }

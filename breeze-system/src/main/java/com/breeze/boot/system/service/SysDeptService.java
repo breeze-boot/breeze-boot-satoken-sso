@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package com.breeze.boot.system.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.dto.DeptDTO;
-import com.breeze.boot.system.entity.SysDept;
 
 import java.util.List;
 

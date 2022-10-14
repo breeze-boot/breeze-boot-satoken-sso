@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,36 +14,46 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-
 /**
- * 系统平台作用实体
+ * 系统部门实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_platform_role")
-public class SysPlatformRole extends BaseModel<SysPlatformRole> implements Serializable {
+@TableName("sys_dept")
+public class SysDept extends BaseModel<SysDept> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 平台Id
+     * 部门编码
      */
-    private Long platformId;
+    @NotBlank(message = "部门编码不能为空")
+    private String deptCode;
 
     /**
-     * 角色Id
+     * 部门名称
      */
-    private Long roleId;
+    @NotBlank(message = "部门名称不能为空")
+    private String deptName;
+
+    /**
+     * 上级部门ID
+     */
+    @NotBlank(message = "上级部门ID不能为空")
+    private Long parentId;
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -30,17 +30,17 @@ import java.io.Serializable;
  * @date 2021-12-06 22:03:39
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @TableName("sys_platform")
 public class SysPlatform extends BaseModel<SysPlatform> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 平台标识
+     * 平台编码
      */
     @NotBlank(message = "平台编码不可为空")
     private String platformCode;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.entity;
+package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * 系统菜单角色实体
+ * 系统角色实体
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_menu_role")
-public class SysMenuRole extends BaseModel<SysMenuRole> implements Serializable {
+@TableName("sys_role")
+public class SysRole extends BaseModel<SysRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 菜单id
+     * 角色编码
      */
-    private Long menuId;
+    @NotBlank(message = "角色编码不可为空")
+    private String roleCode;
+
     /**
-     * 角色id
+     * 角色名称
      */
-    private Long roleId;
+    @NotBlank(message = "角色名称不可为空")
+    private String roleName;
+
 }

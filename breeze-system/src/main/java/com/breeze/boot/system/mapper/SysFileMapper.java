@@ -1,7 +1,7 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.system.entity.SysFile;
+import com.breeze.boot.system.domain.SysFile;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

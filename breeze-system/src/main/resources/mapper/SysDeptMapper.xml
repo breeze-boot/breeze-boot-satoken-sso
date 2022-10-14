@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysDeptMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.entity.SysDept" id="sysDeptMap">
+    <resultMap type="com.breeze.boot.system.domain.SysDept" id="sysDeptMap">
         <id property="id" column="id"/>
         <result property="deptName" column="dept_name"/>
         <result property="parentId" column="parent_id"/>

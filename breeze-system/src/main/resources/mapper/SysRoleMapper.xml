@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.entity.SysRole" id="sysRoleMap">
+    <resultMap type="com.breeze.boot.system.domain.SysRole" id="sysRoleMap">
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
@@ -17,12 +17,12 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listUserRole" resultType="com.breeze.boot.system.entity.SysRole">
+    <select id="listUserRole" resultType="com.breeze.boot.system.domain.SysRole">
         SELECT role.id,
                role.role_code,
                role.role_name
         FROM sys_role AS role
-                 LEFT JOIN sys_role_user AS ru ON ru.role_id = role.id
+                 LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
             AND ru.is_delete = 0
         WHERE role.is_delete = 0
           AND ru.user_id = #{id}

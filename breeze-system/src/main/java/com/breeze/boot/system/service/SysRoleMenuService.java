@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,28 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service.impl;
+package com.breeze.boot.system.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.system.entity.SysRoleUser;
-import com.breeze.boot.system.mapper.SysRoleUserMapper;
-import com.breeze.boot.system.service.SysRoleUserService;
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.Result;
+import com.breeze.boot.system.domain.SysRoleMenu;
+import com.breeze.boot.system.dto.MenuPermissionDTO;
 
 /**
- * 系统角色用户服务impl
+ * 系统菜单角色服务
  *
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Service
-public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRoleUser> implements SysRoleUserService {
+public interface SysRoleMenuService extends IService<SysRoleMenu> {
+
+    /**
+     * 编辑权限
+     *
+     * @param permissionDTO 许可dto
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> editPermission(MenuPermissionDTO permissionDTO);
 
 }
+

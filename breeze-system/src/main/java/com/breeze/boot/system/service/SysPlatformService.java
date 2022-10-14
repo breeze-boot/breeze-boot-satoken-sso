@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.dto.PlatformDTO;
-import com.breeze.boot.system.entity.SysPlatform;
 
 /**
  * 系统平台服务
