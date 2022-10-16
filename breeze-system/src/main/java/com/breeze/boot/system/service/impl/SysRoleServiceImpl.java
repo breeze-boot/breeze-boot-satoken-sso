@@ -83,7 +83,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (remove) {
             // 删除用户角色关系
             this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery()
-                    .eq(SysRoleMenu::getRoleId, roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
+                    .in(SysRoleMenu::getRoleId,
+                            roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
