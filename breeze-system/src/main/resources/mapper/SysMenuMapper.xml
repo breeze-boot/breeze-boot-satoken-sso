@@ -76,6 +76,8 @@
         b.icon,
         b.path,
         b.component,
+        b.keep_alive,
+        b.href,
         b.permission,
         b.sort
         FROM

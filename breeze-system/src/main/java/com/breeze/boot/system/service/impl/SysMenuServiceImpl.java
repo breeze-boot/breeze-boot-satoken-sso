@@ -29,7 +29,6 @@ import com.breeze.boot.jwtlogin.entity.CurrentLoginUser;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 import com.breeze.boot.jwtlogin.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuDTO;
@@ -38,7 +37,6 @@ import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysUserService;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +47,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -87,12 +84,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysRoleMenuService sysRoleMenuService;
 
     /**
-     * 服务菜单作用
-     */
-    @Autowired
-    private SysRoleMenuService menuRoleService;
-
-    /**
      * 用户菜单权限列表
      *
      * @param roleEntityList 角色实体列表
@@ -117,15 +108,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return Result.ok();
         }
 
-        SysPlatform platformEntity = this.platformService.getOne(Wrappers.<SysPlatform>lambdaQuery().eq(SysPlatform::getPlatformCode, platformCode));
-        List<SysMenu> sysMenuList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getPlatformId, platformEntity.getId()));
-        Map<Long, List<SysMenu>> menuGroupByParentIdMap = Optional.ofNullable(sysMenuList)
-                .orElseGet(Lists::newArrayList)
-                .stream().collect(Collectors.groupingBy(SysMenu::getParentId));
-
         // 查询角色下的菜单信息
         List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentLoginUser.getUserRoleIds(), platformCode);
-        return Result.ok(buildTrees(menuList, menuGroupByParentIdMap, 0L));
+        return Result.ok(this.buildTrees(menuList, 0L));
     }
 
     /**
@@ -140,7 +125,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
-        return Result.ok(buildTrees(menuList, Maps.newHashMap(), 0L));
+        return Result.ok(this.buildTrees(menuList, 0L));
     }
 
     /**
@@ -156,7 +141,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return Result.ok(entityList);
         }
         List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuDTO);
-        List<Tree<Long>> build = buildTrees(menuEntityList, Maps.newHashMap(), 0L);
+        List<Tree<Long>> build = this.buildTrees(menuEntityList, 0L);
         return Result.ok(build);
     }
 
@@ -234,15 +219,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 获取树形数据
      *
-     * @param menuEntityList         菜单实体列表
-     * @param menuGroupByParentIdMap
+     * @param menuEntityList 菜单实体列表
      * @param id
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
-    private List<Tree<Long>> buildTrees(List<SysMenu> menuEntityList, Map<Long, List<SysMenu>> menuGroupByParentIdMap, Long id) {
+    private List<Tree<Long>> buildTrees(List<SysMenu> menuEntityList, Long id) {
         List<TreeNode<Long>> collect = menuEntityList.stream().map(menu -> {
             TreeNode<Long> node = new TreeNode<>();
-            Optional<List<SysMenu>> menuList = Optional.ofNullable(menuGroupByParentIdMap.get(menu.getId()));
             node.setId(menu.getId());
             node.setName(menu.getName());
             node.setParentId(menu.getParentId());
@@ -254,9 +237,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             leafMap.put("component", menu.getComponent());
             leafMap.put("icon", menu.getIcon());
             leafMap.put("platformName", menu.getPlatformName());
-            // TODO
-            leafMap.put("permissions", menuList.orElseGet(Lists::newArrayList)
-                    .stream().map(SysMenu::getPermission).collect(Collectors.toList()));
+            leafMap.put("keepAlive", menu.getKeepAlive());
+            leafMap.put("href", menu.getHref());
             leafMap.put("permission", menu.getPermission());
             leafMap.put("platformId", menu.getPlatformId());
             leafMap.put("sort", menu.getSort());

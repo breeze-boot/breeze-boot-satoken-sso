@@ -101,6 +101,16 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     private String permission;
 
     /**
+     * 是否开启缓存
+     */
+    private Integer keepAlive;
+
+    /**
+     * 是否外链
+     */
+    private Integer href;
+
+    /**
      * 顺序
      */
     private Integer sort;
