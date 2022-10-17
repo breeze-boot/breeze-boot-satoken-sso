@@ -18,6 +18,7 @@ package com.breeze.boot.system.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
@@ -63,7 +64,7 @@ public class SysPlatformController {
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result list(@RequestBody PlatformDTO platformDTO) {
+    public Result<Page<SysPlatform>> list(@RequestBody PlatformDTO platformDTO) {
         return Result.ok(this.sysPlatformService.listPage(platformDTO));
     }
 
@@ -75,7 +76,7 @@ public class SysPlatformController {
      */
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:platform:info')")
-    public Result info(@PathVariable("id") Long id) {
+    public Result<SysPlatform> info(@PathVariable("id") Long id) {
         return Result.ok(this.sysPlatformService.getById(id));
     }
 
@@ -87,7 +88,7 @@ public class SysPlatformController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:platform:save')")
-    public Result save(@Validated @RequestBody SysPlatform platform) {
+    public Result<Boolean> save(@Validated @RequestBody SysPlatform platform) {
         return Result.ok(this.sysPlatformService.save(platform));
     }
 
@@ -99,7 +100,7 @@ public class SysPlatformController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:platform:update')")
-    public Result update(@RequestBody SysPlatform platformEntity) {
+    public Result<Boolean> update(@RequestBody SysPlatform platformEntity) {
         return Result.ok(this.sysPlatformService.updateById(platformEntity));
     }
 
@@ -111,7 +112,7 @@ public class SysPlatformController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {
             return Result.warning(Boolean.FALSE, "该平台有菜单配置");

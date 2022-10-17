@@ -74,7 +74,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public Result deleteByIds(List<Long> ids) {
+    public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysRole> roleEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(roleEntityList)) {
             return Result.fail(Boolean.FALSE, "角色不存在");

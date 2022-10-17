@@ -24,7 +24,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * 复述,配置
+ * redis 配置
  *
  * @author breeze
  * @date 2022-08-31
@@ -33,14 +33,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     /**
-     * 复述,模板
+     * redis 配置
      *
      * @param redisConnectionFactory redis 连接工厂
      * @return {@link RedisTemplate}<{@link Object}, {@link Object}>
      */
     @Bean
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         // 设置hashKey和hashValue的序列化规则

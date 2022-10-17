@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.controller;
 
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -46,8 +47,8 @@ public class OpenController {
     private SysMenuService menuService;
 
     @GetMapping("/selectMenu")
-    public Result selectMenu() {
-        List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 3));
+    public Result<List<Tree<Long>>> selectMenu() {
+        List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 2));
         List<TreeNode<Long>> treeNodeList = menuList.stream().map(
                 menu -> {
                     TreeNode<Long> treeNode = new TreeNode<>();

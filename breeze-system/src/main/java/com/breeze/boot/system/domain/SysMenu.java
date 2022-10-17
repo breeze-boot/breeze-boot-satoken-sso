@@ -22,6 +22,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统菜单实体
@@ -87,6 +88,12 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
      * 组件路径
      */
     private String component;
+
+    /**
+     * 此菜单拥有的所有的权限
+     */
+    @TableField(exist = false)
+    private List<String> permissions;
 
     /**
      * 权限标识

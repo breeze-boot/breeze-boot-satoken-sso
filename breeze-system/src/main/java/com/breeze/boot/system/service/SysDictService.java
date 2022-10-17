@@ -49,12 +49,12 @@ public interface SysDictService extends IService<SysDict> {
     Boolean open(DictDTO dictDTO);
 
     /**
-     * 删除由ids
+     * 删除
      *
      * @param ids id
      * @return {@link Result}
      */
-    Result deleteByIds(List<Long> ids);
+    Result<Boolean> deleteByIds(List<Long> ids);
 
 }
 

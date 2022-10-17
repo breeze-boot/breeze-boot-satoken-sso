@@ -54,7 +54,11 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     /**
      * redis 模板
      */
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 用户详细信息服务
+     */
     private IUserDetailsService userDetailsService;
 
     public SmsCodeAuthenticationProvider(IUserDetailsService userDetailsService, RedisTemplate redisTemplate) {

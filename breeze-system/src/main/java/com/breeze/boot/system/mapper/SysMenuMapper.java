@@ -50,4 +50,13 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      */
     List<SysMenu> listMenu(@Param("menuDTO") MenuDTO menuDTO);
 
+    /**
+     * 选择菜单角色id
+     *
+     * @param roleIds      用户角色id
+     * @param platformCode 平台编码
+     * @return {@link List}<{@link SysMenu}>
+     */
+    List<SysMenu> selectMenusByRoleId(@Param("roleIds") List<Long> roleIds, @Param("platformCode") String platformCode);
+
 }

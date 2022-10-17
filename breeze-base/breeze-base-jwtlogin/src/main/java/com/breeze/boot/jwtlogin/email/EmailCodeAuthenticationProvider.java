@@ -47,14 +47,17 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
      * 短信没有发现代码
      */
     private static final String EMAIL_NOT_FOUND_CODE = "emailNotFoundCode";
+
     /**
      * 消息
      */
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+
     /**
      * redis 模板
      */
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+
     private IUserDetailsService userDetailsService;
 
     public EmailCodeAuthenticationProvider(IUserDetailsService userDetailsService, RedisTemplate redisTemplate) {

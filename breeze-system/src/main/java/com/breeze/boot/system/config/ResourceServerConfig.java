@@ -56,7 +56,7 @@ public class ResourceServerConfig {
      * redis模板
      */
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 身份验证管理器生成器

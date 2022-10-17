@@ -17,5 +17,4 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-
 </mapper>

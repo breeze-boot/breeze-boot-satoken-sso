@@ -65,7 +65,7 @@ public class SysLogController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:log:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
     }
 

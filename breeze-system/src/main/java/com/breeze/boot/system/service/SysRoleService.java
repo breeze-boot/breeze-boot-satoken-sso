@@ -54,7 +54,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param ids id
      * @return {@link Result}
      */
-    Result deleteByIds(List<Long> ids);
+    Result<Boolean> deleteByIds(List<Long> ids);
 
 }
 

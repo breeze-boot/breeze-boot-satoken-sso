@@ -60,7 +60,7 @@ public class SysMenuController {
     }
 
     /**
-     * 树菜单列表
+     * 树形菜单
      *
      * @param platformCode 平台标识
      * @return {@link Result}
@@ -116,7 +116,7 @@ public class SysMenuController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:menu:update')")
     public Result<Boolean> update(@RequestBody SysMenu menuEntity) {
-        return Result.ok(sysMenuService.updateById(menuEntity));
+        return sysMenuService.updateMenuById(menuEntity);
     }
 
     /**

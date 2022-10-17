@@ -46,7 +46,7 @@ public interface SysDeptService extends IService<SysDept> {
      * @param id id
      * @return {@link Result}
      */
-    Result deleteById(Long id);
+    Result<Boolean> deleteById(Long id);
 
 }
 

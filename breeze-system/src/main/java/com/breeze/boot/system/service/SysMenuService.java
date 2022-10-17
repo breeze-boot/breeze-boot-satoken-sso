@@ -58,7 +58,7 @@ public interface SysMenuService extends IService<SysMenu> {
     Result<? extends Object> listMenu(MenuDTO menuDTO);
 
     /**
-     * 列表树许可
+     * 树形权限列表
      *
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
@@ -79,6 +79,14 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return {@link Result}
      */
     Result<Boolean> saveMenu(SysMenu menuEntity);
+
+    /**
+     * 更新菜单通过id
+     *
+     * @param menuEntity 菜单实体
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> updateMenuById(SysMenu menuEntity);
 
 }
 

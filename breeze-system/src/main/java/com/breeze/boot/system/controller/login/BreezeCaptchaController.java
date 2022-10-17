@@ -39,7 +39,7 @@ public class BreezeCaptchaController {
      * @param request 请求
      * @return {@link String}
      */
-    public static final String getRemoteId(HttpServletRequest request) {
+    public static String getRemoteId(HttpServletRequest request) {
         String xfwd = request.getHeader("X-Forwarded-For");
         String ip = getRemoteIpFromXfwd(xfwd);
         String ua = request.getHeader("user-agent");

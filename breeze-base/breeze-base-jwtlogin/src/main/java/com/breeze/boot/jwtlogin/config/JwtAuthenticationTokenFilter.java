@@ -101,7 +101,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
         if (!StringUtils.hasLength(token)) {
             //放行
-            throw new BadCredentialsException("令牌错误，请重新登录!");
+            throw new BadCredentialsException("令牌错误，请重新登录");
         }
         if (!StringUtils.startsWithIgnoreCase(token, "Bearer ")) {
             //放行
@@ -113,9 +113,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         Object usernameObj;
         try {
             Jwt jwt = loginJwtDecoder.decode(token.replace("Bearer ", ""));
-            if (Objects.isNull(jwt)) {
-                throw new BadCredentialsException("令牌错误，请重新登录!");
-            }
             JWTSigner jwtSigner = JWTSignerUtil.rs256(jwtConfig.rsaPublicKey);
             if (!JWTUtil.verify(jwt.getTokenValue(), jwtSigner)) {
                 throw new BadCredentialsException("令牌错误，请重新登录!");

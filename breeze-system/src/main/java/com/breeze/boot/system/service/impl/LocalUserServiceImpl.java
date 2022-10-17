@@ -32,7 +32,7 @@ public class LocalUserServiceImpl implements IUserDetailsService {
     private SysUserService sysUserService;
 
     /**
-     * 复述,模板
+     * redis 模板
      */
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -51,9 +51,7 @@ public class LocalUserServiceImpl implements IUserDetailsService {
         if (Objects.isNull(loginUserDTO)) {
             throw new UsernameNotFoundException("此用户不存在");
         } // 权限
-        CurrentLoginUser currentLoginUser = getCurrentLoginUser(loginUserDTO);
-        this.redisTemplate.opsForHash().put("sys:login_user", currentLoginUser.getUsername(), loginUserDTO);
-        return currentLoginUser;
+        return getCurrentLoginUser(loginUserDTO);
     }
 
     @Override
@@ -64,9 +62,7 @@ public class LocalUserServiceImpl implements IUserDetailsService {
             throw new UsernameNotFoundException("此用户不存在");
         }
         // 权限
-        CurrentLoginUser currentLoginUser = getCurrentLoginUser(loginUserDTO);
-        this.redisTemplate.opsForHash().put("sys:login_email", currentLoginUser.getEmail(), loginUserDTO);
-        return currentLoginUser;
+        return getCurrentLoginUser(loginUserDTO);
     }
 
     @Override
@@ -75,10 +71,8 @@ public class LocalUserServiceImpl implements IUserDetailsService {
         LoginUserDTO loginUserDTO = sysUserService.loadUserByPhone(phone);
         if (Objects.isNull(loginUserDTO)) {
             throw new UsernameNotFoundException("此用户不存在");
-        }  // 权限
-        CurrentLoginUser currentLoginUser = getCurrentLoginUser(loginUserDTO);
-        this.redisTemplate.opsForHash().put("sys:login_phone", currentLoginUser.getUsername(), loginUserDTO);
-        return currentLoginUser;
+        }
+        return getCurrentLoginUser(loginUserDTO);
     }
 
     /**
@@ -95,6 +89,8 @@ public class LocalUserServiceImpl implements IUserDetailsService {
                 true,
                 Objects.equals(loginUserDTO.getIsLock(), 0),
                 authorities);
+        // 权限
+        this.redisTemplate.opsForHash().put("sys:login_user", currentLoginUser.getUsername(), loginUserDTO);
         return currentLoginUser;
     }
 }

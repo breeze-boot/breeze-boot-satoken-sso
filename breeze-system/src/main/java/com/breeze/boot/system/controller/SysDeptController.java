@@ -65,7 +65,7 @@ public class SysDeptController {
      */
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dept:info')")
-    public Result info(@PathVariable("id") Long id) {
+    public Result<SysDept> info(@PathVariable("id") Long id) {
         return Result.ok(sysDeptService.getById(id));
     }
 
@@ -77,7 +77,7 @@ public class SysDeptController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dept:save')")
-    public Result save(@RequestBody SysDept deptEntity) {
+    public Result<Boolean> save(@RequestBody SysDept deptEntity) {
         return Result.ok(sysDeptService.save(deptEntity));
     }
 
@@ -89,7 +89,7 @@ public class SysDeptController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dept:update')")
-    public Result update(@RequestBody SysDept deptEntity) {
+    public Result<Boolean> update(@RequestBody SysDept deptEntity) {
         return Result.ok(this.sysDeptService.updateById(deptEntity));
     }
 
@@ -101,7 +101,7 @@ public class SysDeptController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
-    public Result delete(@RequestParam Long id) {
+    public Result<Boolean> delete(@RequestParam Long id) {
         return this.sysDeptService.deleteById(id);
     }
 

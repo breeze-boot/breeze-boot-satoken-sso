@@ -65,4 +65,38 @@
         </where>
     </select>
 
+    <select id="selectMenusByRoleId" resultType="com.breeze.boot.system.domain.SysMenu">
+        SELECT
+        b.id,
+        b.platform_id,
+        b.parent_id,
+        b.title,
+        b.`name`,
+        b.type,
+        b.icon,
+        b.path,
+        b.component,
+        b.permission,
+        b.sort
+        FROM
+        sys_role_menu AS a
+        LEFT JOIN sys_menu AS b ON a.menu_id = b.id
+        LEFT JOIN sys_platform AS c ON c.id = b.platform_id
+        <where>
+            <if test="roleIds == null">
+                AND 1 != 1
+            </if>
+            AND c.platform_code = #{platformCode}
+            AND b.type IN (0,1)
+            AND a.role_id IN
+            <foreach collection="roleIds" item="roleId" open="(" separator="," close=")" index="index">
+                #{roleId}
+            </foreach>
+            AND a.is_delete = 0
+            AND b.is_delete = 0
+            AND c.is_delete = 0
+        </where>
+        ORDER BY b.sort
+    </select>
+
 </mapper>

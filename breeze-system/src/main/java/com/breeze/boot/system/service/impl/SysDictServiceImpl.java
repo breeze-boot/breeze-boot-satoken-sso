@@ -62,7 +62,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     @Override
-    public Result deleteByIds(List<Long> ids) {
+    public Result<Boolean> deleteByIds(List<Long> ids) {
         boolean remove = this.sysDictItemService.remove(Wrappers.<SysDictItem>lambdaQuery().in(SysDictItem::getDictId, ids));
         if (remove) {
             this.removeByIds(ids);

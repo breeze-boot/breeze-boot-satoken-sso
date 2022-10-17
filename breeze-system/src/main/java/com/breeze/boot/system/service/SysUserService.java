@@ -36,7 +36,7 @@ import java.util.List;
 public interface SysUserService extends IService<SysUser> {
 
     /**
-     * 负载登录用户名
+     * 加载登录用户名
      *
      * @param username 用户名
      * @return {@link LoginUserDTO}
@@ -57,7 +57,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param sysUser 系统用户
      * @return {@link Boolean}
      */
-    Result<Object> saveUser(SysUser sysUser);
+    Result<Boolean> saveUser(SysUser sysUser);
 
     /**
      * 更新用户id
@@ -105,6 +105,6 @@ public interface SysUserService extends IService<SysUser> {
      * @param ids id
      * @return {@link Result}
      */
-    Result deleteByIds(List<Long> ids);
+    Result<Boolean> deleteByIds(List<Long> ids);
 
 }

@@ -122,7 +122,7 @@ public class LoginController {
     private Map<String, Object> createJWTToken(Instant now, long expiry, Authentication authenticate) {
         Authentication authentication = authenticate;
         CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
-        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        // String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .issuer("self")
                 .issueTime(new Date(now.toEpochMilli()))
@@ -138,6 +138,7 @@ public class LoginController {
         SignedJWT signedJWT = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("access_token", jwtConfig.sign(signedJWT).serialize());
+        resultMap.put("permissions", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return resultMap;
     }
 

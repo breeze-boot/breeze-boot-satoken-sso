@@ -54,7 +54,7 @@ public class SysDictItemController {
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result list(@RequestBody DictDTO dictDTO) {
+    public Result<List<SysDictItem>> list(@RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictItemService.listDictItem(dictDTO));
     }
 
@@ -66,7 +66,7 @@ public class SysDictItemController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result save(@RequestBody SysDictItem dictItemEntity) {
+    public Result<Boolean> save(@RequestBody SysDictItem dictItemEntity) {
         return Result.ok(sysDictItemService.save(dictItemEntity));
     }
 
@@ -78,7 +78,7 @@ public class SysDictItemController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result update(@RequestBody SysDictItem dictItemEntity) {
+    public Result<Boolean> update(@RequestBody SysDictItem dictItemEntity) {
         return Result.ok(this.sysDictItemService.updateById(dictItemEntity));
     }
 
@@ -90,7 +90,7 @@ public class SysDictItemController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(this.sysDictItemService.removeByIds(Arrays.asList(ids)));
     }
 

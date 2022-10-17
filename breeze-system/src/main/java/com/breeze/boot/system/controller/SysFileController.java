@@ -66,7 +66,7 @@ public class SysFileController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:file:save')")
-    public Result save(@RequestBody SysFile fileEntity) {
+    public Result<Boolean> save(@RequestBody SysFile fileEntity) {
         return Result.ok(sysFileService.save(fileEntity));
     }
 
@@ -78,7 +78,7 @@ public class SysFileController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:file:update')")
-    public Result update(@RequestBody SysFile fileEntity) {
+    public Result<Boolean> update(@RequestBody SysFile fileEntity) {
         return Result.ok(sysFileService.updateById(fileEntity));
     }
 
@@ -90,7 +90,7 @@ public class SysFileController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:file:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(this.sysFileService.removeByIds(Arrays.asList(ids)));
     }
 

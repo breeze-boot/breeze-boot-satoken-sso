@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
 import com.breeze.boot.jwtlogin.entity.UserRoleDTO;
+import com.breeze.boot.jwtlogin.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
@@ -35,9 +36,11 @@ import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -52,6 +55,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    /**
+     * redis 模板
+     */
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 密码编码器
@@ -134,13 +143,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link Boolean}
      */
     @Override
-    public Result<Object> saveUser(SysUser sysUser) {
+    public Result<Boolean> saveUser(SysUser sysUser) {
         SysDept sysDept = this.sysDeptService.getById(sysUser.getDeptId());
         if (Objects.isNull(sysDept)) {
             return Result.fail("部门不存在");
         }
         sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
-        return Result.ok(this.save(sysUser));
+        boolean save = this.save(sysUser);
+        if (save) {
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
+        }
+        return Result.ok();
     }
 
     /**
@@ -151,7 +166,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Boolean updateUserById(SysUser sysUser) {
-        return this.updateById(sysUser);
+        boolean update = this.updateById(sysUser);
+        if (update) {
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
+        }
+        return update;
     }
 
     /**
@@ -162,9 +183,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Boolean open(UserOpenDTO openDTO) {
-        return this.update(Wrappers.<SysUser>lambdaUpdate()
+        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
                 .set(SysUser::getIsLock, openDTO.getIsLock())
                 .eq(SysUser::getId, openDTO.getId()));
+        if (update) {
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
+        }
+        return update;
     }
 
     /**
@@ -176,7 +203,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Boolean resetPass(SysUser userEntity) {
         userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
-        return this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userEntity.getPassword()).eq(SysUser::getId, userEntity.getId()));
+        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userEntity.getPassword()).eq(SysUser::getId, userEntity.getId()));
+        if (update) {
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
+        }
+        return update;
     }
 
     /**
@@ -186,7 +219,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link Result}
      */
     @Override
-    public Result deleteByIds(List<Long> ids) {
+    public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysUser> userEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(userEntityList)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
@@ -196,6 +229,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             // 删除用户角色关系
             this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
                     .in(SysUserRole::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
@@ -210,7 +246,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUserDTO loginUserDTO = new LoginUserDTO();
         BeanUtil.copyProperties(sysUser, loginUserDTO);
         SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
-        // TOOD
+        // TODO
         loginUserDTO.setDeptName(dept.getDeptName());
         List<SysRole> roleList = this.sysRoleService.listUserRole(sysUser.getId());
         if (CollUtil.isEmpty(roleList)) {

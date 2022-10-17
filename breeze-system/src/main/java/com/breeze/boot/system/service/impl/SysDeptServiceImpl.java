@@ -82,7 +82,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return {@link Boolean}
      */
     @Override
-    public Result deleteById(Long id) {
+    public Result<Boolean> deleteById(Long id) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
         if (CollUtil.isNotEmpty(deptEntityList)) {
             return Result.warning(Boolean.FALSE, "此部门存在下级部门,不允许删除");

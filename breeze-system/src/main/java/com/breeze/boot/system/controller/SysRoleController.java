@@ -17,6 +17,7 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
@@ -30,6 +31,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 系统角色控制器
@@ -48,6 +50,9 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    /**
+     * 系统角色菜单服务
+     */
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
@@ -59,19 +64,19 @@ public class SysRoleController {
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result list(@RequestBody RoleDTO roleDTO) {
+    public Result<Page<SysRole>> list(@RequestBody RoleDTO roleDTO) {
         return Result.ok(this.sysRoleService.listPage(roleDTO));
     }
 
     /**
-     * 角色权限列表
+     * 获取树形权限列表 选中数据
      *
      * @param roleId 角色id
      * @return {@link Result}
      */
     @GetMapping("/listRolesPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result listRolesPermission(@RequestParam Long roleId) {
+    public Result<List<SysRoleMenu>> listRolesPermission(@RequestParam Long roleId) {
         return Result.ok(this.sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, roleId)));
     }
 
@@ -83,7 +88,7 @@ public class SysRoleController {
      */
     @PutMapping("/editPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
-    public Result editPermission(@RequestBody MenuPermissionDTO menuRoleDTO) {
+    public Result<Boolean> editPermission(@RequestBody MenuPermissionDTO menuRoleDTO) {
         return this.sysRoleMenuService.editPermission(menuRoleDTO);
     }
 
@@ -95,7 +100,7 @@ public class SysRoleController {
      */
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:role:info')")
-    public Result info(@PathVariable("id") Long id) {
+    public Result<SysRole> info(@PathVariable("id") Long id) {
         return Result.ok(sysRoleService.getById(id));
     }
 
@@ -107,7 +112,7 @@ public class SysRoleController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:role:save')")
-    public Result save(@RequestBody SysRole roleEntity) {
+    public Result<Boolean> save(@RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.save(roleEntity));
     }
 
@@ -119,7 +124,7 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
-    public Result update(@RequestBody SysRole roleEntity) {
+    public Result<Boolean> update(@RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.updateById(roleEntity));
     }
 
@@ -131,7 +136,7 @@ public class SysRoleController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         return sysRoleService.deleteByIds(Arrays.asList(ids));
     }
 

@@ -65,45 +65,44 @@ public class SysUserController {
      */
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
-    public Result info(@PathVariable("id") Long id) {
-        SysUser sysUser = sysUserService.getById(id);
-        return Result.ok(sysUser);
+    public Result<SysUser> info(@PathVariable("id") Long id) {
+        return Result.ok(sysUserService.getById(id));
     }
 
     /**
      * 保存
      *
-     * @param userEntity 系统用户
+     * @param sysUser 系统用户
      * @return {@link Result}
      */
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:user:save')")
-    public Result save(@RequestBody SysUser userEntity) {
-        return sysUserService.saveUser(userEntity);
+    public Result<Boolean> save(@RequestBody SysUser sysUser) {
+        return sysUserService.saveUser(sysUser);
     }
 
     /**
      * 更新
      *
-     * @param userEntity 系统用户
+     * @param sysUser 系统用户
      * @return {@link Result}
      */
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result update(@RequestBody SysUser userEntity) {
-        return Result.ok(sysUserService.updateUserById(userEntity));
+    public Result<Boolean> update(@RequestBody SysUser sysUser) {
+        return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
     /**
      * 重置密码
      *
-     * @param userEntity 系统用户
+     * @param sysUser 系统用户
      * @return {@link Result}
      */
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result resetPass(@RequestBody SysUser userEntity) {
-        return Result.ok(sysUserService.resetPass(userEntity));
+    public Result<Boolean> resetPass(@RequestBody SysUser sysUser) {
+        return Result.ok(sysUserService.resetPass(sysUser));
     }
 
     /**
@@ -114,7 +113,7 @@ public class SysUserController {
      */
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result open(@RequestBody UserOpenDTO openDTO) {
+    public Result<Boolean> open(@RequestBody UserOpenDTO openDTO) {
         return Result.ok(sysUserService.open(openDTO));
     }
 
@@ -126,7 +125,7 @@ public class SysUserController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
-    public Result delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
         return sysUserService.deleteByIds(Arrays.asList(ids));
     }
 

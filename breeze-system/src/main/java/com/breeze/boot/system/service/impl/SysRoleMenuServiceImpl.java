@@ -19,12 +19,18 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.jwtlogin.entity.LoginUserDTO;
+import com.breeze.boot.jwtlogin.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.mapper.SysRoleMenuMapper;
 import com.breeze.boot.system.service.SysRoleMenuService;
+import com.breeze.boot.system.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +42,18 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
+
+    /**
+     * redis 模板
+     */
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 用户服务
+     */
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 编辑权限
@@ -52,8 +70,13 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             sysRoleMenu.setRoleId(menuPermissionDTO.getRoleId());
             return sysRoleMenu;
         }).collect(Collectors.toList());
-        this.saveBatch(sysRoleMenuList);
-        return Result.ok(Boolean.TRUE);
+        boolean batch = this.saveBatch(sysRoleMenuList);
+        if (batch) {
+            // 刷新菜单权限
+            LoginUserDTO loginUserDTO = this.sysUserService.loadUserByUsername(SecurityUtils.getUserName());
+            this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
+        }
+        return Result.ok(batch);
     }
 
 }
