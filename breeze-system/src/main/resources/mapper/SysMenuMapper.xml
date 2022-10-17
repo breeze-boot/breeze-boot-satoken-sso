@@ -49,6 +49,8 @@
         a.path,
         a.title,
         a.component,
+        a.href,
+        a.keep_alive,
         a.type
         FROM sys_menu a
         LEFT JOIN sys_platform b ON a.platform_id =b.id
