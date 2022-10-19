@@ -53,9 +53,13 @@ public enum ResultCode {
      */
     FEIGN_INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(5003, "内部身份验证服务异常"),
     /**
-     * 未经授权
+     * 未授权资源，请联系管理员授权
      */
-    UNAUTHORIZED(401, "未获取访问权限"),
+    UNAUTHORIZED(401, "未授权资源，请联系管理员授权"),
+    /**
+     * 资源不可用
+     */
+    FORBIDDEN(403, "资源不可用"),
     /**
      * 400
      */

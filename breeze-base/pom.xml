@@ -13,7 +13,10 @@
     <description>基础模块</description>
 
     <modules>
-        <module>breeze-base-jwtlogin</module>
+        <module>breeze-base-log</module>
+        <module>breeze-base-springdoc</module>
+        <module>breeze-base-validator</module>
+        <module>breeze-base-security</module>
         <module>breeze-base-core</module>
     </modules>
 

@@ -28,7 +28,7 @@
     </organization>
 
     <modules>
-        <module>breeze-system</module>
+        <module>breeze</module>
         <module>breeze-base</module>
         <module>breeze-boot-admin-server</module>
     </modules>
@@ -125,7 +125,7 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-jwtlogin</artifactId>
+                <artifactId>breeze-base-security</artifactId>
                 <version>1.0</version>
             </dependency>
         </dependencies>

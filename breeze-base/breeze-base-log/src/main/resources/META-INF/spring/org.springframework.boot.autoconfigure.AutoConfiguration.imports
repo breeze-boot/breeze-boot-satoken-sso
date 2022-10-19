@@ -1,0 +1,2 @@
+com.breeze.boot.log.config.SysLogAspect
+com.breeze.boot.log.config.PublisherSaveSysLogEvent
