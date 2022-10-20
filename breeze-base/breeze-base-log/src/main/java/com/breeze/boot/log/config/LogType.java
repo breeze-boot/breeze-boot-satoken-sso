@@ -45,6 +45,19 @@ public enum LogType {
      * 列表
      */
     LIST(3, ""),
+    /**
+     * 用户名登录
+     */
+    USERNAME_LOGIN(4, ""),
+    /**
+     * 手机登录
+     */
+    PHONE_LOGIN(5, ""),
+    /**
+     * 电子邮件登录
+     */
+    EMAIL_LOGIN(6, ""),
+
     ;
 
     /**
