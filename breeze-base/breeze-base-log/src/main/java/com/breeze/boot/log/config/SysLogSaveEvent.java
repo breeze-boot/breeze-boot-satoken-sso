@@ -27,11 +27,8 @@ import org.springframework.context.ApplicationEvent;
  */
 public class SysLogSaveEvent extends ApplicationEvent {
 
-    private final String message;
-
-    public SysLogSaveEvent(SysLogDTO sysLogDTO, String message) {
+    public SysLogSaveEvent(SysLogDTO sysLogDTO) {
         super(sysLogDTO);
-        this.message = message;
     }
 
 }

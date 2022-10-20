@@ -21,7 +21,6 @@ import com.breeze.boot.log.annotation.SysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -73,7 +72,6 @@ public class SysLogAspect {
      * @param joinPoint 切点
      * @return {@link Object}
      */
-    @SneakyThrows
     @Around(value = "logPointcut()")
     public Object doAround(ProceedingJoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -91,24 +89,32 @@ public class SysLogAspect {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        SysLogDTO build = SysLogDTO.builder()
-                .systemModule("--")
-                .logTitle(sysLog.description())
-                .system("")
-                .doType(sysLog.type().getCode())
-                .logType(0)
-                .browser(request.getRemoteAddr())
-                .ip(request.getRemoteAddr())
-                .requestType(request.getMethod())
-                .content(mapper.writeValueAsString(param))
-                .result(1)
-                .build();
-        // 发布
-        Object proceed = joinPoint.proceed();
-        String resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
-        this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
-        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build, ""));
+        Object proceed = null;
+        SysLogDTO build = SysLogDTO.builder().build();
+        try {
+            build = SysLogDTO.builder()
+                    .systemModule("通用权限系统")
+                    .system("管理中心")
+                    .logTitle(sysLog.description())
+                    .doType(sysLog.type().getCode())
+                    .logType(0)
+                    .browser(request.getRemoteAddr())
+                    .ip(request.getRemoteAddr())
+                    .requestType(request.getMethod())
+                    .paramContent(mapper.writeValueAsString(param))
+                    .result(1)
+                    .build();
+            proceed = joinPoint.proceed();
+            String resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
+            this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            build.setExMsg(e.getMessage());
+            build.setResult(0);
+        }
         stopWatch.stop();
+        build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
+        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         return proceed;
     }
 

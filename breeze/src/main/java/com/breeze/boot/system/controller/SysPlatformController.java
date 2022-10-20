@@ -68,7 +68,6 @@ public class SysPlatformController {
     @SysLog(description = "查询", type = LogType.LIST)
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
     public Result<Page<SysPlatform>> list(@RequestBody PlatformDTO platformDTO) {
-        int i = 1 / 0;
         return Result.ok(this.sysPlatformService.listPage(platformDTO));
     }
 

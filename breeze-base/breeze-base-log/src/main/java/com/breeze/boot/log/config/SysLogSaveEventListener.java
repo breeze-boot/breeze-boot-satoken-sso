@@ -18,7 +18,6 @@ package com.breeze.boot.log.config;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 
@@ -32,7 +31,7 @@ import java.util.function.Consumer;
  */
 @Slf4j
 @AllArgsConstructor
-public class SysLogSaveEventListener implements ApplicationListener<SysLogSaveEvent> {
+public class SysLogSaveEventListener {
 
     private Consumer<SysLogSaveEvent> consumer;
 
@@ -43,7 +42,6 @@ public class SysLogSaveEventListener implements ApplicationListener<SysLogSaveEv
      */
     @Async
     @EventListener(SysLogSaveEvent.class)
-    @Override
     public void onApplicationEvent(SysLogSaveEvent sysLogSaveEvent) {
         log.info("消息投递");
         consumer.accept(sysLogSaveEvent);

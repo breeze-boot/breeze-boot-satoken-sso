@@ -83,11 +83,15 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
     /**
      * 入参
      */
-    private String content;
+    private String paramContent;
 
     /**
      * 结果 0 失败 1 成功
      */
     private Integer result;
+
+    private String exMsg;
+
+    private String time;
 
 }
