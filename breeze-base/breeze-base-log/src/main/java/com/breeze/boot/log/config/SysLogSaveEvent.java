@@ -16,6 +16,7 @@
 
 package com.breeze.boot.log.config;
 
+import com.breeze.boot.log.dto.SysLogDTO;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -24,10 +25,13 @@ import org.springframework.context.ApplicationEvent;
  * @author breeze
  * @date 2022-10-19
  */
-public class SysLogSaveEvent<SysLogDTO> extends ApplicationEvent {
+public class SysLogSaveEvent extends ApplicationEvent {
 
-    public SysLogSaveEvent(SysLogDTO sysLogDTO) {
+    private final String message;
+
+    public SysLogSaveEvent(SysLogDTO sysLogDTO, String message) {
         super(sysLogDTO);
+        this.message = message;
     }
 
 }

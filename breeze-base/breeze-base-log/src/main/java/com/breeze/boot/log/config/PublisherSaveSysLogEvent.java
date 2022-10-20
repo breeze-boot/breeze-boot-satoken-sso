@@ -19,7 +19,6 @@ package com.breeze.boot.log.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 
 /**
  * 发布保存系统日志事件
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Component;
  * @author breeze
  * @date 2022-10-19
  */
-@Component
 public class PublisherSaveSysLogEvent {
 
     /**

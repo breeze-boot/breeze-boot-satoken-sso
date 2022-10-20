@@ -56,9 +56,9 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
     private Integer logType;
 
     /**
-     * 请求类型 0 GET 1 POST 2 PUT 3 DELETE
+     * 请求类型 GET POST PUT DELETE
      */
-    private Integer requestType;
+    private String requestType;
 
     /**
      * IP
@@ -79,6 +79,11 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
      * 操作系统类型
      */
     private String system;
+
+    /**
+     * 入参
+     */
+    private String content;
 
     /**
      * 结果 0 失败 1 成功

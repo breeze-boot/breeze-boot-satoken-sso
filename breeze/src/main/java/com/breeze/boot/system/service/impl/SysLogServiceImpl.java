@@ -16,10 +16,12 @@
 
 package com.breeze.boot.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.log.dto.SysLogDTO;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogDTO;
 import com.breeze.boot.system.mapper.SysLogMapper;
@@ -55,5 +57,17 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
                 .ge(Objects.nonNull(logDTO.getStartDate()), SysLog::getCreateTime, logDTO.getStartDate())
                 .le(Objects.nonNull(logDTO.getEndDate()), SysLog::getCreateTime, logDTO.getEndDate())
                 .page(logEntityPage);
+    }
+
+    /**
+     * 保存系统日志
+     *
+     * @param sysLogDTO 系统日志dto
+     */
+    @Override
+    public void saveSysLog(SysLogDTO sysLogDTO) {
+        SysLog sysLog = new SysLog();
+        BeanUtil.copyProperties(sysLogDTO, sysLog);
+        this.save(sysLog);
     }
 }

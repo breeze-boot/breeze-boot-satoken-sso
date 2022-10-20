@@ -3,6 +3,10 @@ server:
   servlet:
     context-path: /
 
+system:
+  log:
+    enable: true
+
 spring:
   application:
     name: ${project.artifactId}

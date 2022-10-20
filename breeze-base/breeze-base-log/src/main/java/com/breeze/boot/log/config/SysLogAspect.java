@@ -16,6 +16,7 @@
 
 package com.breeze.boot.log.config;
 
+import cn.hutool.core.date.StopWatch;
 import com.breeze.boot.log.annotation.SysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -45,7 +45,6 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @Aspect
-@EnableAspectJAutoProxy
 public class SysLogAspect {
 
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -80,7 +79,6 @@ public class SysLogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
         HttpServletRequest request = attributes.getRequest();
-        log.info("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 方法名称
         String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
@@ -88,12 +86,11 @@ public class SysLogAspect {
         Method method = signature.getMethod();
         // 入参
         Object[] param = joinPoint.getArgs();
-        String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param);
         // 注解
         SysLog sysLog = method.getAnnotation(SysLog.class);
 
-        log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
-
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         SysLogDTO build = SysLogDTO.builder()
                 .systemModule("--")
                 .logTitle(sysLog.description())
@@ -103,14 +100,31 @@ public class SysLogAspect {
                 .browser(request.getRemoteAddr())
                 .ip(request.getRemoteAddr())
                 .requestType(request.getMethod())
-                .content(jsonString)
+                .content(mapper.writeValueAsString(param))
                 .result(1)
                 .build();
         // 发布
-        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         Object proceed = joinPoint.proceed();
-        log.info("方法[{}]执行结束, \n 返回值：\n {}", methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed));
+        String resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
+        this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build, ""));
+        stopWatch.stop();
         return proceed;
+    }
+
+    /**
+     * 打印日志
+     *
+     * @param request    请求
+     * @param methodName 方法名称
+     * @param jsonString json字符串
+     * @param stopWatch  时间监听
+     */
+    private void printLog(HttpServletRequest request, String methodName, String jsonString, String resultJSON, StopWatch stopWatch) {
+        log.info("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
+        log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
+        log.info("方法[{}]执行结束, \n 返回值：\n {}", methodName, resultJSON);
+        log.info("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
     }
 
     /**
@@ -122,6 +136,7 @@ public class SysLogAspect {
      */
     @AfterThrowing(value = "@annotation(sysLog)", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, SysLog sysLog, Exception e) {
+        log.error(e.getMessage());
     }
 
 }

@@ -16,7 +16,8 @@
 
 package com.breeze.boot.log.config;
 
-import org.springframework.context.ApplicationEvent;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -29,15 +30,23 @@ import java.util.function.Consumer;
  * @author breeze
  * @date 2022-10-19
  */
-public class SysLogSaveEventListener implements ApplicationListener<ApplicationEvent> {
+@Slf4j
+@AllArgsConstructor
+public class SysLogSaveEventListener implements ApplicationListener<SysLogSaveEvent> {
 
-    private Consumer<ApplicationEvent> consumer;
+    private Consumer<SysLogSaveEvent> consumer;
 
-    @Override
+    /**
+     * 应用程序事件
+     *
+     * @param sysLogSaveEvent 事件
+     */
     @Async
     @EventListener(SysLogSaveEvent.class)
-    public void onApplicationEvent(ApplicationEvent event) {
-        consumer.accept(event);
+    @Override
+    public void onApplicationEvent(SysLogSaveEvent sysLogSaveEvent) {
+        log.info("消息投递");
+        consumer.accept(sysLogSaveEvent);
     }
 
 }
