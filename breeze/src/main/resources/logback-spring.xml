@@ -87,7 +87,7 @@
     </springProfile>
 
     <!-- 开发 和 测试 -->
-    <springProfile name="dev,test">
+    <springProfile name="dev,test,dynamic">
         <logger name="org.springframework.web" level="INFO"/>
         <logger name="com.breeze.boot.system" level="INFO"/>
         <!-- 日志输出级别 -->

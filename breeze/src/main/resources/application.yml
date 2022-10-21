@@ -34,7 +34,7 @@ spring:
         - "/swagger-resources/**"
         - "/v3/api-docs/**"
   profiles:
-    active: dev
+    active: dynamic
 
   boot:
     admin:

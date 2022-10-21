@@ -22,9 +22,7 @@ import com.breeze.boot.log.dto.SysLogDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -131,18 +129,6 @@ public class SysLogAspect {
         log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
         log.info("方法[{}]执行结束, \n 返回值：\n {}", methodName, resultJSON);
         log.info("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
-    }
-
-    /**
-     * 如果处理请求时出现异常
-     * 抛出异常后执行
-     *
-     * @param joinPoint 切点
-     * @param e         异常
-     */
-    @AfterThrowing(value = "@annotation(sysLog)", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, SysLog sysLog, Exception e) {
-        log.error(e.getMessage());
     }
 
 }

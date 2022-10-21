@@ -13,6 +13,8 @@
     <description>基础模块</description>
 
     <modules>
+        <module>breeze-base-database</module>
+        <module>breeze-base-xss</module>
         <module>breeze-base-log</module>
         <module>breeze-base-springdoc</module>
         <module>breeze-base-validator</module>

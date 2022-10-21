@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.config;
+package com.breeze.boot.database.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;

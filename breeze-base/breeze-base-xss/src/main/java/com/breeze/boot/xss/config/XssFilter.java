@@ -14,41 +14,32 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.xss.config;
 
-import lombok.Data;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
- * 文件dto
+ * xss过滤器
  *
  * @author breeze
- * @date 2022-09-02
+ * @date 2022-10-21
  */
-@Data
-public class FileDTO extends PageDTO {
-    /**
-     * 旧文件名称
-     */
-    private String oldFileName;
-    /**
-     * 新文件名字
-     */
-    private String newFileName;
-    /**
-     * 用户id
-     */
-    private String userId;
-    /**
-     * 用户代码
-     */
-    private String userCode;
-    /**
-     * 用户名
-     */
-    private String username;
+public class XssFilter implements Filter {
 
-    /**
-     * url
-     */
-    private String url;
+    @Override
+    public void init(FilterConfig config) {
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
+    }
+
+    @Override
+    public void destroy() {
+    }
+
 }
