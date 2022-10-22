@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author breeze
  * @date 2022-08-31
  */
-@Schema(description = "分页查询参数DTO")
+@Schema(description = "分页查询参DTO", hidden = true)
 public class PageDTO {
 
     /**

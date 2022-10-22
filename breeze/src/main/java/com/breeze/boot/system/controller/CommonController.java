@@ -22,7 +22,9 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysMenu;
+import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.service.SysMenuService;
+import com.breeze.boot.system.service.SysPlatformService;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +51,9 @@ public class CommonController {
 
     @Autowired
     private SysMenuService menuService;
+
+    @Autowired
+    private SysPlatformService platformService;
 
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
@@ -67,6 +73,19 @@ public class CommonController {
                 }
         ).collect(Collectors.toList());
         return Result.ok(TreeUtil.build(treeNodeList, 0L));
+    }
+
+    @Operation(summary = "平台下拉框", description = "下拉框接口")
+    @GetMapping("/selectPlatform")
+    public Result<List<Map<String, Object>>> selectPlatform() {
+        List<SysPlatform> platformList = this.platformService.list();
+        List<Map<String, Object>> collect = platformList.stream().map(sysPlatform -> {
+            HashMap<String, Object> map = Maps.newHashMap();
+            map.put("value", sysPlatform.getId());
+            map.put("label", sysPlatform.getPlatformName());
+            return map;
+        }).collect(Collectors.toList());
+        return Result.ok(collect);
     }
 
 }
