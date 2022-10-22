@@ -37,6 +37,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +79,7 @@ public class LoginController {
      */
     @Operation(security = {@SecurityRequirement(name = "bearer")})
     @PostMapping("/login")
-    public Result login(@RequestBody UserLoginBody userLoginBody) {
+    public Result login(@Validated @RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;
@@ -94,7 +95,7 @@ public class LoginController {
      * @return {@link Result}
      */
     @PostMapping("/sms")
-    public Result sms(@RequestBody SmsLoginBody smsLoginBody) {
+    public Result sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;
@@ -110,7 +111,7 @@ public class LoginController {
      * @return {@link Result}
      */
     @PostMapping("/email")
-    public Result email(@RequestBody EmailLoginBody emailLoginBody) {
+    public Result email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;

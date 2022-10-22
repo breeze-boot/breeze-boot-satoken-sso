@@ -28,6 +28,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -56,7 +57,7 @@ public class SysDictController {
     @Operation(summary = "列表", description = "分页")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDict>> list(@RequestBody DictDTO dictDTO) {
+    public Result<Page<SysDict>> list(@Validated @RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictService.listDict(dictDTO));
     }
 
@@ -82,7 +83,7 @@ public class SysDictController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result<Boolean> update(@RequestBody SysDict dictEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysDict dictEntity) {
         return Result.ok(this.sysDictService.updateById(dictEntity));
     }
 
@@ -95,7 +96,7 @@ public class SysDictController {
     @Operation(summary = "开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result<Boolean> open(@RequestBody DictDTO dictDTO) {
+    public Result<Boolean> open(@Validated @RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictService.open(dictDTO));
     }
 
@@ -108,7 +109,7 @@ public class SysDictController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysDictService.deleteByIds(Arrays.asList(ids));
     }
 

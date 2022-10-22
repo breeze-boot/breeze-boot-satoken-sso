@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -55,7 +57,7 @@ public class SysDeptController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    public Result<List<Tree<Long>>> list(@RequestBody DeptDTO deptDTO) {
+    public Result<List<Tree<Long>>> list(@Validated @RequestBody DeptDTO deptDTO) {
         return Result.ok(this.sysDeptService.listDept(deptDTO));
     }
 
@@ -68,7 +70,7 @@ public class SysDeptController {
     @Operation(summary = "详情", description = "目前详情接口未使用")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dept:info')")
-    public Result<SysDept> info(@PathVariable("id") Long id) {
+    public Result<SysDept> info(@NotNull(message = "参数不能为空") @PathVariable("id") Long id) {
         return Result.ok(sysDeptService.getById(id));
     }
 
@@ -81,7 +83,7 @@ public class SysDeptController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dept:save')")
-    public Result<Boolean> save(@RequestBody SysDept deptEntity) {
+    public Result<Boolean> save(@Validated @RequestBody SysDept deptEntity) {
         return Result.ok(sysDeptService.save(deptEntity));
     }
 
@@ -94,7 +96,7 @@ public class SysDeptController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dept:update')")
-    public Result<Boolean> update(@RequestBody SysDept deptEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysDept deptEntity) {
         return Result.ok(this.sysDeptService.updateById(deptEntity));
     }
 
@@ -107,7 +109,7 @@ public class SysDeptController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
-    public Result<Boolean> delete(@RequestParam Long id) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能未空") @RequestParam Long id) {
         return this.sysDeptService.deleteById(id);
     }
 

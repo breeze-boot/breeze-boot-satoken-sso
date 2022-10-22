@@ -34,6 +34,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class SysPlatformController {
     @PostMapping("/list")
     @SysLog(description = "查询", type = LogType.LIST)
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result<Page<SysPlatform>> list(@RequestBody PlatformDTO platformDTO) {
+    public Result<Page<SysPlatform>> list(@Validated @RequestBody PlatformDTO platformDTO) {
         return Result.ok(this.sysPlatformService.listPage(platformDTO));
     }
 
@@ -108,7 +109,7 @@ public class SysPlatformController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:platform:update')")
-    public Result<Boolean> update(@RequestBody SysPlatform platformEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysPlatform platformEntity) {
         return Result.ok(this.sysPlatformService.updateById(platformEntity));
     }
 
@@ -121,7 +122,7 @@ public class SysPlatformController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {
             return Result.warning(Boolean.FALSE, "该平台有菜单配置");

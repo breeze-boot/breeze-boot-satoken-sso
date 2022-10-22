@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -55,7 +57,7 @@ public class SysLogController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(@RequestBody LogDTO logDTO) {
+    public Result<Page<SysLog>> list(@Validated @RequestBody LogDTO logDTO) {
         return Result.ok(this.sysLogService.listLog(logDTO));
     }
 
@@ -68,7 +70,7 @@ public class SysLogController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:log:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
     }
 

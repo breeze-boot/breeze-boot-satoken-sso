@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -55,7 +57,7 @@ public class SysUserController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    public Result list(@RequestBody UserDTO userDTO) {
+    public Result list(@Validated @RequestBody UserDTO userDTO) {
         return Result.ok(this.sysUserService.listPage(userDTO));
     }
 
@@ -81,7 +83,7 @@ public class SysUserController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:user:save')")
-    public Result<Boolean> save(@RequestBody SysUser sysUser) {
+    public Result<Boolean> save(@Validated @RequestBody SysUser sysUser) {
         return sysUserService.saveUser(sysUser);
     }
 
@@ -94,7 +96,7 @@ public class SysUserController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result<Boolean> update(@RequestBody SysUser sysUser) {
+    public Result<Boolean> update(@Validated @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
@@ -107,7 +109,7 @@ public class SysUserController {
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result<Boolean> resetPass(@RequestBody SysUser sysUser) {
+    public Result<Boolean> resetPass(@Validated @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.resetPass(sysUser));
     }
 
@@ -120,7 +122,7 @@ public class SysUserController {
     @Operation(summary = "更新")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result<Boolean> open(@RequestBody UserOpenDTO openDTO) {
+    public Result<Boolean> open(@Validated @RequestBody UserOpenDTO openDTO) {
         return Result.ok(sysUserService.open(openDTO));
     }
 
@@ -133,7 +135,7 @@ public class SysUserController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return sysUserService.deleteByIds(Arrays.asList(ids));
     }
 

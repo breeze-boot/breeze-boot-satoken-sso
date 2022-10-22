@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class SysDictItemController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> list(@RequestBody DictDTO dictDTO) {
+    public Result<List<SysDictItem>> list(@Validated @RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictItemService.listDictItem(dictDTO));
     }
 
@@ -69,7 +71,7 @@ public class SysDictItemController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result<Boolean> save(@RequestBody SysDictItem dictItemEntity) {
+    public Result<Boolean> save(@Validated @RequestBody SysDictItem dictItemEntity) {
         return Result.ok(sysDictItemService.save(dictItemEntity));
     }
 
@@ -82,7 +84,7 @@ public class SysDictItemController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result<Boolean> update(@RequestBody SysDictItem dictItemEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysDictItem dictItemEntity) {
         return Result.ok(this.sysDictItemService.updateById(dictItemEntity));
     }
 
@@ -95,7 +97,7 @@ public class SysDictItemController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysDictItemService.removeByIds(Arrays.asList(ids)));
     }
 

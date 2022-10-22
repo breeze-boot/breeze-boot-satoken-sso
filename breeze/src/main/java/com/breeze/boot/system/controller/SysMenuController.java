@@ -25,8 +25,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -55,7 +57,7 @@ public class SysMenuController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result<? extends Object> list(@RequestBody MenuDTO menuDTO) {
+    public Result<? extends Object> list(@Validated @RequestBody MenuDTO menuDTO) {
         return this.sysMenuService.listMenu(menuDTO);
     }
 
@@ -106,7 +108,7 @@ public class SysMenuController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:menu:save')")
-    public Result<Boolean> save(@RequestBody SysMenu menuEntity) {
+    public Result<Boolean> save(@Validated @RequestBody SysMenu menuEntity) {
         return this.sysMenuService.saveMenu(menuEntity);
     }
 
@@ -119,7 +121,7 @@ public class SysMenuController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:menu:update')")
-    public Result<Boolean> update(@RequestBody SysMenu menuEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysMenu menuEntity) {
         return sysMenuService.updateMenuById(menuEntity);
     }
 
@@ -132,7 +134,7 @@ public class SysMenuController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
-    public Result<Boolean> delete(@RequestBody Long id) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysMenuService.deleteById(id);
     }
 

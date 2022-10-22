@@ -29,8 +29,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class SysRoleController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result<Page<SysRole>> list(@RequestBody RoleDTO roleDTO) {
+    public Result<Page<SysRole>> list(@Validated @RequestBody RoleDTO roleDTO) {
         return Result.ok(this.sysRoleService.listPage(roleDTO));
     }
 
@@ -92,7 +94,7 @@ public class SysRoleController {
     @Operation(summary = "编辑权限")
     @PutMapping("/editPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
-    public Result<Boolean> editPermission(@RequestBody MenuPermissionDTO menuRoleDTO) {
+    public Result<Boolean> editPermission(@Validated @RequestBody MenuPermissionDTO menuRoleDTO) {
         return this.sysRoleMenuService.editPermission(menuRoleDTO);
     }
 
@@ -118,7 +120,7 @@ public class SysRoleController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:role:save')")
-    public Result<Boolean> save(@RequestBody SysRole roleEntity) {
+    public Result<Boolean> save(@Validated @RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.save(roleEntity));
     }
 
@@ -131,7 +133,7 @@ public class SysRoleController {
     @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
-    public Result<Boolean> update(@RequestBody SysRole roleEntity) {
+    public Result<Boolean> update(@Validated @RequestBody SysRole roleEntity) {
         return Result.ok(sysRoleService.updateById(roleEntity));
     }
 
@@ -144,7 +146,7 @@ public class SysRoleController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
-    public Result<Boolean> delete(@RequestBody Long[] ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long ids) {
         return sysRoleService.deleteByIds(Arrays.asList(ids));
     }
 
