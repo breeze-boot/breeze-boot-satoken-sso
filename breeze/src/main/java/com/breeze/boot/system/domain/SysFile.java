@@ -39,7 +39,7 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
      * 用户ID
      */
     @Schema(description = "用户ID")
-    private String userId;
+    private Long userId;
 
     /**
      * 用户编码

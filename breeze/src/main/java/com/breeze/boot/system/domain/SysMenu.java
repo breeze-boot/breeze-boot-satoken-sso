@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
      * 平台ID
      */
     @Schema(description = "平台ID")
-    @NotBlank(message = "平台ID不可为空")
+    @NotNull(message = "平台ID不可为空")
     private Long platformId;
 
     /**
@@ -60,7 +61,7 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
      * 上一级的菜单ID
      */
     @Schema(description = "上一级的菜单ID")
-    @NotBlank(message = "上一级的菜单ID不可为空")
+    @NotNull(message = "上一级的菜单ID不可为空")
     private Long parentId;
 
     /**

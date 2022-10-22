@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -27,7 +28,7 @@ public class SysDictItem extends BaseModel<SysDictItem> implements Serializable 
     /**
      * 字典ID
      */
-    @NotBlank(message = "字典ID不能为空")
+    @NotNull(message = "字典ID不能为空")
     @Schema(description = "字典ID")
     private Long dictId;
 
