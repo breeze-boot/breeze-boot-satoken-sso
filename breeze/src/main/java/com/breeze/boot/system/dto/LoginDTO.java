@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 登录dto
+ * 用户登录参数DTO
  *
  * @author breeze
  * @date 2022-01-28
@@ -33,17 +34,21 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "用户登录参数DTO")
 public class LoginDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户名
+     * 用户名称
      */
+    @Schema(description = "用户名称")
     private String username;
+
     /**
      * 密码
      */
+    @Schema(description = "密码")
     private String password;
 
 }

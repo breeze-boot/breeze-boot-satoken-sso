@@ -16,30 +16,35 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * dto
+ * 菜单参数DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
 @Data
+@Schema(description = "菜单参数DTO")
 public class MenuDTO {
 
     /**
      * 平台id
      */
+    @Schema(description = "平台ID")
     private Long platformId;
 
     /**
-     * 路由名称
+     * 路由组件名称
      */
+    @Schema(description = "路由组件名称")
     private String name;
 
     /**
-     * 菜单名称
+     * 菜单标题名称
      */
+    @Schema(description = "菜单标题名称")
     private String title;
 
 }

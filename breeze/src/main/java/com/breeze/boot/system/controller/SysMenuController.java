@@ -35,9 +35,9 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Tag(name = "菜单管理模块", description = "菜单管理模块")
 @RestController
 @RequestMapping("/sys/menu")
+@Tag(name = "系统菜单管理模块", description = "SysMenuController")
 public class SysMenuController {
 
     /**
@@ -52,7 +52,7 @@ public class SysMenuController {
      * @param menuDTO 菜单dto
      * @return {@link Result}
      */
-    @Operation(summary = "列表", description = "")
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result<? extends Object> list(@RequestBody MenuDTO menuDTO) {
@@ -65,6 +65,7 @@ public class SysMenuController {
      * @param platformCode 平台标识
      * @return {@link Result}
      */
+    @Operation(summary = "树形菜单")
     @GetMapping("/listTreeMenu")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result<List<Tree<Long>>> listTreeMenu(@RequestParam(required = false) String platformCode) {
@@ -76,7 +77,7 @@ public class SysMenuController {
      *
      * @return {@link Result}
      */
-    @Operation(method = "树形权限列表")
+    @Operation(summary = "树形权限列表")
     @GetMapping("/listTreePermission")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result<List<Tree<Long>>> listTreePermission() {
@@ -89,6 +90,7 @@ public class SysMenuController {
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
     public Result<SysMenu> info(@PathVariable("id") Long id) {
@@ -101,6 +103,7 @@ public class SysMenuController {
      * @param menuEntity 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:menu:save')")
     public Result<Boolean> save(@RequestBody SysMenu menuEntity) {
@@ -113,6 +116,7 @@ public class SysMenuController {
      * @param menuEntity 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:menu:update')")
     public Result<Boolean> update(@RequestBody SysMenu menuEntity) {
@@ -125,6 +129,7 @@ public class SysMenuController {
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
     public Result<Boolean> delete(@RequestBody Long id) {

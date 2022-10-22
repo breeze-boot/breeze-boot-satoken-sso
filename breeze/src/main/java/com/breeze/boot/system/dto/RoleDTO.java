@@ -16,25 +16,29 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 角色dto
+ * 角色查询参数DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
 @Data
+@Schema(description = "角色查询参数DTO")
 public class RoleDTO extends PageDTO {
 
     /**
      * 角色名
      */
+    @Schema(description = "角色名称")
     private String roleName;
 
     /**
-     * 角色代码
+     * 角色编码
      */
+    @Schema(description = "角色编码")
     private String roleCode;
 
 }

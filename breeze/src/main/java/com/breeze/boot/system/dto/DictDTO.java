@@ -16,35 +16,41 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 字典 dto
+ * 字典查询参数DTO
  *
  * @author breeze
  * @date 2022-09-02
  */
 @Data
+@Schema(description = "字典查询参数DTO")
 public class DictDTO extends PageDTO {
 
     /**
      * 字典 id
      */
+    @Schema(description = "字典ID")
     private Long id;
 
     /**
      * 字典 名称
      */
+    @Schema(description = "字典名称")
     private String dictName;
 
     /**
-     * 字典 代码
+     * 字典 编码
      */
+    @Schema(description = "字典编码")
     private String dictCode;
 
     /**
-     * 是开放
+     * 是否开启
      */
+    @Schema(description = "是否开启")
     private Integer isOpen;
 
 }

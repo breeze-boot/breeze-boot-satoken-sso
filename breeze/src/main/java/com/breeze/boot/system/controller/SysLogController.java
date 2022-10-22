@@ -21,6 +21,7 @@ import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogDTO;
 import com.breeze.boot.system.service.SysLogService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,9 +35,9 @@ import java.util.Arrays;
  * @author breeze
  * @date 2022-09-02
  */
-@Tag(name = "日志管理模块", description = "日志管理模块")
 @RestController
 @RequestMapping("/sys/log")
+@Tag(name = "系统日志管理模块", description = "SysLogController")
 public class SysLogController {
 
     /**
@@ -51,6 +52,7 @@ public class SysLogController {
      * @param logDTO 日志dto
      * @return {@link Result}<{@link Page}<{@link SysLog}>>
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
     public Result<Page<SysLog>> list(@RequestBody LogDTO logDTO) {
@@ -63,6 +65,7 @@ public class SysLogController {
      * @param ids ids
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:log:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {

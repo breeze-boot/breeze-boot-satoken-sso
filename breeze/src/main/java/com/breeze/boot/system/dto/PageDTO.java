@@ -16,12 +16,15 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
- * 页面dto
+ * 分页查询参数DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
+@Schema(description = "分页查询参数DTO")
 public class PageDTO {
 
     /**

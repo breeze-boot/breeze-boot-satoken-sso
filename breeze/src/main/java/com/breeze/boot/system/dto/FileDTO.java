@@ -16,39 +16,52 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 文件dto
+ * 文件查询DTO
  *
  * @author breeze
  * @date 2022-09-02
  */
 @Data
+@Schema(description = "文件查询参数DTO")
 public class FileDTO extends PageDTO {
+
     /**
      * 旧文件名称
      */
+    @Schema(description = "旧文件名称")
     private String oldFileName;
+
     /**
      * 新文件名字
      */
+    @Schema(description = "新文件名称")
     private String newFileName;
+
     /**
      * 用户id
      */
+    @Schema(description = "用户ID")
     private String userId;
+
     /**
-     * 用户代码
+     * 用户编码
      */
+    @Schema(description = "用户编码")
     private String userCode;
+
     /**
      * 用户名
      */
+    @Schema(description = "用户名称")
     private String username;
 
     /**
      * url
      */
+    @Schema(description = "URL")
     private String url;
 }

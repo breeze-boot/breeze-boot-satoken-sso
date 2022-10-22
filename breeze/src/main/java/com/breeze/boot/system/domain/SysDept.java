@@ -17,6 +17,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_dept")
+@Schema(description = "系统部门实体")
 public class SysDept extends BaseModel<SysDept> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,18 +44,21 @@ public class SysDept extends BaseModel<SysDept> implements Serializable {
      * 部门编码
      */
     @NotBlank(message = "部门编码不能为空")
+    @Schema(description = "部门编码")
     private String deptCode;
 
     /**
      * 部门名称
      */
     @NotBlank(message = "部门名称不能为空")
+    @Schema(description = "部门名称")
     private String deptName;
 
     /**
      * 上级部门ID
      */
     @NotBlank(message = "上级部门ID不能为空")
+    @Schema(description = "上级部门ID")
     private Long parentId;
 
 }

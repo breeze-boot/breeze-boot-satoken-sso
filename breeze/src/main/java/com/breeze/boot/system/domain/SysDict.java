@@ -18,6 +18,7 @@ package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.Valid;
@@ -37,6 +38,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict")
+@Schema(description = "系统字典实体")
 public class SysDict extends BaseModel<SysDict> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,17 +47,20 @@ public class SysDict extends BaseModel<SysDict> implements Serializable {
      * 字典名称
      */
     @NotBlank(message = "字典名称不能为空")
+    @Schema(description = "字典名称")
     private String dictName;
 
     /**
      * 字典编码
      */
     @NotBlank(message = "字典编码不能为空")
+    @Schema(description = "字典编码")
     private String dictCode;
 
     /**
      * 是否启用 0-关闭 1-启用
      */
+    @Schema(description = "是否启用")
     private Integer isOpen;
 
     /**
@@ -69,6 +74,7 @@ public class SysDict extends BaseModel<SysDict> implements Serializable {
      */
     @TableField(exist = false)
     @Valid
+    @Schema(description = "字典项目列表")
     private List<SysDictItem> sysDictDetailList;
 
 }

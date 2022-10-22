@@ -16,25 +16,29 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 部门dto
+ * 部门参数DTO
  *
  * @author breeze
  * @date 2022-09-01
  */
 @Data
+@Schema(description = "部门参数DTO")
 public class DeptDTO {
 
     /**
      * 部门名称
      */
+    @Schema(description = "部门名称")
     private String deptName;
 
     /**
      * 父id
      */
+    @Schema(description = "父id")
     private Long parentId;
 
 }

@@ -17,6 +17,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -35,6 +36,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_platform")
+@Schema(description = "系统平台实体")
 public class SysPlatform extends BaseModel<SysPlatform> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,17 +45,20 @@ public class SysPlatform extends BaseModel<SysPlatform> implements Serializable 
      * 平台编码
      */
     @NotBlank(message = "平台编码不可为空")
+    @Schema(description = "平台编码")
     private String platformCode;
 
     /**
      * 平台名称
      */
     @NotBlank(message = "平台名称不可为空")
+    @Schema(description = "平台名称")
     private String platformName;
 
     /**
      * 描述
      */
+    @Schema(description = "描述")
     private String description;
 
 }

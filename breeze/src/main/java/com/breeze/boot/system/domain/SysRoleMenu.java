@@ -17,6 +17,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_role_menu")
+@Schema(description = "系统角色菜单实体")
 public class SysRoleMenu extends BaseModel<SysRoleMenu> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,9 +42,13 @@ public class SysRoleMenu extends BaseModel<SysRoleMenu> implements Serializable 
     /**
      * 菜单id
      */
+    @Schema(description = "菜单ID")
     private Long menuId;
+
     /**
      * 角色id
      */
+    @Schema(description = "角色ID")
     private Long roleId;
+
 }

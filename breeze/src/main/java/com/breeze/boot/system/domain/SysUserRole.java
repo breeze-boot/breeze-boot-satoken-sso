@@ -33,6 +33,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
@@ -49,6 +50,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_user_role")
+@Schema(description = "系统用户角色实体")
 public class SysUserRole extends BaseModel<SysUserRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,11 +58,13 @@ public class SysUserRole extends BaseModel<SysUserRole> implements Serializable 
     /**
      * 用户id
      */
+    @Schema(description = "用户ID")
     private Long userId;
 
     /**
      * 角色id
      */
+    @Schema(description = "角色ID")
     private Long roleId;
 
 }

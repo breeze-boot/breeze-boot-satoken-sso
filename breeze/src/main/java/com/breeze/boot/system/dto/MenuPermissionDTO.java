@@ -16,27 +16,31 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * 菜单权限dto
+ * 菜单权限参数DTO
  *
  * @author breeze
  * @date 2022-09-05
  */
 @Data
+@Schema(description = "菜单权限参数DTO")
 public class MenuPermissionDTO {
 
     /**
      * 角色id
      */
+    @Schema(description = "角色ID")
     private Long roleId;
 
     /**
-     * ids允许
+     * 权限IDs
      */
+    @Schema(description = "权限IDs")
     private List<Long> permissionIds;
 
 }

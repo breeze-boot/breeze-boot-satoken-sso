@@ -17,6 +17,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_role")
+@Schema(description = "系统角色实体")
 public class SysRole extends BaseModel<SysRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,12 +44,14 @@ public class SysRole extends BaseModel<SysRole> implements Serializable {
      * 角色编码
      */
     @NotBlank(message = "角色编码不可为空")
+    @Schema(description = "角色编码")
     private String roleCode;
 
     /**
      * 角色名称
      */
     @NotBlank(message = "角色名称不可为空")
+    @Schema(description = "角色名称")
     private String roleName;
 
 }

@@ -21,6 +21,7 @@ import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.service.SysUserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,8 +36,8 @@ import java.util.Arrays;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@Tag(name = "用户管理模块", description = "用户管理模块")
 @RequestMapping("/sys/user")
+@Tag(name = "系统用户管理模块", description = "SysUserController")
 public class SysUserController {
 
     /**
@@ -51,6 +52,7 @@ public class SysUserController {
      * @param userDTO 用户dto
      * @return {@link Result}
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     public Result list(@RequestBody UserDTO userDTO) {
@@ -58,11 +60,12 @@ public class SysUserController {
     }
 
     /**
-     * 信息
+     * 详情
      *
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
     public Result<SysUser> info(@PathVariable("id") Long id) {
@@ -75,6 +78,7 @@ public class SysUserController {
      * @param sysUser 系统用户
      * @return {@link Result}
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:user:save')")
     public Result<Boolean> save(@RequestBody SysUser sysUser) {
@@ -87,6 +91,7 @@ public class SysUserController {
      * @param sysUser 系统用户
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     public Result<Boolean> update(@RequestBody SysUser sysUser) {
@@ -99,6 +104,7 @@ public class SysUserController {
      * @param sysUser 系统用户
      * @return {@link Result}
      */
+    @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     public Result<Boolean> resetPass(@RequestBody SysUser sysUser) {
@@ -111,6 +117,7 @@ public class SysUserController {
      * @param openDTO 打开dto
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:user:update')")
     public Result<Boolean> open(@RequestBody UserOpenDTO openDTO) {
@@ -123,6 +130,7 @@ public class SysUserController {
      * @param ids id
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {

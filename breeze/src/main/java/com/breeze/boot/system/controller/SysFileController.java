@@ -21,6 +21,7 @@ import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.service.SysFileService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,9 +36,9 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Tag(name = "文件管理模块", description = "文件管理模块")
 @RestController
 @RequestMapping("/sys/file")
+@Tag(name = "系统文件管理模块", description = "SysFileController")
 public class SysFileController {
 
     /**
@@ -52,6 +53,7 @@ public class SysFileController {
      * @param fileDTO 文件dto
      * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
     public Result<Page<SysFile>> list(@RequestBody FileDTO fileDTO) {
@@ -64,6 +66,7 @@ public class SysFileController {
      * @param fileEntity 文件实体
      * @return {@link Result}
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:file:save')")
     public Result<Boolean> save(@RequestBody SysFile fileEntity) {
@@ -76,6 +79,7 @@ public class SysFileController {
      * @param fileEntity 文件实体
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:file:update')")
     public Result<Boolean> update(@RequestBody SysFile fileEntity) {
@@ -88,6 +92,7 @@ public class SysFileController {
      * @param ids ids
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:file:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
@@ -95,3 +100,5 @@ public class SysFileController {
     }
 
 }
+
+

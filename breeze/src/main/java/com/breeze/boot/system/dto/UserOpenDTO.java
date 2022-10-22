@@ -16,25 +16,29 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 用户锁定dto
+ * 用户开关DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
 @Data
+@Schema(description = "用户开关DTO")
 public class UserOpenDTO {
 
     /**
      * 用户id
      */
+    @Schema(description = "用户ID")
     private Long id;
 
     /**
      * 是否锁定
      */
+    @Schema(description = "是否锁定")
     private Integer isLock;
 
 }

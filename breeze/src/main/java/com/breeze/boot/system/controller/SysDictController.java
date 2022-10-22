@@ -21,6 +21,7 @@ import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysDict;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.service.SysDictService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,9 +36,9 @@ import java.util.Arrays;
  * @author breeze
  * @date 2022-09-02
  */
-@Tag(name = "字典管理模块", description = "字典管理模块")
 @RestController
 @RequestMapping("/sys/dict")
+@Tag(name = "系统字典管理模块", description = "SysDictController")
 public class SysDictController {
 
     /**
@@ -52,6 +53,7 @@ public class SysDictController {
      * @param dictDTO 字典dto
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
+    @Operation(summary = "列表", description = "分页")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
     public Result<Page<SysDict>> list(@RequestBody DictDTO dictDTO) {
@@ -64,6 +66,7 @@ public class SysDictController {
      * @param dictEntity 字典保存DTO
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
     public Result<Boolean> save(@Validated @RequestBody SysDict dictEntity) {
@@ -76,6 +79,7 @@ public class SysDictController {
      * @param dictEntity 字典更新 实体
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
     public Result<Boolean> update(@RequestBody SysDict dictEntity) {
@@ -88,6 +92,7 @@ public class SysDictController {
      * @param dictDTO 字典dto
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
     public Result<Boolean> open(@RequestBody DictDTO dictDTO) {
@@ -100,6 +105,7 @@ public class SysDictController {
      * @param ids ids
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {

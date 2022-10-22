@@ -16,30 +16,35 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 用户dto
+ * 用户查询参数DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
 @Data
+@Schema(description = "用户查询参数DTO")
 public class UserDTO extends PageDTO {
 
     /**
-     * 用户代码
+     * 用户编码
      */
+    @Schema(description = "用户编码")
     private String userCode;
 
     /**
-     * 用户名
+     * 用户名称
      */
+    @Schema(description = "用户名称")
     private String username;
 
     /**
      * 电话
      */
+    @Schema(description = "电话")
     private String phone;
 
 

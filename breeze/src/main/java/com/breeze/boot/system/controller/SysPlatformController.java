@@ -27,6 +27,7 @@ import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.dto.PlatformDTO;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,9 +44,9 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@Tag(name = "平台管理模块", description = "平台管理模块")
-@RequestMapping("/sys/platform")
 @AllArgsConstructor
+@RequestMapping("/sys/platform")
+@Tag(name = "系统平台管理模块", description = "SysPlatformController")
 public class SysPlatformController {
 
     /**
@@ -64,6 +65,7 @@ public class SysPlatformController {
      * @param platformDTO 平台dto
      * @return {@link Result}
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @SysLog(description = "查询", type = LogType.LIST)
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
@@ -77,6 +79,7 @@ public class SysPlatformController {
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:platform:info')")
     public Result<SysPlatform> info(@PathVariable("id") Long id) {
@@ -89,6 +92,7 @@ public class SysPlatformController {
      * @param platform 平台实体入参
      * @return {@link Result}
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:platform:save')")
     public Result<Boolean> save(@Validated @RequestBody SysPlatform platform) {
@@ -101,6 +105,7 @@ public class SysPlatformController {
      * @param platformEntity 平台实体
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:platform:update')")
     public Result<Boolean> update(@RequestBody SysPlatform platformEntity) {
@@ -113,6 +118,7 @@ public class SysPlatformController {
      * @param ids id
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {

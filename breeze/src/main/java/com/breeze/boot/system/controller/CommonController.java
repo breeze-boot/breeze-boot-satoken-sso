@@ -24,6 +24,8 @@ import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.service.SysMenuService;
 import com.google.common.collect.Maps;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,11 +43,13 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/sys/common")
+@Tag(name = "通用接口管理模块", description = "CommonController")
 public class CommonController {
 
     @Autowired
     private SysMenuService menuService;
 
+    @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
     public Result<List<Tree<Long>>> selectMenu() {
         List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 2));

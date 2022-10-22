@@ -16,25 +16,29 @@
 
 package com.breeze.boot.system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 平台dto
+ * 平台查询参数DTO
  *
  * @author breeze
  * @date 2022-08-31
  */
 @Data
+@Schema(description = "平台查询参数DTO")
 public class PlatformDTO extends PageDTO {
 
     /**
      * 平台名称
      */
+    @Schema(description = "平台名称")
     private String platformName;
 
     /**
-     * 平台代码
+     * 平台编码
      */
+    @Schema(description = "平台编码")
     private String platformCode;
 
 }

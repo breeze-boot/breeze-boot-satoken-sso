@@ -21,6 +21,7 @@ import com.breeze.boot.core.Result;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.service.SysDeptService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,9 +35,9 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Tag(name = "部门管理模块", description = "部门管理模块")
 @RestController
 @RequestMapping("/sys/dept")
+@Tag(name = "系统部门管理模块", description = "SysDeptController")
 public class SysDeptController {
 
     /**
@@ -51,6 +52,7 @@ public class SysDeptController {
      * @param deptDTO 部门dto
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
     public Result<List<Tree<Long>>> list(@RequestBody DeptDTO deptDTO) {
@@ -58,11 +60,12 @@ public class SysDeptController {
     }
 
     /**
-     * 信息
+     * 详情
      *
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "详情", description = "目前详情接口未使用")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dept:info')")
     public Result<SysDept> info(@PathVariable("id") Long id) {
@@ -75,6 +78,7 @@ public class SysDeptController {
      * @param deptEntity 部门实体
      * @return {@link Result}
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dept:save')")
     public Result<Boolean> save(@RequestBody SysDept deptEntity) {
@@ -87,6 +91,7 @@ public class SysDeptController {
      * @param deptEntity 部门实体
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dept:update')")
     public Result<Boolean> update(@RequestBody SysDept deptEntity) {
@@ -99,6 +104,7 @@ public class SysDeptController {
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
     public Result<Boolean> delete(@RequestParam Long id) {

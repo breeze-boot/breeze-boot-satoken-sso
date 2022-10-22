@@ -34,80 +34,81 @@ import java.time.LocalDateTime;
  * @date 2021-12-06 22:03:39
  */
 @Data
+@Schema(name = "基础实体")
 @EqualsAndHashCode(callSuper = false)
 public class BaseModel<T> extends Model<BaseModel<T>> {
 
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    @Schema(name = "主键")
     @ExcelIgnore
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Schema(description = "主键")
     private Long id;
 
     /**
      * 是否删除 0 未删除 1 已删除
      */
     @JsonIgnore
-    @Schema(name = "是否删除 1 已删除 0 未删除", hidden = true)
     @ExcelIgnore
     @TableLogic
+    @Schema(description = "是否删除 1 已删除 0 未删除")
     private Integer isDelete;
 
     /**
      * 删除人 工号
      */
     @JsonIgnore
-    @Schema(name = "删除人 编码", hidden = true)
     @ExcelIgnore
+    @Schema(description = "删除人编码", hidden = true)
     private String deleteBy;
 
     /**
      * createdBy
      */
-    @Schema(name = "创建人编码", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建人编码", hidden = true)
     private String createBy;
 
     /**
      * createdTime
      */
-    @Schema(name = "创建人姓名", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建人姓名", hidden = true)
     private String createName;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Schema(name = "创建时间", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
+    @Schema(hidden = true, description = "创建时间")
     private LocalDateTime createTime;
 
     /**
      * 修改人
      */
-    @Schema(name = "修改人 编码", hidden = true)
     @ExcelIgnore
     @TableField(fill = FieldFill.UPDATE)
+    @Schema(description = "修改人编码", hidden = true)
     private String updateBy;
 
     /**
      * 修改人
      */
-    @Schema(name = "修改人姓名", hidden = true)
     @TableField(fill = FieldFill.UPDATE)
+    @Schema(description = "修改人姓名", hidden = true)
     private String updateName;
 
     /**
      * 修改时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Schema(name = "修改时间", hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "修改时间", hidden = true)
     private LocalDateTime updateTime;
 
 }

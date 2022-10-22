@@ -25,6 +25,7 @@ import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.dto.RoleDTO;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,9 +40,9 @@ import java.util.List;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Tag(name = "角色管理模块", description = "角色管理模块")
 @RestController
 @RequestMapping("/sys/role")
+@Tag(name = "系统角色管理模块", description = "SysRoleController")
 public class SysRoleController {
 
     /**
@@ -62,6 +63,7 @@ public class SysRoleController {
      * @param roleDTO 角色dto
      * @return {@link Result}
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     public Result<Page<SysRole>> list(@RequestBody RoleDTO roleDTO) {
@@ -74,6 +76,7 @@ public class SysRoleController {
      * @param roleId 角色id
      * @return {@link Result}
      */
+    @Operation(summary = "获取树形权限列表", description = "选中的行的回显")
     @GetMapping("/listRolesPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
     public Result<List<SysRoleMenu>> listRolesPermission(@RequestParam Long roleId) {
@@ -86,6 +89,7 @@ public class SysRoleController {
      * @param menuRoleDTO dto菜单作用
      * @return {@link Result}
      */
+    @Operation(summary = "编辑权限")
     @PutMapping("/editPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     public Result<Boolean> editPermission(@RequestBody MenuPermissionDTO menuRoleDTO) {
@@ -93,11 +97,12 @@ public class SysRoleController {
     }
 
     /**
-     * 信息
+     * 详情
      *
      * @param id id
      * @return {@link Result}
      */
+    @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:role:info')")
     public Result<SysRole> info(@PathVariable("id") Long id) {
@@ -110,6 +115,7 @@ public class SysRoleController {
      * @param roleEntity 角色实体
      * @return {@link Result}
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:role:save')")
     public Result<Boolean> save(@RequestBody SysRole roleEntity) {
@@ -122,6 +128,7 @@ public class SysRoleController {
      * @param roleEntity 角色实体
      * @return {@link Result}
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:role:update')")
     public Result<Boolean> update(@RequestBody SysRole roleEntity) {
@@ -134,6 +141,7 @@ public class SysRoleController {
      * @param ids id
      * @return {@link Result}
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {

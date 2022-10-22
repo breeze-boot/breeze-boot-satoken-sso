@@ -21,6 +21,7 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.service.SysDictItemService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,9 +36,9 @@ import java.util.List;
  * @author breeze
  * @date 2022-09-02
  */
-@Tag(name = "字典管理模块", description = "字典管理模块")
 @RestController
 @RequestMapping("/sys/dictItem")
+@Tag(name = "系统字典管理模块", description = "SysDictItemController")
 public class SysDictItemController {
 
     /**
@@ -52,6 +53,7 @@ public class SysDictItemController {
      * @param dictDTO 字典dto
      * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
+    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
     public Result<List<SysDictItem>> list(@RequestBody DictDTO dictDTO) {
@@ -64,6 +66,7 @@ public class SysDictItemController {
      * @param dictItemEntity 字典项保存DTO
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
     public Result<Boolean> save(@RequestBody SysDictItem dictItemEntity) {
@@ -76,6 +79,7 @@ public class SysDictItemController {
      * @param dictItemEntity 字典项更新 实体
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "更新")
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('sys:dict:update')")
     public Result<Boolean> update(@RequestBody SysDictItem dictItemEntity) {
@@ -88,6 +92,7 @@ public class SysDictItemController {
      * @param ids ids
      * @return {@link Result}<{@link Boolean}>
      */
+    @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
