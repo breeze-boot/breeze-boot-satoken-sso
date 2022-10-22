@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.config;
+package com.breeze.boot.database.mapper;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
+ * 基础 映射器
+ *
  * @author breeze
- * @date 2022-10-12
+ * @date 2022-10-22
  */
-@Configuration
-public class WebSocketConfig {
+public interface BreezeBaseMapper<T> extends BaseMapper<T> {
+
     /**
-     * 服务器端点出口国
+     * 如果要自动填充，@{@code Param}(xx) xx参数名必须是 list/collection/array 3个的其中之一
      *
-     * @return {@link ServerEndpointExporter}
+     * @param batchList 批处理列表
+     * @return int
      */
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
-    }
+    int insertAllBatch(@Param("list") List<T> batchList);
+
 }

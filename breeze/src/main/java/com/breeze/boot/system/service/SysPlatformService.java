@@ -21,6 +21,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.dto.PlatformDTO;
 
+import java.util.List;
+
 /**
  * 系统平台服务
  *
@@ -36,5 +38,13 @@ public interface SysPlatformService extends IService<SysPlatform> {
      * @return {@link Page}<{@link SysPlatform}>
      */
     Page<SysPlatform> listPage(PlatformDTO platformDTO);
+
+    /**
+     * 批量保存
+     *
+     * @param platformDTOList 平台 List
+     * @return boolean
+     */
+    Boolean saveAllBatch(List<PlatformDTO> platformDTOList);
 
 }

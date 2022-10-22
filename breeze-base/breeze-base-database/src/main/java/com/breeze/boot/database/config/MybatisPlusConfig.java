@@ -23,7 +23,6 @@ import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerIntercept
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * mybatis +配置
@@ -31,8 +30,16 @@ import org.springframework.context.annotation.Configuration;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Configuration
 public class MybatisPlusConfig {
+
+    /**
+     * 自定义 SqlInjector
+     * 里面包含自定义的全局方法
+     */
+    @Bean
+    public BreezeLogicSqlInjector logicSqlInjector() {
+        return new BreezeLogicSqlInjector();
+    }
 
     /**
      * mybatis +拦截器

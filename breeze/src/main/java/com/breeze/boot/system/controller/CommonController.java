@@ -34,14 +34,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 开放控制器
+ * 公用的接口
  *
  * @author breeze
  * @date 2022-10-08
  */
 @RestController
-@RequestMapping("/sys/open")
-public class OpenController {
+@RequestMapping("/sys/common")
+public class CommonController {
 
     @Autowired
     private SysMenuService menuService;

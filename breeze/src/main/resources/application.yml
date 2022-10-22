@@ -34,7 +34,7 @@ spring:
         - "/swagger-resources/**"
         - "/v3/api-docs/**"
   profiles:
-    active: dynamic
+    active: dev
 
   boot:
     admin:
@@ -143,8 +143,10 @@ aj:
     req-verify-minute-limit: 60
 
 jwt:
-  private.key: classpath:app.key
-  public.key: classpath:app.pub
+  private:
+    key: classpath:app.key
+  public:
+    key: classpath:app.pub
 
 logging:
   config: classpath:logback-spring.xml

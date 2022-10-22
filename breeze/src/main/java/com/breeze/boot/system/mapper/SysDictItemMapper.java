@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysDictItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
+public interface SysDictItemMapper extends BreezeBaseMapper<SysDictItem> {
 
     /**
      * 字典列表项

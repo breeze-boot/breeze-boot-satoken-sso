@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.MenuDTO;
@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Mapper
-public interface SysMenuMapper extends BaseMapper<SysMenu> {
+public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
 
     /**
      * 用户菜单权限列表

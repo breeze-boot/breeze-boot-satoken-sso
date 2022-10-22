@@ -51,6 +51,7 @@ public class HelloController {
     @GetMapping("/hello")
     public Result<String> helloWorld(Authentication authentication) {
         CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        assert currentLoginUser != null;
         currentLoginUser.getAuthorities().forEach((x) -> System.out.println(x.toString()));
         return Result.ok("Hello, " + authentication.getName() + "!");
     }
@@ -66,7 +67,7 @@ public class HelloController {
     }
 
     /**
-     * 得到user
+     * 获取user
      *
      * @param principal 主要
      * @return {@link Principal}
@@ -77,7 +78,7 @@ public class HelloController {
     }
 
     /**
-     * 得到user
+     * 获取user
      * 文档 「https://springdoc.org/#how-can-i-ignore-authenticationprincipal-parameter-from-spring-security」
      *
      * @return {@link Principal}
@@ -88,7 +89,7 @@ public class HelloController {
     }
 
     /**
-     * 得到user4
+     * 获取user4
      *
      * @param authentication 身份验证
      * @return {@link Object}

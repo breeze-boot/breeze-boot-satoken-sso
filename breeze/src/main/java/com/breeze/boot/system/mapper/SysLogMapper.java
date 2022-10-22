@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysLog;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,6 +27,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysLogMapper extends BaseMapper<SysLog> {
+public interface SysLogMapper extends BreezeBaseMapper<SysLog> {
 
 }

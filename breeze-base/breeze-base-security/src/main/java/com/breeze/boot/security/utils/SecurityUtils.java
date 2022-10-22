@@ -17,8 +17,6 @@
 package com.breeze.boot.security.utils;
 
 import com.breeze.boot.security.entity.CurrentLoginUser;
-import com.breeze.boot.security.ex.AcessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -38,15 +36,15 @@ public class SecurityUtils {
      * * @return {@link CurrentLoginUser}
      */
     public static CurrentLoginUser getCurrentLoginUser() {
-        try {
-            return (CurrentLoginUser) getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            throw new AcessException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+        Authentication authentication = getAuthentication();
+        if (authentication == null) {
+            return null;
         }
+        return (CurrentLoginUser) authentication.getPrincipal();
     }
 
     /**
-     * 得到用户代码
+     * 获取用户代码
      *
      * @return {@link String}
      */
@@ -72,7 +70,7 @@ public class SecurityUtils {
     }
 
     /**
-     * 得到认证
+     * 获取认证
      * 获取Authentication
      *
      * @return {@link Authentication}

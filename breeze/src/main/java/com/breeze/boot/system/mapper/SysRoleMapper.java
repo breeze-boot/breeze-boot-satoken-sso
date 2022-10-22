@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Mapper
-public interface SysRoleMapper extends BaseMapper<SysRole> {
+public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
 
     /**
      * 用户角色列表

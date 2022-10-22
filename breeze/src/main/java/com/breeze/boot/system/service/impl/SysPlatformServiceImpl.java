@@ -26,6 +26,8 @@ import com.breeze.boot.system.mapper.SysPlatformMapper;
 import com.breeze.boot.system.service.SysPlatformService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 系统平台服务impl
  *
@@ -48,6 +50,17 @@ public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPl
                 .like(StrUtil.isAllNotBlank(platformDTO.getPlatformName()), SysPlatform::getPlatformCode, platformDTO.getPlatformName())
                 .like(StrUtil.isAllNotBlank(platformDTO.getPlatformCode()), SysPlatform::getPlatformCode, platformDTO.getPlatformCode())
                 .page(platformEntityPage);
+    }
+
+    /**
+     * 列表
+     *
+     * @param platformDTOList 平台List
+     * @return {@link Page}<{@link SysPlatform}>
+     */
+    @Override
+    public Boolean saveAllBatch(List<PlatformDTO> platformDTOList) {
+        return Boolean.TRUE;
     }
 
 }

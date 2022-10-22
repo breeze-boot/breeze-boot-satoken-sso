@@ -16,9 +16,9 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,7 +31,7 @@ import org.apache.ibatis.annotations.Param;
  * @date 2022-08-31
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUser> {
+public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
 
     /**
      * 选择用户

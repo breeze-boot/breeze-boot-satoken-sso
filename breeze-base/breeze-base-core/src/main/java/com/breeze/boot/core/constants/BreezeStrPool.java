@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.mapper;
+package com.breeze.boot.core.constants;
 
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.system.domain.SysDept;
-import org.apache.ibatis.annotations.Mapper;
+import cn.hutool.core.text.StrPool;
 
 /**
- * 系统部门映射器
+ * str池
  *
  * @author breeze
- * @date 2021-12-06 22:03:39
+ * @date 2022-10-22
  */
-@Mapper
-public interface SysDeptMapper extends BreezeBaseMapper<SysDept> {
+public interface BreezeStrPool extends StrPool {
 
+    char M_DELIM_START = '(';
+    char M_DELIM_END = ')';
+
+    String BASE_SQL = "<script>insert into %s %s values %s</script>";
+    String FOREACH_START = "<foreach collection=\"list\" item=\"item\" index=\"index\" open=\"(\" separator=\"),(\" close=\")\">";
+    String _C_DELIM_START = "#{item.";
+    String FOREACH_END = "</foreach>";
 }

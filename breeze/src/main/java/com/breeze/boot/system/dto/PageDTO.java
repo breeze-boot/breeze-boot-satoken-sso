@@ -40,7 +40,7 @@ public class PageDTO {
     }
 
     /**
-     * 得到当前
+     * 获取当前页码
      *
      * @return {@link Integer}
      */
@@ -52,7 +52,7 @@ public class PageDTO {
     }
 
     /**
-     * 设置当前
+     * 设置当前页码
      *
      * @param current 当前
      */
@@ -61,7 +61,7 @@ public class PageDTO {
     }
 
     /**
-     * 得到大小
+     * 获取分页大小
      *
      * @return {@link Integer}
      */
@@ -73,7 +73,7 @@ public class PageDTO {
     }
 
     /**
-     * 设置大小
+     * 设置分页大小
      *
      * @param size 大小
      */

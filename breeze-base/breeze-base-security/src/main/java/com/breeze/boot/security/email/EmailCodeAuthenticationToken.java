@@ -117,7 +117,7 @@ public class EmailCodeAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     /**
-     * 得到主
+     * 获取 principal
      *
      * @return {@link Object}
      */

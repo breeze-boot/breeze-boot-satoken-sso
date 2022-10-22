@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysFile;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,6 +27,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-09-02
  */
 @Mapper
-public interface SysFileMapper extends BaseMapper<SysFile> {
+public interface SysFileMapper extends BreezeBaseMapper<SysFile> {
 
 }

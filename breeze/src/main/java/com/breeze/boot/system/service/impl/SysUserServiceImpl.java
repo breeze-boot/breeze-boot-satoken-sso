@@ -230,7 +230,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 获取登录用户dto
+     * 获取登录用户DTO
      *
      * @param sysUser 系统用户实体
      * @return {@link LoginUserDTO}
