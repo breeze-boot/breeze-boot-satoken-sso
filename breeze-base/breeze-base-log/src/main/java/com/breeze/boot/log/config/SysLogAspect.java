@@ -19,6 +19,7 @@ package com.breeze.boot.log.config;
 import cn.hutool.core.date.StopWatch;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -88,11 +89,13 @@ public class SysLogAspect {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object proceed = null;
+        String resultJson = "";
         SysLogDTO build = SysLogDTO.builder().build();
         try {
+            String userAgent = request.getHeader("User-Agent");
             build = SysLogDTO.builder()
                     .systemModule("通用权限系统")
-                    .system("管理中心")
+                    .system(userAgent)
                     .logTitle(breezeSysLog.description())
                     .doType(breezeSysLog.type().getCode())
                     .logType(0)
@@ -103,15 +106,24 @@ public class SysLogAspect {
                     .result(1)
                     .build();
             proceed = joinPoint.proceed();
-            String resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
-            this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+            resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
+            if (breezeSysLog.type().equals(LogType.LIST)) {
+                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+                return proceed;
+            }
         } catch (Throwable e) {
             e.printStackTrace();
             build.setExMsg(e.getMessage());
             build.setResult(0);
+        } finally {
+            try {
+                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            stopWatch.stop();
+            build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
         }
-        stopWatch.stop();
-        build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
         this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         return proceed;
     }

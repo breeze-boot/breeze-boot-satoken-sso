@@ -56,7 +56,6 @@ public class SysLogController {
      * @param logDTO 日志dto
      * @return {@link Result}<{@link Page}<{@link BreezeSysLog}>>
      */
-    @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
     @BreezeSysLog(description = "日志信息列表", type = LogType.LIST)

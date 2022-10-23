@@ -56,6 +56,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
                 .eq(Objects.nonNull(logDTO.getResult()), SysLog::getResult, logDTO.getResult())
                 .ge(Objects.nonNull(logDTO.getStartDate()), SysLog::getCreateTime, logDTO.getStartDate())
                 .le(Objects.nonNull(logDTO.getEndDate()), SysLog::getCreateTime, logDTO.getEndDate())
+                .orderByDesc(SysLog::getCreateTime)
                 .page(logEntityPage);
     }
 
@@ -68,6 +69,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     public void saveSysLog(SysLogDTO sysLogDTO) {
         SysLog sysLog = new SysLog();
         BeanUtil.copyProperties(sysLogDTO, sysLog);
+        sysLog.setSystem("权限系统");
         this.save(sysLog);
     }
 }
