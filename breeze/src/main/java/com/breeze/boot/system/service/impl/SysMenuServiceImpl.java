@@ -21,7 +21,6 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
@@ -86,7 +85,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
         CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
-        log.info("用户信息 ===> {}", JSONUtil.parse(currentLoginUser));
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
@@ -136,7 +134,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result<List<Tree<Long>>> listTreePermission() {
         CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
-        log.info("用户信息 ===> {}", JSONUtil.parse(currentLoginUser));
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }

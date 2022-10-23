@@ -19,7 +19,6 @@ package com.breeze.boot.log.config;
 import cn.hutool.core.date.StopWatch;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +88,6 @@ public class SysLogAspect {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object proceed = null;
-        String resultJson = "";
         SysLogDTO build = SysLogDTO.builder().build();
         try {
             String userAgent = request.getHeader("User-Agent");
@@ -106,9 +104,8 @@ public class SysLogAspect {
                     .result(1)
                     .build();
             proceed = joinPoint.proceed();
-            resultJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(proceed);
             if (breezeSysLog.type().equals(LogType.LIST)) {
-                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
+                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
                 return proceed;
             }
         } catch (Throwable e) {
@@ -117,14 +114,14 @@ public class SysLogAspect {
             build.setResult(0);
         } finally {
             try {
-                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), resultJson, stopWatch);
-            } catch (JsonProcessingException e) {
+                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             stopWatch.stop();
             build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
+            this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         }
-        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         return proceed;
     }
 
@@ -133,13 +130,11 @@ public class SysLogAspect {
      *
      * @param request    请求
      * @param methodName 方法名称
-     * @param jsonString json字符串
      * @param stopWatch  时间监听
      */
-    private void printLog(HttpServletRequest request, String methodName, String jsonString, String resultJSON, StopWatch stopWatch) {
+    private void printLog(HttpServletRequest request, String methodName, String jsonString, StopWatch stopWatch) {
         log.info("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
-        log.info("方法[{}]执行结束, \n 返回值：\n {}", methodName, resultJSON);
         log.info("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
     }
 
