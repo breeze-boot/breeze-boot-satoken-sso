@@ -21,6 +21,8 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.service.SysMenuService;
@@ -57,6 +59,7 @@ public class CommonController {
 
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
+    @BreezeSysLog(description = "菜单树形下拉框", type = LogType.LIST)
     public Result<List<Tree<Long>>> selectMenu() {
         List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 2));
         List<TreeNode<Long>> treeNodeList = menuList.stream().map(
@@ -77,6 +80,7 @@ public class CommonController {
 
     @Operation(summary = "平台下拉框", description = "下拉框接口")
     @GetMapping("/selectPlatform")
+    @BreezeSysLog(description = "平台下拉框", type = LogType.LIST)
     public Result<List<Map<String, Object>>> selectPlatform() {
         List<SysPlatform> platformList = this.platformService.list();
         List<Map<String, Object>> collect = platformList.stream().map(sysPlatform -> {

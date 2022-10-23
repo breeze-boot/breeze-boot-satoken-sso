@@ -18,6 +18,8 @@ package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogDTO;
 import com.breeze.boot.system.service.SysLogService;
@@ -52,11 +54,12 @@ public class SysLogController {
      * 列表
      *
      * @param logDTO 日志dto
-     * @return {@link Result}<{@link Page}<{@link SysLog}>>
+     * @return {@link Result}<{@link Page}<{@link BreezeSysLog}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
+    @BreezeSysLog(description = "日志信息列表", type = LogType.LIST)
     public Result<Page<SysLog>> list(@Validated @RequestBody LogDTO logDTO) {
         return Result.ok(this.sysLogService.listLog(logDTO));
     }
@@ -68,10 +71,25 @@ public class SysLogController {
      * @return {@link Result}
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('sys:log:delete')")
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    @DeleteMapping("/del")
+    @PreAuthorize("hasAnyAuthority('sys:log:remove')")
+    @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
+    public Result<Boolean> del(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
+    }
+
+    /**
+     * 清空
+     *
+     * @return {@link Result}
+     */
+    @Operation(summary = "清空")
+    @DeleteMapping("/clean")
+    @PreAuthorize("hasAnyAuthority('sys:log:delete')")
+    @BreezeSysLog(description = "日志信息清空", type = LogType.DELETE)
+    public Result<Boolean> clean() {
+        // TODO
+        return Result.ok();
     }
 
 }

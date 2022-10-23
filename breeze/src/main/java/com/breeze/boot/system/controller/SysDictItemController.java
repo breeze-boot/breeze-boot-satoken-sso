@@ -17,6 +17,8 @@
 package com.breeze.boot.system.controller;
 
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.DictDTO;
@@ -40,7 +42,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sys/dictItem")
-@Tag(name = "系统字典管理模块", description = "SysDictItemController")
+@Tag(name = "系统字典项管理模块", description = "SysDictItemController")
 public class SysDictItemController {
 
     /**
@@ -58,6 +60,7 @@ public class SysDictItemController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    @BreezeSysLog(description = "字典项信息列表", type = LogType.LIST)
     public Result<List<SysDictItem>> list(@Validated @RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictItemService.listDictItem(dictDTO));
     }
@@ -65,27 +68,29 @@ public class SysDictItemController {
     /**
      * 保存
      *
-     * @param dictItemEntity 字典项保存DTO
+     * @param sysDictItem 字典项保存DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dict:save')")
-    public Result<Boolean> save(@Validated @RequestBody SysDictItem dictItemEntity) {
-        return Result.ok(sysDictItemService.save(dictItemEntity));
+    @BreezeSysLog(description = "字典项信息保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Validated @RequestBody SysDictItem sysDictItem) {
+        return Result.ok(sysDictItemService.save(sysDictItem));
     }
 
     /**
-     * 更新
+     * 修改
      *
-     * @param dictItemEntity 字典项更新 实体
+     * @param sysDictItem 字典项 实体
      * @return {@link Result}<{@link Boolean}>
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:dict:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysDictItem dictItemEntity) {
-        return Result.ok(this.sysDictItemService.updateById(dictItemEntity));
+    @Operation(summary = "修改")
+    @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('sys:dict:edit')")
+    @BreezeSysLog(description = "字典项信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysDictItem sysDictItem) {
+        return Result.ok(this.sysDictItemService.updateById(sysDictItem));
     }
 
     /**
@@ -97,6 +102,7 @@ public class SysDictItemController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
+    @BreezeSysLog(description = "字典项信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysDictItemService.removeByIds(Arrays.asList(ids)));
     }

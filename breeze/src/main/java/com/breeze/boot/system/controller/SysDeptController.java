@@ -18,6 +18,8 @@ package com.breeze.boot.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.service.SysDeptService;
@@ -57,6 +59,7 @@ public class SysDeptController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
+    @BreezeSysLog(description = "部门信息列表", type = LogType.LIST)
     public Result<List<Tree<Long>>> list(@Validated @RequestBody DeptDTO deptDTO) {
         return Result.ok(this.sysDeptService.listDept(deptDTO));
     }
@@ -70,6 +73,7 @@ public class SysDeptController {
     @Operation(summary = "详情", description = "目前详情接口未使用")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dept:info')")
+    @BreezeSysLog(description = "部门信息详情", type = LogType.INFO)
     public Result<SysDept> info(@NotNull(message = "参数不能为空") @PathVariable("id") Long id) {
         return Result.ok(sysDeptService.getById(id));
     }
@@ -77,27 +81,29 @@ public class SysDeptController {
     /**
      * 保存
      *
-     * @param deptEntity 部门实体
+     * @param sysDept 部门实体
      * @return {@link Result}
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:dept:save')")
-    public Result<Boolean> save(@Validated @RequestBody SysDept deptEntity) {
-        return Result.ok(sysDeptService.save(deptEntity));
+    @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Validated @RequestBody SysDept sysDept) {
+        return Result.ok(sysDeptService.save(sysDept));
     }
 
     /**
-     * 更新
+     * 修改
      *
-     * @param deptEntity 部门实体
+     * @param sysDept 部门实体
      * @return {@link Result}
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:dept:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysDept deptEntity) {
-        return Result.ok(this.sysDeptService.updateById(deptEntity));
+    @Operation(summary = "修改")
+    @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('sys:dept:edit')")
+    @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysDept sysDept) {
+        return Result.ok(this.sysDeptService.updateById(sysDept));
     }
 
     /**
@@ -109,6 +115,7 @@ public class SysDeptController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
+    @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能未空") @RequestParam Long id) {
         return this.sysDeptService.deleteById(id);
     }

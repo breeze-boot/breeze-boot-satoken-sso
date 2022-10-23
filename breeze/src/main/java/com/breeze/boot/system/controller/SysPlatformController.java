@@ -20,7 +20,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.log.annotation.SysLog;
+import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
@@ -68,8 +68,8 @@ public class SysPlatformController {
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @SysLog(description = "查询", type = LogType.LIST)
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
+    @BreezeSysLog(description = "平台信息列表", type = LogType.LIST)
     public Result<Page<SysPlatform>> list(@Validated @RequestBody PlatformDTO platformDTO) {
         return Result.ok(this.sysPlatformService.listPage(platformDTO));
     }
@@ -83,6 +83,7 @@ public class SysPlatformController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:platform:info')")
+    @BreezeSysLog(description = "平台信息详情", type = LogType.INFO)
     public Result<SysPlatform> info(@PathVariable("id") Long id) {
         return Result.ok(this.sysPlatformService.getById(id));
     }
@@ -96,21 +97,23 @@ public class SysPlatformController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:platform:save')")
+    @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysPlatform platform) {
         return Result.ok(this.sysPlatformService.save(platform));
     }
 
     /**
-     * 更新
+     * 修改
      *
-     * @param platformEntity 平台实体
+     * @param sysPlatform 平台实体
      * @return {@link Result}
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:platform:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysPlatform platformEntity) {
-        return Result.ok(this.sysPlatformService.updateById(platformEntity));
+    @Operation(summary = "修改")
+    @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('sys:platform:edit')")
+    @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysPlatform sysPlatform) {
+        return Result.ok(this.sysPlatformService.updateById(sysPlatform));
     }
 
     /**
@@ -122,6 +125,7 @@ public class SysPlatformController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
+    @BreezeSysLog(description = "平台信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {

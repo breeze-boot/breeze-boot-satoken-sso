@@ -17,6 +17,8 @@
 package com.breeze.boot.system.controller;
 
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
@@ -57,6 +59,7 @@ public class SysUserController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
+    @BreezeSysLog(description = "用户信息列表", type = LogType.LIST)
     public Result list(@Validated @RequestBody UserDTO userDTO) {
         return Result.ok(this.sysUserService.listPage(userDTO));
     }
@@ -70,6 +73,7 @@ public class SysUserController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
+    @BreezeSysLog(description = "用户信息详情", type = LogType.INFO)
     public Result<SysUser> info(@PathVariable("id") Long id) {
         return Result.ok(sysUserService.getById(id));
     }
@@ -83,20 +87,22 @@ public class SysUserController {
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:user:save')")
+    @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysUser sysUser) {
         return sysUserService.saveUser(sysUser);
     }
 
     /**
-     * 更新
+     * 修改
      *
      * @param sysUser 系统用户
      * @return {@link Result}
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:user:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysUser sysUser) {
+    @Operation(summary = "修改")
+    @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
@@ -108,7 +114,8 @@ public class SysUserController {
      */
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
-    @PreAuthorize("hasAnyAuthority('sys:user:update')")
+    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
     public Result<Boolean> resetPass(@Validated @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.resetPass(sysUser));
     }
@@ -119,9 +126,10 @@ public class SysUserController {
      * @param openDTO 打开dto
      * @return {@link Result}
      */
-    @Operation(summary = "更新")
+    @Operation(summary = "用户锁定开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:user:update')")
+    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @BreezeSysLog(description = "用户锁定", type = LogType.EDIT)
     public Result<Boolean> open(@Validated @RequestBody UserOpenDTO openDTO) {
         return Result.ok(sysUserService.open(openDTO));
     }
@@ -135,6 +143,7 @@ public class SysUserController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
+    @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return sysUserService.deleteByIds(Arrays.asList(ids));
     }

@@ -18,6 +18,8 @@ package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.service.SysFileService;
@@ -58,6 +60,7 @@ public class SysFileController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
+    @BreezeSysLog(description = "文件信息列表", type = LogType.LIST)
     public Result<Page<SysFile>> list(@Validated @RequestBody FileDTO fileDTO) {
         return Result.ok(this.sysFileService.listFile(fileDTO));
     }
@@ -65,27 +68,29 @@ public class SysFileController {
     /**
      * 保存
      *
-     * @param fileEntity 文件实体
+     * @param sysFile 文件实体
      * @return {@link Result}
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:file:save')")
-    public Result<Boolean> save(@Validated @RequestBody SysFile fileEntity) {
-        return Result.ok(sysFileService.save(fileEntity));
+    @BreezeSysLog(description = "文件信息保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Validated @RequestBody SysFile sysFile) {
+        return Result.ok(sysFileService.save(sysFile));
     }
 
     /**
-     * 更新
+     * 修改
      *
-     * @param fileEntity 文件实体
+     * @param sysFile 文件实体
      * @return {@link Result}
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:file:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysFile fileEntity) {
-        return Result.ok(sysFileService.updateById(fileEntity));
+    @Operation(summary = "修改")
+    @PutMapping("/修改")
+    @PreAuthorize("hasAnyAuthority('sys:file:edit')")
+    @BreezeSysLog(description = "文件信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysFile sysFile) {
+        return Result.ok(sysFileService.updateById(sysFile));
     }
 
     /**
@@ -97,6 +102,7 @@ public class SysFileController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:file:delete')")
+    @BreezeSysLog(description = "文件信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysFileService.removeByIds(Arrays.asList(ids)));
     }

@@ -17,6 +17,8 @@
 package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.security.annotation.JoinWhiteList;
 import com.breeze.boot.security.config.JwtConfig;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
@@ -32,6 +34,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,6 +60,7 @@ import java.util.stream.Collectors;
 @JoinWhiteList
 @RestController
 @RequestMapping("/jwt")
+@Tag(name = "jwt登录", description = "LoginController")
 public class LoginController {
 
     /**
@@ -72,13 +76,14 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     /**
-     * 登录
+     * 用户名登录
      *
      * @param userLoginBody 登录
      * @return {@link Result}
      */
-    @Operation(security = {@SecurityRequirement(name = "bearer")})
+    @Operation(security = {@SecurityRequirement(name = "bearer")}, summary = "用户名登录")
     @PostMapping("/login")
+    @BreezeSysLog(description = "用户名登录", type = LogType.USERNAME_LOGIN)
     public Result login(@Validated @RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();
         // 用户验证
@@ -89,12 +94,14 @@ public class LoginController {
     }
 
     /**
-     * 短信登录
+     * 手机登录
      *
-     * @param smsLoginBody 登录
+     * @param smsLoginBody 手机登录
      * @return {@link Result}
      */
     @PostMapping("/sms")
+    @Operation(summary = "手机登录")
+    @BreezeSysLog(description = "用户手机登录", type = LogType.PHONE_LOGIN)
     public Result sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Instant now = Instant.now();
         // 用户验证
@@ -105,12 +112,14 @@ public class LoginController {
     }
 
     /**
-     * 电子邮件登录
+     * 用户邮箱登录
      *
      * @param emailLoginBody 登录
      * @return {@link Result}
      */
+    @Operation(summary = "邮箱登录")
     @PostMapping("/email")
+    @BreezeSysLog(description = "用户邮箱登录", type = LogType.EMAIL_LOGIN)
     public Result email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
         Instant now = Instant.now();
         // 用户验证

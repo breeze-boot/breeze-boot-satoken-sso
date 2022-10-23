@@ -18,6 +18,8 @@ package com.breeze.boot.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.dto.MenuDTO;
 import com.breeze.boot.system.service.SysMenuService;
@@ -57,6 +59,7 @@ public class SysMenuController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
+    @BreezeSysLog(description = "树形菜单列表", type = LogType.LIST)
     public Result<? extends Object> list(@Validated @RequestBody MenuDTO menuDTO) {
         return this.sysMenuService.listMenu(menuDTO);
     }
@@ -70,6 +73,7 @@ public class SysMenuController {
     @Operation(summary = "树形菜单")
     @GetMapping("/listTreeMenu")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
+    @BreezeSysLog(description = "菜单树查询", type = LogType.LIST)
     public Result<List<Tree<Long>>> listTreeMenu(@RequestParam(required = false) String platformCode) {
         return this.sysMenuService.listTreeMenu(platformCode);
     }
@@ -82,12 +86,13 @@ public class SysMenuController {
     @Operation(summary = "树形权限列表")
     @GetMapping("/listTreePermission")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
+    @BreezeSysLog(description = "权限树查询", type = LogType.LIST)
     public Result<List<Tree<Long>>> listTreePermission() {
         return this.sysMenuService.listTreePermission();
     }
 
     /**
-     * 信息
+     * 详情
      *
      * @param id id
      * @return {@link Result}
@@ -95,6 +100,7 @@ public class SysMenuController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
+    @BreezeSysLog(description = "菜单信息详情", type = LogType.INFO)
     public Result<SysMenu> info(@PathVariable("id") Long id) {
         return Result.ok(sysMenuService.getById(id));
     }
@@ -102,27 +108,29 @@ public class SysMenuController {
     /**
      * 保存
      *
-     * @param menuEntity 菜单实体
+     * @param sysMenu 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:menu:save')")
-    public Result<Boolean> save(@Validated @RequestBody SysMenu menuEntity) {
-        return this.sysMenuService.saveMenu(menuEntity);
+    @BreezeSysLog(description = "菜单信息保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Validated @RequestBody SysMenu sysMenu) {
+        return this.sysMenuService.saveMenu(sysMenu);
     }
 
     /**
-     * 更新
+     * 修改
      *
-     * @param menuEntity 菜单实体
+     * @param sysMenu 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
-    @Operation(summary = "更新")
-    @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('sys:menu:update')")
-    public Result<Boolean> update(@Validated @RequestBody SysMenu menuEntity) {
-        return sysMenuService.updateMenuById(menuEntity);
+    @Operation(summary = "修改")
+    @PutMapping("/edit")
+    @PreAuthorize("hasAnyAuthority('sys:menu:edit')")
+    @BreezeSysLog(description = "菜单信息修改", type = LogType.EDIT)
+    public Result<Boolean> edit(@Validated @RequestBody SysMenu sysMenu) {
+        return sysMenuService.updateMenuById(sysMenu);
     }
 
     /**
@@ -134,6 +142,7 @@ public class SysMenuController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
+    @BreezeSysLog(description = "菜单信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysMenuService.deleteById(id);
     }

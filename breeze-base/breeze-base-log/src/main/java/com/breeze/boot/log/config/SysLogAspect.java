@@ -17,7 +17,7 @@
 package com.breeze.boot.log.config;
 
 import cn.hutool.core.date.StopWatch;
-import com.breeze.boot.log.annotation.SysLog;
+import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -59,7 +59,7 @@ public class SysLogAspect {
     /**
      * AOP 切点
      */
-    @Pointcut("@annotation(com.breeze.boot.log.annotation.SysLog)")
+    @Pointcut("@annotation(com.breeze.boot.log.annotation.BreezeSysLog)")
     public void logPointcut() {
     }
 
@@ -83,7 +83,7 @@ public class SysLogAspect {
         // 入参
         Object[] param = joinPoint.getArgs();
         // 注解
-        SysLog sysLog = method.getAnnotation(SysLog.class);
+        BreezeSysLog breezeSysLog = method.getAnnotation(BreezeSysLog.class);
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -93,8 +93,8 @@ public class SysLogAspect {
             build = SysLogDTO.builder()
                     .systemModule("通用权限系统")
                     .system("管理中心")
-                    .logTitle(sysLog.description())
-                    .doType(sysLog.type().getCode())
+                    .logTitle(breezeSysLog.description())
+                    .doType(breezeSysLog.type().getCode())
                     .logType(0)
                     .browser(request.getRemoteAddr())
                     .ip(request.getRemoteAddr())

@@ -30,9 +30,9 @@ import lombok.NoArgsConstructor;
 public enum LogType {
 
     /**
-     * 插入
+     * 新增
      */
-    INSERT(0, ""),
+    SAVE(0, ""),
     /**
      * 删除
      */
@@ -40,19 +40,23 @@ public enum LogType {
     /**
      * 更新
      */
-    UPDATE(2, ""),
+    EDIT(2, ""),
     /**
      * 列表
      */
     LIST(3, ""),
     /**
+     * 详情
+     */
+    INFO(4, ""),
+    /**
      * 用户名登录
      */
-    USERNAME_LOGIN(4, ""),
+    USERNAME_LOGIN(5, ""),
     /**
      * 手机登录
      */
-    PHONE_LOGIN(5, ""),
+    PHONE_LOGIN(6, ""),
     /**
      * 电子邮件登录
      */
