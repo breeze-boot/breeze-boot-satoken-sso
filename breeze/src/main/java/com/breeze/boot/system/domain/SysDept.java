@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -57,7 +58,7 @@ public class SysDept extends BaseModel<SysDept> implements Serializable {
     /**
      * 上级部门ID
      */
-    @NotBlank(message = "上级部门ID不能为空")
+    @NotNull(message = "上级部门ID不能为空")
     @Schema(description = "上级部门ID")
     private Long parentId;
 
