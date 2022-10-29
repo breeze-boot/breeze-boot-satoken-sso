@@ -21,18 +21,18 @@ import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.dto.SysLogDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 
 /**
  * 系统日志方面
@@ -57,72 +57,67 @@ public class SysLogAspect {
     private PublisherSaveSysLogEvent publisherSaveSysLogEvent;
 
     /**
-     * AOP 切点
+     * 处理完请求后执行
+     *
+     * @param joinPoint 切点
      */
-    @Pointcut("@annotation(com.breeze.boot.log.annotation.BreezeSysLog)")
-    public void logPointcut() {
+    @SneakyThrows
+    @AfterReturning(pointcut = "@annotation(sysLog)", returning = "jsonResult")
+    public void doAfterReturning(JoinPoint joinPoint, BreezeSysLog sysLog, Object jsonResult) {
+        this.doLog(joinPoint, sysLog, mapper.writeValueAsString(jsonResult));
     }
 
     /**
-     * 在
-     * 处理完请求后执行此处代码
+     * 拦截异常操作
      *
      * @param joinPoint 切点
-     * @return {@link Object}
+     * @param ex        异常
      */
-    @Around(value = "logPointcut()")
-    public Object doAround(ProceedingJoinPoint joinPoint) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert attributes != null;
-        HttpServletRequest request = attributes.getRequest();
+    @AfterThrowing(value = "@annotation(sysLog)", throwing = "ex")
+    public void doAfterThrowing(JoinPoint joinPoint, BreezeSysLog sysLog, Exception ex) {
+        this.doLog(joinPoint, sysLog, ex);
+    }
+
+    public void doLog(JoinPoint joinPoint, BreezeSysLog log, Object obj) {
+        HttpServletRequest request = getHttpServletRequest();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 方法名称
         String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
-        // 方法
-        Method method = signature.getMethod();
         // 入参
         Object[] param = joinPoint.getArgs();
-        // 注解
-        BreezeSysLog breezeSysLog = method.getAnnotation(BreezeSysLog.class);
+        this.doLog(log, request, methodName, param, obj);
+    }
 
-        StopWatch stopWatch = new StopWatch();
+    @SneakyThrows
+    private void doLog(BreezeSysLog log, HttpServletRequest request, String methodName, Object[] param, Object obj) {
+        StopWatch stopWatch = getStopWatch();
         stopWatch.start();
-        Object proceed = null;
-        SysLogDTO build = SysLogDTO.builder().build();
-        try {
-            String userAgent = request.getHeader("User-Agent");
-            build = SysLogDTO.builder()
-                    .systemModule("通用权限系统")
-                    .system(userAgent)
-                    .logTitle(breezeSysLog.description())
-                    .doType(breezeSysLog.type().getCode())
-                    .logType(0)
-                    .browser(request.getRemoteAddr())
-                    .ip(request.getRemoteAddr())
-                    .requestType(request.getMethod())
-                    .paramContent(mapper.writeValueAsString(param))
-                    .result(1)
-                    .build();
-            proceed = joinPoint.proceed();
-            if (breezeSysLog.type().equals(LogType.LIST)) {
-                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
-                return proceed;
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            build.setExMsg(e.getMessage());
+        String userAgent = request.getHeader("User-Agent");
+        SysLogDTO build = SysLogDTO.builder()
+                .systemModule("通用权限系统")
+                .system(userAgent)
+                .logTitle(log.description())
+                .doType(log.type().getCode())
+                .logType(0)
+                .browser(request.getRemoteAddr())
+                .resultMsg("")
+                .ip(request.getRemoteAddr())
+                .requestType(request.getMethod())
+                .paramContent(mapper.writeValueAsString(param))
+                .result(1)
+                .build();
+        if (obj instanceof Exception) {
+            build.setResultMsg(obj.toString());
             build.setResult(0);
-        } finally {
-            try {
-                this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            stopWatch.stop();
-            build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
-            this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
         }
-        return proceed;
+        stopWatch.stop();
+        build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
+        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
+        this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
+    }
+
+    private StopWatch getStopWatch() {
+        return new StopWatch();
     }
 
     /**
@@ -133,9 +128,20 @@ public class SysLogAspect {
      * @param stopWatch  时间监听
      */
     private void printLog(HttpServletRequest request, String methodName, String jsonString, StopWatch stopWatch) {
-        log.info("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
+        log.trace("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
-        log.info("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
+        log.trace("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
+    }
+
+    /**
+     * 得到http servlet请求
+     *
+     * @return {@link HttpServletRequest}
+     */
+    private HttpServletRequest getHttpServletRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert attributes != null;
+        return attributes.getRequest();
     }
 
 }

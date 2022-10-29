@@ -19,17 +19,10 @@ package com.breeze.boot.system.exception;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.omg.CORBA.SystemException;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * 全局异常处理程序
@@ -38,67 +31,72 @@ import java.util.stream.Collectors;
  * @date 2022-10-10
  */
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
-     * 处理请求参数格式错误
-     * <p>
-     * eg: @RequestBody上使用@Valid 实体上使用@NotNull
+     * 空指针统一异常处理
      *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param ex
+     * @return 错误信息
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    public Result<? extends Object> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        log.warn("methodArgumentNotValidExceptionHandler: {}", ex.getMessage());
-        String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+    @ExceptionHandler(NullPointerException.class)
+    public Result<? extends Object> globalException(NullPointerException ex) {
+        ex.printStackTrace();
+        log.error("NullPointerException: {}", ex.getMessage());
+        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR);
     }
 
     /**
-     * 处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常
+     * 参数类型转换错误
      *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param ex 错误
+     * @return 错误信息
      */
-    @ExceptionHandler(BindException.class)
-    @ResponseBody
-    public Result<? extends Object> bindExceptionHandler(BindException ex) {
-        log.warn("bindExceptionHandler: {}", ex.getMessage());
-        String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+    @ExceptionHandler(HttpMessageConversionException.class)
+    public Result<? extends Object> parameterTypeException(HttpMessageConversionException ex) {
+        ex.printStackTrace();
+        log.error(ex.getMessage());
+        return Result.fail(ResultCode.FAIL, "类型转换错误");
     }
 
     /**
-     * 处理请求参数格式错误
-     * <p>
-     * eg: @RequestParam上validate失败后抛出的异常是ConstraintViolationException
+     * 自定义异常统一异常处理
      *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param ex 错误
+     * @return 错误信息
      */
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseBody
-    public Result<? extends Object> constraintViolationExceptionHandler(ConstraintViolationException ex) {
-        log.warn("constraintViolationExceptionHandler: {}", ex.getMessage());
-        String message = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+    @ExceptionHandler(SystemException.class)
+    public Result<? extends Object> systemExceptionHandler(SystemServiceException ex) {
+        ex.printStackTrace();
+        log.error("systemExceptionHandler ：{}", ex);
+        return Result.fail(ex.getCode(), ex.getMessage(), ex.getDescription());
     }
 
     /**
-     * http消息不可读异常处理程序
-     * 参数格式异常
+     * 运行时异常统一异常处理
      *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param ex 错误
+     * @return 错误信息
      */
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseBody
-    public Result<? extends Object> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
-        log.warn("httpMessageNotReadableExceptionHandler: {}", ex.getMessage());
-        return Result.warning(ResultCode.WARNING.getCode(), "参数格式异常");
+    @ExceptionHandler(RuntimeException.class)
+    public Result<? extends Object> runtimeExceptionHandler(RuntimeException ex) {
+        ex.printStackTrace();
+        log.error("runtimeException：{}", ex);
+        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    /**
+     * 全局异常统一异常处理
+     *
+     * @param ex 错误
+     * @return 错误信息
+     */
+    @ExceptionHandler(Exception.class)
+    public Result<? extends Object> exceptionHandler(RuntimeException ex) {
+        ex.printStackTrace();
+        log.error("exception：{}", ex);
+        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -53,8 +52,9 @@ public class BreezeBootAdminSecurityConfig {
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler)
                 .and().logout().logoutUrl(adminContextPath + "/logout")
-                .and().httpBasic().disable()
-                .csrf(AbstractHttpConfigurer::disable)
+                .and().httpBasic()
+                .and()
+                .csrf().disable()
                 .build();
     }
 
