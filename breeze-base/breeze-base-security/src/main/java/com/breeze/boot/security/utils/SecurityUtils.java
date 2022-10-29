@@ -99,6 +99,11 @@ public class SecurityUtils {
         return cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
     }
 
+    /**
+     * 租户ID
+     *
+     * @return long
+     */
     public static long getTenantId() {
         Jwt jwt = SecurityUtils.getCurrentJwt();
         if (Objects.isNull(jwt)) {
