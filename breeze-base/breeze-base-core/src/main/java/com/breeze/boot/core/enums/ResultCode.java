@@ -19,8 +19,7 @@ package com.breeze.boot.core.enums;
 import lombok.Getter;
 
 /**
- * 结果代码
- * 返回code枚举
+ * 返回结果代码
  *
  * @author breeze
  * @date 2021/10/1
@@ -92,7 +91,7 @@ public enum ResultCode {
     private final String msg;
 
     /**
-     * 结果代码
+     * 返回结果代码
      *
      * @param code 代码
      * @param msg  msg

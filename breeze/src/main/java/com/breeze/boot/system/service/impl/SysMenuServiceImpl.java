@@ -24,7 +24,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.security.entity.CurrentLoginUser;
+import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRole;
@@ -84,7 +84,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
-        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
@@ -116,7 +116,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @Override
-    public Result<? extends Object> listMenu(MenuDTO menuDTO) {
+    public Result<?> listMenu(MenuDTO menuDTO) {
         if (StrUtil.isAllNotBlank(menuDTO.getName()) || StrUtil.isAllNotBlank(menuDTO.getTitle())) {
             List<SysMenu> entityList = this.baseMapper.listMenu(menuDTO);
             return Result.ok(entityList);
@@ -133,7 +133,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreePermission() {
-        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
@@ -157,7 +157,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             // 删除已经关联的角色的菜单
             this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, id));
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
             return Result.ok(Boolean.TRUE, "删除成功");
         }
         return Result.fail(Boolean.FALSE, "删除失败");
@@ -172,7 +172,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         boolean save = this.save(menuEntity);
         if (save) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return Result.ok();
     }
@@ -188,7 +188,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         boolean update = this.updateById(menuEntity);
         if (update) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return Result.ok(update);
     }

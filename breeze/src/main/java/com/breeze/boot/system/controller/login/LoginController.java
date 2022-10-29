@@ -17,8 +17,6 @@
 package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.Result;
-import com.breeze.boot.log.annotation.BreezeSysLog;
-import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.security.annotation.JoinWhiteList;
 import com.breeze.boot.security.config.JwtConfig;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
@@ -47,8 +45,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -83,7 +83,6 @@ public class LoginController {
      */
     @Operation(security = {@SecurityRequirement(name = "bearer")}, summary = "用户名登录")
     @PostMapping("/login")
-    @BreezeSysLog(description = "用户名登录", type = LogType.USERNAME_LOGIN)
     public Result login(@Validated @RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();
         // 用户验证
@@ -101,7 +100,6 @@ public class LoginController {
      */
     @PostMapping("/sms")
     @Operation(summary = "手机登录")
-    @BreezeSysLog(description = "用户手机登录", type = LogType.PHONE_LOGIN)
     public Result sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Instant now = Instant.now();
         // 用户验证
@@ -119,7 +117,6 @@ public class LoginController {
      */
     @Operation(summary = "邮箱登录")
     @PostMapping("/email")
-    @BreezeSysLog(description = "用户邮箱登录", type = LogType.EMAIL_LOGIN)
     public Result email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
         Instant now = Instant.now();
         // 用户验证
@@ -129,20 +126,21 @@ public class LoginController {
         return Result.ok(resultMap);
     }
 
-    private Map<String, Object> createJWTToken(Instant now, long expiry, Authentication authenticate) {
-        Authentication authentication = authenticate;
+    private Map<String, Object> createJWTToken(Instant now, long expiry, Authentication authentication) {
         CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
-        // String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .issuer("self")
                 .issueTime(new Date(now.toEpochMilli()))
                 .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
                 .subject(authentication.getName())
+                .claim("userId", currentLoginUser.getUserId())
+                .claim("tenantId", currentLoginUser.getTenantId())
                 .claim("username", currentLoginUser.getUsername())
                 .claim("userCode", currentLoginUser.getUserCode())
-                // .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
-                //         .orElseGet(ArrayList::new).stream().collect(Collectors.joining(",")))
-                // .claim("scope", scope)
+                .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
+                        .orElseGet(ArrayList::new).stream().collect(Collectors.joining(",")))
+                .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJWT = new SignedJWT(header, claims);

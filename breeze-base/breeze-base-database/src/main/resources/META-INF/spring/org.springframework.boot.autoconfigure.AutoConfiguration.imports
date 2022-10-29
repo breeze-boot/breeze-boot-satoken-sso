@@ -1,3 +1,2 @@
 com.breeze.boot.database.config.MybatisMetaObjectHandler
 com.breeze.boot.database.config.MybatisPlusConfig
-com.breeze.boot.database.plugins.SqlLogPlugin

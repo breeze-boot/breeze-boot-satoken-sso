@@ -101,10 +101,10 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
     private Integer result;
 
     /**
-     * 异常信息
+     * 结果信息
      */
-    @Schema(description = "异常信息")
-    private String exMsg;
+    @Schema(description = "结果信息")
+    private String resultMsg;
 
     /**
      * 方法执行时间

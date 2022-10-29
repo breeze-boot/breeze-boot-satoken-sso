@@ -19,6 +19,7 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.mapper.SysRoleMenuMapper;
@@ -62,7 +63,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         boolean batch = this.saveBatch(sysRoleMenuList);
         if (batch) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return Result.ok(batch);
     }

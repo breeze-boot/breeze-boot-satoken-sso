@@ -37,14 +37,14 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createBy", SecurityUtils::getUserCode, String.class);
-        this.strictInsertFill(metaObject, "createName", SecurityUtils::getUserName, String.class);
+        this.strictInsertFill(metaObject, "createName", SecurityUtils::getUsername, String.class);
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateBy", SecurityUtils::getUserCode, String.class);
-        this.strictUpdateFill(metaObject, "updateName", SecurityUtils::getUserName, String.class);
+        this.strictUpdateFill(metaObject, "updateName", SecurityUtils::getUsername, String.class);
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
     }
 

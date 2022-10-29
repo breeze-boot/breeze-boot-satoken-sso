@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.breeze.boot.database.plugins.SqlLogInnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +34,7 @@ import org.springframework.context.annotation.Bean;
 public class MybatisPlusConfig {
 
     /**
-     * 自定义 SqlInjector
-     * 里面包含自定义的全局方法
+     * 自定义 SqlInjector 包含自定义的全局方法
      */
     @Bean
     public BreezeLogicSqlInjector logicSqlInjector() {
@@ -71,6 +71,7 @@ public class MybatisPlusConfig {
         }));
         // 如果用了分页插件注意先 add TenantLineInnerInterceptor 再 add PaginationInnerInterceptor
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        interceptor.addInnerInterceptor(new SqlLogInnerInterceptor());
         return interceptor;
     }
 

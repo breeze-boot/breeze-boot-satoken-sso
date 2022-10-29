@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
     <springProperty scop="context" name="spring.application.name" source="spring.application.name"
                     defaultValue="spring-boot"/>
+    <!-- 日志名称 -->
+    <property name="log_name" value="${spring.application.name}"/>
 
-    <!-- 日志名称 获取 项目名称 -->
+    <!-- 日志相对路径 -->
     <property name="log_path" value="logs/${spring.application.name}"/>
 
-    <!-- 日志文件路径+名称 -->
     <property name="file_name_pattern" value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i.log"/>
 
-    <!-- 错误日志文件路径+名称 -->
     <property name="file_name_pattern_error"
               value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i-error.log"/>
 
     <!-- 日志打印格式 -->
-    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %-40.40logger{39} : %msg%n"/>
+    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %-40.40logger{39} :: %msg%n"/>
 
     <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
     <property name="console_color_log_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-10level) %green([%-50.50class]) >>>>>> %cyan(%msg) %n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-10level) %green([%-50.50class]) :: %cyan(%msg) %n"/>
 
     <!-- 日志文件大小 30MB -->
     <property name="max_file_size" value="30MB"/>
@@ -36,8 +37,9 @@
 
     <!-- 按照每天生成日志文件 -->
     <appender name="file_log_all" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_path}/${log_name}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名 -->
+            <!-- 滚动策略 -->
             <FileNamePattern>${file_name_pattern}</FileNamePattern>
             <!-- 日志文件最大的大小 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -53,8 +55,9 @@
 
     <!-- 生成 ERROR 日志文件 -->
     <appender name="file_log_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_path}/${log_name}-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名 -->
+            <!-- 滚动策略 -->
             <FileNamePattern>${file_name_pattern_error}</FileNamePattern>
             <!-- 日志文件最大的大小 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

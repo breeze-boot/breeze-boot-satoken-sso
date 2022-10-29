@@ -36,14 +36,6 @@ import java.util.List;
 public interface SysUserService extends IService<SysUser> {
 
     /**
-     * 加载登录用户名
-     *
-     * @param username 用户名
-     * @return {@link LoginUserDTO}
-     */
-    LoginUserDTO loadUserByUsername(String username);
-
-    /**
      * 列表页面
      *
      * @param userDTO 用户dto
@@ -76,20 +68,12 @@ public interface SysUserService extends IService<SysUser> {
     Boolean open(UserOpenDTO openDTO);
 
     /**
-     * 加载用户通过电子邮件
+     * 刷新用户
      *
-     * @param email 电子邮件
+     * @param username 用户名
      * @return {@link LoginUserDTO}
      */
-    LoginUserDTO loadUserByEmail(String email);
-
-    /**
-     * 加载用户通过电话
-     *
-     * @param phone 电话
-     * @return {@link LoginUserDTO}
-     */
-    LoginUserDTO loadUserByPhone(String phone);
+    LoginUserDTO refreshUser(String username);
 
     /**
      * 重置密码
@@ -102,9 +86,17 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 删除由ids
      *
-     * @param ids id
-     * @return {@link Result}
+     * @param usernameList 用户列表
+     * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> deleteByIds(List<Long> ids);
+    Result<Boolean> deleteByUsernameList(List<String> usernameList);
+
+    /**
+     * 获取登录用户dto
+     *
+     * @param sysUser 系统用户
+     * @return {@link LoginUserDTO}
+     */
+    LoginUserDTO getLoginUserDTO(SysUser sysUser);
 
 }

@@ -17,6 +17,8 @@
 package com.breeze.boot.security.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +32,8 @@ import java.util.List;
  * @author breeze
  * @date 2021/10/1
  */
+@Getter
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrentLoginUser extends User implements UserDetails {
 
@@ -39,6 +43,11 @@ public class CurrentLoginUser extends User implements UserDetails {
      * 用户ID
      */
     private Long userId;
+
+    /**
+     * 租户ID
+     */
+    private Long tenantId;
 
     /**
      * 用户CODE
@@ -106,6 +115,7 @@ public class CurrentLoginUser extends User implements UserDetails {
         this.userRoleIds = loginUserDTO.getUserRoleIds();
         this.deptId = loginUserDTO.getDeptId();
         this.deptName = loginUserDTO.getDeptName();
+        this.tenantId = loginUserDTO.getTenantId();
     }
 
     /**
@@ -129,75 +139,4 @@ public class CurrentLoginUser extends User implements UserDetails {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserCode() {
-        return userCode;
-    }
-
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
-    }
-
-    public List<String> getUserRoleCodes() {
-        return userRoleCodes;
-    }
-
-    public void setUserRoleCodes(List<String> userRoleCodes) {
-        this.userRoleCodes = userRoleCodes;
-    }
-
-    public List<Long> getUserRoleIds() {
-        return userRoleIds;
-    }
-
-    public void setUserRoleIds(List<Long> userRoleIds) {
-        this.userRoleIds = userRoleIds;
-    }
-
-    public String getAmountName() {
-        return amountName;
-    }
-
-    public void setAmountName(String amountName) {
-        this.amountName = amountName;
-    }
-
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

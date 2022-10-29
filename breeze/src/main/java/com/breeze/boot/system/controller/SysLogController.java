@@ -58,7 +58,6 @@ public class SysLogController {
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    @BreezeSysLog(description = "日志信息列表", type = LogType.LIST)
     public Result<Page<SysLog>> list(@Validated @RequestBody LogDTO logDTO) {
         return Result.ok(this.sysLogService.listLog(logDTO));
     }

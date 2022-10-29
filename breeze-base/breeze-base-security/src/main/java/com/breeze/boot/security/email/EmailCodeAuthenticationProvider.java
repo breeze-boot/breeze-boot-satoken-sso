@@ -78,7 +78,7 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(this.messages
                     .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         }
-        Object codeObj = this.redisTemplate.opsForValue().get("sys：validate_code:" + loginUser.getPhone());
+        Object codeObj = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getPhone());
         if (Objects.isNull(codeObj)) {
             log.debug("Failed to authenticate since no credentials provided");
             throw new BadCredentialsException(this.messages

@@ -17,7 +17,7 @@
 package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.Result;
-import com.breeze.boot.security.entity.CurrentLoginUser;
+import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,9 +50,9 @@ public class HelloController {
     @PreAuthorize("hasAnyAuthority('sys:test:hello')")
     @GetMapping("/hello")
     public Result<String> helloWorld(Authentication authentication) {
-        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
+        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
         assert currentLoginUser != null;
-        currentLoginUser.getAuthorities().forEach((x) -> System.out.println(x.toString()));
+        currentLoginUser.getAuthorities().forEach((x) -> System.out.println(x));
         return Result.ok("Hello, " + authentication.getName() + "!");
     }
 

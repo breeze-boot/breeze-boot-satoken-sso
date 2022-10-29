@@ -16,9 +16,18 @@
 
 package com.breeze.boot.security.utils;
 
-import com.breeze.boot.security.entity.CurrentLoginUser;
+import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.signers.JWTSigner;
+import cn.hutool.jwt.signers.JWTSignerUtil;
+import com.breeze.boot.security.config.JwtProperties;
+import com.breeze.boot.security.entity.LoginUserDTO;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.BadJwtException;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Objects;
 
@@ -31,29 +40,35 @@ import java.util.Objects;
 public class SecurityUtils {
 
     /**
-     * 获取当前登录用户
-     * 获取用户
-     * * @return {@link CurrentLoginUser}
+     * 得到当前jwt
+     *
+     * @return {@link Jwt}
      */
-    public static CurrentLoginUser getCurrentLoginUser() {
+    public static Jwt getCurrentJwt() {
+        JwtProperties jwtProperties = SpringUtil.getBean(JwtProperties.class);
         Authentication authentication = getAuthentication();
         if (authentication == null) {
             return null;
         }
-        return (CurrentLoginUser) authentication.getPrincipal();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        JWTSigner jwtSigner = JWTSignerUtil.rs256(jwtProperties.getRsaPublicKey());
+        if (!JWTUtil.verify(jwt.getTokenValue(), jwtSigner)) {
+            throw new BadCredentialsException("令牌错误，请重新登录!");
+        }
+        return jwt;
     }
 
     /**
-     * 获取用户代码
+     * 获取用户编码
      *
      * @return {@link String}
      */
     public static String getUserCode() {
-        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
-        if (Objects.isNull(currentLoginUser)) {
+        Jwt jwt = SecurityUtils.getCurrentJwt();
+        if (Objects.isNull(jwt)) {
             return "";
         }
-        return currentLoginUser.getUserCode();
+        return jwt.getClaims().get("userCode").toString();
     }
 
     /**
@@ -61,12 +76,12 @@ public class SecurityUtils {
      *
      * @return {@link String}
      */
-    public static String getUserName() {
-        CurrentLoginUser currentLoginUser = SecurityUtils.getCurrentLoginUser();
-        if (Objects.isNull(currentLoginUser)) {
+    public static String getUsername() {
+        Jwt jwt = SecurityUtils.getCurrentJwt();
+        if (Objects.isNull(jwt)) {
             return "";
         }
-        return currentLoginUser.getUsername();
+        return jwt.getClaims().get("username").toString();
     }
 
     /**
@@ -77,6 +92,19 @@ public class SecurityUtils {
      */
     public static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    public static LoginUserDTO getCurrentUser() {
+        CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
+        return cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
+    }
+
+    public static long getTenantId() {
+        Jwt jwt = SecurityUtils.getCurrentJwt();
+        if (Objects.isNull(jwt)) {
+            throw new BadJwtException("JWT验证失败");
+        }
+        return (long) jwt.getClaims().get("tenantId");
     }
 
 }

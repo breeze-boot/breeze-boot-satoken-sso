@@ -107,7 +107,7 @@ public class SysLogAspect {
                 .result(1)
                 .build();
         if (obj instanceof Exception) {
-            build.setResultMsg(obj.toString());
+            build.setResultMsg(((Exception) obj).getMessage());
             build.setResult(0);
         }
         stopWatch.stop();

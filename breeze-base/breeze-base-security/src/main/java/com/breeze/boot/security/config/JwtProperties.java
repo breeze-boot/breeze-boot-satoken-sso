@@ -13,32 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.breeze.boot.security.config;
 
-package com.breeze.boot.system.dto;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 /**
- * 用户开关DTO
+ * jwt属性
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2022-10-29
  */
-@Data
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "jwt")
+public class JwtProperties {
 
     /**
-     * 用户名
+     * rsa公钥
      */
-    @Schema(description = "用户名称")
-    private String username;
+    private RSAPublicKey rsaPublicKey;
 
     /**
-     * 是否锁定
+     * rsa私钥
      */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+    private RSAPrivateKey rsaPrivateKey;
 
 }

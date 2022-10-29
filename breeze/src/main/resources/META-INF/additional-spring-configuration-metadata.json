@@ -1,14 +1,14 @@
 {
   "properties": [
     {
-      "name": "jwt.public.key",
+      "name": "jwt.rsa-public-key",
       "type": "java.lang.String",
-      "description": "Description for jwt.public.key."
+      "description": "Description for jwt.public-key."
     },
     {
-      "name": "jwt.private.key",
+      "name": "jwt.rsa-private-key",
       "type": "java.lang.String",
-      "description": "Description for jwt.private.key."
+      "description": "Description for jwt.private-key."
     }
   ]
 }

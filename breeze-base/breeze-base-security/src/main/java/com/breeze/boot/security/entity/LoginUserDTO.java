@@ -102,14 +102,28 @@ public class LoginUserDTO implements Serializable {
     private String email;
 
     /**
-     * 用户角色集合
+     * 用户角色DTO LIST
      */
     private List<UserRoleDTO> userRoleDTOList;
 
+    /**
+     * 用户角色代码
+     */
     private List<String> userRoleCodes;
 
+    /**
+     * 用户角色id
+     */
     private List<Long> userRoleIds;
 
+    /**
+     * 权限
+     */
     private List<String> authorities;
+
+    /**
+     * 承租者id
+     */
+    private Long tenantId;
 
 }

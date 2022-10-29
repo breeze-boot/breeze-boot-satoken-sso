@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.entity.UserRoleDTO;
+import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
@@ -35,6 +36,9 @@ import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,36 +95,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private UserTokenService userTokenService;
 
     /**
-     * 负载登录用户名
+     * 刷新用户
      *
      * @param username 用户名
      * @return {@link LoginUserDTO}
      */
     @Override
-    public LoginUserDTO loadUserByUsername(String username) {
+    @CachePut(cacheNames = "sys:login_user", key = "#username")
+    public LoginUserDTO refreshUser(String username) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("用户名错误或不存在");
         }
-        return getLoginUserDTO(sysUser);
-    }
-
-    @Override
-    public LoginUserDTO loadUserByEmail(String email) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
-        if (Objects.isNull(sysUser)) {
-            throw new UsernameNotFoundException("此邮箱未注册");
-        }
-        return getLoginUserDTO(sysUser);
-    }
-
-    @Override
-    public LoginUserDTO loadUserByPhone(String phone) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
-        if (Objects.isNull(sysUser)) {
-            throw new UsernameNotFoundException("此手机号未注册");
-        }
-        return getLoginUserDTO(sysUser);
+        return this.getLoginUserDTO(sysUser);
     }
 
     /**
@@ -150,7 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean save = this.save(sysUser);
         if (save) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return Result.ok();
     }
@@ -166,7 +153,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean update = this.updateById(sysUser);
         if (update) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return update;
     }
@@ -174,17 +161,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 开启关闭锁定
      *
-     * @param openDTO 打开dto
+     * @param userOpen 用户开关 DTO
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(UserOpenDTO openDTO) {
+    public Boolean open(UserOpenDTO userOpen) {
         boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getIsLock, openDTO.getIsLock())
-                .eq(SysUser::getId, openDTO.getId()));
+                .set(SysUser::getIsLock, userOpen.getIsLock())
+                .eq(SysUser::getUsername, userOpen.getUsername()));
         if (update) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(userOpen.getUsername());
         }
         return update;
     }
@@ -192,39 +179,39 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置密码
      *
-     * @param userEntity 用户实体
+     * @param sysUser 用户实体
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetPass(SysUser userEntity) {
-        userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
-        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userEntity.getPassword()).eq(SysUser::getId, userEntity.getId()));
+    public Boolean resetPass(SysUser sysUser) {
+        sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
+        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, sysUser.getPassword()).eq(SysUser::getUsername, sysUser.getUsername()));
         if (update) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser();
+            this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return update;
     }
 
     /**
+     * 按用户名名单删除
      * 删除由ids
      *
-     * @param ids id
-     * @return {@link Result}
+     * @param usernameList 用户列表
+     * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> deleteByIds(List<Long> ids) {
-        List<SysUser> userEntityList = this.listByIds(ids);
-        if (CollUtil.isEmpty(userEntityList)) {
+    @CacheEvict(cacheNames = "sys:login_user", key = "#usernameList")
+    public Result<Boolean> deleteByUsernameList(List<String> usernameList) {
+        List<SysUser> sysUserList = this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getUsername, usernameList));
+        if (CollUtil.isEmpty(sysUserList)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
-        boolean remove = this.removeByIds(ids);
+        boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().in(SysUser::getUsername, usernameList));
         if (remove) {
             // 删除用户角色关系
             this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
-                    .in(SysUserRole::getUserId, userEntityList.stream().map(SysUser::getId).collect(Collectors.toList())));
-            // 刷新菜单权限
-            this.userTokenService.refreshUser();
+                    .in(SysUserRole::getUserId, sysUserList.stream().map(SysUser::getId).collect(Collectors.toList())));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
@@ -235,7 +222,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param sysUser 系统用户实体
      * @return {@link LoginUserDTO}
      */
-    private LoginUserDTO getLoginUserDTO(SysUser sysUser) {
+    @Override
+    @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
+    public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
         LoginUserDTO loginUserDTO = new LoginUserDTO();
         BeanUtil.copyProperties(sysUser, loginUserDTO);
         SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());

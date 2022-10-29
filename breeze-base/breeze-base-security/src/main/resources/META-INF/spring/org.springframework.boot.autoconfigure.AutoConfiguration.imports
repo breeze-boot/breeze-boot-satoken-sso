@@ -1,6 +1,6 @@
-com.breeze.boot.security.config.JwtAuthenticationTokenFilter
 com.breeze.boot.security.config.JwtConfig
 com.breeze.boot.security.config.PwdConfig
 com.breeze.boot.security.config.IgnoreUrlProperties
 com.breeze.boot.security.config.RedisConfig
 com.breeze.boot.security.config.BreezeJoinTheWhiteAspect
+com.breeze.boot.security.config.JwtProperties

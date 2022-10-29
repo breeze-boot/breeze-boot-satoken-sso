@@ -16,19 +16,18 @@
 
 package com.breeze.boot.system.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,63 +41,81 @@ import java.util.Objects;
 public class UserTokenService {
 
     /**
-     * redis 模板
-     */
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-
-    /**
      * 系统用户服务
      */
     @Autowired
     private SysUserService sysUserService;
 
     /**
-     * 刷新菜单权限
-     */
-    public void refreshUser() {
-        LoginUserDTO loginUserDTO = this.sysUserService.loadUserByUsername(SecurityUtils.getUserName());
-        this.redisTemplate.opsForHash().put("sys:login_user", loginUserDTO.getUsername(), loginUserDTO);
-    }
-
-    /**
-     * 获取当前登录用户
+     * 刷新用户
      *
-     * @param loginUserDTO 登录用户dto
-     * @return {@link UserDetails}
+     * @param username 用户名
+     * @return {@link LoginUserDTO}
      */
-    private CurrentLoginUser getCurrentLoginUser(LoginUserDTO loginUserDTO) {
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(loginUserDTO.getAuthorities().toArray(new String[0]));
-        CurrentLoginUser currentLoginUser = new CurrentLoginUser(loginUserDTO,
-                Objects.equals(loginUserDTO.getIsLock(), 0),
-                true,
-                true,
-                Objects.equals(loginUserDTO.getIsLock(), 0),
-                authorities);
-        // 权限
-        this.redisTemplate.opsForHash().put("sys:login_user", currentLoginUser.getUsername(), loginUserDTO);
-        return currentLoginUser;
+    public CurrentLoginUser refreshUser(@NotNull String username) {
+        return this.getLoginUser(this.sysUserService.refreshUser(username));
     }
 
     /**
      * 加载用户用户名
      *
      * @param username 用户名
-     * @return {@link UserDetails}
-     * @throws UsernameNotFoundException 用户名没有发现异常
+     * @return {@link CurrentLoginUser}
      */
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LoginUserDTO loginUserDTO = sysUserService.loadUserByUsername(username);
-        return getCurrentLoginUser(loginUserDTO);
+    public CurrentLoginUser loadUserByUsername(@NotNull String username) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
+        if (Objects.isNull(sysUser)) {
+            throw new UsernameNotFoundException("用户名不存在");
+        }
+        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        return this.getLoginUser(loginUserDTO);
     }
 
-    public UserDetails loadUserByEmail(String email) {
-        LoginUserDTO loginUserDTO = sysUserService.loadUserByEmail(email);
-        return getCurrentLoginUser(loginUserDTO);
+    /**
+     * 加载用户通过电子邮件
+     *
+     * @param email 电子邮件
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser loadUserByEmail(@NotNull String email) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
+        if (Objects.isNull(sysUser)) {
+            throw new UsernameNotFoundException("邮箱不存在");
+        }
+        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        return this.getLoginUser(loginUserDTO);
     }
 
-    public UserDetails loadUserByPhone(String phone) {
-        LoginUserDTO loginUserDTO = sysUserService.loadUserByPhone(phone);
-        return getCurrentLoginUser(loginUserDTO);
+    /**
+     * 加载用户通过电话
+     *
+     * @param phone 电话
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser loadUserByPhone(@NotNull String phone) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+        if (Objects.isNull(sysUser)) {
+            throw new UsernameNotFoundException("电话不存在");
+        }
+        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        return this.getLoginUser(loginUserDTO);
     }
+
+    /**
+     * 获取登录用户
+     *
+     * @param loginUserDTO 登录用户dto
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser getLoginUser(LoginUserDTO loginUserDTO) {
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(loginUserDTO.getAuthorities().toArray(new String[0]));
+
+        return new CurrentLoginUser(loginUserDTO,
+                Objects.equals(loginUserDTO.getIsLock(), 0),
+                true,
+                true,
+                Objects.equals(loginUserDTO.getIsLock(), 0),
+                authorities);
+    }
+
 }

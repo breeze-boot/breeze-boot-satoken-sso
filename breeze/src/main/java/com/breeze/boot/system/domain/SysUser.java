@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -44,7 +45,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     /**
      * 部门ID
      */
-    @NotBlank(message = "部门ID不可为空")
+    @NotNull(message = "部门ID不可为空")
     @Schema(description = "部门ID")
     private Long deptId;
 
@@ -123,5 +124,11 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "锁定")
     private Integer isLock;
+
+    /**
+     * 租户ID
+     */
+    @Schema(description = "租户ID")
+    private Long tenantId;
 
 }

@@ -40,7 +40,7 @@ spring:
     admin:
       client:
         # Admin 服务端地址
-        url: http://127.0.0.1:8081
+        url: http://127.0.0.1:8000
         instance:
           prefer-ip: true
         # server 用户名
@@ -143,10 +143,10 @@ aj:
     req-verify-minute-limit: 60
 
 jwt:
-  private:
-    key: classpath:app.key
-  public:
-    key: classpath:app.pub
+  rsa-private-key: classpath:app.key
+  rsa-public-key: classpath:app.pub
 
 logging:
+  file:
+    name: ./logs/${spring.application.name}/${spring.application.name}.log
   config: classpath:logback-spring.xml
