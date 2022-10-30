@@ -21,7 +21,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 系统用户角色dto
+ * 系统用户角色DTO
  *
  * @author breeze
  * @date 2022-01-28

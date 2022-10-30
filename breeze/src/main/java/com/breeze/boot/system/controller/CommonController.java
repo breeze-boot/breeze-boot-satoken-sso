@@ -51,12 +51,23 @@ import java.util.stream.Collectors;
 @Tag(name = "通用接口管理模块", description = "CommonController")
 public class CommonController {
 
+    /**
+     * 菜单服务
+     */
     @Autowired
     private SysMenuService menuService;
 
+    /**
+     * 平台服务
+     */
     @Autowired
     private SysPlatformService platformService;
 
+    /**
+     * 菜单树形下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
+     */
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
     @BreezeSysLog(description = "菜单树形下拉框", type = LogType.LIST)
@@ -78,6 +89,11 @@ public class CommonController {
         return Result.ok(TreeUtil.build(treeNodeList, 0L));
     }
 
+    /**
+     * 平台下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
     @Operation(summary = "平台下拉框", description = "下拉框接口")
     @GetMapping("/selectPlatform")
     @BreezeSysLog(description = "平台下拉框", type = LogType.LIST)

@@ -138,8 +138,8 @@ public class LoginController {
                 .claim("tenantId", currentLoginUser.getTenantId())
                 .claim("username", currentLoginUser.getUsername())
                 .claim("userCode", currentLoginUser.getUserCode())
-                .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
-                        .orElseGet(HashSet::new).stream().collect(Collectors.joining(",")))
+                .claim("userRoleCodes", String.join(",", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
+                        .orElseGet(HashSet::new)))
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();

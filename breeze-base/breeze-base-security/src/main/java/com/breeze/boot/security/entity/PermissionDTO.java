@@ -18,10 +18,8 @@ package com.breeze.boot.security.entity;
 
 import lombok.*;
 
-import java.util.Set;
-
 /**
- * 许可dto
+ * 数据权限DTO
  *
  * @author breeze
  * @date 2022-10-30
@@ -33,6 +31,14 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 public class PermissionDTO {
 
+    /**
+     * 权限类型
+     */
+    private Integer permissionsType;
+
+    /**
+     * 操作符
+     */
     private String operator;
 
     /**
@@ -43,6 +49,6 @@ public class PermissionDTO {
     /**
      * 权限 部门ID
      */
-    private Set<Long> permissions;
+    private String permissions;
 
 }

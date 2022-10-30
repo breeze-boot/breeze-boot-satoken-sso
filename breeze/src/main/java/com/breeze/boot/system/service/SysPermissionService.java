@@ -16,7 +16,9 @@
 
 package com.breeze.boot.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
 
 /**
@@ -26,5 +28,13 @@ import com.breeze.boot.system.domain.SysPermission;
  * @date 2022-10-30
  */
 public interface SysPermissionService extends IService<SysPermission> {
+
+    /**
+     * 分页列表
+     *
+     * @param permissionDTO 许可dto
+     * @return {@link Page}<{@link SysPermission}>
+     */
+    Page<SysPermission> listPage(PermissionDTO permissionDTO);
 
 }

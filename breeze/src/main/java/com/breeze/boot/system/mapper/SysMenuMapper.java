@@ -17,8 +17,8 @@
 package com.breeze.boot.system.mapper;
 
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.MenuDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,10 +38,10 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
     /**
      * 用户菜单权限列表
      *
-     * @param roleList 角色列表
+     * @param userRoleDTOList 角色列表
      * @return {@link Set}<{@link String}>
      */
-    Set<String> listUserMenuPermission(@Param("roleList") List<SysRole> roleList);
+    Set<String> listUserMenuPermission(@Param("userRoleDTOList") Set<UserRoleDTO> userRoleDTOList);
 
     /**
      * 菜单列表

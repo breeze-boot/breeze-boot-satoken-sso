@@ -28,14 +28,12 @@ import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
-import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -45,7 +43,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -92,6 +92,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Autowired
     private UserTokenService userTokenService;
+
+    /**
+     * 系统角色权限
+     */
+    @Autowired
+    private SysRolePermissionService sysRolePermissionService;
 
     /**
      * 刷新用户
@@ -226,32 +232,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
         LoginUserDTO loginUser = new LoginUserDTO();
         BeanUtil.copyProperties(sysUser, loginUser);
-        // TODO
+        // 获取部门名称
         SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
         loginUser.setDeptName(dept.getDeptName());
 
-        List<SysRole> roleList = this.sysRoleService.listUserRole(sysUser.getId());
-        if (CollUtil.isEmpty(roleList)) {
+        // 查询 用户的角色
+        Set<UserRoleDTO> roleDTOSet = this.sysRoleService.listUserRole(sysUser.getId());
+        if (CollUtil.isEmpty(roleDTOSet)) {
             loginUser.setAuthorities(Sets.newHashSet());
             return loginUser;
         }
-        //
-        Set<UserRoleDTO> roleDTOList = roleList.stream().map(sysRoleEntity -> {
-            UserRoleDTO userRoleDTO = new UserRoleDTO();
-            BeanUtil.copyProperties(roleList, userRoleDTO);
-            userRoleDTO.setRoleId(sysRoleEntity.getId());
-            return userRoleDTO;
-        }).collect(Collectors.toSet());
-        //
-        loginUser.setUserRoleList(roleDTOList);
-        //
-        loginUser.setUserRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toSet()));
-        //
-        loginUser.setUserRoleCodes(roleList.stream().map(SysRole::getRoleCode).collect(Collectors.toSet()));
-        //
-        loginUser.setAuthorities(Optional.ofNullable(this.sysMenuService.listUserMenuPermission(roleList)).orElseGet(HashSet::new));
-        loginUser.setPermissionType("1");
-        loginUser.setPermissions(Lists.newArrayList(PermissionDTO.builder().operator("OR").sql("a.dict_name = '1'").permissions(Sets.newHashSet(1L)).build()));
+
+        loginUser.setUserRoleList(roleDTOSet);
+        // 角色ID
+        Set<Long> roleIdSet = roleDTOSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
+        loginUser.setUserRoleIds(roleIdSet);
+        // 角色CODE
+        Set<String> roleCodeList = roleDTOSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
+        loginUser.setUserRoleCodes(roleCodeList);
+        // 角色权限
+        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDTOSet));
+        // 用户的多个数据权限汇总
+        List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
+        // 数据权限 类型
+        loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
+        loginUser.setPermissions(permissionDTOList);
         return loginUser;
     }
 

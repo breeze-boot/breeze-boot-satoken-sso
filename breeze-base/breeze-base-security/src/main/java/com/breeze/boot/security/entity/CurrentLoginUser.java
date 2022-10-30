@@ -93,7 +93,7 @@ public class CurrentLoginUser extends User implements UserDetails {
     /**
      * 数据权限类型
      */
-    private String permissionType;
+    private Integer permissionType;
 
     /**
      * 权限
@@ -128,7 +128,7 @@ public class CurrentLoginUser extends User implements UserDetails {
         this.deptName = loginUserDTO.getDeptName();
         this.tenantId = loginUserDTO.getTenantId();
         this.permissions = loginUserDTO.getPermissions();
-        this.permissionType = loginUserDTO.getPermissionType() == null ? "0" : loginUserDTO.getPermissionType();
+        this.permissionType = loginUserDTO.getPermissionType() == null ? 0 : loginUserDTO.getPermissionType();
     }
 
     /**

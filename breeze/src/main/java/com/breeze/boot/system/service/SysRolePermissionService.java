@@ -17,8 +17,11 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysRolePermission;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 系统角色权限服务
@@ -26,7 +29,14 @@ import org.springframework.stereotype.Service;
  * @author breeze
  * @date 2022-10-30
  */
-@Service
 public interface SysRolePermissionService extends IService<SysRolePermission> {
+
+    /**
+     * 角色权限列表
+     *
+     * @param roleIdSet 角色id设置
+     * @return {@link List}<{@link PermissionDTO}>
+     */
+    List<PermissionDTO> listRolesPermission(Set<Long> roleIdSet);
 
 }

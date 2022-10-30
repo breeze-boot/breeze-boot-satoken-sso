@@ -109,7 +109,8 @@ public class UserTokenService {
      */
     public CurrentLoginUser getLoginUser(LoginUserDTO loginUserDTO) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(loginUserDTO.getAuthorities().toArray(new String[0]));
-
+        List<GrantedAuthority> authoritiesRoles = AuthorityUtils.createAuthorityList(loginUserDTO.getUserRoleCodes().toArray(new String[0]));
+        authorities.addAll(authoritiesRoles);
         return new CurrentLoginUser(loginUserDTO,
                 Objects.equals(loginUserDTO.getIsLock(), 0),
                 true,

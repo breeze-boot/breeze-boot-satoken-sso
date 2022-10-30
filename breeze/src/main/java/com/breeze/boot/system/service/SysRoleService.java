@@ -19,10 +19,12 @@ package com.breeze.boot.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.RoleDTO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统角色服务
@@ -38,7 +40,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param id id
      * @return {@link List}<{@link SysRole}>
      */
-    List<SysRole> listUserRole(Long id);
+    Set<UserRoleDTO> listUserRole(Long id);
 
     /**
      * 列表页面

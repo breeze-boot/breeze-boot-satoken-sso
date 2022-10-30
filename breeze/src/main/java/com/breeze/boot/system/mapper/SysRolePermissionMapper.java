@@ -17,8 +17,13 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysRolePermission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 系统角色权限映射器
@@ -28,6 +33,14 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {
+
+    /**
+     * 角色权限列表
+     *
+     * @param roleIdList 角色id列表
+     * @return {@link List}<{@link PermissionDTO}>
+     */
+    List<PermissionDTO> listRolesPermission(@Param("roleIdList") Set<Long> roleIdList);
 
 }
 

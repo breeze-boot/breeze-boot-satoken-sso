@@ -37,14 +37,31 @@ import java.io.Serializable;
 @TableName(value = "sys_permission")
 @Schema(description = "系统权限实体")
 public class SysPermission extends BaseModel<SysPermission> implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 操作符
+     */
+    @Schema(description = "操作符")
     private String operator;
 
+    /**
+     * sql
+     */
+    @Schema(description = "自定义SQL")
     private String sql;
 
+    /**
+     * 权限
+     */
+    @Schema(description = "权限")
     private String permissions;
 
+    /**
+     * 承租者id
+     */
+    @Schema(description = "租户ID")
     private Long tenantId;
 
 }

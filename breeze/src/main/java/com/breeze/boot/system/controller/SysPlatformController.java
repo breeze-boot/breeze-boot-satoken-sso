@@ -75,7 +75,7 @@ public class SysPlatformController {
     }
 
     /**
-     * 信息
+     * 详情
      *
      * @param id id
      * @return {@link Result}

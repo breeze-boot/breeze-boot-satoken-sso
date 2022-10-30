@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +24,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.RoleDTO;
@@ -33,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -54,8 +57,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return {@link List}<{@link SysRole}>
      */
     @Override
-    public List<SysRole> listUserRole(Long id) {
-        return this.baseMapper.listUserRole(id);
+    public Set<UserRoleDTO> listUserRole(Long id) {
+        return this.baseMapper.listUserRole(id)
+                .stream()
+                .map(sysRoleEntity -> {
+                    UserRoleDTO userRoleDTO = new UserRoleDTO();
+                    BeanUtil.copyProperties(sysRoleEntity, userRoleDTO);
+                    userRoleDTO.setRoleId(sysRoleEntity.getId());
+                    return userRoleDTO;
+                }).collect(Collectors.toSet());
     }
 
     /**

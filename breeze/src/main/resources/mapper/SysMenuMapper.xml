@@ -31,8 +31,8 @@
         WHERE menu.is_delete = 0
         AND menu.permission != ''
         AND mr.role_id IN
-        <foreach collection="roleList" open="(" separator="," close=")" item="roleItem" index="index">
-            #{roleItem.id}
+        <foreach collection="userRoleDTOList" open="(" separator="," close=")" item="roleItem" index="index">
+            #{roleItem.roleId }
         </foreach>
     </select>
 

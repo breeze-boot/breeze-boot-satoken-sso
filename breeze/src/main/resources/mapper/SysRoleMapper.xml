@@ -28,5 +28,4 @@
           AND ru.user_id = #{id}
     </select>
 
-
 </mapper>

@@ -37,12 +37,31 @@ import java.io.Serializable;
 @TableName(value = "sys_role_permission")
 @Schema(description = "角色权限实体")
 public class SysRolePermission extends BaseModel<SysRolePermission> implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 数据权限类型
+     */
+    @Schema(description = "数据权限类型")
+    private Integer permissionType;
+
+    /**
+     * 权限id
+     */
+    @Schema(description = "数据权限ID")
     private Long permissionId;
 
+    /**
+     * 角色id
+     */
+    @Schema(description = "角色ID")
     private Long roleId;
 
+    /**
+     * 承租者id
+     */
+    @Schema(description = "租户ID")
     private Long tenantId;
 
 }

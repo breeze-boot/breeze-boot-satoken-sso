@@ -52,7 +52,22 @@ public class HelloController {
     public Result<String> helloWorld(Authentication authentication) {
         LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
         assert currentLoginUser != null;
-        currentLoginUser.getAuthorities().forEach((x) -> System.out.println(x));
+        currentLoginUser.getAuthorities().forEach(System.out::println);
+        return Result.ok("Hello, " + authentication.getName() + "!");
+    }
+
+    /**
+     * 你好，世界
+     *
+     * @param authentication 身份验证
+     * @return {@link Result}<{@link String}>
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/hello2")
+    public Result<String> helloWorld2(Authentication authentication) {
+        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
+        assert currentLoginUser != null;
+        currentLoginUser.getAuthorities().forEach(System.out::println);
         return Result.ok("Hello, " + authentication.getName() + "!");
     }
 

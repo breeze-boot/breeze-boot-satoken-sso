@@ -16,7 +16,9 @@
 
 package com.breeze.boot.system.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
 import com.breeze.boot.system.mapper.SysPermissionMapper;
 import com.breeze.boot.system.service.SysPermissionService;
@@ -30,6 +32,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
+
+    /**
+     * 列表分页
+     *
+     * @param permissionDTO 许可dto
+     * @return {@link Page}<{@link SysPermission}>
+     */
+    @Override
+    public Page<SysPermission> listPage(PermissionDTO permissionDTO) {
+        return null;
+    }
 
 }
 

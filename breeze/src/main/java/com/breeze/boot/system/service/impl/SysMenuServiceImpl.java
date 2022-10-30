@@ -25,9 +25,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.entity.LoginUserDTO;
+import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuDTO;
 import com.breeze.boot.system.mapper.SysMenuMapper;
@@ -38,10 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -69,12 +66,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 用户菜单权限列表
      *
-     * @param roleEntityList 角色实体列表
+     * @param roleDTOList 角色列表
      * @return {@link List}<{@link String}>
      */
     @Override
-    public Set<String> listUserMenuPermission(List<SysRole> roleEntityList) {
-        return this.baseMapper.listUserMenuPermission(roleEntityList);
+    public Set<String> listUserMenuPermission(Set<UserRoleDTO> roleDTOList) {
+        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(roleDTOList))
+                .orElseGet(HashSet::new);
     }
 
     /**
