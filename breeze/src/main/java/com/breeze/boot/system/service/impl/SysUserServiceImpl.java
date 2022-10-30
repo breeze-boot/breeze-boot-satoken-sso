@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.entity.LoginUserDTO;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
@@ -35,6 +36,7 @@ import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -43,10 +45,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -225,28 +224,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
     public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
-        LoginUserDTO loginUserDTO = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUser, loginUserDTO);
-        SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
+        LoginUserDTO loginUser = new LoginUserDTO();
+        BeanUtil.copyProperties(sysUser, loginUser);
         // TODO
-        loginUserDTO.setDeptName(dept.getDeptName());
+        SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
+        loginUser.setDeptName(dept.getDeptName());
+
         List<SysRole> roleList = this.sysRoleService.listUserRole(sysUser.getId());
         if (CollUtil.isEmpty(roleList)) {
-            loginUserDTO.setAuthorities(Lists.newArrayList());
-            return loginUserDTO;
+            loginUser.setAuthorities(Sets.newHashSet());
+            return loginUser;
         }
-        List<UserRoleDTO> roleDTOList = roleList.stream().map(sysRoleEntity -> {
+        //
+        Set<UserRoleDTO> roleDTOList = roleList.stream().map(sysRoleEntity -> {
             UserRoleDTO userRoleDTO = new UserRoleDTO();
             BeanUtil.copyProperties(roleList, userRoleDTO);
             userRoleDTO.setRoleId(sysRoleEntity.getId());
             return userRoleDTO;
-        }).collect(Collectors.toList());
-        loginUserDTO.setUserRoleDTOList(roleDTOList);
-        loginUserDTO.setUserRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
-        loginUserDTO.setUserRoleCodes(roleList.stream().map(SysRole::getRoleCode).collect(Collectors.toList()));
-        List<String> permissionList = Optional.ofNullable(this.sysMenuService.listUserMenuPermission(roleList)).orElseGet(ArrayList::new);
-        loginUserDTO.setAuthorities(permissionList);
-        return loginUserDTO;
+        }).collect(Collectors.toSet());
+        //
+        loginUser.setUserRoleList(roleDTOList);
+        //
+        loginUser.setUserRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toSet()));
+        //
+        loginUser.setUserRoleCodes(roleList.stream().map(SysRole::getRoleCode).collect(Collectors.toSet()));
+        //
+        loginUser.setAuthorities(Optional.ofNullable(this.sysMenuService.listUserMenuPermission(roleList)).orElseGet(HashSet::new));
+        loginUser.setPermissionType("1");
+        loginUser.setPermissions(Lists.newArrayList(PermissionDTO.builder().operator("OR").sql("a.dict_name = '1'").permissions(Sets.newHashSet(1L)).build()));
+        return loginUser;
     }
 
 }

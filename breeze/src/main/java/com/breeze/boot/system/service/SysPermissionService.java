@@ -14,35 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.service;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.system.domain.SysPermission;
 
 /**
- * 用户开关DTO
+ * 系统数据权限服务
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2022-10-30
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
-
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名称")
-    private String username;
-
-    /**
-     * 是否锁定
-     */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+public interface SysPermissionService extends IService<SysPermission> {
 
 }

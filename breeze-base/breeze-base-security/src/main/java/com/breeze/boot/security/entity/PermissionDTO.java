@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.security.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.util.Set;
+
 /**
- * 用户开关DTO
+ * 许可dto
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2022-10-30
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
+public class PermissionDTO {
+
+    private String operator;
 
     /**
-     * 用户名
+     * 权限过滤 sql
      */
-    @Schema(description = "用户名称")
-    private String username;
+    private String sql;
 
     /**
-     * 是否锁定
+     * 权限 部门ID
      */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+    private Set<Long> permissions;
 
 }

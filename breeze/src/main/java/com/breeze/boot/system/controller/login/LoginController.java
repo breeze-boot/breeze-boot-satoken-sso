@@ -45,8 +45,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -139,7 +139,7 @@ public class LoginController {
                 .claim("username", currentLoginUser.getUsername())
                 .claim("userCode", currentLoginUser.getUserCode())
                 .claim("userRoleCodes", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
-                        .orElseGet(ArrayList::new).stream().collect(Collectors.joining(",")))
+                        .orElseGet(HashSet::new).stream().collect(Collectors.joining(",")))
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();

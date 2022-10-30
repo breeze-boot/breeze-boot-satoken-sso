@@ -43,7 +43,7 @@ import java.util.*;
  * @date 2022-10-28
  */
 @Slf4j
-public class SqlLogInnerInterceptor implements InnerInterceptor {
+public class BreezeSqlLogInnerInterceptor implements InnerInterceptor {
 
     /**
      * 会查询

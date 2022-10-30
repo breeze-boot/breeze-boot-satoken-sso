@@ -17,7 +17,7 @@
 package com.breeze.boot.system.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -28,6 +28,10 @@ import java.util.List;
  * @date 2022-09-05
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "菜单权限参数DTO")
 public class MenuPermissionDTO {
 

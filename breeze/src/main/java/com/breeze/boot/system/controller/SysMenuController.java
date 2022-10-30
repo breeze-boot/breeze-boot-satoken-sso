@@ -60,7 +60,7 @@ public class SysMenuController {
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     @BreezeSysLog(description = "树形菜单列表", type = LogType.LIST)
-    public Result<? extends Object> list(@Validated @RequestBody MenuDTO menuDTO) {
+    public Result<?> list(@Validated @RequestBody MenuDTO menuDTO) {
         return this.sysMenuService.listMenu(menuDTO);
     }
 

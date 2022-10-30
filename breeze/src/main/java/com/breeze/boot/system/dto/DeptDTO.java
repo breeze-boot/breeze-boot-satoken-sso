@@ -17,7 +17,7 @@
 package com.breeze.boot.system.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 /**
  * 部门参数DTO
@@ -26,6 +26,10 @@ import lombok.Data;
  * @date 2022-09-01
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "部门参数DTO")
 public class DeptDTO {
 

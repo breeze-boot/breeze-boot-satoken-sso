@@ -16,8 +16,9 @@
 
 package com.breeze.boot.system.dto;
 
+import com.breeze.boot.core.entity.PageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 /**
  * 平台查询参数DTO
@@ -26,6 +27,10 @@ import lombok.Data;
  * @date 2022-08-31
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "平台查询参数DTO")
 public class PlatformDTO extends PageDTO {
 

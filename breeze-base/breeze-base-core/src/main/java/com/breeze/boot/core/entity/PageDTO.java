@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.core.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 
 /**
  * 分页查询参数DTO
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author breeze
  * @date 2022-08-31
  */
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "分页查询参DTO", hidden = true)
 public class PageDTO {
 

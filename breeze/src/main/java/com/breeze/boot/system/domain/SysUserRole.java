@@ -33,6 +33,7 @@
 package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.core.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.*;
@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
 public class BaseModel<T> extends Model<BaseModel<T>> {
 
     /**
-     * id
+     * ID
      */
     @ExcelIgnore
     @TableId(value = "id", type = IdType.ASSIGN_ID)

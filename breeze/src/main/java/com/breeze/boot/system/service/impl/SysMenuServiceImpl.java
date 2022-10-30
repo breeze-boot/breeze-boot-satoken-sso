@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -49,8 +50,8 @@ import java.util.stream.Collectors;
  * @author breeze
  * @date 2021-12-06 22:03:39
  */
-@Service
 @Slf4j
+@Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     /**
@@ -72,7 +73,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return {@link List}<{@link String}>
      */
     @Override
-    public List<String> listUserMenuPermission(List<SysRole> roleEntityList) {
+    public Set<String> listUserMenuPermission(List<SysRole> roleEntityList) {
         return this.baseMapper.listUserMenuPermission(roleEntityList);
     }
 

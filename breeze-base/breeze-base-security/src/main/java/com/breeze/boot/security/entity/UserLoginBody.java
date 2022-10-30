@@ -16,7 +16,7 @@
 
 package com.breeze.boot.security.entity;
 
-import lombok.Data;
+import lombok.*;
 
 /**
  * 用户登录
@@ -25,6 +25,10 @@ import lombok.Data;
  * @date 2022-08-31
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class UserLoginBody extends LoginBody {
     /**
      * 用户名

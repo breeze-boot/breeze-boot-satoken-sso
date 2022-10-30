@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 登录用户的扩展类
@@ -57,12 +58,12 @@ public class CurrentLoginUser extends User implements UserDetails {
     /**
      * 用户的角色CODE
      */
-    private List<String> userRoleCodes;
+    private Set<String> userRoleCodes;
 
     /**
      * 用户的角色ID
      */
-    private List<Long> userRoleIds;
+    private Set<Long> userRoleIds;
 
     /**
      * 登录后显示的账户名称
@@ -88,6 +89,16 @@ public class CurrentLoginUser extends User implements UserDetails {
      * 电话
      */
     private String phone;
+
+    /**
+     * 数据权限类型
+     */
+    private String permissionType;
+
+    /**
+     * 权限
+     */
+    private List<PermissionDTO> permissions;
 
     /**
      * 当前登录用户
@@ -116,6 +127,8 @@ public class CurrentLoginUser extends User implements UserDetails {
         this.deptId = loginUserDTO.getDeptId();
         this.deptName = loginUserDTO.getDeptName();
         this.tenantId = loginUserDTO.getTenantId();
+        this.permissions = loginUserDTO.getPermissions();
+        this.permissionType = loginUserDTO.getPermissionType() == null ? "0" : loginUserDTO.getPermissionType();
     }
 
     /**

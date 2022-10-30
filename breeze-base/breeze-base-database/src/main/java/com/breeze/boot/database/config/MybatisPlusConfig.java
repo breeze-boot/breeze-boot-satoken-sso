@@ -20,7 +20,8 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.breeze.boot.database.plugins.SqlLogInnerInterceptor;
+import com.breeze.boot.database.plugins.BreezeDataPermissionInterceptor;
+import com.breeze.boot.database.plugins.BreezeSqlLogInnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.context.annotation.Bean;
@@ -69,9 +70,10 @@ public class MybatisPlusConfig {
                 return false;
             }
         }));
+        interceptor.addInnerInterceptor(new BreezeDataPermissionInterceptor());
         // 如果用了分页插件注意先 add TenantLineInnerInterceptor 再 add PaginationInnerInterceptor
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
-        interceptor.addInnerInterceptor(new SqlLogInnerInterceptor());
+        interceptor.addInnerInterceptor(new BreezeSqlLogInnerInterceptor());
         return interceptor;
     }
 

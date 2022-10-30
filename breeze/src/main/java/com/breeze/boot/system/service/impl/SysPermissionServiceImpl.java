@@ -14,35 +14,25 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.service.impl;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.system.domain.SysPermission;
+import com.breeze.boot.system.mapper.SysPermissionMapper;
+import com.breeze.boot.system.service.SysPermissionService;
+import org.springframework.stereotype.Service;
 
 /**
- * 用户开关DTO
+ * 系统数据权限服务 impl
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2022-10-30
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
-
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名称")
-    private String username;
-
-    /**
-     * 是否锁定
-     */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+@Service
+public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 
 }
+
+
+
+

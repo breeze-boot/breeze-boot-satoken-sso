@@ -1,0 +1,223 @@
+/*
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.breeze.boot.database.plugins;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
+import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
+import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.breeze.boot.core.entity.DataScope;
+import com.breeze.boot.database.annotation.DataPermission;
+import com.breeze.boot.security.entity.LoginUserDTO;
+import com.breeze.boot.security.entity.PermissionDTO;
+import com.breeze.boot.security.utils.SecurityUtils;
+import com.google.common.collect.Lists;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.util.TablesNamesFinder;
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.constants.DataPermissionType.*;
+
+/**
+ * 数据权限内拦截器
+ *
+ * @author breeze
+ * @date 2022-10-28
+ */
+@Slf4j
+public class BreezeDataPermissionInterceptor extends JsqlParserSupport implements InnerInterceptor {
+
+    /**
+     * 使用数据权限的表
+     */
+    private final List<String> tables = Lists.newArrayList("sys_role_menu", "sys_menu", "sys_platform");
+
+    /**
+     * sql的表名
+     *
+     * @param sql sql
+     * @return {@link List}<{@link String}>
+     * @throws JSQLParserException jsqlparser例外
+     */
+    public static List<String> selectTable(String sql)
+            throws JSQLParserException {
+        Statement statement = CCJSqlParserUtil.parse(sql);
+        Select selectStatement = (Select) statement;
+        TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
+        return tablesNamesFinder.getTableList(selectStatement);
+    }
+
+    /**
+     * 会查询
+     *
+     * @param executor      执行器
+     * @param ms            映射语句
+     * @param parameter     参数
+     * @param rowBounds     行范围
+     * @param resultHandler 结果处理程序
+     * @param boundSql      绑定sql
+     * @return boolean
+     * @throws SQLException sqlexception异常
+     */
+    @Override
+    public boolean willDoQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+        return InnerInterceptor.super.willDoQuery(executor, ms, parameter, rowBounds, resultHandler, boundSql);
+    }
+
+    /**
+     * 之前查询
+     *
+     * @param executor      遗嘱执行人
+     * @param ms            映射语句
+     * @param parameter     参数
+     * @param rowBounds     行范围
+     * @param resultHandler 结果处理程序
+     * @param boundSql      绑定sql
+     */
+    @SneakyThrows
+    @Override
+    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds,
+                            ResultHandler resultHandler, BoundSql boundSql) {
+        if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
+            return;
+        }
+
+        Select select = (Select) CCJSqlParserUtil.parse(boundSql.getSql());
+        PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+        List<SelectItem> selectItems = plainSelect.getSelectItems();
+        selectItems.forEach(System.out::println);
+
+        PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
+        String originalSql = boundSql.getSql();
+        // 采用判断方法注解方式进行数据权限
+        Class<?> clazz = null;
+
+        try {
+            // 获取Mapper类
+            clazz = Class.forName(ms.getId().substring(0, ms.getId().lastIndexOf(".")));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // 获取方法名
+        String methodName = ms.getId().substring(ms.getId().lastIndexOf(".") + 1);
+        assert clazz != null;
+        Method[] methods = clazz.getMethods();
+        // 遍历类的方法
+        for (Method method : methods) {
+            DataPermission annotation = method.getAnnotation(DataPermission.class);
+            // 判断是否存在注解且方法名一致
+            if (annotation == null || !methodName.equals(method.getName())) {
+                continue;
+            }
+            LoginUserDTO currentUser = SecurityUtils.getCurrentUser();
+            if (currentUser == null) {
+                throw new RuntimeException("未登录，数据权限不可实现");
+            }
+            List<PermissionDTO> dataPermissions = currentUser.getPermissions();
+
+            // 获取 deptIds
+            if (!StrUtil.equals(currentUser.getPermissionType(), "0") && CollUtil.isEmpty(dataPermissions)) {
+                continue;
+            }
+            String sql = this.getSql(currentUser.getPermissionType(), dataPermissions, annotation);
+            System.out.println(sql);
+            originalSql = String.format("SELECT a.* FROM (%s) a %s", originalSql, sql);
+        }
+        mpBs.sql(originalSql);
+    }
+
+    @NotNull
+    private String getSql(String permissionType, List<PermissionDTO> permissions, DataPermission dataPermission) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" WHERE ");
+        String operator = "";
+        for (PermissionDTO permission : permissions) {
+            operator = permission.getOperator();
+            // 自定义sql
+            String sql = permission.getSql();
+            if (StrUtil.isAllBlank(sql)) {
+                continue;
+            }
+            sb.append(permission.getOperator());
+            sb.append(" ( ");
+            sb.append(sql);
+            sb.append(" ) ");
+            if (StrUtil.equals(permissionType, OWN)) {
+                // create_by 字段
+                if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
+                    continue;
+                }
+                sb.append(String.format("OR ( a.%s = '", dataPermission.own()));
+                sb.append(SecurityUtils.getUserCode());
+                sb.append(" ' ) ");
+            } else if (StrUtil.equals(permissionType, DEPT_AND_LOWER_LEVEL) || StrUtil.equals(permissionType, DEPT_LEVEL)) {
+                String deptIds = permission.getPermissions().stream().map(String::valueOf).collect(Collectors.joining(","));
+                // deptId 字段
+                if (StrUtil.isAllBlank(deptIds)) {
+                    continue;
+                }
+                sb.append(String.format("OR ( a.%s IN ( ", dataPermission.scope()));
+                sb.append(deptIds);
+                sb.append(" ) ) ");
+            } else if (StrUtil.equals(permissionType, ALL)) {
+                return sb.toString().replaceFirst("WHERE", "");
+            }
+        }
+        return sb.toString().replaceFirst(operator, "");
+    }
+
+    /**
+     * 获取数据范围
+     *
+     * @param parameterObj 参数列表
+     * @return DataScope
+     */
+    private DataScope listDataScope(Object parameterObj) {
+        if (parameterObj instanceof DataScope) {
+            return (DataScope) parameterObj;
+        } else if (parameterObj instanceof Map) {
+            for (Object val : ((Map<?, ?>) parameterObj).values()) {
+                if (val instanceof DataScope) {
+                    return (DataScope) val;
+                }
+            }
+        }
+        return null;
+    }
+
+}

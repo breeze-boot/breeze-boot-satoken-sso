@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
- * 用户开关DTO
+ * 系统平台实体
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2021-12-06 22:03:39
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
+@TableName(value = "sys_role_permission")
+@Schema(description = "角色权限实体")
+public class SysRolePermission extends BaseModel<SysRolePermission> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名称")
-    private String username;
+    private Long permissionId;
 
-    /**
-     * 是否锁定
-     */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+    private Long roleId;
+
+    private Long tenantId;
 
 }

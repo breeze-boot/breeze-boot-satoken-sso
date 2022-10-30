@@ -14,35 +14,19 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.mapper;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.boot.system.domain.SysPermission;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 用户开关DTO
+ * 系统权限映射器
  *
  * @author breeze
- * @date 2022-08-31
+ * @date 2022-10-30
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
-
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名称")
-    private String username;
-
-    /**
-     * 是否锁定
-     */
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+@Mapper
+public interface SysPermissionMapper extends BreezeBaseMapper<SysPermission> {
 
 }

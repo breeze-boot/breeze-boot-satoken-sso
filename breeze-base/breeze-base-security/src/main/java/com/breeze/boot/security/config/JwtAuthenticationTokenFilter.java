@@ -19,8 +19,8 @@
 //import cn.hutool.jwt.JWTUtil;
 //import cn.hutool.jwt.signers.JWTSigner;
 //import cn.hutool.jwt.signers.JWTSignerUtil;
-//import com.breeze.boot.security.entity.CurrentLoginUser;
-//import com.breeze.boot.security.entity.LoginUserDTO;
+//import com.breeze.boot.core.enums.CurrentLoginUser;
+//import com.breeze.boot.core.enums.LoginUserDTO;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Configuration;

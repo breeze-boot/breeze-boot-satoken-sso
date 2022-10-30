@@ -16,13 +16,11 @@
 
 package com.breeze.boot.security.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author breeze
@@ -32,6 +30,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class LoginUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -104,26 +103,36 @@ public class LoginUserDTO implements Serializable {
     /**
      * 用户角色DTO LIST
      */
-    private List<UserRoleDTO> userRoleDTOList;
+    private Set<UserRoleDTO> userRoleList;
 
     /**
      * 用户角色代码
      */
-    private List<String> userRoleCodes;
+    private Set<String> userRoleCodes;
 
     /**
      * 用户角色id
      */
-    private List<Long> userRoleIds;
+    private Set<Long> userRoleIds;
 
     /**
      * 权限
      */
-    private List<String> authorities;
+    private Set<String> authorities;
 
     /**
      * 承租者id
      */
     private Long tenantId;
+
+    /**
+     * 数据权限类型
+     */
+    private String permissionType;
+
+    /**
+     * 权限
+     */
+    private List<PermissionDTO> permissions;
 
 }

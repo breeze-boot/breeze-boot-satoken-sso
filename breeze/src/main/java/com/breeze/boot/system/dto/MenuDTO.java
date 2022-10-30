@@ -17,7 +17,7 @@
 package com.breeze.boot.system.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 /**
  * 菜单参数DTO
@@ -26,6 +26,10 @@ import lombok.Data;
  * @date 2022-08-31
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Schema(description = "菜单参数DTO")
 public class MenuDTO {
 

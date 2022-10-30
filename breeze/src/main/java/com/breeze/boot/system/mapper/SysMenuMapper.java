@@ -24,6 +24,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统菜单映射器
@@ -37,10 +38,10 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
     /**
      * 用户菜单权限列表
      *
-     * @param roleEntityList 角色实体列表
-     * @return {@link List}<{@link String}>
+     * @param roleList 角色列表
+     * @return {@link Set}<{@link String}>
      */
-    List<String> listUserMenuPermission(@Param("roleList") List<SysRole> roleEntityList);
+    Set<String> listUserMenuPermission(@Param("roleList") List<SysRole> roleList);
 
     /**
      * 菜单列表
@@ -57,6 +58,6 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
      * @param platformCode 平台编码
      * @return {@link List}<{@link SysMenu}>
      */
-    List<SysMenu> selectMenusByRoleId(@Param("roleIds") List<Long> roleIds, @Param("platformCode") String platformCode);
+    List<SysMenu> selectMenusByRoleId(@Param("roleIds") Set<Long> roleIds, @Param("platformCode") String platformCode);
 
 }

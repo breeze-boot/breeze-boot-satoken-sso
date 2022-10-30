@@ -71,12 +71,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
-            <version>2.2.11</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-security</artifactId>
         </dependency>

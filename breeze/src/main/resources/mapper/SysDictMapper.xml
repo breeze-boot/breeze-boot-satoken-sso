@@ -21,7 +21,9 @@
         a.id,
         a.dict_name,
         a.dict_code,
-        a.is_open
+        a.is_open,
+        a.create_by,
+        a.dept_id
         FROM sys_dict AS a
         <where>
             a.is_delete = 0

@@ -51,7 +51,7 @@ public class GlobalControllerExceptionHandler {
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result<? extends Object> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
+    public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
         log.warn("methodArgumentNotValidExceptionHandler: {}", ex.getMessage());
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
@@ -64,7 +64,7 @@ public class GlobalControllerExceptionHandler {
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @ExceptionHandler(BindException.class)
-    public Result<? extends Object> bindExceptionHandler(BindException ex) {
+    public Result<?> bindExceptionHandler(BindException ex) {
         log.warn("bindExceptionHandler: {}", ex.getMessage());
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
@@ -79,7 +79,7 @@ public class GlobalControllerExceptionHandler {
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public Result<? extends Object> constraintViolationExceptionHandler(ConstraintViolationException ex) {
+    public Result<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
         log.warn("constraintViolationExceptionHandler: {}", ex.getMessage());
         String message = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
@@ -93,7 +93,7 @@ public class GlobalControllerExceptionHandler {
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Result<? extends Object> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
+    public Result<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
         log.warn("httpMessageNotReadableExceptionHandler: {}", ex.getMessage());
         return Result.warning(ResultCode.WARNING.getCode(), "参数格式异常");
     }

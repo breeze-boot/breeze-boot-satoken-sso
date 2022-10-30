@@ -24,6 +24,7 @@ import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.MenuDTO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统菜单服务
@@ -39,7 +40,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param roleEntityList 角色实体列表
      * @return {@link List}<{@link String}>
      */
-    List<String> listUserMenuPermission(List<SysRole> roleEntityList);
+    Set<String> listUserMenuPermission(List<SysRole> roleEntityList);
 
     /**
      * 树菜单列表
@@ -55,7 +56,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param menuDTO 菜单dto
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
-    Result<? extends Object> listMenu(MenuDTO menuDTO);
+    Result<?> listMenu(MenuDTO menuDTO);
 
     /**
      * 树形权限列表

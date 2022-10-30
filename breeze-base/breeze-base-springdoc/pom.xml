@@ -27,14 +27,14 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.6.11</version>
+            <version>1.6.12</version>
         </dependency>
 
         <!--springDoc 官方Starter-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.11</version>
+            <version>1.6.12</version>
         </dependency>
 
     </dependencies>

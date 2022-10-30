@@ -16,10 +16,7 @@
 
 package com.breeze.boot.security.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -33,6 +30,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class UserRoleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
