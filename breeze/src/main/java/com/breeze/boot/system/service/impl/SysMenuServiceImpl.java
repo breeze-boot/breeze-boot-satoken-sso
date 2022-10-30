@@ -214,6 +214,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             leafMap.put("icon", menu.getIcon());
             leafMap.put("platformName", menu.getPlatformName());
             leafMap.put("keepAlive", menu.getKeepAlive());
+            leafMap.put("hidden", menu.getHidden());
             leafMap.put("href", menu.getHref());
             leafMap.put("permission", menu.getPermission());
             leafMap.put("platformId", menu.getPlatformId());

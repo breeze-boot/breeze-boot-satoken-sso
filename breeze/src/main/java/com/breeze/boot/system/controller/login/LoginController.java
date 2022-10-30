@@ -46,9 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -138,8 +136,6 @@ public class LoginController {
                 .claim("tenantId", currentLoginUser.getTenantId())
                 .claim("username", currentLoginUser.getUsername())
                 .claim("userCode", currentLoginUser.getUserCode())
-                .claim("userRoleCodes", String.join(",", Optional.ofNullable(currentLoginUser.getUserRoleCodes())
-                        .orElseGet(HashSet::new)))
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();

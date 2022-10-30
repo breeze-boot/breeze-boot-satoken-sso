@@ -122,6 +122,12 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     private Integer keepAlive;
 
     /**
+     * 是否隐藏
+     */
+    @Schema(description = "是否隐藏")
+    private Integer hidden;
+
+    /**
      * 是否外链
      */
     @Schema(description = "是否外链")

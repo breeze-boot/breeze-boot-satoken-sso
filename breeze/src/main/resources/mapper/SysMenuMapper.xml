@@ -51,6 +51,7 @@
         a.component,
         a.href,
         a.keep_alive,
+        a.hidden,
         a.type
         FROM sys_menu a
         LEFT JOIN sys_platform b ON a.platform_id =b.id
@@ -79,6 +80,7 @@
         b.path,
         b.component,
         b.keep_alive,
+        b.hidden,
         b.href,
         b.permission,
         b.sort
