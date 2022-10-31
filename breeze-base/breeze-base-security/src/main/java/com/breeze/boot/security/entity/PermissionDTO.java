@@ -16,6 +16,7 @@
 
 package com.breeze.boot.security.entity;
 
+import com.breeze.boot.core.entity.PageDTO;
 import lombok.*;
 
 /**
@@ -29,7 +30,17 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class PermissionDTO {
+public class PermissionDTO extends PageDTO {
+
+    /**
+     * 名称
+     */
+    private String name;
+
+    /**
+     * 编码
+     */
+    private String code;
 
     /**
      * 权限类型

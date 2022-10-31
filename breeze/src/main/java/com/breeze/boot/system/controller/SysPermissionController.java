@@ -69,7 +69,6 @@ public class SysPermissionController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:permission:list')")
-    @BreezeSysLog(description = "数据权限信息列表", type = LogType.LIST)
     public Result<Page<SysPermission>> list(@Validated @RequestBody PermissionDTO permissionDTO) {
         return Result.ok(this.sysPermissionService.listPage(permissionDTO));
     }

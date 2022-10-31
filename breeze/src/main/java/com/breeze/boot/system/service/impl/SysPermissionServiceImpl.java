@@ -41,7 +41,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
      */
     @Override
     public Page<SysPermission> listPage(PermissionDTO permissionDTO) {
-        return null;
+        return this.baseMapper.listPage(new Page<>(permissionDTO.getCurrent(), permissionDTO.getSize()), permissionDTO);
     }
 
 }

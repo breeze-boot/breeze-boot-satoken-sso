@@ -16,9 +16,12 @@
 
 package com.breeze.boot.system.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 系统权限映射器
@@ -28,5 +31,14 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysPermissionMapper extends BreezeBaseMapper<SysPermission> {
+
+    /**
+     * 列表分页
+     *
+     * @param permissionDTO 许可dto
+     * @param page          页面
+     * @return {@link Page}<{@link SysPermission}>
+     */
+    Page<SysPermission> listPage(Page<SysPermission> page, @Param("permissionDTO") PermissionDTO permissionDTO);
 
 }

@@ -25,7 +25,6 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.mapper.SysDictMapper;
 import com.breeze.boot.system.service.SysDictItemService;
-import com.breeze.boot.system.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +37,20 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
+public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDicstService {
 
+    /**
+     * sys dict项目服务
+     */
     @Autowired
     private SysDictItemService sysDictItemService;
 
+    /**
+     * dict类型列表
+     *
+     * @param dictDto dict dto
+     * @return {@link Page}<{@link SysDict}>
+     */
     @Override
     public Page<SysDict> listDict(DictDTO dictDto) {
         return this.baseMapper.listDict(new Page<>(dictDto.getCurrent(), dictDto.getSize()), dictDto);
@@ -61,6 +69,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 .eq(SysDict::getId, dictDTO.getId()));
     }
 
+    /**
+     * 删除由ids
+     *
+     * @param ids id
+     * @return {@link Result}<{@link Boolean}>
+     */
     @Override
     public Result<Boolean> deleteByIds(List<Long> ids) {
         boolean remove = this.sysDictItemService.remove(Wrappers.<SysDictItem>lambdaQuery().in(SysDictItem::getDictId, ids));

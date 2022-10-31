@@ -28,4 +28,27 @@
         update_time,is_delete,delete_by,
         tenant_id
     </sql>
+
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysPermission">
+        SELECT
+        a.id,
+        a.`name`,
+        a.`code`,
+        a.operator,
+        a.`sql`,
+        a.permissions
+        FROM
+        sys_permission AS a
+        <where>
+            a.is_delete = 0
+            <if test="permissionDTO.name != null and permissionDTO.name != ''">
+                AND a.name LIKE CONCAT('%' , #{permissionDTO.name}, '%')
+            </if>
+            <if test="permissionDTO.name != null and permissionDTO.name != ''">
+                AND a.code LIKE CONCAT('%' , #{permissionDTO.code}, '%')
+            </if>
+        </where>
+
+    </select>
+
 </mapper>
