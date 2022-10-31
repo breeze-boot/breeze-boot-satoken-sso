@@ -25,6 +25,7 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictDTO;
 import com.breeze.boot.system.mapper.SysDictMapper;
 import com.breeze.boot.system.service.SysDictItemService;
+import com.breeze.boot.system.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Service
-public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDicstService {
+public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     /**
      * sys dict项目服务
