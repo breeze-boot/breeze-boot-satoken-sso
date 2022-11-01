@@ -19,7 +19,6 @@ package com.breeze.boot.system.exception;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.SystemException;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -66,7 +65,7 @@ public class GlobalExceptionHandler {
      * @param ex 错误
      * @return 错误信息
      */
-    @ExceptionHandler(SystemException.class)
+    @ExceptionHandler(SystemServiceException.class)
     public Result<? extends Object> systemExceptionHandler(SystemServiceException ex) {
         ex.printStackTrace();
         log.error("systemExceptionHandler ：{}", ex);

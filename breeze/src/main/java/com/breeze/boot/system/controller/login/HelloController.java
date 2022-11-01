@@ -17,15 +17,18 @@
 package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +40,7 @@ import java.security.Principal;
  * @author breeze
  * @date 2022-08-31
  */
+@Slf4j
 @RestController
 @RequestMapping("/test")
 public class HelloController {
@@ -112,6 +116,18 @@ public class HelloController {
     @GetMapping("/v4/getUser")
     public Object getUser4(Authentication authentication) {
         return authentication.getPrincipal();
+    }
+
+    /**
+     * 测试
+     *
+     * @param a a
+     * @param b b
+     */
+    @NoAuthentication
+    @GetMapping("/v4/test/{a}/{b}")
+    public void test(@PathVariable("a") String a, @PathVariable("b") String b) {
+        log.info("{}, {}", a, b);
     }
 
 }

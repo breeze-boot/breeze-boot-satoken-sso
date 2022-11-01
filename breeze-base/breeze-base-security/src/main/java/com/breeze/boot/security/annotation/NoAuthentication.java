@@ -21,13 +21,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * 加入白名单
+ * 无需认证注解
  *
  * @author breeze
  * @date 2021/10/1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JoinWhiteList {
+public @interface NoAuthentication {
 
 }

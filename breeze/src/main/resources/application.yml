@@ -10,9 +10,6 @@ system:
 spring:
   application:
     name: ${project.artifactId}
-  mvc:
-    pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
   main:
     allow-circular-references: true
   security:

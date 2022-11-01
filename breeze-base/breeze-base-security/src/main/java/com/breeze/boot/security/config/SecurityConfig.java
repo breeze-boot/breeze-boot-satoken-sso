@@ -25,6 +25,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -40,10 +42,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     /**
-     * jwt身份验证令牌过滤器
+     * 没有认证方面
      */
-    // @Autowired
-    // private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Autowired
+    private BreezeNoAuthenticationAspect noAuthenticationAspect;
 
     /**
      * 身份验证配置
@@ -61,7 +63,7 @@ public class SecurityConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer = http
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
@@ -76,13 +78,15 @@ public class SecurityConfig {
                 .accessDeniedHandler(new SimpleAccessDeniedHandler())
                 .authenticationEntryPoint(new SimpleAuthenticationEntryPoint())
                 .and()
-                .authorizeRequests()
-                // 只有没有登录可以访问
-                .antMatchers("/captcha/**", "/jwt/**").anonymous()
-                // 其余的必须登录
-                .anyRequest().authenticated()
-                .and()
                 .cors();
+
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
+        // 只有{{没有登录}}可以访问
+        noAuthenticationAspect.ignoreUrl
+                .forEach(url -> expressionInterceptUrlRegistry.antMatchers(url).anonymous());
+        // 其余的必须登录
+        expressionInterceptUrlRegistry
+                .anyRequest().authenticated();
         return http.build();
     }
 

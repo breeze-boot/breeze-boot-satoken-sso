@@ -17,7 +17,7 @@
 package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.Result;
-import com.breeze.boot.security.annotation.JoinWhiteList;
+import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.config.JwtConfig;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
 import com.breeze.boot.security.entity.CurrentLoginUser;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @author breeze
  * @date 2022-08-31
  */
-@JoinWhiteList
+@NoAuthentication
 @RestController
 @RequestMapping("/jwt")
 @Tag(name = "jwt登录", description = "LoginController")
@@ -141,6 +141,7 @@ public class LoginController {
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJWT = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
+        resultMap.put("user_info", currentLoginUser);
         resultMap.put("access_token", jwtConfig.sign(signedJWT).serialize());
         resultMap.put("permissions", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return resultMap;
