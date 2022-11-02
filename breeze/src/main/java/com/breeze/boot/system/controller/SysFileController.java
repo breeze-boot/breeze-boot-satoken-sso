@@ -60,8 +60,7 @@ public class SysFileController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
-    @BreezeSysLog(description = "文件信息列表", type = LogType.LIST)
-    public Result<Page<SysFile>> list(@Validated @RequestBody FileDTO fileDTO) {
+    public Result<Page<SysFile>> list(@RequestBody FileDTO fileDTO) {
         return Result.ok(this.sysFileService.listFile(fileDTO));
     }
 

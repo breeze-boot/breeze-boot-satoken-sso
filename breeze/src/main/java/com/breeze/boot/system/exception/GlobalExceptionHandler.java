@@ -41,7 +41,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NullPointerException.class)
     public Result<? extends Object> globalException(NullPointerException ex) {
-        ex.printStackTrace();
         log.error("NullPointerException: {}", ex.getMessage());
         return Result.fail(ResultCode.INTERNAL_SERVER_ERROR);
     }
@@ -54,7 +53,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageConversionException.class)
     public Result<? extends Object> parameterTypeException(HttpMessageConversionException ex) {
-        ex.printStackTrace();
         log.error(ex.getMessage());
         return Result.fail(ResultCode.FAIL, "类型转换错误");
     }
@@ -67,22 +65,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(SystemServiceException.class)
     public Result<? extends Object> systemExceptionHandler(SystemServiceException ex) {
-        ex.printStackTrace();
         log.error("systemExceptionHandler ：{}", ex);
         return Result.fail(ex.getCode(), ex.getMessage(), ex.getDescription());
-    }
-
-    /**
-     * 运行时异常统一异常处理
-     *
-     * @param ex 错误
-     * @return 错误信息
-     */
-    @ExceptionHandler(RuntimeException.class)
-    public Result<? extends Object> runtimeExceptionHandler(RuntimeException ex) {
-        ex.printStackTrace();
-        log.error("runtimeException：{}", ex);
-        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     /**
@@ -92,9 +76,20 @@ public class GlobalExceptionHandler {
      * @return 错误信息
      */
     @ExceptionHandler(Exception.class)
-    public Result<? extends Object> exceptionHandler(RuntimeException ex) {
-        ex.printStackTrace();
+    public Result<? extends Object> exceptionHandler(Exception ex) {
         log.error("exception：{}", ex);
+        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    /**
+     * 全局异常统一异常处理
+     *
+     * @param ex 错误
+     * @return 错误信息
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public Result<? extends Object> runtimeException(RuntimeException ex) {
+        log.error("runtimeException：{}", ex);
         return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 

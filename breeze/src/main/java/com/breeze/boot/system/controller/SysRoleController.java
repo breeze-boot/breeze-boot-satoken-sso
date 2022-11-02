@@ -70,8 +70,7 @@ public class SysRoleController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    @BreezeSysLog(description = "角色信息列表", type = LogType.LIST)
-    public Result<Page<SysRole>> list(@Validated @RequestBody RoleDTO roleDTO) {
+    public Result<Page<SysRole>> list(@RequestBody RoleDTO roleDTO) {
         return Result.ok(this.sysRoleService.listPage(roleDTO));
     }
 
@@ -84,7 +83,6 @@ public class SysRoleController {
     @Operation(summary = "获取树形权限列表", description = "选中的行的回显")
     @GetMapping("/listRolesPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    @BreezeSysLog(description = "树形权限信息列表", type = LogType.LIST)
     public Result<List<SysRoleMenu>> listRolesPermission(@RequestParam Long roleId) {
         return Result.ok(this.sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, roleId)));
     }
@@ -112,7 +110,6 @@ public class SysRoleController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:role:info')")
-    @BreezeSysLog(description = "角色信息详情", type = LogType.INFO)
     public Result<SysRole> info(@PathVariable("id") Long id) {
         return Result.ok(sysRoleService.getById(id));
     }

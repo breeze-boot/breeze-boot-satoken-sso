@@ -60,8 +60,7 @@ public class SysDictItemController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    @BreezeSysLog(description = "字典项信息列表", type = LogType.LIST)
-    public Result<List<SysDictItem>> list(@Validated @RequestBody DictDTO dictDTO) {
+    public Result<List<SysDictItem>> list(@RequestBody DictDTO dictDTO) {
         return Result.ok(this.sysDictItemService.listDictItem(dictDTO));
     }
 

@@ -17,10 +17,13 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.mapper.SysUserRoleMapper;
 import com.breeze.boot.system.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 系统角色用户服务impl
@@ -31,4 +34,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
+    /**
+     * 使用 [userId] 查询用户角色
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link SysRole}>
+     */
+    @Override
+    public List<SysRole> getSysRoleByUserId(Long userId) {
+        return this.baseMapper.getSysRoleByUserId(userId);
+    }
 }

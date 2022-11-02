@@ -17,7 +17,10 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUserRole;
+
+import java.util.List;
 
 /**
  * 系统用户角色服务
@@ -26,6 +29,14 @@ import com.breeze.boot.system.domain.SysUserRole;
  * @date 2021-12-06 22:03:39
  */
 public interface SysUserRoleService extends IService<SysUserRole> {
+
+    /**
+     * 使用 [userId] 查询用户角色
+     *
+     * @param userId 用户ID
+     * @return {@link List}<{@link SysRole}>
+     */
+    List<SysRole> getSysRoleByUserId(Long userId);
 
 }
 

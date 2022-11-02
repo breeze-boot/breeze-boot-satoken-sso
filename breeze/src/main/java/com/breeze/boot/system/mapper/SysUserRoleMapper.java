@@ -17,8 +17,12 @@
 package com.breeze.boot.system.mapper;
 
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUserRole;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统用户角色映射器
@@ -28,5 +32,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysUserRoleMapper extends BreezeBaseMapper<SysUserRole> {
+
+    /**
+     * 使用 [userId] 查询用户角色
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link SysRole}>
+     */
+    List<SysRole> getSysRoleByUserId(@Param("userId") Long userId);
 
 }

@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -58,7 +57,7 @@ public class SysLogController {
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(@Validated @RequestBody LogDTO logDTO) {
+    public Result<Page<SysLog>> list(@RequestBody LogDTO logDTO) {
         return Result.ok(this.sysLogService.listLog(logDTO));
     }
 

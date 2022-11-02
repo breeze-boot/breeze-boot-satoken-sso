@@ -21,10 +21,10 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.log.annotation.BreezeSysLog;
-import com.breeze.boot.log.config.LogType;
+import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
+import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
 import com.google.common.collect.Maps;
@@ -64,13 +64,18 @@ public class CommonController {
     private SysPlatformService platformService;
 
     /**
+     * 平台服务
+     */
+    @Autowired
+    private SysDeptService deptService;
+
+    /**
      * 菜单树形下拉框
      *
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
-    @BreezeSysLog(description = "菜单树形下拉框", type = LogType.LIST)
     public Result<List<Tree<Long>>> selectMenu() {
         List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 2));
         List<TreeNode<Long>> treeNodeList = menuList.stream().map(
@@ -81,7 +86,7 @@ public class CommonController {
                     treeNode.setName(menu.getName());
                     Map<String, Object> leafMap = Maps.newHashMap();
                     leafMap.put("label", menu.getTitle());
-                    leafMap.put("value", menu.getId().toString());
+                    leafMap.put("value", menu.getId());
                     treeNode.setExtra(leafMap);
                     return treeNode;
                 }
@@ -96,13 +101,30 @@ public class CommonController {
      */
     @Operation(summary = "平台下拉框", description = "下拉框接口")
     @GetMapping("/selectPlatform")
-    @BreezeSysLog(description = "平台下拉框", type = LogType.LIST)
     public Result<List<Map<String, Object>>> selectPlatform() {
         List<SysPlatform> platformList = this.platformService.list();
         List<Map<String, Object>> collect = platformList.stream().map(sysPlatform -> {
             HashMap<String, Object> map = Maps.newHashMap();
             map.put("value", sysPlatform.getId());
             map.put("label", sysPlatform.getPlatformName());
+            return map;
+        }).collect(Collectors.toList());
+        return Result.ok(collect);
+    }
+
+    /**
+     * 部门下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Operation(summary = "部门下拉框", description = "下拉框接口")
+    @GetMapping("/selectDept")
+    public Result<List<Map<String, Object>>> selectDept() {
+        List<SysDept> deptList = this.deptService.list();
+        List<Map<String, Object>> collect = deptList.stream().map(sysDept -> {
+            HashMap<String, Object> map = Maps.newHashMap();
+            map.put("value", sysDept.getId());
+            map.put("label", sysDept.getDeptName());
             return map;
         }).collect(Collectors.toList());
         return Result.ok(collect);

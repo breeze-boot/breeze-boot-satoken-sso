@@ -21,9 +21,10 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * 用户开关DTO
+ * 用户角色DTO
  *
  * @author breeze
  * @date 2022-08-31
@@ -33,8 +34,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户开关DTO")
-public class UserOpenDTO {
+@Schema(description = "用户角色DTO")
+public class UserRolesDTO {
 
     /**
      * 用户名
@@ -44,10 +45,10 @@ public class UserOpenDTO {
     private String username;
 
     /**
-     * 是否锁定
+     * 角色ID
      */
-    @NotNull(message = "锁定标识不可为空")
-    @Schema(description = "是否锁定")
-    private Integer isLock;
+    @NotNull(message = "角色ID不可为空")
+    @Schema(description = "角色ID")
+    private List<Long> roleId;
 
 }

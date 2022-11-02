@@ -42,25 +42,17 @@ public enum LogType {
      */
     EDIT(2, ""),
     /**
-     * 列表
-     */
-    LIST(3, ""),
-    /**
-     * 详情
-     */
-    INFO(4, ""),
-    /**
      * 用户名登录
      */
-    USERNAME_LOGIN(5, ""),
+    USERNAME_LOGIN(3, ""),
     /**
      * 手机登录
      */
-    PHONE_LOGIN(6, ""),
+    PHONE_LOGIN(4, ""),
     /**
      * 电子邮件登录
      */
-    EMAIL_LOGIN(6, ""),
+    EMAIL_LOGIN(5, ""),
 
     ;
 

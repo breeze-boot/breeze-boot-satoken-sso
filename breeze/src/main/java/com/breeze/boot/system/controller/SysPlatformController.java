@@ -69,8 +69,7 @@ public class SysPlatformController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    @BreezeSysLog(description = "平台信息列表", type = LogType.LIST)
-    public Result<Page<SysPlatform>> list(@Validated @RequestBody PlatformDTO platformDTO) {
+    public Result<Page<SysPlatform>> list(@RequestBody PlatformDTO platformDTO) {
         return Result.ok(this.sysPlatformService.listPage(platformDTO));
     }
 
@@ -83,7 +82,6 @@ public class SysPlatformController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:platform:info')")
-    @BreezeSysLog(description = "平台信息详情", type = LogType.INFO)
     public Result<SysPlatform> info(@PathVariable("id") Long id) {
         return Result.ok(this.sysPlatformService.getById(id));
     }

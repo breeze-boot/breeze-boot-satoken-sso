@@ -69,7 +69,7 @@ public class SysPermissionController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:permission:list')")
-    public Result<Page<SysPermission>> list(@Validated @RequestBody PermissionDTO permissionDTO) {
+    public Result<Page<SysPermission>> list(@RequestBody PermissionDTO permissionDTO) {
         return Result.ok(this.sysPermissionService.listPage(permissionDTO));
     }
 
@@ -82,7 +82,6 @@ public class SysPermissionController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:permission:info')")
-    @BreezeSysLog(description = "数据权限信息详情", type = LogType.INFO)
     public Result<SysPermission> info(@PathVariable("id") Long id) {
         return Result.ok(this.sysPermissionService.getById(id));
     }

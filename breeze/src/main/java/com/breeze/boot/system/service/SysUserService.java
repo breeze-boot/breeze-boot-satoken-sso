@@ -24,6 +24,7 @@ import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserRolesDTO;
 
 import java.util.List;
 
@@ -98,5 +99,21 @@ public interface SysUserService extends IService<SysUser> {
      * @return {@link LoginUserDTO}
      */
     LoginUserDTO getLoginUserDTO(SysUser sysUser);
+
+    /**
+     * 用户分配角色
+     *
+     * @param userRolesDTO 用户角色dto
+     * @return {@link Boolean}
+     */
+    Result<Boolean> userAddRole(UserRolesDTO userRolesDTO);
+
+    /**
+     * 通过ID查询用户
+     *
+     * @param id id
+     * @return {@link SysUser}
+     */
+    Result<SysUser> getUserById(Long id);
 
 }

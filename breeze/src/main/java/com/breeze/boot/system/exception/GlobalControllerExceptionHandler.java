@@ -21,11 +21,9 @@ import com.breeze.boot.core.enums.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
@@ -39,7 +37,7 @@ import java.util.stream.Collectors;
  * @date 2022-10-10
  */
 @Slf4j
-@RestControllerAdvice(basePackageClasses = {RestController.class, Controller.class})
+@RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 
     /**
@@ -52,7 +50,7 @@ public class GlobalControllerExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        log.warn("methodArgumentNotValidExceptionHandler: {}", ex.getMessage());
+        log.error("methodArgumentNotValidExceptionHandler: {}", ex.getMessage());
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
     }
@@ -65,7 +63,7 @@ public class GlobalControllerExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public Result<?> bindExceptionHandler(BindException ex) {
-        log.warn("bindExceptionHandler: {}", ex.getMessage());
+        log.error("bindExceptionHandler: {}", ex.getMessage());
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
     }
@@ -80,7 +78,7 @@ public class GlobalControllerExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public Result<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
-        log.warn("constraintViolationExceptionHandler: {}", ex.getMessage());
+        log.error("constraintViolationExceptionHandler: {}", ex.getMessage());
         String message = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         return Result.warning(ResultCode.WARNING.getCode(), message);
     }
@@ -94,7 +92,7 @@ public class GlobalControllerExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
-        log.warn("httpMessageNotReadableExceptionHandler: {}", ex.getMessage());
+        log.error("httpMessageNotReadableExceptionHandler: {}", ex.getMessage());
         return Result.warning(ResultCode.WARNING.getCode(), "参数格式异常");
     }
 

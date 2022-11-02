@@ -25,6 +25,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统用户实体
@@ -131,5 +132,14 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "租户ID")
     private Long tenantId;
+
+    /**
+     * 用户角色
+     * <p>
+     * 查询用户详情返回使用
+     */
+    @TableField(exist = false)
+    @Schema(description = "用户角色")
+    private List<SysRole> sysRoles;
 
 }

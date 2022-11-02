@@ -59,8 +59,7 @@ public class SysDeptController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    @BreezeSysLog(description = "部门信息列表", type = LogType.LIST)
-    public Result<List<Tree<Long>>> list(@Validated @RequestBody DeptDTO deptDTO) {
+    public Result<List<Tree<Long>>> list(@RequestBody DeptDTO deptDTO) {
         return Result.ok(this.sysDeptService.listDept(deptDTO));
     }
 
@@ -73,7 +72,6 @@ public class SysDeptController {
     @Operation(summary = "详情", description = "目前详情接口未使用")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dept:info')")
-    @BreezeSysLog(description = "部门信息详情", type = LogType.INFO)
     public Result<SysDept> info(@NotNull(message = "参数不能为空") @PathVariable("id") Long id) {
         return Result.ok(sysDeptService.getById(id));
     }

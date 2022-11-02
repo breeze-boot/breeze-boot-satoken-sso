@@ -59,8 +59,7 @@ public class SysMenuController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    @BreezeSysLog(description = "树形菜单列表", type = LogType.LIST)
-    public Result<?> list(@Validated @RequestBody MenuDTO menuDTO) {
+    public Result<?> list(@RequestBody MenuDTO menuDTO) {
         return this.sysMenuService.listMenu(menuDTO);
     }
 
@@ -73,7 +72,6 @@ public class SysMenuController {
     @Operation(summary = "树形菜单")
     @GetMapping("/listTreeMenu")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    @BreezeSysLog(description = "菜单树查询", type = LogType.LIST)
     public Result<List<Tree<Long>>> listTreeMenu(@RequestParam(required = false) String platformCode) {
         return this.sysMenuService.listTreeMenu(platformCode);
     }
@@ -86,7 +84,6 @@ public class SysMenuController {
     @Operation(summary = "树形权限列表")
     @GetMapping("/listTreePermission")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    @BreezeSysLog(description = "权限树查询", type = LogType.LIST)
     public Result<List<Tree<Long>>> listTreePermission() {
         return this.sysMenuService.listTreePermission();
     }
@@ -100,7 +97,6 @@ public class SysMenuController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
-    @BreezeSysLog(description = "菜单信息详情", type = LogType.INFO)
     public Result<SysMenu> info(@PathVariable("id") Long id) {
         return Result.ok(sysMenuService.getById(id));
     }

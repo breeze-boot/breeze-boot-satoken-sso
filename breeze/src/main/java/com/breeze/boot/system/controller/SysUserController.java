@@ -16,12 +16,14 @@
 
 package com.breeze.boot.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,8 +61,7 @@ public class SysUserController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    @BreezeSysLog(description = "用户信息列表", type = LogType.LIST)
-    public Result list(@Validated @RequestBody UserDTO userDTO) {
+    public Result<IPage<SysUser>> list(@RequestBody UserDTO userDTO) {
         return Result.ok(this.sysUserService.listPage(userDTO));
     }
 
@@ -73,9 +74,8 @@ public class SysUserController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:user:info')")
-    @BreezeSysLog(description = "用户信息详情", type = LogType.INFO)
     public Result<SysUser> info(@PathVariable("id") Long id) {
-        return Result.ok(sysUserService.getById(id));
+        return sysUserService.getUserById(id);
     }
 
     /**
@@ -132,6 +132,20 @@ public class SysUserController {
     @BreezeSysLog(description = "用户锁定", type = LogType.EDIT)
     public Result<Boolean> open(@Validated @RequestBody UserOpenDTO openDTO) {
         return Result.ok(sysUserService.open(openDTO));
+    }
+
+    /**
+     * 用户分配角色
+     *
+     * @param userRolesDTO 用户角色dto
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "用户分配角色")
+    @PutMapping("/userAddRole")
+    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
+    public Result<Boolean> userAddRole(@Validated @RequestBody UserRolesDTO userRolesDTO) {
+        return sysUserService.userAddRole(userRolesDTO);
     }
 
     /**

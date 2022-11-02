@@ -32,6 +32,7 @@ import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Sets;
@@ -259,6 +260,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         loginUser.setPermissions(permissionDTOList);
         return loginUser;
     }
+
+    @Override
+    public Result<Boolean> userAddRole(UserRolesDTO userRolesDTO) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesDTO.getUsername()));
+        if (Objects.isNull(sysUser)) {
+            return Result.fail(Boolean.FALSE, "用户不存在");
+        }
+        this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
+        List<SysUserRole> collect = userRolesDTO.getRoleId().stream().map(roleId ->
+                SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()
+        ).collect(Collectors.toList());
+        this.sysUserRoleService.saveBatch(collect);
+        return Result.ok(Boolean.TRUE, "分配成功");
+    }
+
+    @Override
+    public Result<SysUser> getUserById(Long id) {
+        SysUser sysUser = this.getById(id);
+        if (Objects.isNull(sysUser)) {
+            return Result.fail("用户不存在");
+        }
+        sysUser.setSysRoles(this.sysUserRoleService.getSysRoleByUserId(sysUser.getId()));
+        return Result.ok(sysUser);
+    }
+
 
 }
 
