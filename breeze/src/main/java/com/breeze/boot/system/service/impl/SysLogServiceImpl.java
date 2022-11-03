@@ -72,4 +72,13 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         sysLog.setSystemModule("权限系统");
         this.save(sysLog);
     }
+
+    /**
+     * 清空
+     */
+    @Override
+    public void clear() {
+        this.baseMapper.clear();
+    }
+
 }

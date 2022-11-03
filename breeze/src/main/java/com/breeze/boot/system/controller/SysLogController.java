@@ -62,31 +62,30 @@ public class SysLogController {
     }
 
     /**
-     * 删除
-     *
-     * @param ids ids
-     * @return {@link Result}
-     */
-    @Operation(summary = "删除")
-    @DeleteMapping("/del")
-    @PreAuthorize("hasAnyAuthority('sys:log:remove')")
-    @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
-    public Result<Boolean> del(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
-    }
-
-    /**
-     * 清空
+     * 清空日志表
      *
      * @return {@link Result}
      */
     @Operation(summary = "清空")
-    @DeleteMapping("/clean")
-    @PreAuthorize("hasAnyAuthority('sys:log:delete')")
+    @DeleteMapping("/clear")
+    @PreAuthorize("hasAnyAuthority('sys:log:clear')")
     @BreezeSysLog(description = "日志信息清空", type = LogType.DELETE)
-    public Result<Boolean> clean() {
-        // TODO
-        return Result.ok();
+    public void clear() {
+        this.sysLogService.clear();
     }
 
+    /**
+     * 删除
+     *
+     * @param ids id
+     * @return {@link Result}
+     */
+    @Operation(summary = "删除")
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyAuthority('sys:log:delete')")
+    @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+        return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
+    }
+    
 }

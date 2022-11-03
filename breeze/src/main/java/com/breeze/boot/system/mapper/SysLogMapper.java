@@ -29,4 +29,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysLogMapper extends BreezeBaseMapper<SysLog> {
 
+    /**
+     * 清晰
+     */
+    void clear();
+
 }

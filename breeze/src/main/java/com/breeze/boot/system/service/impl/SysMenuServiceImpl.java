@@ -41,6 +41,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.breeze.boot.core.constants.CoreConstants.ROOT;
+
 /**
  * 系统菜单服务impl
  *
@@ -90,7 +92,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 查询角色下的菜单信息
         List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentLoginUser.getUserRoleIds(), platformCode);
-        return Result.ok(this.buildTrees(menuList, 0L));
+        return Result.ok(this.buildTrees(menuList, ROOT));
     }
 
     /**
@@ -105,7 +107,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
-        return Result.ok(this.buildTrees(menuList, 0L));
+        return Result.ok(this.buildTrees(menuList, ROOT));
     }
 
     /**
@@ -121,7 +123,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return Result.ok(entityList);
         }
         List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuDTO);
-        List<Tree<Long>> build = this.buildTrees(menuEntityList, 0L);
+        List<Tree<Long>> build = this.buildTrees(menuEntityList, ROOT);
         return Result.ok(build);
     }
 
@@ -165,7 +167,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result<Boolean> saveMenu(SysMenu menuEntity) {
         SysMenu sysMenu = this.getById(menuEntity.getParentId());
-        if (!Objects.equals(0L, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
+        if (!Objects.equals(ROOT, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
             return Result.fail("上一层组件不存在");
         }
         boolean save = this.save(menuEntity);
@@ -207,7 +209,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             node.setParentId(menu.getParentId());
             node.setWeight(menu.getSort());
             Map<String, Object> leafMap = Maps.newHashMap();
-            leafMap.put("sid", menu.getId().toString());
             leafMap.put("title", menu.getTitle());
             leafMap.put("path", menu.getPath());
             leafMap.put("component", menu.getComponent());

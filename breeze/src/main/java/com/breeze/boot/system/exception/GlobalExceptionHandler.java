@@ -41,6 +41,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NullPointerException.class)
     public Result<? extends Object> globalException(NullPointerException ex) {
+        ex.printStackTrace();
         log.error("NullPointerException: {}", ex.getMessage());
         return Result.fail(ResultCode.INTERNAL_SERVER_ERROR);
     }

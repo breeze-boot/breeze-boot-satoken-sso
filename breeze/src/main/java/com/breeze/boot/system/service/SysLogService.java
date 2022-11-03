@@ -45,5 +45,10 @@ public interface SysLogService extends IService<SysLog> {
      */
     void saveSysLog(SysLogDTO sysLog);
 
+    /**
+     * 清空
+     */
+    void clear();
+
 }
 

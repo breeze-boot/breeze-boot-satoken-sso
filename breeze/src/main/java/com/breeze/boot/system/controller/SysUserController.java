@@ -151,15 +151,15 @@ public class SysUserController {
     /**
      * 删除
      *
-     * @param usernameList 用户列表
+     * @param ids 用户ID列表
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody String[] usernameList) {
-        return sysUserService.deleteByUsernameList(Arrays.asList(usernameList));
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+        return Result.ok(sysUserService.removeByIds(Arrays.asList(ids)));
     }
 
 }

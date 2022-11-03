@@ -36,7 +36,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.constants.CoreConstants.ROOT;
 
 /**
  * 系统部门服务impl
@@ -58,21 +61,27 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public List<Tree<Long>> listDept(DeptDTO deptDTO) {
-        List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(StrUtil.isAllNotBlank(deptDTO.getDeptName()), SysDept::getDeptName, deptDTO.getDeptName()));
+        List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery()
+                .eq(Objects.nonNull(deptDTO) && StrUtil.isAllNotBlank(deptDTO.getDeptName()), SysDept::getDeptName, deptDTO.getDeptName()));
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
-                sysDeptEntity -> {
+                sysDept -> {
                     TreeNode<Long> treeNode = new TreeNode<>();
-                    treeNode.setId(sysDeptEntity.getId());
-                    treeNode.setParentId(sysDeptEntity.getParentId());
-                    treeNode.setName(sysDeptEntity.getDeptName());
+                    treeNode.setId(sysDept.getId());
+                    treeNode.setParentId(sysDept.getParentId());
+                    treeNode.setName(sysDept.getDeptName());
                     Map<String, Object> leafMap = Maps.newHashMap();
-                    leafMap.put("deptName", sysDeptEntity.getDeptName());
-                    leafMap.put("deptCode", sysDeptEntity.getDeptCode());
+                    leafMap.put("deptName", sysDept.getDeptName());
+                    leafMap.put("deptCode", sysDept.getDeptCode());
+                    if (Objects.equals(deptDTO.getId(), sysDept.getId())) {
+                        leafMap.put("disabled", Boolean.TRUE);
+                    }
+                    leafMap.put("value", sysDept.getId());
+                    leafMap.put("label", sysDept.getDeptName());
                     treeNode.setExtra(leafMap);
                     return treeNode;
                 }
         ).collect(Collectors.toList());
-        return TreeUtil.build(treeNodeList, 0L);
+        return TreeUtil.build(treeNodeList, ROOT);
     }
 
     /**

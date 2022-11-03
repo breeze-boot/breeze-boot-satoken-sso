@@ -14,40 +14,16 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+package com.breeze.boot.core.constants;
 
 /**
- * 部门参数DTO
+ * 缓存常量
  *
  * @author breeze
- * @date 2022-09-01
+ * @date 2021/10/1
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "部门参数DTO")
-public class DeptDTO {
+public class CoreConstants {
 
-    /**
-     * id
-     */
-    private Long id;
-
-    /**
-     * 部门名称
-     */
-    @Schema(description = "部门名称")
-    private String deptName;
-
-    /**
-     * 父id
-     */
-    @Schema(description = "父id")
-    private Long parentId;
+    public static final Long ROOT = 1111111111111111111L;
 
 }

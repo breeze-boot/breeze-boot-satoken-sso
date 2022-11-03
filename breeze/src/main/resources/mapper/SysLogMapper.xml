@@ -36,4 +36,8 @@
         tenant_id
     </sql>
 
+    <update id="clear">
+        TRUNCATE TABLE sys_log;
+    </update>
+
 </mapper>

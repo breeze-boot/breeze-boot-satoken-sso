@@ -22,6 +22,7 @@
     <select id="listDictDetailByDictId" resultMap="sysDictItemMap">
         SELECT
         a.id,
+        a.`dict_id`,
         a.`value`,
         a.label,
         a.sort

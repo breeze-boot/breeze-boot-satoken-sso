@@ -27,10 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -128,6 +125,15 @@ public class HelloController {
     @GetMapping("/v4/test/{a}/{b}")
     public void test(@PathVariable("a") String a, @PathVariable("b") String b) {
         log.info("{}, {}", a, b);
+    }
+
+    /**
+     * 测试2
+     */
+    @NoAuthentication
+    @PostMapping("/v4/test2")
+    public void test2(@RequestBody TestDTO testDTO) {
+        log.info("{}", testDTO.toString());
     }
 
 }

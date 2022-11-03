@@ -73,8 +73,8 @@ public class SysDict extends BaseModel<SysDict> implements Serializable {
      * 【@Valid】：可用在方法、构造函数、方法参数和成员属性（字段）
      * 需要用 BindingResult 来做一个校验结果接收。当校验不通过，如果手动不 return，则并不会阻止程序的执行；
      */
-    @TableField(exist = false)
     @Valid
+    @TableField(exist = false)
     @Schema(description = "字典项目列表")
     private List<SysDictItem> sysDictDetailList;
 

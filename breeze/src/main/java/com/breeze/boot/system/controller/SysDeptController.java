@@ -114,7 +114,7 @@ public class SysDeptController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
     @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能未空") @RequestParam Long id) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能未空") @RequestBody Long id) {
         return this.sysDeptService.deleteById(id);
     }
 

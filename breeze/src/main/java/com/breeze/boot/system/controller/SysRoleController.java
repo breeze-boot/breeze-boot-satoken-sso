@@ -152,7 +152,7 @@ public class SysRoleController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
     @BreezeSysLog(description = "角色信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long ids) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return sysRoleService.deleteByIds(Arrays.asList(ids));
     }
 

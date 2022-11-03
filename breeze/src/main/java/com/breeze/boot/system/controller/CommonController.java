@@ -21,9 +21,9 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
+import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
@@ -33,12 +33,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.constants.CoreConstants.ROOT;
 
 /**
  * 公用的接口
@@ -76,7 +80,7 @@ public class CommonController {
      */
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
     @GetMapping("/selectMenu")
-    public Result<List<Tree<Long>>> selectMenu() {
+    public Result<List<Tree<Long>>> selectMenu(@RequestParam(defaultValue = "", required = false) Long id) {
         List<SysMenu> menuList = this.menuService.list(Wrappers.<SysMenu>lambdaQuery().ne(SysMenu::getType, 2));
         List<TreeNode<Long>> treeNodeList = menuList.stream().map(
                 menu -> {
@@ -85,13 +89,16 @@ public class CommonController {
                     treeNode.setParentId(menu.getParentId());
                     treeNode.setName(menu.getName());
                     Map<String, Object> leafMap = Maps.newHashMap();
+                    if (Objects.equals(menu.getId(), id)) {
+                        leafMap.put("disabled", Boolean.TRUE);
+                    }
                     leafMap.put("label", menu.getTitle());
                     leafMap.put("value", menu.getId());
                     treeNode.setExtra(leafMap);
                     return treeNode;
                 }
         ).collect(Collectors.toList());
-        return Result.ok(TreeUtil.build(treeNodeList, 0L));
+        return Result.ok(TreeUtil.build(treeNodeList, ROOT));
     }
 
     /**
@@ -119,15 +126,8 @@ public class CommonController {
      */
     @Operation(summary = "部门下拉框", description = "下拉框接口")
     @GetMapping("/selectDept")
-    public Result<List<Map<String, Object>>> selectDept() {
-        List<SysDept> deptList = this.deptService.list();
-        List<Map<String, Object>> collect = deptList.stream().map(sysDept -> {
-            HashMap<String, Object> map = Maps.newHashMap();
-            map.put("value", sysDept.getId());
-            map.put("label", sysDept.getDeptName());
-            return map;
-        }).collect(Collectors.toList());
-        return Result.ok(collect);
+    public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
+        return Result.ok(this.deptService.listDept(DeptDTO.builder().id(id).build()));
     }
 
 }
