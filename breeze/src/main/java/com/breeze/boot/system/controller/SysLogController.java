@@ -87,5 +87,5 @@ public class SysLogController {
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
     }
-    
+
 }
