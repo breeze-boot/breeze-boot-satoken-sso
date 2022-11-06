@@ -35,6 +35,7 @@ import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -46,6 +47,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -140,6 +142,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Result.fail("部门不存在");
         }
         sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
+        saveUserRole(sysUser);
         boolean save = this.save(sysUser);
         if (save) {
             // 刷新菜单权限
@@ -157,11 +160,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Boolean updateUserById(SysUser sysUser) {
         boolean update = this.updateById(sysUser);
+        this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
+        this.saveUserRole(sysUser);
         if (update) {
             // 刷新菜单权限
             this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
         return update;
+    }
+
+    private void saveUserRole(SysUser sysUser) {
+        List<SysUserRole> userRoleList = Optional.ofNullable(sysUser.getRoleIds())
+                .orElseGet(Lists::newArrayList).stream().map(id -> {
+                    SysUserRole sysUserRole = new SysUserRole();
+                    sysUserRole.setUserId(sysUser.getId());
+                    sysUserRole.setRoleId(id);
+                    return sysUserRole;
+                }).collect(Collectors.toList());
+        this.sysUserRoleService.saveBatch(userRoleList);
     }
 
     /**

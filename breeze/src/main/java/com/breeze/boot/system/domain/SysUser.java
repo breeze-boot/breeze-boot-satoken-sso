@@ -87,7 +87,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     /**
      * 用户密码
      */
-    @NotBlank(message = "用户密码不可为空")
     @Schema(description = "用户密码")
     private String password;
 
@@ -141,5 +140,14 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     @TableField(exist = false)
     @Schema(description = "用户角色")
     private List<SysRole> sysRoles;
+
+    /**
+     * 用户角色ID
+     * <p>
+     * 查询用户详情返回使用
+     */
+    @TableField(exist = false)
+    @Schema(description = "用户角色ID")
+    private List<Long> roleIds;
 
 }
