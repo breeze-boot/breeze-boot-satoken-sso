@@ -43,6 +43,6 @@ public class SysTenant extends BaseModel<SysRolePermission> implements Serializa
     /**
      * 租户名称
      */
-    private String name;
+    private String tenantName;
 
 }

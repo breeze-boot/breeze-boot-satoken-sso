@@ -39,6 +39,6 @@ public class TenantDTO extends PageDTO {
      * 租户名称
      */
     @Schema(description = "租户名称")
-    private String name;
+    private String tenantName;
 
 }

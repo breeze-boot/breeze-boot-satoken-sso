@@ -60,7 +60,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public IPage<SysTenant> listPage(TenantDTO tenantDTO) {
         Page<SysTenant> logEntityPage = new Page<>(tenantDTO.getCurrent(), tenantDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(tenantDTO.getName()), SysTenant::getName, tenantDTO.getName())
+                .like(StrUtil.isAllNotBlank(tenantDTO.getTenantName()), SysTenant::getTenantName, tenantDTO.getTenantName())
                 .orderByDesc(SysTenant::getCreateTime)
                 .page(logEntityPage);
     }
