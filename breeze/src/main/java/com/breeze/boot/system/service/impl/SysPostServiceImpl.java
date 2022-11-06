@@ -75,7 +75,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         if (CollUtil.isNotEmpty(sysUserList)) {
             return Result.warning(Boolean.FALSE, "岗位存在用户");
         }
-        return Result.ok(thi.removeByIds(ids));
+        return Result.ok(this.removeByIds(ids));
     }
 
 }
