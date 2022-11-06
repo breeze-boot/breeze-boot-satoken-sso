@@ -10,6 +10,7 @@
         <result property="username" column="username"/>
         <result property="password" column="password"/>
         <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
         <result property="amountName" column="amount_name"/>
         <result property="avatar" column="avatar"/>
         <result property="phone" column="phone"/>
@@ -25,9 +26,14 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
         <result property="deleteBy" column="delete_by"/>
+        <collection property="sysRoles" javaType="java.util.List"
+                    ofType="com.breeze.boot.system.domain.SysRole"
+                    column="{userId=id}"
+                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleByUserId">
+        </collection>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.system.domain.SysUser">
+    <select id="listPage" resultMap="sysUserMap">
         SELECT
         a.id,
         a.dept_id,
@@ -41,11 +47,10 @@
         a.is_lock,
         a.open_id,
         a.email,
-        a.dept_id,
         b.dept_name
         FROM
-        sys_user a
-        LEFT JOIN sys_dept b ON a.dept_id = b.id
+        sys_user AS a
+        LEFT JOIN sys_dept AS b ON a.dept_id = b.id
         <where>
             a.is_delete = 0
             AND b.is_delete = 0

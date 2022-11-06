@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Result<? extends Object> runtimeException(RuntimeException ex) {
         log.error("runtimeException：{}", ex);
-        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return Result.fail(ResultCode.INTERNAL_SERVER_ERROR, ResultCode.INTERNAL_SERVER_ERROR.getMsg());
     }
 
 }

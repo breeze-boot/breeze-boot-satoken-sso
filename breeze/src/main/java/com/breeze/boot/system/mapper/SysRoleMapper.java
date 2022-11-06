@@ -17,9 +17,9 @@
 package com.breeze.boot.system.mapper;
 
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,9 +35,9 @@ public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
     /**
      * 用户角色列表
      *
-     * @param id id
-     * @return {@link List}<{@link UserRoleDTO}>
+     * @param userId 用户id
+     * @return {@link List}<{@link SysRole}>
      */
-    List<SysRole> listUserRole(Long id);
+    List<SysRole> listRoleByUserId(@Param("userId") Long userId);
 
 }

@@ -27,9 +27,11 @@ import com.breeze.boot.system.dto.DeptDTO;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
+import com.breeze.boot.system.service.SysRoleService;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +74,12 @@ public class CommonController {
      */
     @Autowired
     private SysDeptService deptService;
+
+    /**
+     * 角色服务
+     */
+    @Autowired
+    private SysRoleService roleService;
 
     /**
      * 菜单树形下拉框
@@ -128,6 +136,22 @@ public class CommonController {
     @GetMapping("/selectDept")
     public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
         return Result.ok(this.deptService.listDept(DeptDTO.builder().id(id).build()));
+    }
+
+    /**
+     * 角色下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Operation(summary = "角色下拉框", description = "下拉框接口")
+    @GetMapping("/selectRole")
+    public Result<List<Map<String, Object>>> selectRole() {
+        return Result.ok(this.roleService.list().stream().map(sysRole -> {
+            Map<@Nullable String, @Nullable Object> roleMap = Maps.newHashMap();
+            roleMap.put("value", sysRole.getId());
+            roleMap.put("label", sysRole.getRoleName());
+            return roleMap;
+        }).collect(Collectors.toList()));
     }
 
 }

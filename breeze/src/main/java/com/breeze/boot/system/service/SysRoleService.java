@@ -37,10 +37,10 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 用户角色列表
      *
-     * @param id id
+     * @param userId 用户ID
      * @return {@link List}<{@link SysRole}>
      */
-    Set<UserRoleDTO> listUserRole(Long id);
+    Set<UserRoleDTO> listRoleByUserId(Long userId);
 
     /**
      * 列表页面

@@ -113,7 +113,7 @@ public class SysLogAspect {
         stopWatch.stop();
         build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
         this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
-        this.printLog(request, methodName, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param), stopWatch);
+        this.printLog(request, methodName, mapper.writeValueAsString(param), stopWatch);
     }
 
     private StopWatch getStopWatch() {
@@ -130,7 +130,7 @@ public class SysLogAspect {
     private void printLog(HttpServletRequest request, String methodName, String jsonString, StopWatch stopWatch) {
         log.trace("HTTP_METHOD : {} , URL {} , IP : {}", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         log.info("进入方法 [{}], \n 传入参数：\n {}", methodName, jsonString);
-        log.trace("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeSeconds());
+        log.trace("方法[{}]执行时间： {}", methodName, stopWatch.getTotalTimeMillis());
     }
 
     /**

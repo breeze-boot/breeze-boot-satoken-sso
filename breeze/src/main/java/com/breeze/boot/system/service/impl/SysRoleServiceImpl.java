@@ -53,12 +53,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 用户角色列表
      *
-     * @param id id
-     * @return {@link List}<{@link SysRole}>
+     * @param userId 用户id
+     * @return {@link Set}<{@link UserRoleDTO}>
      */
     @Override
-    public Set<UserRoleDTO> listUserRole(Long id) {
-        return this.baseMapper.listUserRole(id)
+    public Set<UserRoleDTO> listRoleByUserId(Long userId) {
+        return this.baseMapper.listRoleByUserId(userId)
                 .stream()
                 .map(sysRoleEntity -> {
                     UserRoleDTO userRoleDTO = new UserRoleDTO();

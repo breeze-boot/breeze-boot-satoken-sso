@@ -238,7 +238,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         loginUser.setDeptName(dept.getDeptName());
 
         // 查询 用户的角色
-        Set<UserRoleDTO> roleDTOSet = this.sysRoleService.listUserRole(sysUser.getId());
+        Set<UserRoleDTO> roleDTOSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
         if (CollUtil.isEmpty(roleDTOSet)) {
             loginUser.setAuthorities(Sets.newHashSet());
             return loginUser;

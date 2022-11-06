@@ -17,7 +17,7 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listUserRole" resultType="com.breeze.boot.system.domain.SysRole">
+    <select id="listRoleByUserId" resultType="com.breeze.boot.system.domain.SysRole">
         SELECT role.id,
                role.role_code,
                role.role_name
@@ -25,7 +25,7 @@
                  LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
         WHERE role.is_delete = 0
           AND ru.is_delete = 0
-          AND ru.user_id = #{id}
+          AND ru.user_id = #{userId}
     </select>
 
 </mapper>
