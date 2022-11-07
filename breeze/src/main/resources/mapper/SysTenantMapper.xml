@@ -17,11 +17,4 @@
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id
-        ,name,create_by,
-        create_name,create_time,update_by,
-        update_name,update_time,is_delete,
-        delete_by,tenant_id
-    </sql>
 </mapper>

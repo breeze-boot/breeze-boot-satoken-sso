@@ -6,6 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysPermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
         <result property="operator" column="operator" jdbcType="VARCHAR"/>
         <result property="sql" column="sql" jdbcType="VARCHAR"/>
         <result property="permissions" column="permissions" jdbcType="VARCHAR"/>
@@ -20,20 +22,11 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id
-        ,operator,`sql`,
-        permissions,create_by,create_name,
-        create_time,update_by,update_name,
-        update_time,is_delete,delete_by,
-        tenant_id
-    </sql>
-
     <select id="listPage" resultType="com.breeze.boot.system.domain.SysPermission">
         SELECT
         a.id,
-        a.`name`,
-        a.`code`,
+        a.`permission_name`,
+        a.`permission_code`,
         a.operator,
         a.`sql`,
         a.permissions
@@ -42,10 +35,10 @@
         <where>
             a.is_delete = 0
             <if test="permissionDTO.name != null and permissionDTO.name != ''">
-                AND a.name LIKE CONCAT('%' , #{permissionDTO.name}, '%')
+                AND a.permission_name LIKE CONCAT('%' , #{permissionDTO.permissionName}, '%')
             </if>
             <if test="permissionDTO.name != null and permissionDTO.name != ''">
-                AND a.code LIKE CONCAT('%' , #{permissionDTO.code}, '%')
+                AND a.permission_code LIKE CONCAT('%' , #{permissionDTO.permissioCode}, '%')
             </if>
         </where>
 

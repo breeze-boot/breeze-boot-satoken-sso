@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
  * @author breeze
  * @date 2022-08-31
  */
-public class AcessException extends RuntimeException {
+public class AccessException extends RuntimeException {
 
     /**
      * 代码
@@ -42,7 +42,7 @@ public class AcessException extends RuntimeException {
      * @param msg        信息
      * @param httpStatus http状态
      */
-    public AcessException(String msg, HttpStatus httpStatus) {
+    public AccessException(String msg, HttpStatus httpStatus) {
         super(msg);
         this.code = httpStatus.value();
         this.msg = msg;

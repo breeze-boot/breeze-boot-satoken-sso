@@ -45,4 +45,8 @@ public class SysTenant extends BaseModel<SysRolePermission> implements Serializa
      */
     private String tenantName;
 
+    /**
+     * 租户编码
+     */
+    private String tenantCode;
 }

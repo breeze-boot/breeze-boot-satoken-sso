@@ -41,4 +41,8 @@ public class TenantDTO extends PageDTO {
     @Schema(description = "租户名称")
     private String tenantName;
 
+    /**
+     * 租户编码
+     */
+    private String tenantCode;
 }

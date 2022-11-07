@@ -39,7 +39,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_user")
-@Schema(description = "系统角色实体")
+@Schema(description = "系统用户实体")
 public class SysUser extends BaseModel<SysUser> implements Serializable {
 
     private static final long serialVersionUID = 1L;
