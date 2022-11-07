@@ -42,23 +42,20 @@ import java.util.*;
 public class BreezeNoAuthenticationAspect implements InitializingBean {
 
     private static final String PATTERN = "\\{(.*?)\\}";
-
+    /**
+     * 忽略的url
+     */
+    public List<String> ignoreUrl = Lists.newArrayList();
     /**
      * 请求映射处理程序映射
      */
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
-
     /**
      * 应用程序上下文
      */
     @Autowired
     private ApplicationContext applicationContext;
-
-    /**
-     * 忽略的url
-     */
-    public List<String> ignoreUrl = Lists.newArrayList();
 
     /**
      * 请求
