@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2020 the original author or authors.
+ * Copyright (c) 2021-2022, gaoweixuan (gaoweixuan@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.security.Principal;
 /**
  * 你好控制器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Slf4j

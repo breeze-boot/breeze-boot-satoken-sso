@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * 系统字典项实体
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-09-02
  */
 @Data

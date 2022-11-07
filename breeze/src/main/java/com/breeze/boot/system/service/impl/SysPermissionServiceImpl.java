@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2021-2022, gaoweixuan (gaoweixuan@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 /**
  * 系统数据权限服务 impl
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-30
  */
 @Service

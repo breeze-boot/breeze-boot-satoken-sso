@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 /**
  * 登录控制器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @NoAuthentication

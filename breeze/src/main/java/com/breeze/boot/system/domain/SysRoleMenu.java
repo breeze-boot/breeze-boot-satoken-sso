@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2021-2022, gaoweixuan (gaoweixuan@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * 系统角色菜单实体
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021-12-06 22:03:39
  */
 @Data

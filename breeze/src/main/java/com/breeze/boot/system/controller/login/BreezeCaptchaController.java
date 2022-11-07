@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p>
  * 模仿 {@link com.anji.captcha.controller.CaptchaController } 重写请求路径
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022/09/18
  */
 @RestController

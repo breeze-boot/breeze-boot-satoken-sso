@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2021-2022, gaoweixuan (gaoweixuan@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.breeze.boot.system.dto.MenuPermissionDTO;
 /**
  * 系统菜单角色服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021-12-06 22:03:39
  */
 public interface SysRoleMenuService extends IService<SysRoleMenu> {

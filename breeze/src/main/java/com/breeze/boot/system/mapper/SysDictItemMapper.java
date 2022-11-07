@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2021-2022, gaoweixuan (gaoweixuan@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 系统字典项映射器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-09-02
  */
 @Mapper
