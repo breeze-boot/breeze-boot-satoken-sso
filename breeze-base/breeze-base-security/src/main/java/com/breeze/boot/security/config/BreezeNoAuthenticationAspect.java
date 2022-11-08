@@ -19,7 +19,6 @@ package com.breeze.boot.security.config;
 import cn.hutool.core.util.ReUtil;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,7 +29,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * 无需认证注解切面
@@ -42,10 +44,13 @@ import java.util.*;
 public class BreezeNoAuthenticationAspect implements InitializingBean {
 
     private static final String PATTERN = "\\{(.*?)\\}";
+
     /**
      * 忽略的url
      */
-    public List<String> ignoreUrl = Lists.newArrayList();
+    @Autowired
+    public IgnoreUrlProperties ignoreUrlProperties;
+
     /**
      * 请求映射处理程序映射
      */
@@ -80,7 +85,7 @@ public class BreezeNoAuthenticationAspect implements InitializingBean {
                 Optional.ofNullable(requestMappingInfo.getPathPatternsCondition())
                         .ifPresent((condition) -> condition.getPatternValues().forEach(url -> {
                             log.info("{}", ReUtil.replaceAll(url, PATTERN, "*"));
-                            this.ignoreUrl.add(ReUtil.replaceAll(url, PATTERN, "*"));
+                            this.ignoreUrlProperties.getExcludeUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
                         }));
             } else {
                 Optional.ofNullable(requestMappingInfo.getPathPatternsCondition()).ifPresent((condition) -> this.setUrl(method, condition.getPatternValues()));
@@ -98,7 +103,7 @@ public class BreezeNoAuthenticationAspect implements InitializingBean {
         if (Objects.nonNull(method.getMethodAnnotation(NoAuthentication.class))) {
             pathPatterns.forEach(url -> {
                 log.info("{}", ReUtil.replaceAll(url, PATTERN, "*"));
-                this.ignoreUrl.add(ReUtil.replaceAll(url, PATTERN, "*"));
+                this.ignoreUrlProperties.getExcludeUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
             });
         }
     }

@@ -17,12 +17,10 @@ spring:
       excludeUrls:
         - "/actuator/**"
         - "/captcha/**"
-        - "/jwt/**"
         - "/**/*.js"
         - "/**/*.css"
         - "/**/*.png"
         - "/**/*.ico"
-        - "/"
         - "/druid/**"
         - "/swagger-ui.html"
         - "/swagger-ui/"

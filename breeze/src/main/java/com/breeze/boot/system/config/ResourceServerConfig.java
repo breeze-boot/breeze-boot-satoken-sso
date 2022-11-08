@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 /**
  * 资源服务器配置
@@ -61,17 +60,6 @@ public class ResourceServerConfig {
      */
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    /**
-     * 网络安全编辑器
-     * 使用WebSecurity.ignoring()忽略某些URL请求，这些请求将被Spring Security忽略
-     *
-     * @return {@link WebSecurityCustomizer}
-     */
-    @Bean
-    WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers(ignoreUrlProperties.getExcludeUrls().toArray(new String[]{}));
-    }
 
     /**
      * 短信令牌身份验证提供者 Bean

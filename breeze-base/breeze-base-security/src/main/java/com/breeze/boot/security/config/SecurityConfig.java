@@ -82,7 +82,7 @@ public class SecurityConfig {
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
         // 只有{{没有登录}}可以访问
-        noAuthenticationAspect.ignoreUrl
+        noAuthenticationAspect.ignoreUrlProperties.getExcludeUrls()
                 .forEach(url -> expressionInterceptUrlRegistry.antMatchers(url).permitAll());
         // 其余的必须登录
         expressionInterceptUrlRegistry
