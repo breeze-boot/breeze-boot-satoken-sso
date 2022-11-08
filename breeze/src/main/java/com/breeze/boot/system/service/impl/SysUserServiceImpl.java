@@ -32,6 +32,7 @@ import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.*;
@@ -201,13 +202,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置密码
      *
-     * @param sysUser 用户实体
+     * @param userResetPasswordDTO 用户重置密码dto
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetPass(SysUser sysUser) {
-        sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
-        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, sysUser.getPassword()).eq(SysUser::getUsername, sysUser.getUsername()));
+    public Boolean resetPass(UserResetPasswordDTO userResetPasswordDTO) {
+        userResetPasswordDTO.setPassword(this.passwordEncoder.encode(userResetPasswordDTO.getPassword()));
+        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
+                .set(SysUser::getPassword, userResetPasswordDTO.getPassword()).eq(SysUser::getId, userResetPasswordDTO.getId()));
         if (update) {
             // 刷新菜单权限
             this.userTokenService.refreshUser(SecurityUtils.getUsername());
@@ -217,23 +219,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 按用户名名单删除
-     * 删除由ids
      *
-     * @param usernameList 用户列表
+     * @param sysUser 用户
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    @CacheEvict(cacheNames = "sys:login_user", key = "#usernameList")
-    public Result<Boolean> deleteByUsernameList(List<String> usernameList) {
-        List<SysUser> sysUserList = this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getUsername, usernameList));
-        if (CollUtil.isEmpty(sysUserList)) {
-            return Result.fail(Boolean.FALSE, "用户不存在");
-        }
-        boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().in(SysUser::getUsername, usernameList));
+    @CacheEvict(cacheNames = "sys:login_user", key = "#sysUser.username")
+    public Result<Boolean> removeUser(SysUser sysUser) {
+        boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, sysUser.getId()));
         if (remove) {
             // 删除用户角色关系
             this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
-                    .in(SysUserRole::getUserId, sysUserList.stream().map(SysUser::getId).collect(Collectors.toList())));
+                    .in(SysUserRole::getUserId, sysUser.getId()));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
@@ -254,21 +251,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         loginUser.setDeptName(dept.getDeptName());
 
         // 查询 用户的角色
-        Set<UserRoleDTO> roleDTOSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isEmpty(roleDTOSet)) {
+        Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
+        if (CollUtil.isEmpty(roleDtoSet)) {
             loginUser.setAuthorities(Sets.newHashSet());
             return loginUser;
         }
 
-        loginUser.setUserRoleList(roleDTOSet);
+        loginUser.setUserRoleList(roleDtoSet);
         // 角色ID
-        Set<Long> roleIdSet = roleDTOSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
+        Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
         loginUser.setUserRoleIds(roleIdSet);
         // 角色CODE
-        Set<String> roleCodeList = roleDTOSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
+        Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
         loginUser.setUserRoleCodes(roleCodeList);
         // 角色权限
-        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDTOSet));
+        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
         // 用户的多个数据权限汇总
         List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
         // 数据权限 类型

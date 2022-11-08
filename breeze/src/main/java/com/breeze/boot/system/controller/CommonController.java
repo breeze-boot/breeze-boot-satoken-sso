@@ -21,13 +21,11 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.dto.DeptDTO;
-import com.breeze.boot.system.service.SysDeptService;
-import com.breeze.boot.system.service.SysMenuService;
-import com.breeze.boot.system.service.SysPlatformService;
-import com.breeze.boot.system.service.SysRoleService;
+import com.breeze.boot.system.service.*;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -80,6 +78,12 @@ public class CommonController {
      */
     @Autowired
     private SysRoleService roleService;
+
+    /**
+     * 租户服务
+     */
+    @Autowired
+    private SysTenantService tenantService;
 
     /**
      * 菜单树形下拉框
@@ -151,6 +155,23 @@ public class CommonController {
             roleMap.put("value", sysRole.getId());
             roleMap.put("label", sysRole.getRoleName());
             return roleMap;
+        }).collect(Collectors.toList()));
+    }
+
+    /**
+     * 租户下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @NoAuthentication
+    @Operation(summary = "角色下拉框", description = "下拉框接口")
+    @GetMapping("/selectTenant")
+    public Result<List<Map<String, Object>>> selectTenant() {
+        return Result.ok(this.tenantService.list().stream().map(sysRole -> {
+            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
+            tenantMap.put("value", sysRole.getId());
+            tenantMap.put("label", sysRole.getTenantName());
+            return tenantMap;
         }).collect(Collectors.toList()));
     }
 

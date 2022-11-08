@@ -16,13 +16,16 @@
 
 package com.breeze.boot.system.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +36,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * 系统用户控制器
@@ -109,15 +112,15 @@ public class SysUserController {
     /**
      * 重置密码
      *
-     * @param sysUser 系统用户
-     * @return {@link Result}
+     * @param userResetPassword 用户重置密码
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:edit')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
-    public Result<Boolean> resetPass(@Validated @RequestBody SysUser sysUser) {
-        return Result.ok(sysUserService.resetPass(sysUser));
+    public Result<Boolean> resetPass(@Validated @RequestBody UserResetPasswordDTO userResetPassword) {
+        return Result.ok(sysUserService.resetPass(userResetPassword));
     }
 
     /**
@@ -151,15 +154,22 @@ public class SysUserController {
     /**
      * 删除
      *
-     * @param ids 用户ID列表
+     * @param ids 用户 ids
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:user:delete')")
     @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return Result.ok(sysUserService.removeByIds(Arrays.asList(ids)));
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
+        List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getId, ids));
+        if (CollUtil.isEmpty(sysUserList)) {
+            return Result.fail(Boolean.FALSE, "用户不存在");
+        }
+        for (SysUser sysUser : sysUserList) {
+            this.sysUserService.removeUser(sysUser);
+        }
+        return Result.ok();
     }
 
 }

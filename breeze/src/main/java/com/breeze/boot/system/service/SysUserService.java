@@ -24,9 +24,8 @@ import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
+import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
-
-import java.util.List;
 
 /**
  * 系统用户服务
@@ -79,18 +78,18 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 重置密码
      *
-     * @param userEntity 用户实体
+     * @param userResetPasswordDTO 用户重置密码dto
      * @return {@link Boolean}
      */
-    Boolean resetPass(SysUser userEntity);
+    Boolean resetPass(UserResetPasswordDTO userResetPasswordDTO);
 
     /**
      * 删除由ids
      *
-     * @param usernameList 用户列表
+     * @param sysUser 用户
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> deleteByUsernameList(List<String> usernameList);
+    Result<Boolean> removeUser(SysUser sysUser);
 
     /**
      * 获取登录用户dto

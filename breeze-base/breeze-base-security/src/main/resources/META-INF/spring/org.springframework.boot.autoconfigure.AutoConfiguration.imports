@@ -4,4 +4,5 @@ com.breeze.boot.security.config.PwdConfig
 com.breeze.boot.security.config.IgnoreUrlProperties
 com.breeze.boot.security.config.RedisConfig
 com.breeze.boot.security.config.JwtProperties
+com.breeze.boot.security.config.SysTenantLoadFilter
 

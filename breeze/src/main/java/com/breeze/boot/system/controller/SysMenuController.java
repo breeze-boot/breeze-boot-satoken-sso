@@ -71,7 +71,6 @@ public class SysMenuController {
      */
     @Operation(summary = "树形菜单")
     @GetMapping("/listTreeMenu")
-    @PreAuthorize("hasAnyAuthority('sys:menu:list')")
     public Result<List<Tree<Long>>> listTreeMenu(@RequestParam(required = false) String platformCode) {
         return this.sysMenuService.listTreeMenu(platformCode);
     }

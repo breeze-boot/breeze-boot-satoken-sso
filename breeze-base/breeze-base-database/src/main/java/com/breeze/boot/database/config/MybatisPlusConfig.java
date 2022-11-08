@@ -20,11 +20,14 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.database.plugins.BreezeDataPermissionInterceptor;
 import com.breeze.boot.database.plugins.BreezeSqlLogInnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Objects;
 
 /**
  * mybatis +配置
@@ -33,6 +36,8 @@ import org.springframework.context.annotation.Bean;
  * @date 2021-12-06 22:03:39
  */
 public class MybatisPlusConfig {
+
+    private final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     /**
      * 自定义 SqlInjector 包含自定义的全局方法
@@ -54,7 +59,11 @@ public class MybatisPlusConfig {
 
             @Override
             public Expression getTenantId() {
-                return new LongValue(1);
+                Long tenantId = BreezeThreadLocal.get();
+                if (Objects.isNull(tenantId)) {
+                    return new LongValue(1);
+                }
+                return new LongValue(tenantId);
             }
 
             @Override
@@ -67,7 +76,7 @@ public class MybatisPlusConfig {
              */
             @Override
             public boolean ignoreTable(String tableName) {
-                return false;
+                return Objects.equals("sys_tenant", tableName);
             }
         }));
         interceptor.addInnerInterceptor(new BreezeDataPermissionInterceptor());
