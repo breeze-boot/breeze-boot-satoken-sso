@@ -116,7 +116,7 @@ public class SecurityConfig {
      */
     @Bean
     @SneakyThrows
-    public AuthenticationManager userAuthenticationManager() {
+    public AuthenticationManager authenticationManager() {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

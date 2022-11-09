@@ -16,7 +16,6 @@
 
 package com.breeze.boot.security.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,19 +23,30 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.function.Function;
 
 /**
- * 本地用户加载 服务
+ * 本地用户详细信息服务
  *
  * @author breeze
  * @date 2022-08-31
  */
-@AllArgsConstructor
 public class LocalUserDetailsService implements UserDetailsService {
 
     protected Function<String, UserDetails> usernameFunction;
 
     protected Function<String, UserDetails> phoneFunction;
 
+    protected Function<String, UserDetails> wxFunction;
+
     protected Function<String, UserDetails> emailFunction;
+
+    public LocalUserDetailsService(Function<String, UserDetails> usernameFunction,
+                                   Function<String, UserDetails> phoneFunction,
+                                   Function<String, UserDetails> wxFunction,
+                                   Function<String, UserDetails> emailFunction) {
+        this.usernameFunction = usernameFunction;
+        this.phoneFunction = phoneFunction;
+        this.wxFunction = wxFunction;
+        this.emailFunction = emailFunction;
+    }
 
     public UserDetails loadUserByEmail(String email) {
         return emailFunction.apply(email);
@@ -44,6 +54,10 @@ public class LocalUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByPhone(String phone) {
         return phoneFunction.apply(phone);
+    }
+
+    public UserDetails createOrLoadUserByOpenId(String openId) {
+        return wxFunction.apply(openId);
     }
 
     @Override

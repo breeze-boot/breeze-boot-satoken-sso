@@ -16,15 +16,22 @@
 
 package com.breeze.boot.system.controller.login;
 
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.config.JwtConfig;
+import com.breeze.boot.security.config.WxLoginProperties;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.EmailLoginBody;
 import com.breeze.boot.security.entity.SmsLoginBody;
 import com.breeze.boot.security.entity.UserLoginBody;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationToken;
+import com.breeze.boot.security.wx.WxCodeAuthenticationToken;
+import com.breeze.boot.system.dto.WxLoginDTO;
 import com.google.common.collect.Maps;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -33,6 +40,7 @@ import com.nimbusds.jwt.SignedJWT;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,6 +55,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +64,7 @@ import java.util.stream.Collectors;
  * @author gaoweixuan
  * @date 2022-08-31
  */
+@Slf4j
 @NoAuthentication
 @RestController
 @RequestMapping("/jwt")
@@ -72,6 +82,8 @@ public class LoginController {
      */
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private WxLoginProperties wxLoginProperties;
 
     /**
      * 用户名登录
@@ -81,13 +93,12 @@ public class LoginController {
      */
     @Operation(security = {@SecurityRequirement(name = "bearer")}, summary = "用户名登录")
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody UserLoginBody userLoginBody) {
+    public Result<Map<String, Object>> login(@Validated @RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(userLoginBody.getUsername(), userLoginBody.getPassword());
-        Map<String, Object> resultMap = createJWTToken(now, expiry, authenticationManager.authenticate(usernamePasswordAuthenticationToken));
-        return Result.ok(resultMap);
+        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(usernamePasswordAuthenticationToken)));
     }
 
     /**
@@ -98,13 +109,12 @@ public class LoginController {
      */
     @PostMapping("/sms")
     @Operation(summary = "手机登录")
-    public Result sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
+    public Result<Map<String, Object>> sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;
         SmsCodeAuthenticationToken smsCodeAuthenticationToken = SmsCodeAuthenticationToken.unauthenticated(smsLoginBody.getPhone(), smsLoginBody.getCode());
-        Map<String, Object> resultMap = createJWTToken(now, expiry, authenticationManager.authenticate(smsCodeAuthenticationToken));
-        return Result.ok(resultMap);
+        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(smsCodeAuthenticationToken)));
     }
 
     /**
@@ -115,16 +125,15 @@ public class LoginController {
      */
     @Operation(summary = "邮箱登录")
     @PostMapping("/email")
-    public Result email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
+    public Result<Map<String, Object>> email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
         Instant now = Instant.now();
         // 用户验证
         long expiry = 36000L;
         EmailCodeAuthenticationToken emailCodeAuthenticationToken = EmailCodeAuthenticationToken.unauthenticated(emailLoginBody.getEmail(), emailLoginBody.getCode());
-        Map<String, Object> resultMap = createJWTToken(now, expiry, authenticationManager.authenticate(emailCodeAuthenticationToken));
-        return Result.ok(resultMap);
+        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(emailCodeAuthenticationToken)));
     }
 
-    private Map<String, Object> createJWTToken(Instant now, long expiry, Authentication authentication) {
+    private Map<String, Object> createJwtToken(Instant now, long expiry, Authentication authentication) {
         CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
         String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
@@ -139,12 +148,44 @@ public class LoginController {
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
-        SignedJWT signedJWT = new SignedJWT(header, claims);
+        SignedJWT signedJwt = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("user_info", currentLoginUser);
-        resultMap.put("access_token", jwtConfig.sign(signedJWT).serialize());
+        resultMap.put("access_token", jwtConfig.sign(signedJwt).serialize());
         resultMap.put("permissions", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return resultMap;
+    }
+
+    /**
+     * wx登录
+     *
+     * @param wxLoginDTO wx登录dto
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @PostMapping("/wxLogin")
+    public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginDTO wxLoginDTO) {
+        Map<String, Object> resultMap = Maps.newHashMap();
+        String url = "https://api.weixin.qq.com/sns/jscode2session";
+        HttpResponse response = HttpUtil.createGet(url)
+                .form("secret", this.wxLoginProperties.getAppSecret())
+                .form("appid", this.wxLoginProperties.getAppId())
+                .form("js_code", wxLoginDTO.getCode())
+                .form("grant_type", "authorization_code")
+                .execute();
+        String formatJsonStr = JSONUtil.formatJsonStr(response.body());
+        log.info("\n{}", formatJsonStr);
+        JSONObject jsonObj = JSONUtil.parseObj(response.body());
+        if (Objects.equals(jsonObj.get("errcode"), 40164) || Objects.equals(41008, jsonObj.get("errcode"))) {
+            resultMap.put("code", jsonObj.get("errcode"));
+            resultMap.put("msg", "登录失败");
+            return Result.ok(resultMap);
+        }
+        // 用户验证
+        long expiry = 36000L;
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated("", "");
+        Instant now = Instant.now();
+        resultMap.putAll(this.createJwtToken(now, expiry, authenticationManager.authenticate(wxCodeAuthenticationToken)));
+        return Result.ok(resultMap);
     }
 
 }

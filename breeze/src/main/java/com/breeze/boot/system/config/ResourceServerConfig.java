@@ -17,10 +17,11 @@
 package com.breeze.boot.system.config;
 
 import com.breeze.boot.security.annotation.EnableSecurityServer;
-import com.breeze.boot.security.config.IgnoreUrlProperties;
 import com.breeze.boot.security.email.EmailCodeAuthenticationProvider;
 import com.breeze.boot.security.service.LocalUserDetailsService;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationProvider;
+import com.breeze.boot.security.utils.LoginCheck;
+import com.breeze.boot.security.wx.WxCodeAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,12 +37,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 @Configuration
 @EnableSecurityServer
 public class ResourceServerConfig {
-
-    /**
-     * 忽略url属性
-     */
-    @Autowired
-    private IgnoreUrlProperties ignoreUrlProperties;
 
     /**
      * 用户详细信息服务
@@ -68,7 +63,7 @@ public class ResourceServerConfig {
      */
     @Bean
     SmsCodeAuthenticationProvider smsTokenAuthenticationProvider() {
-        SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider(userDetailsService, redisTemplate);
+        SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
         authenticationManagerBuilder.authenticationProvider(smsCodeAuthenticationProvider);
         return smsCodeAuthenticationProvider;
     }
@@ -80,9 +75,21 @@ public class ResourceServerConfig {
      */
     @Bean
     EmailCodeAuthenticationProvider emailCodeAuthenticationProvider() {
-        EmailCodeAuthenticationProvider emailCodeAuthenticationProvider = new EmailCodeAuthenticationProvider(userDetailsService, redisTemplate);
+        EmailCodeAuthenticationProvider emailCodeAuthenticationProvider = new EmailCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
         authenticationManagerBuilder.authenticationProvider(emailCodeAuthenticationProvider);
         return emailCodeAuthenticationProvider;
+    }
+
+    /**
+     * 微信令牌身份验证提供者 Bean
+     *
+     * @return {@link EmailCodeAuthenticationProvider}
+     */
+    @Bean
+    WxCodeAuthenticationProvider wxCodeAuthenticationProvider() {
+        WxCodeAuthenticationProvider wxCodeAuthenticationProvider = new WxCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
+        authenticationManagerBuilder.authenticationProvider(wxCodeAuthenticationProvider);
+        return wxCodeAuthenticationProvider;
     }
 
 }

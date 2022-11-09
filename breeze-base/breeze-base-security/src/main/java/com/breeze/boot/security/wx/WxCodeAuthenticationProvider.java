@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.email;
+package com.breeze.boot.security.wx;
 
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.service.LocalUserDetailsService;
@@ -42,7 +42,7 @@ import java.util.Objects;
  * @date 2022-09-03
  */
 @Slf4j
-public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
+public class WxCodeAuthenticationProvider implements AuthenticationProvider {
 
     /**
      * 短信没有发现代码
@@ -65,13 +65,7 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
      */
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    /**
-     * 电子邮件密码身份验证提供者
-     *
-     * @param userDetailsService 用户详细信息服务
-     * @param redisTemplate      复述,模板
-     */
-    public EmailCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate<String, Object> redisTemplate, LoginCheck loginCheck) {
+    public WxCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate<String, Object> redisTemplate, LoginCheck loginCheck) {
         this.userDetailsService = userDetailsService;
         this.redisTemplate = redisTemplate;
         this.loginCheck = loginCheck;
@@ -86,13 +80,13 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        EmailCodeAuthenticationToken authenticationToken = (EmailCodeAuthenticationToken) authentication;
-        UserDetails userDetails = this.userDetailsService.loadUserByEmail((String) authenticationToken.getPrincipal());
+        WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
+        UserDetails userDetails = this.userDetailsService.createOrLoadUserByOpenId((String) authenticationToken.getPrincipal());
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(EMAIL_NOT_FOUND_CODE);
         }
         this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUser -> {
-            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getEmail());
+            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getUserId());
             if (Objects.isNull(token)) {
                 log.debug("Failed to authenticate since no credentials provided");
                 throw new BadCredentialsException(this.messages
@@ -100,7 +94,7 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
             }
             return String.valueOf(token);
         });
-        EmailCodeAuthenticationToken emailCodeAuthenticationToken = new EmailCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
+        WxCodeAuthenticationToken emailCodeAuthenticationToken = new WxCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
         emailCodeAuthenticationToken.setDetails(userDetails);
         return emailCodeAuthenticationToken;
     }
@@ -115,6 +109,7 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return EmailCodeAuthenticationToken.class.isAssignableFrom(authentication);
+        return WxCodeAuthenticationToken.class.isAssignableFrom(authentication);
     }
+
 }

@@ -119,13 +119,14 @@ public class CurrentLoginUser extends User implements UserDetails {
         super(loginUserDTO.getUsername(), loginUserDTO.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         // 扩展自定义属性
         this.userId = loginUserDTO.getId();
-        this.email = loginUserDTO.getEmail();
         this.amountName = loginUserDTO.getAmountName();
         this.userCode = loginUserDTO.getUserCode();
         this.userRoleCodes = loginUserDTO.getUserRoleCodes();
         this.userRoleIds = loginUserDTO.getUserRoleIds();
         this.deptId = loginUserDTO.getDeptId();
         this.deptName = loginUserDTO.getDeptName();
+        this.email = loginUserDTO.getEmail();
+        this.phone = loginUserDTO.getPhone();
         this.tenantId = loginUserDTO.getTenantId();
         this.permissions = loginUserDTO.getPermissions();
         this.permissionType = loginUserDTO.getPermissionType() == null ? 0 : loginUserDTO.getPermissionType();

@@ -99,3 +99,9 @@ mybatis-plus:
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # 搜索指定包别名
   typeAliasesPackage: com.breeze.**.entity
+
+
+breeze:
+  wx:
+    app-id: wx269d15f1415fc7e2
+    app-secret: d7ff69f48514eeb7b1727f7c328c6f51

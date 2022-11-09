@@ -16,9 +16,9 @@
 
 package com.breeze.boot.security.sms;
 
-import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.service.LocalUserDetailsService;
+import com.breeze.boot.security.utils.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,23 +48,31 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
      * 短信没有发现代码
      */
     private static final String SMS_NOT_FOUND_CODE = "phoneNotFoundCode";
+
     /**
      * 消息
      */
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+
     /**
      * redis 模板
      */
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用户详细信息服务
      */
-    private LocalUserDetailsService userDetailsService;
+    private final LocalUserDetailsService userDetailsService;
 
-    public SmsCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate redisTemplate) {
-        this.setUserDetailsService(userDetailsService);
-        this.setRedisTemplate(redisTemplate);
+    /**
+     * 登录检查
+     */
+    private final LoginCheck loginCheck;
+
+    public SmsCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate<String, Object> redisTemplate, LoginCheck loginCheck) {
+        this.userDetailsService = userDetailsService;
+        this.redisTemplate = redisTemplate;
+        this.loginCheck = loginCheck;
     }
 
     /**
@@ -74,50 +82,12 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
      * @param loginUser      登录用户
      */
     private void checkSmsCode(CurrentLoginUser loginUser, SmsCodeAuthenticationToken authentication) {
-        if (authentication.getCredentials() == null) {
+        if (Objects.isNull(authentication.getCredentials())) {
             log.debug("Failed to authenticate since no credentials provided");
             throw new BadCredentialsException(this.messages
                     .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         }
-        Object codeObj = this.redisTemplate.opsForValue().get("sys：validate_code:" + loginUser.getPhone());
-        if (Objects.isNull(codeObj)) {
-            log.debug("Failed to authenticate since no credentials provided");
-            throw new BadCredentialsException(this.messages
-                    .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-        }
-        String presentCode = authentication.getCredentials().toString();
-        if (!StrUtil.equals(presentCode, String.valueOf(codeObj))) {
-            log.debug("Failed to authenticate since password does not match stored value");
-            throw new BadCredentialsException(this.messages
-                    .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-        }
-    }
 
-    /**
-     * 获取用户详细信息服务
-     *
-     * @return {@link LocalUserDetailsService}
-     */
-    protected LocalUserDetailsService getUserDetailsService() {
-        return this.userDetailsService;
-    }
-
-    /**
-     * 设置用户详细信息服务
-     *
-     * @param userDetailsService 用户详细信息服务
-     */
-    public void setUserDetailsService(LocalUserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    /**
-     * redis设置模板
-     *
-     * @param redisTemplate redis模板
-     */
-    protected void setRedisTemplate(RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -130,11 +100,19 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
-        UserDetails userDetails = this.getUserDetailsService().loadUserByPhone((String) authenticationToken.getPrincipal());
+        UserDetails userDetails = this.userDetailsService.loadUserByPhone((String) authenticationToken.getPrincipal());
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(SMS_NOT_FOUND_CODE);
         }
-        // this.checkSmsCode(currentLoginUser, authenticationToken);
+        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUser -> {
+            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getPhone());
+            if (Objects.isNull(token)) {
+                log.debug("Failed to authenticate since no credentials provided");
+                throw new BadCredentialsException(this.messages
+                        .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+            }
+            return String.valueOf(token);
+        });
         SmsCodeAuthenticationToken smsCodeAuthenticationToken = new SmsCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
         smsCodeAuthenticationToken.setDetails(userDetails);
         return smsCodeAuthenticationToken;

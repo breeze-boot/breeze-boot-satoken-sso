@@ -39,6 +39,7 @@ public class LocalUserServiceConfig {
         return new LocalUserDetailsService(
                 userTokenService::loadUserByUsername
                 , userTokenService::loadUserByPhone
+                , userTokenService::createOrLoadUserByOpenId
                 , userTokenService::loadUserByEmail);
     }
 

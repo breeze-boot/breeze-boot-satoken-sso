@@ -102,6 +102,23 @@ public class UserTokenService {
     }
 
     /**
+     * 创建或者加载用户通过微信OpenId
+     *
+     * @param openId openId
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser createOrLoadUserByOpenId(@NotNull String openId) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
+        if (Objects.isNull(sysUser)) {
+            // 不存在就去创建
+            // TODO
+            return null;
+        }
+        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        return this.getLoginUser(loginUserDTO);
+    }
+
+    /**
      * 获取登录用户
      *
      * @param loginUserDTO 登录用户dto
