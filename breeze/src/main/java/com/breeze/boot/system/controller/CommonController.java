@@ -86,6 +86,12 @@ public class CommonController {
     private SysTenantService tenantService;
 
     /**
+     * 岗位服务
+     */
+    @Autowired
+    private SysPostService postService;
+
+    /**
      * 元数据服务
      */
     @Autowired
@@ -173,10 +179,26 @@ public class CommonController {
     @Operation(summary = "租户下拉框", description = "下拉框接口")
     @GetMapping("/selectTenant")
     public Result<List<Map<String, Object>>> selectTenant() {
-        return Result.ok(this.tenantService.list().stream().map(sysRole -> {
+        return Result.ok(this.tenantService.list().stream().map(tanent -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", sysRole.getId());
-            tenantMap.put("label", sysRole.getTenantName());
+            tenantMap.put("value", tanent.getId());
+            tenantMap.put("label", tanent.getTenantName());
+            return tenantMap;
+        }).collect(Collectors.toList()));
+    }
+
+    /**
+     * 岗位下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Operation(summary = "岗位下拉框", description = "下拉框接口")
+    @GetMapping("/selectPost")
+    public Result<List<Map<String, Object>>> selectPost() {
+        return Result.ok(this.postService.list().stream().map(post -> {
+            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
+            tenantMap.put("value", post.getId());
+            tenantMap.put("label", post.getPostName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }
@@ -186,7 +208,6 @@ public class CommonController {
      *
      * @return {@link Result}<{@link List}<{@link String}>>
      */
-    @NoAuthentication
     @Operation(summary = "表名下拉框", description = "下拉框接口")
     @GetMapping("/selectTable")
     public Result<List<String>> selectTable() {
@@ -198,7 +219,6 @@ public class CommonController {
      *
      * @return {@link Result}<{@link List}<{@link String}>>
      */
-    @NoAuthentication
     @Operation(summary = "字段下拉框", description = "下拉框接口")
     @GetMapping("/selectColumn")
     public Result<List<String>> selectColumn() {

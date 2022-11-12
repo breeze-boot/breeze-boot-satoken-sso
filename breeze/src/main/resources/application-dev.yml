@@ -78,6 +78,19 @@ spring:
         session-stat-enable: true
         session-stat-max-count: 1000
 
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: 123@qq.com
+    password: 123
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        debug: true
+    from-address: 123@qq.com
+
 # mybatis-plus 配置
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
