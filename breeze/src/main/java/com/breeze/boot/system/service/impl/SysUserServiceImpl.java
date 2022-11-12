@@ -298,6 +298,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(sysUser);
     }
 
+    /**
+     * 注册用户
+     *
+     * @param openId 开放id
+     * @return {@link LoginUserDTO}
+     */
+    @Override
+    public LoginUserDTO registerUser(String openId) {
+        SysUser sysUser = SysUser.builder().username(openId)
+                .amountName("微信匿名用户")
+                .password(this.passwordEncoder.encode("123456"))
+                .openId(openId)
+                .build();
+        this.save(sysUser);
+        // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
+
+        // 可以存放redis中 便于 SecurityUtils 获取当前登录用户
+
+        return this.getLoginUserDTO(sysUser);
+    }
 
 }
 

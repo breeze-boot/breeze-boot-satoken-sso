@@ -101,6 +101,11 @@ public class CurrentLoginUser extends User implements UserDetails {
     private List<PermissionDTO> permissions;
 
     /**
+     * 微信OpenId
+     */
+    private String openId;
+
+    /**
      * 当前登录用户
      *
      * @param enabled               用户是否可用
@@ -108,7 +113,7 @@ public class CurrentLoginUser extends User implements UserDetails {
      * @param credentialsNonExpired 凭证是否过期
      * @param accountNonLocked      账户是否锁定
      * @param authorities           用户的权限集， 默认需要添加ROLE_ 前缀
-     * @param loginUserDTO          用户dto
+     * @param loginUserDTO          登录用户DTO
      */
     public CurrentLoginUser(LoginUserDTO loginUserDTO
             , boolean enabled
@@ -127,6 +132,7 @@ public class CurrentLoginUser extends User implements UserDetails {
         this.deptName = loginUserDTO.getDeptName();
         this.email = loginUserDTO.getEmail();
         this.phone = loginUserDTO.getPhone();
+        this.openId = loginUserDTO.getOpenId();
         this.tenantId = loginUserDTO.getTenantId();
         this.permissions = loginUserDTO.getPermissions();
         this.permissionType = loginUserDTO.getPermissionType() == null ? 0 : loginUserDTO.getPermissionType();

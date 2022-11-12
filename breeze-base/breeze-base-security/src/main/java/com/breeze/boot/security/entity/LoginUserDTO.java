@@ -94,7 +94,7 @@ public class LoginUserDTO implements Serializable {
     /**
      * 微信ID
      */
-    private Integer openId;
+    private String openId;
     /**
      * 邮件
      */

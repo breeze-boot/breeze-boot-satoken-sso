@@ -17,6 +17,7 @@
 package com.breeze.boot.system.config;
 
 import com.breeze.boot.security.annotation.EnableSecurityServer;
+import com.breeze.boot.security.config.WxLoginProperties;
 import com.breeze.boot.security.email.EmailCodeAuthenticationProvider;
 import com.breeze.boot.security.service.LocalUserDetailsService;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationProvider;
@@ -57,6 +58,12 @@ public class ResourceServerConfig {
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
     /**
+     * wx登录属性
+     */
+    @Autowired
+    private WxLoginProperties wxLoginProperties;
+
+    /**
      * 短信令牌身份验证提供者 Bean
      *
      * @return {@link SmsCodeAuthenticationProvider}
@@ -87,7 +94,7 @@ public class ResourceServerConfig {
      */
     @Bean
     WxCodeAuthenticationProvider wxCodeAuthenticationProvider() {
-        WxCodeAuthenticationProvider wxCodeAuthenticationProvider = new WxCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
+        WxCodeAuthenticationProvider wxCodeAuthenticationProvider = new WxCodeAuthenticationProvider(userDetailsService, wxLoginProperties);
         authenticationManagerBuilder.authenticationProvider(wxCodeAuthenticationProvider);
         return wxCodeAuthenticationProvider;
     }

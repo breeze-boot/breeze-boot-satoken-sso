@@ -126,7 +126,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      * 微信OpenID
      */
     @Schema(description = "微信OpenID")
-    private Integer openId;
+    private String openId;
 
     /**
      * 邮件

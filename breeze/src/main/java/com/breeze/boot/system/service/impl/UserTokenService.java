@@ -111,8 +111,7 @@ public class UserTokenService {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
-            // TODO
-            return null;
+            return getLoginUser(this.sysUserService.registerUser(openId));
         }
         LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);

@@ -45,12 +45,16 @@ public class SecurityUtils {
      * @return {@link Jwt}
      */
     public static Jwt getCurrentJwt() {
-        JwtProperties jwtProperties = SpringUtil.getBean(JwtProperties.class);
         Authentication authentication = getAuthentication();
         if (authentication == null) {
             return null;
         }
-        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
+        if (Objects.equals("anonymousUser", principal)) {
+            return null;
+        }
+        JwtProperties jwtProperties = SpringUtil.getBean(JwtProperties.class);
+        Jwt jwt = (Jwt) principal;
         JWTSigner jwtSigner = JWTSignerUtil.rs256(jwtProperties.getRsaPublicKey());
         if (!JWTUtil.verify(jwt.getTokenValue(), jwtSigner)) {
             throw new BadCredentialsException("令牌错误，请重新登录!");

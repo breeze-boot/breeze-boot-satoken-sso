@@ -16,14 +16,9 @@
 
 package com.breeze.boot.system.controller.login;
 
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.config.JwtConfig;
-import com.breeze.boot.security.config.WxLoginProperties;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.EmailLoginBody;
@@ -55,7 +50,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -82,8 +76,6 @@ public class LoginController {
      */
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private WxLoginProperties wxLoginProperties;
 
     /**
      * 用户名登录
@@ -165,24 +157,9 @@ public class LoginController {
     @PostMapping("/wxLogin")
     public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginDTO wxLoginDTO) {
         Map<String, Object> resultMap = Maps.newHashMap();
-        String url = "https://api.weixin.qq.com/sns/jscode2session";
-        HttpResponse response = HttpUtil.createGet(url)
-                .form("secret", this.wxLoginProperties.getAppSecret())
-                .form("appid", this.wxLoginProperties.getAppId())
-                .form("js_code", wxLoginDTO.getCode())
-                .form("grant_type", "authorization_code")
-                .execute();
-        String formatJsonStr = JSONUtil.formatJsonStr(response.body());
-        log.info("\n{}", formatJsonStr);
-        JSONObject jsonObj = JSONUtil.parseObj(response.body());
-        if (Objects.equals(jsonObj.get("errcode"), 40164) || Objects.equals(41008, jsonObj.get("errcode"))) {
-            resultMap.put("code", jsonObj.get("errcode"));
-            resultMap.put("msg", "登录失败");
-            return Result.ok(resultMap);
-        }
         // 用户验证
         long expiry = 36000L;
-        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated("", "");
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginDTO.getCode(), "");
         Instant now = Instant.now();
         resultMap.putAll(this.createJwtToken(now, expiry, authenticationManager.authenticate(wxCodeAuthenticationToken)));
         return Result.ok(resultMap);

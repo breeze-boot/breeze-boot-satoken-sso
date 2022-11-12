@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AuthenticationException.class)
     public Result<? extends Object> authenticationException(AuthenticationException ex) {
-        log.error("AccessDeniedException：{}", ex);
+        log.error("authenticationException：{}", ex);
         return Result.fail(ResultCode.FORBIDDEN, ex.getMessage());
     }
 

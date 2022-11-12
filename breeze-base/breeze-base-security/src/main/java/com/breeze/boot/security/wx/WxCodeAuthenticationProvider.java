@@ -16,18 +16,18 @@
 
 package com.breeze.boot.security.wx;
 
-import com.breeze.boot.security.entity.CurrentLoginUser;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.breeze.boot.security.config.WxLoginProperties;
 import com.breeze.boot.security.service.LocalUserDetailsService;
-import com.breeze.boot.security.utils.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Objects;
@@ -45,30 +45,24 @@ import java.util.Objects;
 public class WxCodeAuthenticationProvider implements AuthenticationProvider {
 
     /**
-     * 短信没有发现代码
+     * 创建失败
      */
-    private static final String EMAIL_NOT_FOUND_CODE = "emailNotFoundCode";
-    /**
-     * redis 模板
-     */
-    private final RedisTemplate<String, Object> redisTemplate;
+    private static final String CREATE_FAIL = "微信用户获取失败";
+
     /**
      * 用户详细信息服务
      */
     private final LocalUserDetailsService userDetailsService;
-    /**
-     * 登录检查
-     */
-    private final LoginCheck loginCheck;
-    /**
-     * 消息
-     */
-    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    public WxCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate<String, Object> redisTemplate, LoginCheck loginCheck) {
+    /**
+     * wx登录属性
+     */
+    private final WxLoginProperties wxLoginProperties;
+
+    public WxCodeAuthenticationProvider(LocalUserDetailsService userDetailsService,
+                                        WxLoginProperties wxLoginProperties) {
         this.userDetailsService = userDetailsService;
-        this.redisTemplate = redisTemplate;
-        this.loginCheck = loginCheck;
+        this.wxLoginProperties = wxLoginProperties;
     }
 
     /**
@@ -81,22 +75,28 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
+        String code = String.valueOf(authenticationToken.getPrincipal());
         UserDetails userDetails = this.userDetailsService.createOrLoadUserByOpenId((String) authenticationToken.getPrincipal());
         if (Objects.isNull(userDetails)) {
-            throw new InternalAuthenticationServiceException(EMAIL_NOT_FOUND_CODE);
+            throw new InternalAuthenticationServiceException(CREATE_FAIL);
         }
-        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUser -> {
-            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getUserId());
-            if (Objects.isNull(token)) {
-                log.debug("Failed to authenticate since no credentials provided");
-                throw new BadCredentialsException(this.messages
-                        .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-            }
-            return String.valueOf(token);
-        });
-        WxCodeAuthenticationToken emailCodeAuthenticationToken = new WxCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
-        emailCodeAuthenticationToken.setDetails(userDetails);
-        return emailCodeAuthenticationToken;
+        String url = "https://api.weixin.qq.com/sns/jscode2session";
+        HttpResponse response = HttpUtil.createGet(url)
+                .form("secret", this.wxLoginProperties.getAppSecret())
+                .form("appid", this.wxLoginProperties.getAppId())
+                .form("js_code", code)
+                .form("grant_type", "authorization_code")
+                .execute();
+        String formatJsonStr = JSONUtil.formatJsonStr(response.body());
+        log.info("\n{}", formatJsonStr);
+        JSONObject jsonObj = JSONUtil.parseObj(response.body());
+        if (Objects.equals(jsonObj.get("errcode"), 40164) || Objects.equals(41008, jsonObj.get("errcode"))) {
+            throw new AccessDeniedException("微信认证失败");
+        }
+
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = new WxCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
+        wxCodeAuthenticationToken.setDetails(userDetails);
+        return wxCodeAuthenticationToken;
     }
 
     /**

@@ -115,4 +115,12 @@ public interface SysUserService extends IService<SysUser> {
      */
     Result<SysUser> getUserById(Long id);
 
+    /**
+     * 注册用户
+     *
+     * @param openId 开放id
+     * @return {@link LoginUserDTO}
+     */
+    LoginUserDTO registerUser(String openId);
+
 }
