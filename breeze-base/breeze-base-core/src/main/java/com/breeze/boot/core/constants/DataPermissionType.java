@@ -12,15 +12,16 @@ public interface DataPermissionType {
      * 全部
      */
     Integer ALL = 0;
-    /**
-     * 本级部门
-     */
-    Integer DEPT_LEVEL = 1;
 
     /**
      * 本级部门和下属部门
      */
-    Integer DEPT_AND_LOWER_LEVEL = 2;
+    Integer DEPT_AND_LOWER_LEVEL = 1;
+
+    /**
+     * 本级部门
+     */
+    Integer DEPT_LEVEL = 2;
 
     /**
      * 自己
@@ -30,6 +31,6 @@ public interface DataPermissionType {
     /**
      * diy
      */
-    Integer DIY = 9999;
+    Integer DIY = 999999;
 
 }

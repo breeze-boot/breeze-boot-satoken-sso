@@ -8,7 +8,7 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>breeze-base-database</artifactId>
+    <artifactId>breeze-base-datasource</artifactId>
     <packaging>jar</packaging>
     <description>XSS Filter starter</description>
 
