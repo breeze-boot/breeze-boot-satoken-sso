@@ -23,6 +23,7 @@ import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.breeze.boot.security.config.JwtProperties;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import org.springframework.cache.CacheManager;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -100,7 +101,11 @@ public class SecurityUtils {
 
     public static LoginUserDTO getCurrentUser() {
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
-        return cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
+        LoginUserDTO loginUserDTO = cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
+        if (Objects.isNull(loginUserDTO)) {
+            throw new AccessDeniedException("用户过期");
+        }
+        return loginUserDTO;
     }
 
     /**

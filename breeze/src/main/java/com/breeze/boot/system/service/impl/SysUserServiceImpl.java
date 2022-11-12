@@ -16,16 +16,11 @@
 
 package com.breeze.boot.system.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.entity.PermissionDTO;
-import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysUser;
@@ -35,21 +30,18 @@ import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
-import com.breeze.boot.system.service.*;
+import com.breeze.boot.system.service.SysDeptService;
+import com.breeze.boot.system.service.SysUserRoleService;
+import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -68,18 +60,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private PasswordEncoder passwordEncoder;
 
     /**
-     * 系统角色服务
-     */
-    @Autowired
-    private SysRoleService sysRoleService;
-
-    /**
-     * 系统菜单服务
-     */
-    @Autowired
-    private SysMenuService sysMenuService;
-
-    /**
      * 系统用户角色服务
      */
     @Autowired
@@ -96,28 +76,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Autowired
     private UserTokenService userTokenService;
-
-    /**
-     * 系统角色权限
-     */
-    @Autowired
-    private SysRolePermissionService sysRolePermissionService;
-
-    /**
-     * 刷新用户
-     *
-     * @param username 用户名
-     * @return {@link LoginUserDTO}
-     */
-    @Override
-    @CachePut(cacheNames = "sys:login_user", key = "#username")
-    public LoginUserDTO refreshUser(String username) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
-        if (Objects.isNull(sysUser)) {
-            throw new UsernameNotFoundException("用户名错误或不存在");
-        }
-        return this.getLoginUserDTO(sysUser);
-    }
 
     /**
      * 列表页面
@@ -258,44 +216,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setSysRoles(this.sysUserRoleService.getSysRoleByUserId(sysUser.getId()));
         return Result.ok(sysUser);
     }
-
-    /**
-     * 获取登录用户DTO
-     *
-     * @param sysUser 系统用户实体
-     * @return {@link LoginUserDTO}
-     */
-    @Override
-    @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
-    public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
-        LoginUserDTO loginUser = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUser, loginUser);
-        // 获取部门名称
-        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
-        // 查询 用户的角色
-        Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isEmpty(roleDtoSet)) {
-            loginUser.setAuthorities(Sets.newHashSet());
-            return loginUser;
-        }
-
-        loginUser.setUserRoleList(roleDtoSet);
-        // 角色ID
-        Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
-        loginUser.setUserRoleIds(roleIdSet);
-        // 角色CODE
-        Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
-        loginUser.setUserRoleCodes(roleCodeList);
-        // 角色权限
-        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
-        // 用户的多个数据权限汇总
-        List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
-        // 数据权限 类型
-        loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
-        loginUser.setPermissions(permissionDTOList);
-        return loginUser;
-    }
-
 
 }
 

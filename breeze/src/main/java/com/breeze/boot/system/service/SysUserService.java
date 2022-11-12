@@ -20,7 +20,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.Result;
-import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
@@ -68,14 +67,6 @@ public interface SysUserService extends IService<SysUser> {
     Boolean open(UserOpenDTO openDTO);
 
     /**
-     * 刷新用户
-     *
-     * @param username 用户名
-     * @return {@link LoginUserDTO}
-     */
-    LoginUserDTO refreshUser(String username);
-
-    /**
      * 重置密码
      *
      * @param userResetPasswordDTO 用户重置密码dto
@@ -90,14 +81,6 @@ public interface SysUserService extends IService<SysUser> {
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> removeUser(SysUser sysUser);
-
-    /**
-     * 获取登录用户dto
-     *
-     * @param sysUser 系统用户
-     * @return {@link LoginUserDTO}
-     */
-    LoginUserDTO getLoginUserDTO(SysUser sysUser);
 
     /**
      * 用户分配角色

@@ -50,6 +50,12 @@ public class UserTokenService {
      * 系统用户服务
      */
     @Autowired
+    private UserTokenCacheService userTokenCacheService;
+
+    /**
+     * 系统用户服务
+     */
+    @Autowired
     private SysUserService sysUserService;
 
     /**
@@ -71,16 +77,6 @@ public class UserTokenService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * 刷新用户
-     *
-     * @param username 用户名
-     * @return {@link LoginUserDTO}
-     */
-    public CurrentLoginUser refreshUser(@NotNull String username) {
-        return this.getLoginUser(this.sysUserService.refreshUser(username));
-    }
-
-    /**
      * 加载用户用户名
      *
      * @param username 用户名
@@ -91,7 +87,7 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("用户名不存在");
         }
-        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
     }
 
@@ -106,7 +102,7 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("邮箱不存在");
         }
-        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
     }
 
@@ -121,7 +117,7 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("电话不存在");
         }
-        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
     }
 
@@ -149,8 +145,22 @@ public class UserTokenService {
             }
             this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
         }
-        LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
+        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
+    }
+
+    /**
+     * 刷新用户
+     *
+     * @param username 用户名
+     * @return {@link LoginUserDTO}
+     */
+    public LoginUserDTO refreshUser(String username) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
+        if (Objects.isNull(sysUser)) {
+            throw new UsernameNotFoundException("用户名错误或不存在");
+        }
+        return this.userTokenCacheService.getLoginUserDTO(sysUser);
     }
 
     /**
