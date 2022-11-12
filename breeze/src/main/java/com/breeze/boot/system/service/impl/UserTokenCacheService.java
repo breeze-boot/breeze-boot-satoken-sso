@@ -28,7 +28,7 @@ import com.breeze.boot.system.service.SysRolePermissionService;
 import com.breeze.boot.system.service.SysRoleService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,12 +70,17 @@ public class UserTokenCacheService {
     private SysDeptService sysDeptService;
 
     /**
+     * 缓存
+     */
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
      * 获取登录用户DTO
      *
      * @param sysUser 系统用户实体
      * @return {@link LoginUserDTO}
      */
-    @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
     public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
         LoginUserDTO loginUser = new LoginUserDTO();
         BeanUtil.copyProperties(sysUser, loginUser);
@@ -102,6 +107,7 @@ public class UserTokenCacheService {
         // 数据权限 类型
         loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
         loginUser.setPermissions(permissionDTOList);
+        this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUser);
         return loginUser;
     }
 

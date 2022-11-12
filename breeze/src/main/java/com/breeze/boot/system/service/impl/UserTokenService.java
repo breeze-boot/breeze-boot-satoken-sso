@@ -109,9 +109,8 @@ public class UserTokenService {
     public CurrentLoginUser createOrLoadUserByOpenId(@NotNull String openId) {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
         if (Objects.isNull(sysUser)) {
-            sysUser.setOpenId(openId);
             // 不存在就去创建
-            sysUser = this.sysUserService.registerUser(sysUser);
+            sysUser = this.sysUserService.registerUser(SysUser.builder().openId(openId).build());
         }
         LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
