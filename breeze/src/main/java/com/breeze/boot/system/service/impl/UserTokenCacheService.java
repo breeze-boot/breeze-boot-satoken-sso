@@ -58,13 +58,13 @@ public class UserTokenCacheService {
     private SysMenuService sysMenuService;
 
     /**
-     * 密码编码器
+     * 系统角色权限服务
      */
     @Autowired
     private SysRolePermissionService sysRolePermissionService;
 
     /**
-     * 密码编码器
+     * 系统部门服务
      */
     @Autowired
     private SysDeptService sysDeptService;

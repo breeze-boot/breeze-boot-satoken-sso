@@ -21,8 +21,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
+import com.breeze.boot.security.ex.AccessException;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysDept;
+import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserRole;
 import com.breeze.boot.system.dto.UserDTO;
@@ -31,6 +33,7 @@ import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.SysDeptService;
+import com.breeze.boot.system.service.SysRoleService;
 import com.breeze.boot.system.service.SysUserRoleService;
 import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Lists;
@@ -60,6 +63,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private PasswordEncoder passwordEncoder;
 
     /**
+     * 系统角色服务
+     */
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    /**
      * 系统用户角色服务
      */
     @Autowired
@@ -72,7 +81,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysDeptService sysDeptService;
 
     /**
-     * 用户token服务
+     * 用户令牌服务
      */
     @Autowired
     private UserTokenService userTokenService;
@@ -215,6 +224,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         sysUser.setSysRoles(this.sysUserRoleService.getSysRoleByUserId(sysUser.getId()));
         return Result.ok(sysUser);
+    }
+
+    /**
+     * 注册用户
+     *
+     * @param registerUser 注册用户
+     * @return {@link SysUser}
+     */
+    @Override
+    public SysUser registerUser(SysUser registerUser) {
+        SysUser user = SysUser.builder()
+                .username(registerUser.getOpenId())
+                .amountName("微信匿名用户")
+                .password(this.passwordEncoder.encode("123456"))
+                .openId(registerUser.getOpenId())
+                .build();
+        this.save(registerUser);
+        // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
+        SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
+        if (Objects.isNull(sysRole)) {
+            throw new AccessException("登录失败,小程序身份不存在");
+        }
+        this.sysUserRoleService.save(SysUserRole.builder().userId(registerUser.getId()).roleId(sysRole.getId()).build());
+        return user;
     }
 
 }

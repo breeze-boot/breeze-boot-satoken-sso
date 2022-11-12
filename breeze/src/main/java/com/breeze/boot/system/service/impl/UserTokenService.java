@@ -19,23 +19,20 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.ex.AccessException;
-import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.domain.SysUserRole;
-import com.breeze.boot.system.service.SysRoleService;
-import com.breeze.boot.system.service.SysUserRoleService;
 import com.breeze.boot.system.service.SysUserService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * 用户令牌服务
@@ -47,7 +44,7 @@ import java.util.Objects;
 public class UserTokenService {
 
     /**
-     * 系统用户服务
+     * 用户令牌缓存服务
      */
     @Autowired
     private UserTokenCacheService userTokenCacheService;
@@ -57,24 +54,6 @@ public class UserTokenService {
      */
     @Autowired
     private SysUserService sysUserService;
-
-    /**
-     * 系统角色服务
-     */
-    @Autowired
-    private SysRoleService sysRoleService;
-
-    /**
-     * 系统用户角色服务
-     */
-    @Autowired
-    private SysUserRoleService sysUserRoleService;
-
-    /**
-     * 密码编码器
-     */
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     /**
      * 加载用户用户名
@@ -130,20 +109,9 @@ public class UserTokenService {
     public CurrentLoginUser createOrLoadUserByOpenId(@NotNull String openId) {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
         if (Objects.isNull(sysUser)) {
+            sysUser.setOpenId(openId);
             // 不存在就去创建
-            sysUser = SysUser.builder()
-                    .username(openId)
-                    .amountName("微信匿名用户")
-                    .password(this.passwordEncoder.encode("123456"))
-                    .openId(openId)
-                    .build();
-            this.sysUserService.save(sysUser);
-            // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
-            SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
-            if (Objects.isNull(sysRole)) {
-                throw new AccessException("登录失败,小程序身份不存在");
-            }
-            this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
+            sysUser = this.sysUserService.registerUser(sysUser);
         }
         LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);
@@ -170,15 +138,19 @@ public class UserTokenService {
      * @return {@link CurrentLoginUser}
      */
     public CurrentLoginUser getLoginUser(LoginUserDTO loginUserDTO) {
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(loginUserDTO.getAuthorities().toArray(new String[0]));
-        List<GrantedAuthority> authoritiesRoles = AuthorityUtils.createAuthorityList(loginUserDTO.getUserRoleCodes().toArray(new String[0]));
-        authorities.addAll(authoritiesRoles);
+        List<GrantedAuthority> authorities = Lists.newArrayList();
+        Optional.ofNullable(loginUserDTO.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
+        Optional.ofNullable(loginUserDTO.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));
         return new CurrentLoginUser(loginUserDTO,
                 Objects.equals(loginUserDTO.getIsLock(), 0),
                 true,
                 true,
                 Objects.equals(loginUserDTO.getIsLock(), 0),
                 authorities);
+    }
+
+    private void getAuthorityList(Set<String> auth, List<GrantedAuthority> authorities) {
+        authorities.addAll(AuthorityUtils.createAuthorityList(auth.toArray(new String[0])));
     }
 
 }

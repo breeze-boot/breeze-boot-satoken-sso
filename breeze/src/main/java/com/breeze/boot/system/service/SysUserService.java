@@ -98,4 +98,12 @@ public interface SysUserService extends IService<SysUser> {
      */
     Result<SysUser> getUserById(Long id);
 
+    /**
+     * 注册用户
+     *
+     * @param sysUser 系统用户
+     * @return {@link SysUser}
+     */
+    SysUser registerUser(SysUser sysUser);
+
 }

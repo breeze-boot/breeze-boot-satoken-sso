@@ -131,7 +131,7 @@ public class LoginUserDTO implements Serializable {
     private Integer permissionType;
 
     /**
-     * 权限
+     * 数据权限
      */
     private List<PermissionDTO> permissions;
 
