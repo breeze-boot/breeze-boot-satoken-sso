@@ -28,7 +28,7 @@ import javax.validation.ValidatorFactory;
 /**
  * 验证器配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-19
  */
 public class ValidatorConfiguration {

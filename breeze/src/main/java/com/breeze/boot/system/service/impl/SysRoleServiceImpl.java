@@ -47,6 +47,9 @@ import java.util.stream.Collectors;
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
+    /**
+     * 系统角色菜单服务
+     */
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 

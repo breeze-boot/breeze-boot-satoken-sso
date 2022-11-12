@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationEventPublisher;
 /**
  * 发布保存系统日志事件
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-19
  */
 public class PublisherSaveSysLogEvent {

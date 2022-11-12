@@ -31,8 +31,8 @@ import java.util.Collection;
  * {@link org.springframework.security.authentication.UsernamePasswordAuthenticationToken}
  * <p>
  *
- * @author Breeze
- * @date 2022-09-03
+ * @author gaoweixuan
+ * @date 2022-11-09
  */
 @Component
 public class WxCodeAuthenticationToken extends AbstractAuthenticationToken {

@@ -25,7 +25,7 @@ import java.security.interfaces.RSAPublicKey;
 /**
  * jwt属性
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-29
  */
 @Getter

@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * 启用验证器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-19
  */
 @Target(ElementType.TYPE)

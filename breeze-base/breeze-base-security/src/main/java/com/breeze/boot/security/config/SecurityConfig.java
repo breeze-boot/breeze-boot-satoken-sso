@@ -35,7 +35,7 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * 安全配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Configuration(proxyBeanMethods = false)

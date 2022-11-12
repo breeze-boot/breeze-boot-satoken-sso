@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 匿名用户访问无权限
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Slf4j

@@ -31,7 +31,7 @@ import java.util.Collection;
  * {@link org.springframework.security.authentication.UsernamePasswordAuthenticationToken}
  * <p>
  *
- * @author Breeze
+ * @author gaoweixuan
  * @date 2022-09-03
  */
 @Component

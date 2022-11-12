@@ -3,7 +3,7 @@ package com.breeze.boot.core.utils;
 /**
  * 微风线程本地
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-08
  */
 public class BreezeThreadLocal {

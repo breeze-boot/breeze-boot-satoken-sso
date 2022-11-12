@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * 忽略url属性
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Data

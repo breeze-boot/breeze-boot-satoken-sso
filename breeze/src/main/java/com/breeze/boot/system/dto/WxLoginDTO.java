@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * wx登录dto
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-09
  */
 @Data

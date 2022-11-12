@@ -19,7 +19,7 @@ package com.breeze.boot.core.constants;
 /**
  * 缓存常量
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021/10/1
  */
 public class CacheConstants {

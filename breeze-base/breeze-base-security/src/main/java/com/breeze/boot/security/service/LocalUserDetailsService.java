@@ -25,7 +25,7 @@ import java.util.function.Function;
 /**
  * 本地用户详细信息服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 public class LocalUserDetailsService implements UserDetailsService {

@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 /**
  * 微风启动管理安全配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-10
  */
 @EnableWebSecurity(debug = true)

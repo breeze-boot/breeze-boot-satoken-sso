@@ -34,7 +34,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
  * jwt配置
  * 过滤器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Configuration

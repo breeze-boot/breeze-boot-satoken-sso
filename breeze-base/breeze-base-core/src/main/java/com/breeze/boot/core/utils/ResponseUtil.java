@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * response 返回JSON工具类
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021/10/2
  */
 public class ResponseUtil {

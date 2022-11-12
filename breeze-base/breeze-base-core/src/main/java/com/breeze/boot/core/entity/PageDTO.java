@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 分页查询参数DTO
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @EqualsAndHashCode(callSuper = false)

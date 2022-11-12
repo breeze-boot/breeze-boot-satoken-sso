@@ -38,7 +38,7 @@ import java.util.Objects;
  * 参考：
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-09-03
  */
 @Slf4j

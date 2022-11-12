@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 监控 应用程序
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-10
  */
 @EnableAdminServer

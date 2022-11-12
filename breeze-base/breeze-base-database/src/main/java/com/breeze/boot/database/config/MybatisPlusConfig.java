@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * mybatis +配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021-12-06 22:03:39
  */
 public class MybatisPlusConfig {

@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p>
  * AccessDeniedHandler 用来解决认证过的用户访问无权限资源时的异常
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Slf4j

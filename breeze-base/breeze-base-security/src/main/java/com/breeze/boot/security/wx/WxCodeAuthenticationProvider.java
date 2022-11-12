@@ -38,8 +38,8 @@ import java.util.Objects;
  * 参考：
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
  *
- * @author breeze
- * @date 2022-09-03
+ * @author gaoweixuan
+ * @date 2022-11-09
  */
 @Slf4j
 public class WxCodeAuthenticationProvider implements AuthenticationProvider {

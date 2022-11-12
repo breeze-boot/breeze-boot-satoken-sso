@@ -25,7 +25,7 @@ import javax.servlet.Filter;
 /**
  * xxs过滤器配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-21
  */
 public class XxsFilterConfig {

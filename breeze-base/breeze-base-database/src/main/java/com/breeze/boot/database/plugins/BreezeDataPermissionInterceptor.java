@@ -51,7 +51,7 @@ import static com.breeze.boot.core.constants.DataPermissionType.*;
 /**
  * 数据权限内拦截器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-28
  */
 @Slf4j

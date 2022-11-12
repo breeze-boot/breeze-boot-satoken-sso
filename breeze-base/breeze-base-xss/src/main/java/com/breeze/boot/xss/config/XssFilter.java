@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * xss过滤器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-21
  */
 public class XssFilter implements Filter {

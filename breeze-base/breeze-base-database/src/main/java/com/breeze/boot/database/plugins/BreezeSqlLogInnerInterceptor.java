@@ -38,7 +38,7 @@ import java.util.*;
 /**
  * sql日志内拦截器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-28
  */
 @Slf4j

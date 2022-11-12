@@ -26,7 +26,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 /**
  * 开启日志配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021/10/20
  **/
 @Configuration

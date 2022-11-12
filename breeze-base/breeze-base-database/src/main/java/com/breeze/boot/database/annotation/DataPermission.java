@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * 数据权限
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-29
  */
 @Target(ElementType.METHOD)

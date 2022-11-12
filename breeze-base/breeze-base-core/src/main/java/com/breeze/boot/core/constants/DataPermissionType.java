@@ -3,7 +3,7 @@ package com.breeze.boot.core.constants;
 /**
  * 枚举数据权限
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-29
  */
 public interface DataPermissionType {

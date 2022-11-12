@@ -19,7 +19,7 @@ package com.breeze.boot.security.ex;
 /**
  * 访问异常
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 public class AccessException extends RuntimeException {

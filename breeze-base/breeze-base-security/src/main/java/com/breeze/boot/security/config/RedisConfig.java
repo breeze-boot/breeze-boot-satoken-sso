@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -36,7 +37,7 @@ import java.time.Duration;
 /**
  * redis 配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-08-31
  */
 @Configuration
@@ -57,9 +58,11 @@ public class RedisConfig {
         redisTemplate.setHashKeySerializer(StringRedisSerializer.UTF_8);
         redisTemplate.setHashValueSerializer(RedisSerializer.json());
 
+
+        Jackson2JsonRedisSerializer jacksonSeial = getJackson2JsonRedisSerializer();
         // 设置key和value的序列化规则
         redisTemplate.setKeySerializer(StringRedisSerializer.UTF_8);
-        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setValueSerializer(jacksonSeial);
 
         // 设置支持事务
         redisTemplate.setEnableTransactionSupport(true);
@@ -78,11 +81,8 @@ public class RedisConfig {
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
         RedisSerializer<String> strSerializer = new StringRedisSerializer();
-        Jackson2JsonRedisSerializer jacksonSeial = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
-        jacksonSeial.setObjectMapper(mapper);
+
+        Jackson2JsonRedisSerializer jacksonSeial = getJackson2JsonRedisSerializer();
 
         // 自定义缓存数据序列化方式和有效期限
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -97,6 +97,16 @@ public class RedisConfig {
                 .disableCachingNullValues();
 
         return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
+    }
+
+    @NotNull
+    private Jackson2JsonRedisSerializer getJackson2JsonRedisSerializer() {
+        Jackson2JsonRedisSerializer jacksonSeial = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
+        jacksonSeial.setObjectMapper(mapper);
+        return jacksonSeial;
     }
 
 }

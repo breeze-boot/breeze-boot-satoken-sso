@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * 系统日志dto
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-19
  */
 @Data

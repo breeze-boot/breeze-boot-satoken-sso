@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * 登录用户的扩展类
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021/10/1
  */
 @Getter

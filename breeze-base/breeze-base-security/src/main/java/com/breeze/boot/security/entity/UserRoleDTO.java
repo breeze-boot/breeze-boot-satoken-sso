@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * 系统用户角色DTO
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-01-28
  */
 @Data

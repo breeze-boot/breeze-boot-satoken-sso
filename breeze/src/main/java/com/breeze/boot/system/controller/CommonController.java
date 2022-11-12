@@ -86,6 +86,12 @@ public class CommonController {
     private SysTenantService tenantService;
 
     /**
+     * 元数据服务
+     */
+    @Autowired
+    private MateService mateService;
+
+    /**
      * 菜单树形下拉框
      *
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
@@ -164,7 +170,7 @@ public class CommonController {
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @NoAuthentication
-    @Operation(summary = "角色下拉框", description = "下拉框接口")
+    @Operation(summary = "租户下拉框", description = "下拉框接口")
     @GetMapping("/selectTenant")
     public Result<List<Map<String, Object>>> selectTenant() {
         return Result.ok(this.tenantService.list().stream().map(sysRole -> {
@@ -173,6 +179,30 @@ public class CommonController {
             tenantMap.put("label", sysRole.getTenantName());
             return tenantMap;
         }).collect(Collectors.toList()));
+    }
+
+    /**
+     * 表名下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link String}>>
+     */
+    @NoAuthentication
+    @Operation(summary = "表名下拉框", description = "下拉框接口")
+    @GetMapping("/selectTable")
+    public Result<List<String>> selectTable() {
+        return Result.ok(this.mateService.selectTable());
+    }
+
+    /**
+     * 字段下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link String}>>
+     */
+    @NoAuthentication
+    @Operation(summary = "字段下拉框", description = "下拉框接口")
+    @GetMapping("/selectColumn")
+    public Result<List<String>> selectColumn() {
+        return Result.ok(this.mateService.selectColumn());
     }
 
 }

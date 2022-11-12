@@ -42,7 +42,7 @@ import java.util.Map;
  * 但是实际还是调用HttpServletRequest的相对应方法
  * <p>
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-10-21
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {

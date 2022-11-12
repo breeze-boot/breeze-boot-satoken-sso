@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * 无需认证注解
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2021/10/1
  */
 @Documented
