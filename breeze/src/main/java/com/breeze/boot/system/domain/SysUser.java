@@ -47,7 +47,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     /**
      * 岗位ID
      */
-    @NotNull(message = "岗位ID不可为空")
+//    @NotNull(message = "岗位ID不可为空")
     @Schema(description = "岗位ID")
     private Long postId;
 

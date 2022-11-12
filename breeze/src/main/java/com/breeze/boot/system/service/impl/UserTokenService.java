@@ -19,12 +19,18 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.LoginUserDTO;
+import com.breeze.boot.security.ex.AccessException;
+import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
+import com.breeze.boot.system.domain.SysUserRole;
+import com.breeze.boot.system.service.SysRoleService;
+import com.breeze.boot.system.service.SysUserRoleService;
 import com.breeze.boot.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -45,6 +51,24 @@ public class UserTokenService {
      */
     @Autowired
     private SysUserService sysUserService;
+
+    /**
+     * 系统角色服务
+     */
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    /**
+     * 系统用户角色服务
+     */
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+
+    /**
+     * 密码编码器
+     */
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 刷新用户
@@ -111,7 +135,19 @@ public class UserTokenService {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
-            return getLoginUser(this.sysUserService.registerUser(openId));
+            sysUser = SysUser.builder()
+                    .username(openId)
+                    .amountName("微信匿名用户")
+                    .password(this.passwordEncoder.encode("123456"))
+                    .openId(openId)
+                    .build();
+            this.sysUserService.save(sysUser);
+            // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
+            SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
+            if (Objects.isNull(sysRole)) {
+                throw new AccessException("登录失败,小程序身份不存在");
+            }
+            this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
         }
         LoginUserDTO loginUserDTO = this.sysUserService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);

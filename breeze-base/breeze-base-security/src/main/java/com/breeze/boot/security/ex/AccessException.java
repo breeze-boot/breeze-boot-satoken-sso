@@ -16,8 +16,6 @@
 
 package com.breeze.boot.security.ex;
 
-import org.springframework.http.HttpStatus;
-
 /**
  * 访问异常
  *
@@ -27,11 +25,6 @@ import org.springframework.http.HttpStatus;
 public class AccessException extends RuntimeException {
 
     /**
-     * 代码
-     */
-    private final Integer code;
-
-    /**
      * 信息
      */
     private final String msg;
@@ -39,12 +32,10 @@ public class AccessException extends RuntimeException {
     /**
      * 访问异常
      *
-     * @param msg        信息
-     * @param httpStatus http状态
+     * @param msg 信息
      */
-    public AccessException(String msg, HttpStatus httpStatus) {
+    public AccessException(String msg) {
         super(msg);
-        this.code = httpStatus.value();
         this.msg = msg;
     }
 }

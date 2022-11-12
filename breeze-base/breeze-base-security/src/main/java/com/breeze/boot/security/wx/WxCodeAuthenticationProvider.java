@@ -76,10 +76,6 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
         String code = String.valueOf(authenticationToken.getPrincipal());
-        UserDetails userDetails = this.userDetailsService.createOrLoadUserByOpenId((String) authenticationToken.getPrincipal());
-        if (Objects.isNull(userDetails)) {
-            throw new InternalAuthenticationServiceException(CREATE_FAIL);
-        }
         String url = "https://api.weixin.qq.com/sns/jscode2session";
         HttpResponse response = HttpUtil.createGet(url)
                 .form("secret", this.wxLoginProperties.getAppSecret())
@@ -94,6 +90,10 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
             throw new AccessDeniedException("微信认证失败");
         }
 
+        UserDetails userDetails = this.userDetailsService.createOrLoadUserByOpenId(jsonObj.getObj("openid").toString());
+        if (Objects.isNull(userDetails)) {
+            throw new InternalAuthenticationServiceException(CREATE_FAIL);
+        }
         WxCodeAuthenticationToken wxCodeAuthenticationToken = new WxCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
         wxCodeAuthenticationToken.setDetails(userDetails);
         return wxCodeAuthenticationToken;

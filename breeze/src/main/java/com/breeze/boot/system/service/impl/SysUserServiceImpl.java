@@ -235,45 +235,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 
-    /**
-     * 获取登录用户DTO
-     *
-     * @param sysUser 系统用户实体
-     * @return {@link LoginUserDTO}
-     */
-    @Override
-    @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
-    public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
-        LoginUserDTO loginUser = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUser, loginUser);
-        // 获取部门名称
-        SysDept dept = this.sysDeptService.getById(sysUser.getDeptId());
-        loginUser.setDeptName(dept.getDeptName());
-
-        // 查询 用户的角色
-        Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isEmpty(roleDtoSet)) {
-            loginUser.setAuthorities(Sets.newHashSet());
-            return loginUser;
-        }
-
-        loginUser.setUserRoleList(roleDtoSet);
-        // 角色ID
-        Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
-        loginUser.setUserRoleIds(roleIdSet);
-        // 角色CODE
-        Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
-        loginUser.setUserRoleCodes(roleCodeList);
-        // 角色权限
-        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
-        // 用户的多个数据权限汇总
-        List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
-        // 数据权限 类型
-        loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
-        loginUser.setPermissions(permissionDTOList);
-        return loginUser;
-    }
-
     @Override
     public Result<Boolean> userAddRole(UserRolesDTO userRolesDTO) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesDTO.getUsername()));
@@ -299,25 +260,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 注册用户
+     * 获取登录用户DTO
      *
-     * @param openId 开放id
+     * @param sysUser 系统用户实体
      * @return {@link LoginUserDTO}
      */
     @Override
-    public LoginUserDTO registerUser(String openId) {
-        SysUser sysUser = SysUser.builder().username(openId)
-                .amountName("微信匿名用户")
-                .password(this.passwordEncoder.encode("123456"))
-                .openId(openId)
-                .build();
-        this.save(sysUser);
-        // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
+    @Cacheable(cacheNames = "sys:login_user", key = "#sysUser.username")
+    public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
+        LoginUserDTO loginUser = new LoginUserDTO();
+        BeanUtil.copyProperties(sysUser, loginUser);
+        // 获取部门名称
+        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
+        // 查询 用户的角色
+        Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
+        if (CollUtil.isEmpty(roleDtoSet)) {
+            loginUser.setAuthorities(Sets.newHashSet());
+            return loginUser;
+        }
 
-        // 可以存放redis中 便于 SecurityUtils 获取当前登录用户
-
-        return this.getLoginUserDTO(sysUser);
+        loginUser.setUserRoleList(roleDtoSet);
+        // 角色ID
+        Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
+        loginUser.setUserRoleIds(roleIdSet);
+        // 角色CODE
+        Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
+        loginUser.setUserRoleCodes(roleCodeList);
+        // 角色权限
+        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
+        // 用户的多个数据权限汇总
+        List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
+        // 数据权限 类型
+        loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
+        loginUser.setPermissions(permissionDTOList);
+        return loginUser;
     }
+
 
 }
 
