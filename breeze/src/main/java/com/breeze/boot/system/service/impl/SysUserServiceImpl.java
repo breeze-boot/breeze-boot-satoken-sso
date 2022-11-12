@@ -110,9 +110,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Result.fail("部门不存在");
         }
         sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
-        saveUserRole(sysUser);
         boolean save = this.save(sysUser);
         if (save) {
+            this.saveUserRole(sysUser);
             // 刷新菜单权限
             this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
@@ -129,8 +129,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Boolean updateUserById(SysUser sysUser) {
         boolean update = this.updateById(sysUser);
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
-        this.saveUserRole(sysUser);
         if (update) {
+            this.saveUserRole(sysUser);
             // 刷新菜单权限
             this.userTokenService.refreshUser(SecurityUtils.getUsername());
         }
