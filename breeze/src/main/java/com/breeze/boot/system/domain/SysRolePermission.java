@@ -41,12 +41,6 @@ public class SysRolePermission extends BaseModel<SysRolePermission> implements S
     private static final long serialVersionUID = 1L;
 
     /**
-     * 数据权限类型
-     */
-    @Schema(description = "数据权限类型")
-    private Integer permissionType;
-
-    /**
      * 权限id
      */
     @Schema(description = "数据权限ID")

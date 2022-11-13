@@ -37,10 +37,10 @@ public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {
     /**
      * 角色权限列表
      *
-     * @param roleIdList 角色id列表
+     * @param roleIdSet 角色id列表
      * @return {@link List}<{@link PermissionDTO}>
      */
-    List<PermissionDTO> listRolesPermission(@Param("roleIdList") Set<Long> roleIdList);
+    List<PermissionDTO> listRolesPermission(@Param("roleIdSet") Set<Long> roleIdSet);
 
 }
 

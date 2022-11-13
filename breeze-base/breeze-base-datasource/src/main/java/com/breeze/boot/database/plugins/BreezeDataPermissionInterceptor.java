@@ -139,13 +139,13 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             if (currentUser == null) {
                 throw new RuntimeException("未登录，数据权限不可实现");
             }
-            List<PermissionDTO> dataPermissions = currentUser.getPermissions();
+            List<PermissionDTO> permissionList = currentUser.getPermissions();
 
             // 获取 deptIds
-            if (!Objects.equals(currentUser.getPermissionType(), 0) && CollUtil.isEmpty(dataPermissions)) {
+            if (!Objects.equals(currentUser.getPermissionType(), 0) && CollUtil.isEmpty(permissionList)) {
                 continue;
             }
-            String sql = this.getSql(currentUser.getPermissionType(), dataPermissions, annotation);
+            String sql = this.getSql(currentUser.getPermissionType(), permissionList, annotation);
             originalSql = String.format("SELECT a.* FROM (%s) a %s", originalSql, sql);
         }
         mpBs.sql(originalSql);

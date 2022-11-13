@@ -18,6 +18,7 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrBuilder;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
@@ -32,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +72,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         SysPermission sysPermission = SysPermission.builder().build();
         BeanUtil.copyProperties(permission, sysPermission);
         sysPermission.setPermissions(String.join(",", permission.getPermissions()));
-        if (Objects.equals("999999", permission.getPermissionType())) {
+        if (StrUtil.equals(permission.getPermissionType(), "DIY_DEPT")) {
             // 自定义
             List<PermissionDiy> divList = permission.getPermissionDiy();
             StrBuilder strBuilder = new StrBuilder();
@@ -86,7 +86,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                     .append(" ) "));
             String sql = strBuilder.toString();
             sysPermission.setStrSql(sql.replaceFirst("OR", ""));
-        } else if (Objects.equals("1", permission.getPermissionType())) {
+        } else if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", permission.getPermissionType())) {
             // 本级部门及其以下部门
             List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", permission.getPermissions()));
             sysPermission.setPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));

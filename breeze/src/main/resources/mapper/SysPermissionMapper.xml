@@ -8,8 +8,9 @@
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
         <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionType" column="permission_type" jdbcType="VARCHAR"/>
         <result property="operator" column="operator" jdbcType="VARCHAR"/>
-        <result property="sql" column="sql" jdbcType="VARCHAR"/>
+        <result property="strSql" column="str_sql" jdbcType="VARCHAR"/>
         <result property="permissions" column="permissions" jdbcType="VARCHAR"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>
@@ -27,6 +28,7 @@
         a.id,
         a.`permission_name`,
         a.`permission_code`,
+        a.`permission_type`,
         a.operator,
         a.str_sql,
         a.permissions

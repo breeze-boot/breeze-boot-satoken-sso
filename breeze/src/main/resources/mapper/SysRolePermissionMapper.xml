@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysRolePermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="permissionType" column="permission_type" jdbcType="INTEGER"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
         <result property="permissionId" column="permission_id" jdbcType="BIGINT"/>
         <result property="roleId" column="role_id" jdbcType="BIGINT"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
@@ -20,21 +20,13 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id
-        ,permission_type,permission_id,role_id,
-        create_by,create_name,create_time,
-        update_by,update_name,update_time,
-        is_delete,delete_by,tenant_id
-    </sql>
-
     <select id="listRolesPermission" resultType="com.breeze.boot.security.entity.PermissionDTO">
         SELECT
-        b.permission_type,
+        b.permission_code,
         b.role_id,
         b.permission_id,
         a.operator,
-        a.`sql`,
+        a.`str_sql`,
         a.permissions
         FROM
         sys_permission AS a
@@ -42,9 +34,9 @@
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
-            <if test="roleIdList != null and roleIdList.size > 0">
+            <if test="roleIdSet != null and roleIdSet.size > 0">
                 AND b.role_id IN
-                <foreach collection="roleIdList" item="roleId" open="(" separator="," close=")">
+                <foreach collection="roleIdSet" item="roleId" open="(" separator="," close=")">
                     #{roleId}
                 </foreach>
             </if>

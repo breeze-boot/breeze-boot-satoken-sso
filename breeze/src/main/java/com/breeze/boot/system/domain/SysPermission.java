@@ -41,21 +41,21 @@ public class SysPermission extends BaseModel<SysPermission> implements Serializa
     private static final long serialVersionUID = 1L;
 
     /**
-     * 权限名称
+     * 数据权限名称
      */
-    @Schema(description = "权限名称")
+    @Schema(description = "数据权限名称")
     private String permissionName;
 
     /**
-     * 权限编码
+     * 数据权限编码
      */
-    @Schema(description = "权限编码")
+    @Schema(description = "数据权限编码")
     private String permissionCode;
 
     /**
-     * 权限类型
+     * 数据权限标识
      */
-    @Schema(description = "权限类型")
+    @Schema(description = "数据权限标识")
     private String permissionType;
 
     /**
