@@ -91,11 +91,6 @@ public class CurrentLoginUser extends User implements UserDetails {
     private String phone;
 
     /**
-     * 数据权限类型
-     */
-    private Integer permissionType;
-
-    /**
      * 权限
      */
     private List<PermissionDTO> permissions;
@@ -135,7 +130,6 @@ public class CurrentLoginUser extends User implements UserDetails {
         this.openId = loginUserDTO.getOpenId();
         this.tenantId = loginUserDTO.getTenantId();
         this.permissions = loginUserDTO.getPermissions();
-        this.permissionType = loginUserDTO.getPermissionType() == null ? 0 : loginUserDTO.getPermissionType();
     }
 
     /**

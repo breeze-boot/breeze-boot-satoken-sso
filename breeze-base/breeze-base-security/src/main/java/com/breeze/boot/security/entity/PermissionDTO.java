@@ -17,6 +17,7 @@
 package com.breeze.boot.security.entity;
 
 import com.breeze.boot.core.entity.PageDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 /**
@@ -35,17 +36,18 @@ public class PermissionDTO extends PageDTO {
     /**
      * 名称
      */
-    private String name;
+    @JsonIgnore
+    private String permissionName;
 
     /**
      * 编码
      */
-    private String code;
+    private String permissionCode;
 
     /**
      * 权限类型
      */
-    private Integer permissionsType;
+    private String permissionType;
 
     /**
      * 操作符
@@ -55,7 +57,7 @@ public class PermissionDTO extends PageDTO {
     /**
      * 权限过滤 sql
      */
-    private String sql;
+    private String strSql;
 
     /**
      * 权限 部门ID

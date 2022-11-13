@@ -36,11 +36,11 @@
         sys_permission AS a
         <where>
             a.is_delete = 0
-            <if test="permissionDTO.name != null and permissionDTO.name != ''">
+            <if test="permissionDTO.permissionName != null and permissionDTO.permissionName != ''">
                 AND a.permission_name LIKE CONCAT('%' , #{permissionDTO.permissionName}, '%')
             </if>
-            <if test="permissionDTO.name != null and permissionDTO.name != ''">
-                AND a.permission_code LIKE CONCAT('%' , #{permissionDTO.permissioCode}, '%')
+            <if test="permissionDTO.permissionCode != null and permissionDTO.permissionCode != ''">
+                AND a.permission_code LIKE CONCAT('%' , #{permissionDTO.permissionCode}, '%')
             </if>
         </where>
 

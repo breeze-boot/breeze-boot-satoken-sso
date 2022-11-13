@@ -72,12 +72,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         SysPermission sysPermission = SysPermission.builder().build();
         BeanUtil.copyProperties(permission, sysPermission);
         sysPermission.setPermissions(String.join(",", permission.getPermissions()));
-        if (StrUtil.equals(permission.getPermissionType(), "DIY_DEPT")) {
+        if (StrUtil.equals(permission.getPermissionType(), "DIY")) {
             // 自定义
             List<PermissionDiy> divList = permission.getPermissionDiy();
             StrBuilder strBuilder = new StrBuilder();
             divList.forEach(div -> strBuilder
-                    .append(" OR ( ")
+                    .append(" OR ( a.")
                     .append(div.getColumn())
                     .append(" ")
                     .append(div.getCompare())

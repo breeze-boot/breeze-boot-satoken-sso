@@ -18,6 +18,7 @@
 
     <select id="listDict" resultMap="sysDictMap">
         SELECT
+        a.dept_id, -- 测试使用
         a.id,
         a.dict_name,
         a.dict_code,

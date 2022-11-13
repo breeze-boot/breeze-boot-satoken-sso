@@ -22,9 +22,9 @@
 
     <select id="listRolesPermission" resultType="com.breeze.boot.security.entity.PermissionDTO">
         SELECT
-        b.permission_code,
+        a.permission_code,
+        a.permission_type,
         b.role_id,
-        b.permission_id,
         a.operator,
         a.`str_sql`,
         a.permissions

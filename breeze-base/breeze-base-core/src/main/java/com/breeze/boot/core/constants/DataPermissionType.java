@@ -11,26 +11,32 @@ public interface DataPermissionType {
     /**
      * 全部
      */
-    Integer ALL = 0;
+    String ALL = "ALL";
 
     /**
      * 本级部门和下属部门
      */
-    Integer DEPT_AND_LOWER_LEVEL = 1;
+    String DEPT_AND_LOWER_LEVEL = "DEPT_AND_LOWER_LEVEL";
 
     /**
      * 本级部门
      */
-    Integer DEPT_LEVEL = 2;
+    String DEPT_LEVEL = "DEPT_LEVEL";
+
 
     /**
      * 自己
      */
-    Integer OWN = 3;
+    String OWN = "OWN";
+
+    /**
+     * 自定义部门
+     */
+    String DIY_DEPT = "DIY_DEPT";
 
     /**
      * diy
      */
-    Integer DIY = 999999;
+    String DIY = "DIY";
 
 }

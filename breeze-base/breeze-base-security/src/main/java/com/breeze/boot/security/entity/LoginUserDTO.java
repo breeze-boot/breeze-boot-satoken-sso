@@ -126,11 +126,6 @@ public class LoginUserDTO implements Serializable {
     private Long tenantId;
 
     /**
-     * 数据权限类型
-     */
-    private Integer permissionType;
-
-    /**
      * 数据权限
      */
     private List<PermissionDTO> permissions;

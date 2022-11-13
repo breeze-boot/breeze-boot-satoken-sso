@@ -104,8 +104,6 @@ public class UserTokenCacheService {
         loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
         // 用户的多个数据权限汇总
         List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
-        // 数据权限 类型
-        loginUser.setPermissionType(CollUtil.isEmpty(permissionDTOList) ? 0 : permissionDTOList.get(0).getPermissionsType());
         loginUser.setPermissions(permissionDTOList);
         this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUser);
         return loginUser;

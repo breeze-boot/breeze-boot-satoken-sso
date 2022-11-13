@@ -16,6 +16,7 @@
 
 package com.breeze.boot.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 
@@ -32,10 +33,13 @@ public class PageDTO {
     /**
      * 当前页
      */
+    @JsonIgnore
     private Integer current;
+
     /**
      * 大小
      */
+    @JsonIgnore
     private Integer size;
 
     /**
