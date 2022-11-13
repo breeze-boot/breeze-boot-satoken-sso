@@ -69,9 +69,9 @@ public class SysPermissionDTO implements Serializable {
     private List<String> permissions;
 
     /**
-     * 承租者id
+     * diy权限
      */
-    @Schema(description = "租户ID")
-    private List<PermissionDiv> permissionDiv;
+    @Schema(description = "DIY权限")
+    private List<PermissionDiy> permissionDiy;
 
 }

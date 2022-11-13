@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.Result;
 import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
-import com.breeze.boot.system.dto.PermissionDiv;
+import com.breeze.boot.system.dto.PermissionDiy;
 import com.breeze.boot.system.dto.SysPermissionDTO;
 import com.breeze.boot.system.mapper.SysPermissionMapper;
 import com.breeze.boot.system.service.SysDeptService;
@@ -74,7 +74,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         sysPermission.setPermissions(String.join(",", permission.getPermissions()));
         if (Objects.equals("999999", permission.getPermissionType())) {
             // 自定义
-            List<PermissionDiv> divList = permission.getPermissionDiv();
+            List<PermissionDiy> divList = permission.getPermissionDiy();
             StrBuilder strBuilder = new StrBuilder();
             divList.forEach(div -> strBuilder
                     .append(" OR ( ")
@@ -85,7 +85,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                     .append(div.getConditions())
                     .append(" ) "));
             String sql = strBuilder.toString();
-            sysPermission.setSql(sql.replaceFirst("OR", ""));
+            sysPermission.setStrSql(sql.replaceFirst("OR", ""));
         } else if (Objects.equals("1", permission.getPermissionType())) {
             // 本级部门及其以下部门
             List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", permission.getPermissions()));

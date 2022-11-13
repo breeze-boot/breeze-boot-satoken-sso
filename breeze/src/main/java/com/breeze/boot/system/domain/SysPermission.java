@@ -68,7 +68,7 @@ public class SysPermission extends BaseModel<SysPermission> implements Serializa
      * sql
      */
     @Schema(description = "自定义SQL")
-    private String sql;
+    private String strSql;
 
     /**
      * 权限

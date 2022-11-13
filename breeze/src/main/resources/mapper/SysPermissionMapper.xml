@@ -28,7 +28,7 @@
         a.`permission_name`,
         a.`permission_code`,
         a.operator,
-        a.`sql`,
+        a.str_sql,
         a.permissions
         FROM
         sys_permission AS a

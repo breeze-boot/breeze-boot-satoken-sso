@@ -31,7 +31,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "系统数据权限自定义添加DTO")
-public class PermissionDiv {
+public class PermissionDiy {
 
     /**
      * 列
