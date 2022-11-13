@@ -25,6 +25,7 @@ import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
 import com.breeze.boot.system.domain.SysRolePermission;
+import com.breeze.boot.system.dto.SysPermissionDTO;
 import com.breeze.boot.system.service.SysPermissionService;
 import com.breeze.boot.system.service.SysRolePermissionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -96,8 +97,8 @@ public class SysPermissionController {
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('sys:permission:save')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysPermission permission) {
-        return Result.ok(this.sysPermissionService.save(permission));
+    public Result<Boolean> save(@Validated @RequestBody SysPermissionDTO permission) {
+        return this.sysPermissionService.savePermission(permission);
     }
 
     /**

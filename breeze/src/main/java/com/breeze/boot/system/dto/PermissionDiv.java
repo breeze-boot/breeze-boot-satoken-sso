@@ -14,32 +14,41 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.system.dto;
 
-import java.util.List;
-import java.util.Map;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
- * 元数据服务
+ * 自定义权限
  *
- * @author gaoweixuan
+ * @author breeze
  * @date 2022-11-12
  */
-public interface MateService {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "系统数据权限自定义添加DTO")
+public class PermissionDiv {
 
     /**
-     * 表名下拉框
-     *
-     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     * 列
      */
-    List<Map<String, Object>> selectTable();
+    @Schema(description = "列")
+    private String column;
 
     /**
-     * 字段下拉框
-     *
-     * @param tableName 表名
-     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
+     * 条件
      */
-    List<Map<String, Object>> selectColumn(String tableName);
+    @Schema(description = "条件")
+    private String conditions;
+
+    /**
+     * 比较
+     */
+    @Schema(description = "比较")
+    private String compare;
 
 }

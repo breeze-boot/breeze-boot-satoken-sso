@@ -17,6 +17,7 @@
 package com.breeze.boot.system.service.impl;
 
 import com.breeze.boot.system.service.MateService;
+import com.google.common.collect.Maps;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,13 +61,16 @@ public class MateDataServiceImpl implements MateService {
      * @return {@link List}<{@link Map}<{@link String}, {@link String}>>
      */
     @Override
-    public List<String> selectTable() {
-        List<String> tableList = new ArrayList<>();
+    public List<Map<String, Object>> selectTable() {
+        List<Map<String, Object>> tableList = new ArrayList<>();
         try {
             // 获取 表
             ResultSet rs = metaData.getTables(connection.getCatalog(), null, "%", new String[]{"table"});
             while (rs.next()) {
-                tableList.add(rs.getString("TABLE_NAME"));
+                Map<String, Object> selectMap = Maps.newHashMap();
+                selectMap.put("value", rs.getString("TABLE_NAME"));
+                selectMap.put("label", rs.getString("TABLE_NAME"));
+                tableList.add(selectMap);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,16 +81,20 @@ public class MateDataServiceImpl implements MateService {
     /**
      * 字段下拉框
      *
+     * @param tableName
      * @return {@link List}<{@link String}>
      */
     @Override
-    public List<String> selectColumn() {
-        List<String> columnList = new ArrayList<>();
+    public List<Map<String, Object>> selectColumn(String tableName) {
+        List<Map<String, Object>> columnList = new ArrayList<>();
         try {
             // 获取 字段
-            ResultSet rs = metaData.getColumns(connection.getCatalog(), null, "sys_user", null);
+            ResultSet rs = metaData.getColumns(connection.getCatalog(), null, tableName, null);
             while (rs.next()) {
-                columnList.add(rs.getString("COLUMN_NAME"));
+                Map<String, Object> selectMap = Maps.newHashMap();
+                selectMap.put("value", rs.getString("COLUMN_NAME"));
+                selectMap.put("label", rs.getString("COLUMN_NAME"));
+                columnList.add(selectMap);
             }
         } catch (SQLException e) {
             e.printStackTrace();

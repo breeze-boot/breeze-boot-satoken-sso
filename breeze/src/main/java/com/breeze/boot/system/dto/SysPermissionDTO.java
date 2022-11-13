@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.system.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统权限实体
@@ -34,9 +33,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_permission")
-@Schema(description = "系统权限实体")
-public class SysPermission extends BaseModel<SysPermission> implements Serializable {
+@Schema(description = "系统数据权限添加DTO")
+public class SysPermissionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,21 +63,15 @@ public class SysPermission extends BaseModel<SysPermission> implements Serializa
     private String operator;
 
     /**
-     * sql
-     */
-    @Schema(description = "自定义SQL")
-    private String sql;
-
-    /**
      * 权限
      */
     @Schema(description = "权限")
-    private String permissions;
+    private List<String> permissions;
 
     /**
      * 承租者id
      */
     @Schema(description = "租户ID")
-    private Long tenantId;
+    private List<PermissionDiv> permissionDiv;
 
 }

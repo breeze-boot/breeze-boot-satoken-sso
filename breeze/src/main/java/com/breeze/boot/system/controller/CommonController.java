@@ -206,23 +206,24 @@ public class CommonController {
     /**
      * 表名下拉框
      *
-     * @return {@link Result}<{@link List}<{@link String}>>
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Operation(summary = "表名下拉框", description = "下拉框接口")
     @GetMapping("/selectTable")
-    public Result<List<String>> selectTable() {
+    public Result<List<Map<String, Object>>> selectTable() {
         return Result.ok(this.mateService.selectTable());
     }
 
     /**
      * 字段下拉框
      *
-     * @return {@link Result}<{@link List}<{@link String}>>
+     * @param tableName 表名
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Operation(summary = "字段下拉框", description = "下拉框接口")
     @GetMapping("/selectColumn")
-    public Result<List<String>> selectColumn() {
-        return Result.ok(this.mateService.selectColumn());
+    public Result<List<Map<String, Object>>> selectColumn(@RequestParam("tableName") String tableName) {
+        return Result.ok(this.mateService.selectColumn(tableName));
     }
 
 }

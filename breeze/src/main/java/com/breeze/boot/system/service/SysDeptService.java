@@ -48,5 +48,13 @@ public interface SysDeptService extends IService<SysDept> {
      */
     Result<Boolean> deleteById(Long id);
 
+    /**
+     * 选择部门id
+     *
+     * @param permissions 权限
+     * @return {@link List}<{@link Long}>
+     */
+    List<Long> selectDeptById(String permissions);
+
 }
 

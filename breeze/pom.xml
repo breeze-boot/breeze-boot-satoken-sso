@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-database</artifactId>
+            <artifactId>breeze-base-datasource</artifactId>
             <version>1.0</version>
         </dependency>
 

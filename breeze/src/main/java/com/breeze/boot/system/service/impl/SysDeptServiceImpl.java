@@ -31,6 +31,7 @@ import com.breeze.boot.system.mapper.SysDeptMapper;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Maps;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,6 +106,38 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             return Result.ok(Boolean.TRUE, "删除成功");
         }
         return Result.fail(Boolean.FALSE, "删除失败");
+    }
+
+    /**
+     * 选择部门id
+     *
+     * @param permissions 权限
+     * @return {@link List}<{@link Long}>
+     */
+    @Override
+    public List<Long> selectDeptById(String permissions) {
+        List<SysDept> sysDeptList = this.baseMapper.selectDeptById(Long.valueOf(permissions));
+        List<Long> idList = Lists.newArrayList();
+        for (SysDept sysDept : sysDeptList) {
+            idList.add(sysDept.getId());
+            this.filterDeptTree(idList, sysDept);
+        }
+        return idList;
+    }
+
+    /**
+     * 过滤器部门树
+     *
+     * @param idList  id列表
+     * @param sysDept 系统部门
+     */
+    public void filterDeptTree(List<Long> idList, SysDept sysDept) {
+        if (CollUtil.isEmpty(sysDept.getSysDeptList())) {
+            return;
+        }
+        for (SysDept dept : sysDept.getSysDeptList()) {
+            idList.add(dept.getId());
+        }
     }
 
 }

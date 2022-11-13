@@ -15,6 +15,27 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
         <result property="deleteBy" column="delete_by"/>
+        <collection property="sysDeptList" javaType="java.util.List"
+                    ofType="com.breeze.boot.system.domain.SysDept"
+                    column="{parentId=id}"
+                    select="com.breeze.boot.system.mapper.SysDeptMapper.selectDeptByParentId">
+        </collection>
     </resultMap>
+
+    <select id="selectDeptById" resultMap="sysDeptMap">
+        SELECT a.id,
+               a.dept_name
+        FROM sys_dept AS a
+        WHERE a.id = #{id}
+          AND a.is_delete = 0
+    </select>
+
+    <select id="selectDeptByParentId" resultMap="sysDeptMap">
+        SELECT a.id,
+               a.dept_name
+        FROM sys_dept AS a
+        WHERE a.parent_id = #{parentId}
+          AND a.is_delete = 0
+    </select>
 
 </mapper>
