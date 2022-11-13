@@ -19,6 +19,9 @@ package com.breeze.boot.system.mapper;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysDept;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统部门映射器
@@ -28,5 +31,22 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysDeptMapper extends BreezeBaseMapper<SysDept> {
+
+
+    /**
+     * 查询部门
+     *
+     * @param id id
+     * @return {@link List}<{@link SysDept}>
+     */
+    List<SysDept> selectDeptById(@Param("id") Long id);
+
+    /**
+     * 查询部门
+     *
+     * @param parentId 父id
+     * @return {@link List}<{@link SysDept}>
+     */
+    List<SysDept> selectDeptByParentId(@Param("parentId") Long parentId);
 
 }

@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统部门实体
@@ -62,5 +64,12 @@ public class SysDept extends BaseModel<SysDept> implements Serializable {
     @NotNull(message = "上级部门ID不能为空")
     @Schema(description = "上级部门ID")
     private Long parentId;
+
+    /**
+     * sys部门名单列表
+     */
+    @Schema(description = "下级部门")
+    @TableField(exist = false)
+    private List<SysDept> sysDeptList;
 
 }
