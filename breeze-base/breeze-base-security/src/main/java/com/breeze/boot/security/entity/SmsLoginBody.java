@@ -30,6 +30,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class SmsLoginBody extends LoginBody {
+
     /**
      * 电话
      */

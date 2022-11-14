@@ -35,7 +35,7 @@ import java.util.Objects;
  * @author gaoweixuan
  * @date 2021-12-06 22:03:39
  */
-public class MybatisPlusConfig {
+public class MybatisPlusConfiguration {
 
     private final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 

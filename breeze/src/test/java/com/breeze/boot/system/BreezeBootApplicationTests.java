@@ -27,6 +27,9 @@ class BreezeBootApplicationTests {
     @Autowired
     private SysPlatformMapper sysPlatformMapper;
 
+    @Autowired
+    private MailSender mailSender;
+
     @Test
     void contextLoads() {
         FastAutoGenerator.create(ds.getUrl(), ds.getUsername(), ds.getPassword())
@@ -57,10 +60,6 @@ class BreezeBootApplicationTests {
         );
         this.sysPlatformMapper.insertAllBatch(list);
     }
-
-
-    @Autowired
-    private MailSender mailSender;
 
     /**
      * 测试文本邮件发送（无附件）

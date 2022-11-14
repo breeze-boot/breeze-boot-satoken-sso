@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.controller.login;
 
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.utils.SecurityUtils;

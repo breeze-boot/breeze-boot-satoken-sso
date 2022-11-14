@@ -23,6 +23,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -32,38 +33,47 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 /**
  * jwt配置
- * 过滤器
  *
  * @author gaoweixuan
  * @date 2022-08-31
  */
-@Configuration
-public class JwtConfig {
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(JwtProperties.class)
+public class JwtConfiguration {
 
+    /**
+     * jwt参数配置
+     */
     @Autowired
     private JwtProperties jwtProperties;
 
     /**
-     * 登录jwt译码器
+     * jwt译码器
      *
      * @return {@link JwtDecoder}
      */
     @Bean
-    JwtDecoder jwtDecoder() {
+    public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(this.jwtProperties.getRsaPublicKey()).build();
     }
 
     /**
-     * 登录jwt编码器
+     * jwt编码器
      *
      * @return {@link JwtEncoder}
      */
     @Bean
-    JwtEncoder jwtEncoder() {
+    public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(this.jwtProperties.getRsaPublicKey()).privateKey(this.jwtProperties.getRsaPrivateKey()).build();
         return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(jwk)));
     }
 
+    /**
+     * 签名
+     *
+     * @param jwt jwt
+     * @return {@link SignedJWT}
+     */
     public SignedJWT sign(SignedJWT jwt) {
         try {
             jwt.sign(new RSASSASigner(this.jwtProperties.getRsaPrivateKey()));

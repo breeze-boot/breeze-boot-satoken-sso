@@ -16,9 +16,9 @@
 
 package com.breeze.boot.security.config;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * wx登录属性
@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Configuration;
  * @author gaoweixuan
  * @date 2022-11-09
  */
-@Data
-@Configuration
+@Getter
+@Setter
 @ConfigurationProperties(prefix = "breeze.wx")
 public class WxLoginProperties {
 
@@ -40,4 +40,5 @@ public class WxLoginProperties {
      * 应用程序id
      */
     private String appId;
+
 }

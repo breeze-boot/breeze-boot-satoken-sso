@@ -1,4 +1,4 @@
-package com.breeze.boot;
+package com.breeze.boot.monitor;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;

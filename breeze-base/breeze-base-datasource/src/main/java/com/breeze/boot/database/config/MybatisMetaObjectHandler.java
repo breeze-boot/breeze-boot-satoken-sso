@@ -20,7 +20,6 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.breeze.boot.security.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +30,6 @@ import java.time.LocalDateTime;
  * @date 2022-10-12
  */
 @Slf4j
-@Configuration
 public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override

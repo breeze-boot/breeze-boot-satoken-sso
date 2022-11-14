@@ -48,26 +48,22 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
      * 短信没有发现代码
      */
     private static final String SMS_NOT_FOUND_CODE = "phoneNotFoundCode";
-
-    /**
-     * 消息
-     */
-    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
-
     /**
      * redis 模板
      */
     private final RedisTemplate<String, Object> redisTemplate;
-
     /**
      * 用户详细信息服务
      */
     private final LocalUserDetailsService userDetailsService;
-
     /**
      * 登录检查
      */
     private final LoginCheck loginCheck;
+    /**
+     * 消息
+     */
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     public SmsCodeAuthenticationProvider(LocalUserDetailsService userDetailsService, RedisTemplate<String, Object> redisTemplate, LoginCheck loginCheck) {
         this.userDetailsService = userDetailsService;

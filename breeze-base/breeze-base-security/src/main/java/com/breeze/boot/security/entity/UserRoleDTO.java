@@ -50,5 +50,4 @@ public class UserRoleDTO implements Serializable {
      */
     private String roleName;
 
-
 }

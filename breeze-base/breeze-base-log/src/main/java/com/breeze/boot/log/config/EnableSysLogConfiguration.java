@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 
 /**
  * 开启日志配置
@@ -29,11 +30,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @author gaoweixuan
  * @date 2021/10/20
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "system.log", value = "enable")
-public class EnableSysLogConfig {
+@ConditionalOnProperty(prefix = "breeze.log", value = "enable")
+@Import(PublisherSaveSysLogEvent.class)
+public class EnableSysLogConfiguration {
 
     /**
      * 系统日志AOP Bean
@@ -47,3 +49,4 @@ public class EnableSysLogConfig {
     }
 
 }
+

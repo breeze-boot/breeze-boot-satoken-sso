@@ -23,7 +23,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.DeptDTO;

@@ -16,6 +16,10 @@
 
 package com.breeze.boot.database.annotation;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+
 import java.lang.annotation.*;
 
 /**
@@ -24,10 +28,12 @@ import java.lang.annotation.*;
  * @author gaoweixuan
  * @date 2022-10-29
  */
+@Inherited
+@Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
+@ConditionalOnWebApplication
+@ConditionalOnBean(MybatisPlusAutoConfiguration.class)
 public @interface DataPermission {
 
     String scope() default "dept_id";

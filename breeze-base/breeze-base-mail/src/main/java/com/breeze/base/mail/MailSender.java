@@ -23,14 +23,18 @@ import java.util.Set;
  */
 @Component
 public class MailSender {
+
     /**
      * 发送发邮箱地址
      */
     @Autowired
-    private MailConfig mailConfig;
+    private MailProperties mailProperties;
 
+    /**
+     * 邮件发送者
+     */
     @Autowired
-    private JavaMailSender mailSender;
+    private JavaMailSender javaMailSender;
 
     /**
      * 发送纯文本邮件信息
@@ -43,7 +47,7 @@ public class MailSender {
         // 创建一个邮件对象
         SimpleMailMessage msg = new SimpleMailMessage();
         // 设置发送方
-        msg.setFrom(mailConfig.getFromAddress());
+        msg.setFrom(mailProperties.getFromAddress());
         // 设置接收方
         msg.setTo(to);
         // 设置邮件主题
@@ -51,7 +55,7 @@ public class MailSender {
         // 设置邮件内容
         msg.setText(content);
         // 发送邮件
-        mailSender.send(msg);
+        this.javaMailSender.send(msg);
     }
 
     /**
@@ -63,11 +67,11 @@ public class MailSender {
      * @param files   文件可变数组
      */
     public void sendMessageCarryFile(String to, String subject, String content, File... files) {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             // 设置发送方
-            mimeMessageHelper.setFrom(mailConfig.getFromAddress());
+            mimeMessageHelper.setFrom(mailProperties.getFromAddress());
             // 设置接收方
             mimeMessageHelper.setTo(to);
             // 设置邮件主题
@@ -86,7 +90,7 @@ public class MailSender {
             e.printStackTrace();
         }
         // 发送邮件
-        mailSender.send(mimeMessage);
+        this.javaMailSender.send(mimeMessage);
     }
 
     /**
@@ -99,11 +103,11 @@ public class MailSender {
      * @param files   文件可变数组
      */
     public void sendMessageCarryFile(String to, String cc, String subject, String content, Map<String, File> imageMap, File... files) {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             // 设置发送方
-            mimeMessageHelper.setFrom(mailConfig.getFromAddress());
+            mimeMessageHelper.setFrom(mailProperties.getFromAddress());
             // 设置接收方
             mimeMessageHelper.setTo(to);
             // 设置抄送
@@ -132,7 +136,7 @@ public class MailSender {
             e.printStackTrace();
         }
         // 发送邮件
-        mailSender.send(mimeMessage);
+        this.javaMailSender.send(mimeMessage);
     }
 
     /**

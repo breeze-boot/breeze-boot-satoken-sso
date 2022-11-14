@@ -44,10 +44,13 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 public class SysLogAspect {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    /**
+     * 映射器
+     */
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
-        mapper.registerModule(new JavaTimeModule());
+        MAPPER.registerModule(new JavaTimeModule());
     }
 
     /**
@@ -64,20 +67,29 @@ public class SysLogAspect {
     @SneakyThrows
     @AfterReturning(pointcut = "@annotation(sysLog)", returning = "jsonResult")
     public void doAfterReturning(JoinPoint joinPoint, BreezeSysLog sysLog, Object jsonResult) {
-        this.doLog(joinPoint, sysLog, mapper.writeValueAsString(jsonResult));
+        this.doLog(joinPoint, sysLog, MAPPER.writeValueAsString(jsonResult));
     }
 
     /**
+     * 后做了把
      * 拦截异常操作
      *
      * @param joinPoint 切点
      * @param ex        异常
+     * @param sysLog    系统日志
      */
     @AfterThrowing(value = "@annotation(sysLog)", throwing = "ex")
     public void doAfterThrowing(JoinPoint joinPoint, BreezeSysLog sysLog, Exception ex) {
         this.doLog(joinPoint, sysLog, ex);
     }
 
+    /**
+     * 执行日志 业务
+     *
+     * @param joinPoint 连接点
+     * @param log       日志
+     * @param obj       obj
+     */
     public void doLog(JoinPoint joinPoint, BreezeSysLog log, Object obj) {
         HttpServletRequest request = getHttpServletRequest();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -88,6 +100,15 @@ public class SysLogAspect {
         this.doLog(log, request, methodName, param, obj);
     }
 
+    /**
+     * 执行日志 业务
+     *
+     * @param log        日志
+     * @param request    请求
+     * @param methodName 方法名称
+     * @param param      参数
+     * @param obj        obj
+     */
     @SneakyThrows
     private void doLog(BreezeSysLog log, HttpServletRequest request, String methodName, Object[] param, Object obj) {
         StopWatch stopWatch = getStopWatch();
@@ -103,7 +124,7 @@ public class SysLogAspect {
                 .resultMsg("")
                 .ip(request.getRemoteAddr())
                 .requestType(request.getMethod())
-                .paramContent(mapper.writeValueAsString(param))
+                .paramContent(MAPPER.writeValueAsString(param))
                 .result(1)
                 .build();
         if (obj instanceof Exception) {
@@ -113,9 +134,12 @@ public class SysLogAspect {
         stopWatch.stop();
         build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
         this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
-        this.printLog(request, methodName, mapper.writeValueAsString(param), stopWatch);
+        this.printLog(request, methodName, MAPPER.writeValueAsString(param), stopWatch);
     }
 
+    /**
+     * @return {@link StopWatch}
+     */
     private StopWatch getStopWatch() {
         return new StopWatch();
     }
@@ -134,7 +158,7 @@ public class SysLogAspect {
     }
 
     /**
-     * 得到http servlet请求
+     * 获取http servlet请求
      *
      * @return {@link HttpServletRequest}
      */

@@ -132,11 +132,17 @@
             <artifactId>breeze-base-xss</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-mail</artifactId>
             <version>1.0</version>
-            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-oss</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

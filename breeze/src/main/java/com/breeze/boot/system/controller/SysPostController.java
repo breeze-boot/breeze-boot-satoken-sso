@@ -17,7 +17,7 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysPost;

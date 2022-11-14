@@ -45,7 +45,7 @@ import java.util.Objects;
 public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
 
     /**
-     * 短信没有发现代码
+     * 电子邮件未获取到代码
      */
     private static final String EMAIL_NOT_FOUND_CODE = "emailNotFoundCode";
     /**

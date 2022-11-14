@@ -16,7 +16,7 @@
 
 package com.breeze.boot.springdoc.annotation;
 
-import com.breeze.boot.springdoc.config.SpringDocConfig;
+import com.breeze.boot.springdoc.config.SpringDocConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -30,7 +30,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Import(value = SpringDocConfig.class)
+@Import(value = SpringDocConfiguration.class)
 public @interface EnableSpringDoc {
 
 }

@@ -16,9 +16,9 @@
 
 package com.breeze.boot.system.controller.login;
 
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
-import com.breeze.boot.security.config.JwtConfig;
+import com.breeze.boot.security.config.JwtConfiguration;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.EmailLoginBody;
@@ -69,7 +69,7 @@ public class LoginController {
      * jwt配置
      */
     @Autowired
-    private JwtConfig jwtConfig;
+    private JwtConfiguration jwtConfiguration;
 
     /**
      * 身份验证管理器
@@ -143,7 +143,7 @@ public class LoginController {
         SignedJWT signedJwt = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("user_info", currentLoginUser);
-        resultMap.put("access_token", jwtConfig.sign(signedJwt).serialize());
+        resultMap.put("access_token", jwtConfiguration.sign(signedJwt).serialize());
         resultMap.put("permissions", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return resultMap;
     }

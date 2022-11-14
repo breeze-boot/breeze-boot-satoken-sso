@@ -18,7 +18,6 @@ package com.breeze.boot.security.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -29,13 +28,12 @@ import java.util.List;
  * @date 2022-08-31
  */
 @Data
-@Component
-@ConfigurationProperties(prefix = "spring.security.ignore")
+@ConfigurationProperties(prefix = "breeze.security")
 public class IgnoreUrlProperties {
 
     /**
      * 排除url
      */
-    private List<String> excludeUrls;
+    private List<String> ignoreUrls;
 
 }

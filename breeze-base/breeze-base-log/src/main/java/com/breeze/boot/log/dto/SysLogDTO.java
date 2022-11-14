@@ -87,8 +87,14 @@ public class SysLogDTO implements Serializable {
      */
     private Integer result;
 
+    /**
+     * 时间
+     */
     private String time;
 
+    /**
+     * 执行结果
+     */
     private String resultMsg;
 
 }

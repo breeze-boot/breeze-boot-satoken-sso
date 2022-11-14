@@ -27,6 +27,11 @@ import org.springframework.context.ApplicationEvent;
  */
 public class SysLogSaveEvent extends ApplicationEvent {
 
+    /**
+     * 系统日志保存事件
+     *
+     * @param sysLogDTO 系统日志dto
+     */
     public SysLogSaveEvent(SysLogDTO sysLogDTO) {
         super(sysLogDTO);
     }

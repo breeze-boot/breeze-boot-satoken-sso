@@ -1,2 +1,1 @@
-com.breeze.boot.log.config.EnableSysLogConfig
-com.breeze.boot.log.config.PublisherSaveSysLogEvent
+com.breeze.boot.log.config.EnableSysLogConfiguration

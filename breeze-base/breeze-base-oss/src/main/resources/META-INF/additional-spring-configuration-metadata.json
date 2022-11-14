@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "breeze.oss.local.enable",
+      "type": "java.lang.String",
+      "description": "Description for breeze.oss.local.enable."
+    },
+    {
+      "name": "breeze.oss.local.path",
+      "type": "java.lang.String",
+      "description": "Description for breeze.oss.local.path."
+    }
+  ]
+}

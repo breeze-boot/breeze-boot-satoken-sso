@@ -21,7 +21,7 @@ import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.system.domain.SysPermission;
 import com.breeze.boot.system.dto.PermissionDiy;

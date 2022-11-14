@@ -22,13 +22,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * pwd配置
+ * 密码配置
  *
  * @author gaoweixuan
  * @date 2022-08-31
  */
-@Configuration
-public class PwdConfig {
+@Configuration(proxyBeanMethods = false)
+public class PwdConfiguration {
 
     /**
      * 密码编码器

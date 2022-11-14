@@ -35,7 +35,7 @@ public class SysTenantLoadFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String tenantId = request.getHeader("tenantId");
+        String tenantId = request.getHeader("TENANT-ID");
         BreezeThreadLocal.set(tenantId == null ? 1L : Long.parseLong(tenantId));
         filterChain.doFilter(request, response);
     }

@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.config;
+package com.breeze.boot.xss.config;
 
-import com.breeze.boot.security.service.LocalUserDetailsService;
-import com.breeze.boot.system.service.impl.UserTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
+
 /**
- * 本地用户服务配置
+ * xxs过滤器注册配置
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @date 2022-10-21
  */
 @Configuration
-public class LocalUserServiceConfig {
-
-    @Autowired
-    private UserTokenService userTokenService;
+public class XssFilterRegisterConfiguration {
 
     @Bean
-    public LocalUserDetailsService loadCurrentLoginUser() {
-        return new LocalUserDetailsService(
-                userTokenService::loadUserByUsername
-                , userTokenService::loadUserByPhone
-                , userTokenService::createOrLoadUserByOpenId
-                , userTokenService::loadUserByEmail);
+    public FilterRegistrationBean<Filter> xssFilterRegistration() {
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+        // 过滤器要设置最先执行
+        registration.setOrder(Integer.MAX_VALUE);
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new XssFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("xssFilter");
+        return registration;
     }
 
 }

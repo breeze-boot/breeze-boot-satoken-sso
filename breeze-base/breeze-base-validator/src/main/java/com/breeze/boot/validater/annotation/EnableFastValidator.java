@@ -27,8 +27,8 @@ import java.lang.annotation.*;
  * @author gaoweixuan
  * @date 2022-10-19
  */
-@Target(ElementType.TYPE)
 @Documented
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(value = ValidatorConfiguration.class)
 public @interface EnableFastValidator {

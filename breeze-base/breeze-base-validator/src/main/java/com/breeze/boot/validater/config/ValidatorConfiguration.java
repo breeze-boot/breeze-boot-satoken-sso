@@ -33,6 +33,11 @@ import javax.validation.ValidatorFactory;
  */
 public class ValidatorConfiguration {
 
+    /**
+     * 验证器
+     *
+     * @return {@link Validator}
+     */
     @Bean
     public Validator validator() {
         ValidatorFactory factory = Validation.byProvider(HibernateValidator.class)
@@ -43,6 +48,12 @@ public class ValidatorConfiguration {
         return factory.getValidator();
     }
 
+    /**
+     * 方法验证后置处理程序
+     *
+     * @param validator 验证器
+     * @return {@link MethodValidationPostProcessor}
+     */
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor(@Autowired Validator validator) {
         MethodValidationPostProcessor postProcessor = new MethodValidationPostProcessor();

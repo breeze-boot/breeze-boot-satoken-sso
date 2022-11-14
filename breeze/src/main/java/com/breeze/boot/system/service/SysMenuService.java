@@ -18,7 +18,7 @@ package com.breeze.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.dto.MenuDTO;

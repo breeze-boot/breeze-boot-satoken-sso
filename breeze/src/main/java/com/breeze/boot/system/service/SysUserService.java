@@ -19,7 +19,7 @@ package com.breeze.boot.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.Result;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;

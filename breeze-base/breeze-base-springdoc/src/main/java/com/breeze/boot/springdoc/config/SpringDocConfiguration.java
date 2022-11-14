@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Bean;
  * @author gaoweixuan
  * @date 2022/09/24
  */
-public class SpringDocConfig {
+public class SpringDocConfiguration {
 
     /**
      * 安全计划名称

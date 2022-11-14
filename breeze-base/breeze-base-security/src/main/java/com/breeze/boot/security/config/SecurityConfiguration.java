@@ -16,13 +16,21 @@
 
 package com.breeze.boot.security.config;
 
+import com.breeze.boot.security.email.EmailCodeAuthenticationProvider;
+import com.breeze.boot.security.service.LocalUserDetailsService;
+import com.breeze.boot.security.sms.SmsCodeAuthenticationProvider;
+import com.breeze.boot.security.utils.LoginCheck;
+import com.breeze.boot.security.wx.WxCodeAuthenticationProvider;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -39,19 +47,44 @@ import org.springframework.security.web.SecurityFilterChain;
  * @date 2022-08-31
  */
 @Configuration(proxyBeanMethods = false)
-public class SecurityConfig {
+@EnableConfigurationProperties(WxLoginProperties.class)
+public class SecurityConfiguration {
 
     /**
-     * 没有认证方面
+     * 不需要认证切面类
      */
     @Autowired
-    private BreezeNoAuthenticationAspect noAuthenticationAspect;
+    private BreezeNoAuthenticationInit noAuthenticationAspect;
 
     /**
      * 身份验证配置
      */
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
+
+    /**
+     * 用户详细信息服务
+     */
+    @Autowired
+    private LocalUserDetailsService userDetailsService;
+
+    /**
+     * redis请求
+     */
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 身份验证管理器生成器
+     */
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    /**
+     * wx登录属性
+     */
+    @Autowired
+    private WxLoginProperties wxLoginProperties;
 
     /**
      * 安全过滤器链
@@ -82,7 +115,7 @@ public class SecurityConfig {
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
         // 只有{{没有登录}}可以访问
-        noAuthenticationAspect.ignoreUrlProperties.getExcludeUrls()
+        noAuthenticationAspect.ignoreUrlProperties.getIgnoreUrls()
                 .forEach(url -> expressionInterceptUrlRegistry.antMatchers(url).permitAll());
         // 其余的必须登录
         expressionInterceptUrlRegistry
@@ -118,6 +151,42 @@ public class SecurityConfig {
     @SneakyThrows
     public AuthenticationManager authenticationManager() {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    /**
+     * 短信令牌身份验证提供者 Bean
+     *
+     * @return {@link SmsCodeAuthenticationProvider}
+     */
+    @Bean
+    public SmsCodeAuthenticationProvider smsTokenAuthenticationProvider() {
+        SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
+        this.authenticationManagerBuilder.authenticationProvider(smsCodeAuthenticationProvider);
+        return smsCodeAuthenticationProvider;
+    }
+
+    /**
+     * 邮箱令牌身份验证提供者 Bean
+     *
+     * @return {@link EmailCodeAuthenticationProvider}
+     */
+    @Bean
+    public EmailCodeAuthenticationProvider emailCodeAuthenticationProvider() {
+        EmailCodeAuthenticationProvider emailCodeAuthenticationProvider = new EmailCodeAuthenticationProvider(userDetailsService, redisTemplate, new LoginCheck());
+        this.authenticationManagerBuilder.authenticationProvider(emailCodeAuthenticationProvider);
+        return emailCodeAuthenticationProvider;
+    }
+
+    /**
+     * 微信令牌身份验证提供者 Bean
+     *
+     * @return {@link EmailCodeAuthenticationProvider}
+     */
+    @Bean
+    public WxCodeAuthenticationProvider wxCodeAuthenticationProvider() {
+        WxCodeAuthenticationProvider wxCodeAuthenticationProvider = new WxCodeAuthenticationProvider(userDetailsService, wxLoginProperties);
+        this.authenticationManagerBuilder.authenticationProvider(wxCodeAuthenticationProvider);
+        return wxCodeAuthenticationProvider;
     }
 
 }

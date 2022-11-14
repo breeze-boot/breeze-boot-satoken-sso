@@ -30,6 +30,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class EmailLoginBody extends LoginBody {
+
     /**
      * 电子邮件
      */

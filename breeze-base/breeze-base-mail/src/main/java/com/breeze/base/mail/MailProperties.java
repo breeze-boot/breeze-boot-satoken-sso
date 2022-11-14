@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties("spring.mail")
-public class MailConfig {
+public class MailProperties {
 
     private String fromAddress;
 

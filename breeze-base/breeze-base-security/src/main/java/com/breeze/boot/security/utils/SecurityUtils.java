@@ -41,7 +41,7 @@ import java.util.Objects;
 public class SecurityUtils {
 
     /**
-     * 得到当前jwt
+     * 获取当前jwt
      *
      * @return {@link Jwt}
      */

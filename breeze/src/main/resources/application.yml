@@ -3,31 +3,11 @@ server:
   servlet:
     context-path: /
 
-system:
-  log:
-    enable: true
-
 spring:
   application:
     name: ${project.artifactId}
   main:
     allow-circular-references: true
-  security:
-    ignore:
-      excludeUrls:
-        - "/actuator/**"
-        - "/captcha/**"
-        - "/**/*.js"
-        - "/**/*.css"
-        - "/**/*.png"
-        - "/**/*.ico"
-        - "/druid/**"
-        - "/swagger-ui.html"
-        - "/swagger-ui/"
-        - "/*.html"
-        - "/**/*.html"
-        - "/swagger-resources/**"
-        - "/v3/api-docs/**"
   profiles:
     active: dev
 
@@ -58,6 +38,34 @@ management:
       enabled: false
     metrics:
       enabled: true
+
+breeze:
+  security:
+    ignore-urls:
+      - "/img/**"
+      - "/actuator/**"
+      - "/captcha/**"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
+      - "/druid/**"
+      - "/swagger-ui.html"
+      - "/swagger-ui/"
+      - "/*.html"
+      - "/**/*.html"
+      - "/swagger-resources/**"
+      - "/v3/api-docs/**"
+  jwt:
+    rsa-private-key: classpath:app.key
+    rsa-public-key: classpath:app.pub
+  log:
+    enable: true
+
+logging:
+  file:
+    name: ./logs/${spring.application.name}/${spring.application.name}.log
+  config: classpath:logback-spring.xml
 
 springdoc:
   swagger-ui:
@@ -136,12 +144,3 @@ aj:
     req-check-minute-limit: 60
     # verify接口一分钟内请求数限制
     req-verify-minute-limit: 60
-
-jwt:
-  rsa-private-key: classpath:app.key
-  rsa-public-key: classpath:app.pub
-
-logging:
-  file:
-    name: ./logs/${spring.application.name}/${spring.application.name}.log
-  config: classpath:logback-spring.xml

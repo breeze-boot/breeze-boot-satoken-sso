@@ -30,6 +30,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class UserLoginBody extends LoginBody {
+
     /**
      * 用户名
      */

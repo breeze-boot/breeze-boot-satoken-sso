@@ -32,27 +32,27 @@ public enum LogType {
     /**
      * 新增
      */
-    SAVE(0, ""),
+    SAVE(0, "新增"),
     /**
      * 删除
      */
-    DELETE(1, ""),
+    DELETE(1, "删除"),
     /**
      * 更新
      */
-    EDIT(2, ""),
+    EDIT(2, "更新"),
     /**
      * 用户名登录
      */
-    USERNAME_LOGIN(3, ""),
+    USERNAME_LOGIN(3, "用户名登录"),
     /**
      * 手机登录
      */
-    PHONE_LOGIN(4, ""),
+    PHONE_LOGIN(4, "手机登录"),
     /**
      * 电子邮件登录
      */
-    EMAIL_LOGIN(5, ""),
+    EMAIL_LOGIN(5, "电子邮件登录"),
 
     ;
 
@@ -69,7 +69,7 @@ public enum LogType {
     /**
      * 日志类型
      *
-     * @param code 代码
+     * @param code 编码
      * @param name 名字
      */
     LogType(int code, String name) {

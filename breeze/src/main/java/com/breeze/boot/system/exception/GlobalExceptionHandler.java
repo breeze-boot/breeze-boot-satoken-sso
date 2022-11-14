@@ -16,8 +16,8 @@
 
 package com.breeze.boot.system.exception;
 
-import com.breeze.boot.core.Result;
 import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;

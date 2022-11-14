@@ -21,6 +21,7 @@ import com.breeze.boot.security.annotation.NoAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -41,8 +42,12 @@ import java.util.Set;
  * @date 2022/08/31
  */
 @Slf4j
-public class BreezeNoAuthenticationAspect implements InitializingBean {
+@EnableConfigurationProperties(IgnoreUrlProperties.class)
+public class BreezeNoAuthenticationInit implements InitializingBean {
 
+    /**
+     * 正则
+     */
     private static final String PATTERN = "\\{(.*?)\\}";
 
     /**
@@ -56,6 +61,7 @@ public class BreezeNoAuthenticationAspect implements InitializingBean {
      */
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
+
     /**
      * 应用程序上下文
      */
@@ -77,33 +83,34 @@ public class BreezeNoAuthenticationAspect implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
+        log.info("{}", this.ignoreUrlProperties.getIgnoreUrls());
         // 获取全部的请求方法
-        Map<RequestMappingInfo, HandlerMethod> methodMap = requestMappingHandlerMapping.getHandlerMethods();
+        Map<RequestMappingInfo, HandlerMethod> methodMap = this.requestMappingHandlerMapping.getHandlerMethods();
         methodMap.forEach((requestMappingInfo, method) -> {
             Class<?> clazz = this.applicationContext.getBean(method.getBean().toString()).getClass();
             if (Objects.nonNull(AnnotationUtils.findAnnotation(clazz, NoAuthentication.class))) {
                 Optional.ofNullable(requestMappingInfo.getPathPatternsCondition())
                         .ifPresent((condition) -> condition.getPatternValues().forEach(url -> {
                             log.info("{}", ReUtil.replaceAll(url, PATTERN, "*"));
-                            this.ignoreUrlProperties.getExcludeUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
+                            this.ignoreUrlProperties.getIgnoreUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
                         }));
             } else {
-                Optional.ofNullable(requestMappingInfo.getPathPatternsCondition()).ifPresent((condition) -> this.setUrl(method, condition.getPatternValues()));
+                Optional.ofNullable(requestMappingInfo.getPathPatternsCondition()).ifPresent((condition) -> this.setIgnoreUrl(method, condition.getPatternValues()));
             }
         });
     }
 
     /**
-     * 设置地址
+     * 设置忽略url
      *
      * @param method       方法
      * @param pathPatterns 路径模式
      */
-    private void setUrl(HandlerMethod method, Set<String> pathPatterns) {
+    private void setIgnoreUrl(HandlerMethod method, Set<String> pathPatterns) {
         if (Objects.nonNull(method.getMethodAnnotation(NoAuthentication.class))) {
             pathPatterns.forEach(url -> {
                 log.info("{}", ReUtil.replaceAll(url, PATTERN, "*"));
-                this.ignoreUrlProperties.getExcludeUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
+                this.ignoreUrlProperties.getIgnoreUrls().add(ReUtil.replaceAll(url, PATTERN, "*"));
             });
         }
     }

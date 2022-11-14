@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.breeze.boot.security.config;
 
 import lombok.Getter;
@@ -30,7 +31,7 @@ import java.security.interfaces.RSAPublicKey;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "jwt")
+@ConfigurationProperties(prefix = "breeze.jwt")
 public class JwtProperties {
 
     /**

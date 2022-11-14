@@ -40,8 +40,8 @@ import java.time.Duration;
  * @author gaoweixuan
  * @date 2022-08-31
  */
-@Configuration
-public class RedisConfig {
+@Configuration(proxyBeanMethods = false)
+public class RedisConfiguration {
 
     /**
      * redis 配置
@@ -57,12 +57,9 @@ public class RedisConfig {
         // 设置hashKey和hashValue的序列化规则
         redisTemplate.setHashKeySerializer(StringRedisSerializer.UTF_8);
         redisTemplate.setHashValueSerializer(RedisSerializer.json());
-
-
-        Jackson2JsonRedisSerializer jacksonSeial = getJackson2JsonRedisSerializer();
         // 设置key和value的序列化规则
         redisTemplate.setKeySerializer(StringRedisSerializer.UTF_8);
-        redisTemplate.setValueSerializer(jacksonSeial);
+        redisTemplate.setValueSerializer(this.getJackson2JsonRedisSerializer());
 
         // 设置支持事务
         redisTemplate.setEnableTransactionSupport(true);
@@ -82,7 +79,6 @@ public class RedisConfig {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
         RedisSerializer<String> strSerializer = new StringRedisSerializer();
 
-        Jackson2JsonRedisSerializer jacksonSeial = getJackson2JsonRedisSerializer();
 
         // 自定义缓存数据序列化方式和有效期限
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -92,13 +88,18 @@ public class RedisConfig {
                 // 使用 strSerializer 对key进行数据类型转换
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(strSerializer))
                 // 使用 jacksonSeial 对value的数据类型进行转换
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jacksonSeial))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(this.getJackson2JsonRedisSerializer()))
                 // 对空数据不操作
                 .disableCachingNullValues();
 
         return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
     }
 
+    /**
+     * 得到jackson2 json复述,序列化器
+     *
+     * @return {@link Jackson2JsonRedisSerializer}
+     */
     @NotNull
     private Jackson2JsonRedisSerializer getJackson2JsonRedisSerializer() {
         Jackson2JsonRedisSerializer jacksonSeial = new Jackson2JsonRedisSerializer(Object.class);

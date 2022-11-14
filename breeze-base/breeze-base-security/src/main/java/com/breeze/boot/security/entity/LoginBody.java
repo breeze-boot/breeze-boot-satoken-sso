@@ -19,7 +19,14 @@ package com.breeze.boot.security.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 登录实体
+ *
+ * @author breeze
+ * @date 2022-11-14
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class LoginBody {
+
 }

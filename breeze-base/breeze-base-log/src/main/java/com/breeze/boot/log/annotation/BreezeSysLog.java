@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * @date 2021/10/19
  **/
 @Documented
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BreezeSysLog {
 

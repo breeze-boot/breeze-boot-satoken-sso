@@ -16,7 +16,6 @@
 
 package com.breeze.boot.core.utils;
 
-import com.breeze.boot.core.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 

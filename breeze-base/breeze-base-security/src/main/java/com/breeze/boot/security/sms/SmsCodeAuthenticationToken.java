@@ -19,7 +19,6 @@ package com.breeze.boot.security.sms;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
@@ -34,7 +33,6 @@ import java.util.Collection;
  * @author gaoweixuan
  * @date 2022-09-03
  */
-@Component
 public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;

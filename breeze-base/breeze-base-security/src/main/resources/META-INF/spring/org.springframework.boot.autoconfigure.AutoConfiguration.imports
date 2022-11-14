@@ -1,8 +1,4 @@
-com.breeze.boot.security.config.BreezeNoAuthenticationAspect
-com.breeze.boot.security.config.JwtConfig
-com.breeze.boot.security.config.PwdConfig
-com.breeze.boot.security.config.IgnoreUrlProperties
-com.breeze.boot.security.config.RedisConfig
-com.breeze.boot.security.config.JwtProperties
-com.breeze.boot.security.config.SysTenantLoadFilter
-com.breeze.boot.security.config.WxLoginProperties
+com.breeze.boot.system.config.ResourceServerConfiguration
+com.breeze.boot.security.config.JwtConfiguration
+com.breeze.boot.security.config.PwdConfiguration
+com.breeze.boot.security.config.RedisConfiguration

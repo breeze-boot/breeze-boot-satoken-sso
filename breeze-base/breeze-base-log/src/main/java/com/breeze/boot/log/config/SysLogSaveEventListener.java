@@ -33,6 +33,11 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class SysLogSaveEventListener {
 
+    /**
+     * 消费者
+     * <p>
+     * 去执行保存逻辑
+     */
     private Consumer<SysLogSaveEvent> consumer;
 
     /**

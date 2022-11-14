@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.core;
+package com.breeze.boot.core.utils;
 
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.Getter;
