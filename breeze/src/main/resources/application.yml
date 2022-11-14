@@ -10,7 +10,12 @@ spring:
     allow-circular-references: true
   profiles:
     active: dev
-
+  servlet:
+    multipart:
+      # 单文件大小限制
+      max-file-size: 10MB
+      # 总上传大小限制
+      max-request-size: 10MB
   boot:
     admin:
       client:

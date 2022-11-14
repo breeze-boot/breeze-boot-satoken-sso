@@ -28,7 +28,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         /*
             handler为前台访问的URL目录，locations为files相对应的本地路径
             eg: 也就是说如果有一个 img/1.png 请求，那程序会到后面的目录里面找1.png文件
-            ps：在Security里面配置过滤下
+            ps：在Security里面配置过滤
          */
         registry.addResourceHandler("/img/**").addResourceLocations(this.localProperties.getPath());
     }

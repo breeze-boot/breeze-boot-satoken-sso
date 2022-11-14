@@ -120,4 +120,4 @@ breeze:
   oss:
     local:
       enable: true
-      path: /usr/local/breeze/files/
+      path: file:/usr/local/breeze/files/
