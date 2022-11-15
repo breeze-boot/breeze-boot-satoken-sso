@@ -21,7 +21,7 @@ import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.domain.SysFile;
-import com.breeze.boot.system.dto.DictDTO;
+import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,14 +54,14 @@ public class SysDictItemController {
     /**
      * 列表
      *
-     * @param dictDTO 字典dto
+     * @param dictSearchDTO 字典dto
      * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> list(@RequestBody DictDTO dictDTO) {
-        return Result.ok(this.sysDictItemService.listDictItem(dictDTO));
+    public Result<List<SysDictItem>> list(@RequestBody DictSearchDTO dictSearchDTO) {
+        return Result.ok(this.sysDictItemService.listDictItem(dictSearchDTO));
     }
 
     /**

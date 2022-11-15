@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDept;
-import com.breeze.boot.system.dto.DeptDTO;
+import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,14 +53,14 @@ public class SysDeptController {
     /**
      * 列表
      *
-     * @param deptDTO 部门dto
+     * @param deptSearchDTO 部门dto
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    public Result<List<Tree<Long>>> list(@RequestBody DeptDTO deptDTO) {
-        return Result.ok(this.sysDeptService.listDept(deptDTO));
+    public Result<List<Tree<Long>>> list(@RequestBody DeptSearchDTO deptSearchDTO) {
+        return Result.ok(this.sysDeptService.listDept(deptSearchDTO));
     }
 
     /**

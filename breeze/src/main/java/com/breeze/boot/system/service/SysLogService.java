@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.log.dto.SysLogDTO;
 import com.breeze.boot.system.domain.SysLog;
-import com.breeze.boot.system.dto.LogDTO;
+import com.breeze.boot.system.dto.LogSearchDTO;
 
 /**
  * 系统日志服务
@@ -33,10 +33,10 @@ public interface SysLogService extends IService<SysLog> {
     /**
      * 日志列表
      *
-     * @param logDTO 日志dto
+     * @param logSearchDTO 日志dto
      * @return {@link Page}<{@link SysLog}>
      */
-    Page<SysLog> listLog(LogDTO logDTO);
+    Page<SysLog> listLog(LogSearchDTO logSearchDTO);
 
     /**
      * 保存系统日志

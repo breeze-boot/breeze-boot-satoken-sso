@@ -29,7 +29,7 @@ import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRoleMenu;
-import com.breeze.boot.system.dto.MenuDTO;
+import com.breeze.boot.system.dto.MenuSearchDTO;
 import com.breeze.boot.system.mapper.SysMenuMapper;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysRoleMenuService;
@@ -113,16 +113,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 菜单列表
      *
-     * @param menuDTO 菜单dto
+     * @param menuSearchDTO 菜单dto
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
     @Override
-    public Result<?> listMenu(MenuDTO menuDTO) {
-        if (StrUtil.isAllNotBlank(menuDTO.getName()) || StrUtil.isAllNotBlank(menuDTO.getTitle())) {
-            List<SysMenu> entityList = this.baseMapper.listMenu(menuDTO);
+    public Result<?> listMenu(MenuSearchDTO menuSearchDTO) {
+        if (StrUtil.isAllNotBlank(menuSearchDTO.getName()) || StrUtil.isAllNotBlank(menuSearchDTO.getTitle())) {
+            List<SysMenu> entityList = this.baseMapper.listMenu(menuSearchDTO);
             return Result.ok(entityList);
         }
-        List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuDTO);
+        List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuSearchDTO);
         List<Tree<Long>> build = this.buildTrees(menuEntityList, ROOT);
         return Result.ok(build);
     }

@@ -14,29 +14,46 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.base.oss.minio.config;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.dto.DictSearchDTO;
-
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 系统字典项服务
+ * minio属性
  *
- * @author gaoweixuan
- * @date 2022-09-02
+ * @author breeze
+ * @date 2022-11-14
  */
-public interface SysDictItemService extends IService<SysDictItem> {
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "breeze.oss.minio")
+public class BreezeMinioProperties {
 
     /**
-     * 字典列表项
-     *
-     * @param dictSearchDTO dict dto
-     * @return {@link List}<{@link SysDictItem}>
+     * bucket名称
      */
-    List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);
+    private String bucketName;
+
+    /**
+     * 连接地址
+     */
+    private String endpoint;
+
+    /**
+     * 用户名
+     */
+    private String accessKey;
+
+    /**
+     * 密码
+     */
+    private String secretKey;
+
+    /**
+     * 域名
+     */
+    private String nginxHost;
 
 }
-

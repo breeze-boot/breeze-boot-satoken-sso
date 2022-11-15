@@ -1,5 +1,6 @@
 package com.breeze.boot.system.controller.login;
 
+import cn.hutool.core.util.StrUtil;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
@@ -53,7 +54,7 @@ public class BreezeCaptchaController {
      * @return {@link String}
      */
     private static String getRemoteIpFromXfwd(String xfwd) {
-        if (StringUtils.isNotBlank(xfwd)) {
+        if (StrUtil.isAllNotBlank(xfwd)) {
             String[] ipList = xfwd.split(",");
             return StringUtils.trim(ipList[0]);
         } else {

@@ -26,11 +26,11 @@
         FROM sys_dict AS a
         <where>
             a.is_delete = 0
-            <if test="dictDto.dictName != null and dictDto.dictName != ''">
-                AND a.dict_name LIKE CONCAT( '%', #{dictDto.dictName}, '%')
+            <if test="dictSearchDto.dictName != null and dictSearchDto.dictName != ''">
+                AND a.dict_name LIKE CONCAT( '%', #{dictSearchDto.dictName}, '%')
             </if>
-            <if test="dictDto.dictCode != null and dictDto.dictCode != ''">
-                AND a.dict_code LIKE CONCAT( '%', #{dictDto.dictCode}, '%')
+            <if test="dictSearchDto.dictCode != null and dictSearchDto.dictCode != ''">
+                AND a.dict_code LIKE CONCAT( '%', #{dictSearchDto.dictCode}, '%')
             </if>
         </where>
     </select>

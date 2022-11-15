@@ -7,10 +7,8 @@
     <resultMap type="com.breeze.boot.system.domain.SysFile" id="sysFileMap">
         <id property="id" column="id"/>
         <result property="newFileName" column="new_file_name"/>
-        <result property="oldFileName" column="old_file_name"/>
-        <result property="userCode" column="user_code"/>
+        <result property="originalFileName" column="original_file_name"/>
         <result property="userId" column="user_id"/>
-        <result property="username" column="username"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>

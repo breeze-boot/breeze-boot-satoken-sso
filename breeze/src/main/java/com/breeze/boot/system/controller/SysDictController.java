@@ -21,7 +21,8 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDict;
-import com.breeze.boot.system.dto.DictDTO;
+import com.breeze.boot.system.dto.DictOpenDTO;
+import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,14 +54,14 @@ public class SysDictController {
     /**
      * 列表
      *
-     * @param dictDTO 字典dto
+     * @param dictSearchDTO 字典dto
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @Operation(summary = "列表", description = "分页")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDict>> list(@RequestBody DictDTO dictDTO) {
-        return Result.ok(this.sysDictService.listDict(dictDTO));
+    public Result<Page<SysDict>> list(@RequestBody DictSearchDTO dictSearchDTO) {
+        return Result.ok(this.sysDictService.listDict(dictSearchDTO));
     }
 
     /**
@@ -94,15 +95,15 @@ public class SysDictController {
     /**
      * 开关
      *
-     * @param dictDTO 字典dto
+     * @param dictOpenDTO 字典开关 DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:dict:edit')")
     @BreezeSysLog(description = "字典信息开关", type = LogType.EDIT)
-    public Result<Boolean> open(@Validated @RequestBody DictDTO dictDTO) {
-        return Result.ok(this.sysDictService.open(dictDTO));
+    public Result<Boolean> open(@Validated @RequestBody DictOpenDTO dictOpenDTO) {
+        return Result.ok(this.sysDictService.open(dictOpenDTO));
     }
 
     /**

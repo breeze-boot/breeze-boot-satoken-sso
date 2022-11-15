@@ -24,7 +24,7 @@ import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
-import com.breeze.boot.system.dto.PlatformDTO;
+import com.breeze.boot.system.dto.PlatformSearchDTO;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,14 +63,14 @@ public class SysPlatformController {
     /**
      * 列表
      *
-     * @param platformDTO 平台dto
+     * @param platformSearchDTO 平台dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result<Page<SysPlatform>> list(@RequestBody PlatformDTO platformDTO) {
-        return Result.ok(this.sysPlatformService.listPage(platformDTO));
+    public Result<Page<SysPlatform>> list(@RequestBody PlatformSearchDTO platformSearchDTO) {
+        return Result.ok(this.sysPlatformService.listPage(platformSearchDTO));
     }
 
     /**

@@ -27,10 +27,10 @@ import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserRole;
-import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
+import com.breeze.boot.system.dto.UserSearchDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysRoleService;
@@ -89,12 +89,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 列表页面
      *
-     * @param userDTO 用户dto
+     * @param userSearchDTO 用户dto
      * @return {@link Page}<{@link SysUser}>
      */
     @Override
-    public IPage<SysUser> listPage(UserDTO userDTO) {
-        return this.baseMapper.listPage(new Page<>(userDTO.getCurrent(), userDTO.getSize()), userDTO);
+    public IPage<SysUser> listPage(UserSearchDTO userSearchDTO) {
+        return this.baseMapper.listPage(new Page<>(userSearchDTO.getCurrent(), userSearchDTO.getSize()), userSearchDTO);
     }
 
     /**

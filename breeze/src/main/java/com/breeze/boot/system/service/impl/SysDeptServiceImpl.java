@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.DeptDTO;
+import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.mapper.SysDeptMapper;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysUserService;
@@ -57,13 +57,13 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 部门列表
      *
-     * @param deptDTO 部门dto
+     * @param deptSearchDTO 部门dto
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     @Override
-    public List<Tree<Long>> listDept(DeptDTO deptDTO) {
+    public List<Tree<Long>> listDept(DeptSearchDTO deptSearchDTO) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery()
-                .eq(Objects.nonNull(deptDTO) && StrUtil.isAllNotBlank(deptDTO.getDeptName()), SysDept::getDeptName, deptDTO.getDeptName()));
+                .eq(Objects.nonNull(deptSearchDTO) && StrUtil.isAllNotBlank(deptSearchDTO.getDeptName()), SysDept::getDeptName, deptSearchDTO.getDeptName()));
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
                 sysDept -> {
                     TreeNode<Long> treeNode = new TreeNode<>();
@@ -73,7 +73,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                     Map<String, Object> leafMap = Maps.newHashMap();
                     leafMap.put("deptName", sysDept.getDeptName());
                     leafMap.put("deptCode", sysDept.getDeptCode());
-                    if (Objects.equals(deptDTO.getId(), sysDept.getId())) {
+                    if (Objects.equals(deptSearchDTO.getId(), sysDept.getId())) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
                     leafMap.put("value", sysDept.getId());

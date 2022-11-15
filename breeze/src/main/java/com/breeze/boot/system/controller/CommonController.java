@@ -24,7 +24,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
-import com.breeze.boot.system.dto.DeptDTO;
+import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
@@ -151,7 +151,7 @@ public class CommonController {
     @Operation(summary = "部门下拉框", description = "下拉框接口")
     @GetMapping("/selectDept")
     public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
-        return Result.ok(this.deptService.listDept(DeptDTO.builder().id(id).build()));
+        return Result.ok(this.deptService.listDept(DeptSearchDTO.builder().id(id).build()));
     }
 
     /**

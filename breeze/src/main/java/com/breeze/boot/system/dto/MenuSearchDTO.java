@@ -30,8 +30,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "菜单参数DTO")
-public class MenuDTO {
+@Schema(description = "菜单查询参数DTO")
+public class MenuSearchDTO {
 
     /**
      * 平台id

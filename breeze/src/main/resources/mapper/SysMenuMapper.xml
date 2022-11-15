@@ -58,12 +58,12 @@
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
-            AND a.platform_id = #{menuDTO.platformId}
-            <if test="menuDTO.title != null and menuDTO.title != ''">
-                AND a.title like CONCAT( '%', #{menuDTO.title}, '%')
+            AND a.platform_id = #{menuSearchDTO.platformId}
+            <if test="menuSearchDTO.title != null and menuSearchDTO.title != ''">
+                AND a.title like CONCAT( '%', #{menuSearchDTO.title}, '%')
             </if>
-            <if test="menuDTO.name != null and menuDTO.name != ''">
-                AND a.name like CONCAT( '%', #{menuDTO.name}, '%')
+            <if test="menuSearchDTO.name != null and menuSearchDTO.name != ''">
+                AND a.name like CONCAT( '%', #{menuSearchDTO.name}, '%')
             </if>
         </where>
     </select>

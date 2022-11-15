@@ -1,6 +1,7 @@
 package com.breeze.boot.system.dto;
 
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
  * wx登录dto
@@ -9,20 +10,29 @@ import lombok.Data;
  * @date 2022-11-09
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "用户查询参数DTO")
 public class WxLoginDTO {
 
     /**
-     * 尼克名字
+     * 用户昵称
      */
+    @Schema(description = "用户昵称")
     private String nickName;
 
     /**
      * 头像 url
      */
+    @Schema(description = "头像地址")
     private String avatarUrl;
 
     /**
-     * 代码
+     * code
      */
+    @Schema(description = "code")
     private String code;
+
 }

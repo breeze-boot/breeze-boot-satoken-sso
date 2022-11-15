@@ -16,41 +16,33 @@
 
 package com.breeze.boot.system.dto;
 
-import com.breeze.boot.core.entity.PageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
- * 用户查询参数DTO
+ * 字典开关参数DTO
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @date 2022-09-02
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户查询参数DTO")
-public class UserDTO extends PageDTO {
+@Schema(description = "字典开关参数DTO")
+public class DictOpenDTO {
 
     /**
-     * 用户编码
+     * 字典 id
      */
-    @Schema(description = "用户编码")
-    private String userCode;
+    @Schema(description = "字典ID")
+    private Long id;
 
     /**
-     * 用户名称
+     * 是否开启
      */
-    @Schema(description = "用户名称")
-    private String username;
-
-    /**
-     * 电话
-     */
-    @Schema(description = "电话")
-    private String phone;
-
+    @Schema(description = "是否开启")
+    private Integer isOpen;
 
 }

@@ -27,7 +27,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
-import com.breeze.boot.system.dto.RoleDTO;
+import com.breeze.boot.system.dto.RoleSearchDTO;
 import com.breeze.boot.system.mapper.SysRoleMapper;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
@@ -74,15 +74,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 列表页面
      *
-     * @param roleDTO 角色dto
+     * @param roleSearchDTO 角色dto
      * @return {@link Page}<{@link SysRole}>
      */
     @Override
-    public Page<SysRole> listPage(RoleDTO roleDTO) {
-        Page<SysRole> platformEntityPage = new Page<>(roleDTO.getCurrent(), roleDTO.getSize());
+    public Page<SysRole> listPage(RoleSearchDTO roleSearchDTO) {
+        Page<SysRole> platformEntityPage = new Page<>(roleSearchDTO.getCurrent(), roleSearchDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(roleDTO.getRoleName()), SysRole::getRoleName, roleDTO.getRoleName())
-                .like(StrUtil.isAllNotBlank(roleDTO.getRoleCode()), SysRole::getRoleCode, roleDTO.getRoleCode())
+                .like(StrUtil.isAllNotBlank(roleSearchDTO.getRoleName()), SysRole::getRoleName, roleSearchDTO.getRoleName())
+                .like(StrUtil.isAllNotBlank(roleSearchDTO.getRoleCode()), SysRole::getRoleCode, roleSearchDTO.getRoleCode())
                 .page(platformEntityPage);
     }
 

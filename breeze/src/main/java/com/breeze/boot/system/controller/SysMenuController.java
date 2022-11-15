@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.dto.MenuDTO;
+import com.breeze.boot.system.dto.MenuSearchDTO;
 import com.breeze.boot.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,14 +53,14 @@ public class SysMenuController {
     /**
      * 列表
      *
-     * @param menuDTO 菜单dto
+     * @param menuSearchDTO 菜单dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result<?> list(@RequestBody MenuDTO menuDTO) {
-        return this.sysMenuService.listMenu(menuDTO);
+    public Result<?> list(@RequestBody MenuSearchDTO menuSearchDTO) {
+        return this.sysMenuService.listMenu(menuSearchDTO);
     }
 
     /**

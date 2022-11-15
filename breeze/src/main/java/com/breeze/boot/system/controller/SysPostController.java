@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysPost;
-import com.breeze.boot.system.dto.PostDTO;
+import com.breeze.boot.system.dto.PostSearchDTO;
 import com.breeze.boot.system.service.SysPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,14 +53,14 @@ public class SysPostController {
     /**
      * 列表
      *
-     * @param postDTO 岗位dto
+     * @param postSearchDTO 岗位dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:post:list')")
-    public Result<IPage<SysPost>> list(@RequestBody PostDTO postDTO) {
-        return Result.ok(this.sysPostService.listPage(postDTO));
+    public Result<IPage<SysPost>> list(@RequestBody PostSearchDTO postSearchDTO) {
+        return Result.ok(this.sysPostService.listPage(postSearchDTO));
     }
 
     /**

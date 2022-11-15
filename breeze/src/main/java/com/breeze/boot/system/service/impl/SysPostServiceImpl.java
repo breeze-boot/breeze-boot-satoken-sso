@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysPost;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.PostDTO;
+import com.breeze.boot.system.dto.PostSearchDTO;
 import com.breeze.boot.system.mapper.SysPostMapper;
 import com.breeze.boot.system.service.SysPostService;
 import com.breeze.boot.system.service.SysUserService;
@@ -50,15 +50,15 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
     /**
      * 列表页面
      *
-     * @param postDTO 帖子dto
+     * @param postSearchDTO 帖子dto
      * @return {@link IPage}<{@link List}<{@link SysPost}>>
      */
     @Override
-    public IPage<SysPost> listPage(PostDTO postDTO) {
-        Page<SysPost> sysPostPage = new Page<>(postDTO.getCurrent(), postDTO.getSize());
+    public IPage<SysPost> listPage(PostSearchDTO postSearchDTO) {
+        Page<SysPost> sysPostPage = new Page<>(postSearchDTO.getCurrent(), postSearchDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(postDTO.getPostCode()), SysPost::getPostCode, postDTO.getPostCode())
-                .like(StrUtil.isAllNotBlank(postDTO.getPostName()), SysPost::getPostName, postDTO.getPostName())
+                .like(StrUtil.isAllNotBlank(postSearchDTO.getPostCode()), SysPost::getPostCode, postSearchDTO.getPostCode())
+                .like(StrUtil.isAllNotBlank(postSearchDTO.getPostName()), SysPost::getPostName, postSearchDTO.getPostName())
                 .orderByDesc(SysPost::getCreateTime)
                 .page(sysPostPage);
     }

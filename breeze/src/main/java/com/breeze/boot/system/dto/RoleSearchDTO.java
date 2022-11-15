@@ -21,41 +21,29 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
- * 字典查询参数DTO
+ * 角色查询参数DTO
  *
  * @author gaoweixuan
- * @date 2022-09-02
+ * @date 2022-08-31
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "字典查询参数DTO")
-public class DictDTO extends PageDTO {
+@Schema(description = "角色查询参数DTO")
+public class RoleSearchDTO extends PageDTO {
 
     /**
-     * 字典 id
+     * 角色名
      */
-    @Schema(description = "字典ID")
-    private Long id;
+    @Schema(description = "角色名称")
+    private String roleName;
 
     /**
-     * 字典 名称
+     * 角色编码
      */
-    @Schema(description = "字典名称")
-    private String dictName;
-
-    /**
-     * 字典 编码
-     */
-    @Schema(description = "字典编码")
-    private String dictCode;
-
-    /**
-     * 是否开启
-     */
-    @Schema(description = "是否开启")
-    private Integer isOpen;
+    @Schema(description = "角色编码")
+    private String roleCode;
 
 }

@@ -25,10 +25,16 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 文件标题
+     */
+    @Schema(description = "文件标题")
+    private String title;
+
+    /**
      * 原文件名称
      */
     @Schema(description = "原文件名称")
-    private String oldFileName;
+    private String originalFileName;
 
     /**
      * 新文件名字
@@ -43,21 +49,8 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
     private Long userId;
 
     /**
-     * 用户编码
+     * 路径
      */
-    @Schema(description = "用户编码")
-    private String userCode;
-
-    /**
-     * 用户名
-     */
-    @Schema(description = "用户名")
-    private String username;
-
-    /**
-     * url
-     */
-    @Schema(description = "url")
-    private String url;
-
+    @Schema(description = "路径")
+    private String path;
 }

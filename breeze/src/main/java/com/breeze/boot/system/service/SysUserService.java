@@ -21,10 +21,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
+import com.breeze.boot.system.dto.UserSearchDTO;
 
 /**
  * 系统用户服务
@@ -37,10 +37,10 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 列表页面
      *
-     * @param userDTO 用户dto
+     * @param userSearchDTO 用户dto
      * @return {@link Page}<{@link SysUser}>
      */
-    IPage<SysUser> listPage(UserDTO userDTO);
+    IPage<SysUser> listPage(UserSearchDTO userSearchDTO);
 
     /**
      * 保存用户

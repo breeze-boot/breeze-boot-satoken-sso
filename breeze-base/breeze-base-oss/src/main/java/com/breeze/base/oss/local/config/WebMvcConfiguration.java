@@ -1,10 +1,28 @@
+/*
+ * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.breeze.base.oss.local.config;
 
+import com.breeze.base.oss.local.service.LocalFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,18 +36,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(LocalProperties.class)
 @ConditionalOnProperty(prefix = "breeze.oss.local", value = "enable")
+@Import(LocalFileService.class)
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private LocalProperties localProperties;
 
+    /**
+     * 添加资源处理程序
+     * handler: 前台访问的URL目录
+     * locations: files相对应的本地路径
+     * eg: 如果有一个 img/1.png 请求，访问后面的目录里面找1.png文件
+     * ps：在Security里面配置过滤路径
+     *
+     * @param registry 注册表
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        /*
-            handler为前台访问的URL目录，locations为files相对应的本地路径
-            eg: 也就是说如果有一个 img/1.png 请求，那程序会到后面的目录里面找1.png文件
-            ps：在Security里面配置过滤
-         */
-        registry.addResourceHandler("/img/**").addResourceLocations(this.localProperties.getPath());
+        registry.addResourceHandler("/img/**").addResourceLocations("file:" + this.localProperties.getPath());
     }
 }

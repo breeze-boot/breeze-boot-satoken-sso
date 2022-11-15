@@ -17,11 +17,13 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.base.oss.dto.FileDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
+import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysFile;
-import com.breeze.boot.system.dto.FileDTO;
+import com.breeze.boot.system.dto.FileSearchDTO;
 import com.breeze.boot.system.service.SysFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,6 +32,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -54,14 +58,14 @@ public class SysFileController {
     /**
      * 列表
      *
-     * @param fileDTO 文件dto
+     * @param fileSearchDTO 文件dto
      * @return {@link Result}<{@link List}<{@link SysFile}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
-    public Result<Page<SysFile>> list(@RequestBody FileDTO fileDTO) {
-        return Result.ok(this.sysFileService.listFile(fileDTO));
+    public Result<Page<SysFile>> list(@RequestBody FileSearchDTO fileSearchDTO) {
+        return Result.ok(this.sysFileService.listFile(fileSearchDTO));
     }
 
     /**
@@ -76,6 +80,19 @@ public class SysFileController {
     @BreezeSysLog(description = "文件信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysFile sysFile) {
         return Result.ok(sysFileService.save(sysFile));
+    }
+
+    /**
+     * 文件上传
+     *
+     * @return {@link Result}
+     */
+    @NoAuthentication
+    @Operation(summary = "保存")
+    @PostMapping("/upload")
+//    @PreAuthorize("hasAnyAuthority('sys:file:upload')")
+    public Result<?> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
+        return this.sysFileService.upload(fileDTO, request, response);
     }
 
     /**

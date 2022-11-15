@@ -19,7 +19,7 @@ package com.breeze.boot.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.system.domain.SysPlatform;
-import com.breeze.boot.system.dto.PlatformDTO;
+import com.breeze.boot.system.dto.PlatformSearchDTO;
 
 import java.util.List;
 
@@ -34,17 +34,17 @@ public interface SysPlatformService extends IService<SysPlatform> {
     /**
      * 列表页面
      *
-     * @param platformDTO 平台dto
+     * @param platformSearchDTO 平台dto
      * @return {@link Page}<{@link SysPlatform}>
      */
-    Page<SysPlatform> listPage(PlatformDTO platformDTO);
+    Page<SysPlatform> listPage(PlatformSearchDTO platformSearchDTO);
 
     /**
      * 批量保存
      *
-     * @param platformDTOList 平台 List
+     * @param platformSearchDTOList 平台 List
      * @return boolean
      */
-    Boolean saveAllBatch(List<PlatformDTO> platformDTOList);
+    Boolean saveAllBatch(List<PlatformSearchDTO> platformSearchDTOList);
 
 }

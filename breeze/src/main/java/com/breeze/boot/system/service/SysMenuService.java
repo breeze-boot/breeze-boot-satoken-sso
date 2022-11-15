@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.dto.MenuDTO;
+import com.breeze.boot.system.dto.MenuSearchDTO;
 
 import java.util.List;
 import java.util.Set;
@@ -53,10 +53,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 菜单列表
      *
-     * @param menuDTO 菜单dto
+     * @param menuSearchDTO 菜单dto
      * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
      */
-    Result<?> listMenu(MenuDTO menuDTO);
+    Result<?> listMenu(MenuSearchDTO menuSearchDTO);
 
     /**
      * 树形权限列表

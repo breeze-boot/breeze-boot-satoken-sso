@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
-import com.breeze.boot.system.dto.RoleDTO;
+import com.breeze.boot.system.dto.RoleSearchDTO;
 
 import java.util.List;
 import java.util.Set;
@@ -45,10 +45,10 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 列表页面
      *
-     * @param roleDTO 角色dto
+     * @param roleSearchDTO 角色dto
      * @return {@link Page}<{@link SysRole}>
      */
-    Page<SysRole> listPage(RoleDTO roleDTO);
+    Page<SysRole> listPage(RoleSearchDTO roleSearchDTO);
 
     /**
      * 删除由ids

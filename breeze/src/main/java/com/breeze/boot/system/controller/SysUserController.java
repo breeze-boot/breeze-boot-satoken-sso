@@ -23,10 +23,10 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.UserDTO;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
+import com.breeze.boot.system.dto.UserSearchDTO;
 import com.breeze.boot.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,14 +58,14 @@ public class SysUserController {
     /**
      * 列表
      *
-     * @param userDTO 用户dto
+     * @param userSearchDTO 用户dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    public Result<IPage<SysUser>> list(@RequestBody UserDTO userDTO) {
-        return Result.ok(this.sysUserService.listPage(userDTO));
+    public Result<IPage<SysUser>> list(@RequestBody UserSearchDTO userSearchDTO) {
+        return Result.ok(this.sysUserService.listPage(userSearchDTO));
     }
 
     /**

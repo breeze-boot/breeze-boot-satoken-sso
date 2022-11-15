@@ -16,34 +16,38 @@
 
 package com.breeze.boot.system.dto;
 
-import com.breeze.boot.core.entity.PageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
- * 用户查询参数DTO
+ * 部门参数DTO
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @date 2022-09-01
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "岗位查询参数DTO")
-public class PostDTO extends PageDTO {
+@Schema(description = "部门参数DTO")
+public class DeptSearchDTO {
 
     /**
-     * 岗位编码
+     * id
      */
-    @Schema(description = "岗位编码")
-    private String postCode;
+    private Long id;
 
     /**
-     * 岗位名字
+     * 部门名称
      */
-    @Schema(description = "岗位名称")
-    private String postName;
+    @Schema(description = "部门名称")
+    private String deptName;
+
+    /**
+     * 父id
+     */
+    @Schema(description = "父id")
+    private Long parentId;
 
 }

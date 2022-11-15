@@ -103,7 +103,7 @@ public class SecurityUtils {
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
         LoginUserDTO loginUserDTO = cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
         if (Objects.isNull(loginUserDTO)) {
-            throw new AccessDeniedException("用户过期");
+            throw new AccessDeniedException("用户未登录");
         }
         return loginUserDTO;
     }

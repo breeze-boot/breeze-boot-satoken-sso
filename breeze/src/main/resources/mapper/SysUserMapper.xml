@@ -57,14 +57,14 @@
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
-            <if test="userDTO.phone != null and userDTO.phone != ''">
+            <if test="userSearchDTO.phone != null and userSearchDTO.phone != ''">
                 AND a.phone like CONCAT('%' , #{phone}, '%')
             </if>
-            <if test="userDTO.username != null and userDTO.username != ''">
-                AND a.username like CONCAT('%' , #{userDTO.username}, '%')
+            <if test="userSearchDTO.username != null and userSearchDTO.username != ''">
+                AND a.username like CONCAT('%' , #{userSearchDTO.username}, '%')
             </if>
-            <if test="userDTO.userCode != null and userDTO.userCode != ''">
-                AND a.user_code like CONCAT('%' , #{userDTO.userCode}, '%')
+            <if test="userSearchDTO.userCode != null and userSearchDTO.userCode != ''">
+                AND a.user_code like CONCAT('%' , #{userSearchDTO.userCode}, '%')
             </if>
         </where>
     </select>

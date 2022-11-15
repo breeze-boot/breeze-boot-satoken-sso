@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysPost;
-import com.breeze.boot.system.dto.PostDTO;
+import com.breeze.boot.system.dto.PostSearchDTO;
 
 import java.util.List;
 
@@ -35,10 +35,10 @@ public interface SysPostService extends IService<SysPost> {
     /**
      * 列表页面
      *
-     * @param postDTO 帖子dto
+     * @param postSearchDTO 帖子dto
      * @return {@link IPage}<{@link List}<{@link SysPost}>>
      */
-    IPage<SysPost> listPage(PostDTO postDTO);
+    IPage<SysPost> listPage(PostSearchDTO postSearchDTO);
 
     /**
      * id s

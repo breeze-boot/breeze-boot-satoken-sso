@@ -22,7 +22,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysDict;
 import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.dto.DictDTO;
+import com.breeze.boot.system.dto.DictOpenDTO;
+import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.mapper.SysDictMapper;
 import com.breeze.boot.system.service.SysDictItemService;
 import com.breeze.boot.system.service.SysDictService;
@@ -49,25 +50,25 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     /**
      * dict类型列表
      *
-     * @param dictDto dict dto
+     * @param dictSearchDto dict dto
      * @return {@link Page}<{@link SysDict}>
      */
     @Override
-    public Page<SysDict> listDict(DictDTO dictDto) {
-        return this.baseMapper.listDict(new Page<>(dictDto.getCurrent(), dictDto.getSize()), dictDto);
+    public Page<SysDict> listDict(DictSearchDTO dictSearchDto) {
+        return this.baseMapper.listDict(new Page<>(dictSearchDto.getCurrent(), dictSearchDto.getSize()), dictSearchDto);
     }
 
     /**
      * 开关
      *
-     * @param dictDTO 字典 dto
+     * @param dictOpenDTO 字典开关 dto
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(DictDTO dictDTO) {
+    public Boolean open(DictOpenDTO dictOpenDTO) {
         return this.update(Wrappers.<SysDict>lambdaUpdate()
-                .set(SysDict::getIsOpen, dictDTO.getIsOpen())
-                .eq(SysDict::getId, dictDTO.getId()));
+                .set(SysDict::getIsOpen, dictOpenDTO.getIsOpen())
+                .eq(SysDict::getId, dictOpenDTO.getId()));
     }
 
     /**

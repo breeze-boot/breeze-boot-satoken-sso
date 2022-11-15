@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "日志查询参数DTO")
-public class LogDTO extends PageDTO {
+public class LogSearchDTO extends PageDTO {
 
     /**
      * 系统模块

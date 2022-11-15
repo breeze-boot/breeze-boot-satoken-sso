@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysLog;
-import com.breeze.boot.system.dto.LogDTO;
+import com.breeze.boot.system.dto.LogSearchDTO;
 import com.breeze.boot.system.service.SysLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,13 +52,13 @@ public class SysLogController {
     /**
      * 列表
      *
-     * @param logDTO 日志dto
+     * @param logSearchDTO 日志dto
      * @return {@link Result}<{@link Page}<{@link BreezeSysLog}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(@RequestBody LogDTO logDTO) {
-        return Result.ok(this.sysLogService.listLog(logDTO));
+    public Result<Page<SysLog>> list(@RequestBody LogSearchDTO logSearchDTO) {
+        return Result.ok(this.sysLogService.listLog(logSearchDTO));
     }
 
     /**

@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
- * 平台查询参数DTO
+ * 用户查询参数DTO
  *
  * @author gaoweixuan
  * @date 2022-08-31
@@ -31,19 +31,26 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "平台查询参数DTO")
-public class PlatformDTO extends PageDTO {
+@Schema(description = "用户查询参数DTO")
+public class UserSearchDTO extends PageDTO {
 
     /**
-     * 平台名称
+     * 用户编码
      */
-    @Schema(description = "平台名称")
-    private String platformName;
+    @Schema(description = "用户编码")
+    private String userCode;
 
     /**
-     * 平台编码
+     * 用户名称
      */
-    @Schema(description = "平台编码")
-    private String platformCode;
+    @Schema(description = "用户名称")
+    private String username;
+
+    /**
+     * 电话
+     */
+    @Schema(description = "电话")
+    private String phone;
+
 
 }

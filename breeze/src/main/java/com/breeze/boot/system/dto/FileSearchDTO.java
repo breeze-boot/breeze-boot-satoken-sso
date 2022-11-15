@@ -14,29 +14,42 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.system.dto;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.dto.DictSearchDTO;
-
-import java.util.List;
+import com.breeze.boot.core.entity.PageDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
- * 系统字典项服务
+ * 文件查询DTO
  *
  * @author gaoweixuan
  * @date 2022-09-02
  */
-public interface SysDictItemService extends IService<SysDictItem> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "文件查询参数DTO")
+public class FileSearchDTO extends PageDTO {
 
     /**
-     * 字典列表项
-     *
-     * @param dictSearchDTO dict dto
-     * @return {@link List}<{@link SysDictItem}>
+     * 新文件名称
      */
-    List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);
+    @Schema(description = "新文件名称")
+    private String newFileName;
+
+    /**
+     * 原文件名字
+     */
+    @Schema(description = "原文件名称")
+    private String originalFileName;
+
+    /**
+     * 用户id
+     */
+    @Schema(description = "用户ID")
+    private String userId;
 
 }
-

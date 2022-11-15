@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysTenant;
-import com.breeze.boot.system.dto.TenantDTO;
+import com.breeze.boot.system.dto.TenantSearchDTO;
 import com.breeze.boot.system.service.SysTenantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,14 +54,14 @@ public class SysTenantController {
     /**
      * 列表
      *
-     * @param tenantDTO 租户dto
+     * @param tenantSearchDTO 租户dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
-    public Result<IPage<SysTenant>> list(@RequestBody TenantDTO tenantDTO) {
-        return Result.ok(this.sysTenantService.listPage(tenantDTO));
+    public Result<IPage<SysTenant>> list(@RequestBody TenantSearchDTO tenantSearchDTO) {
+        return Result.ok(this.sysTenantService.listPage(tenantSearchDTO));
     }
 
     /**

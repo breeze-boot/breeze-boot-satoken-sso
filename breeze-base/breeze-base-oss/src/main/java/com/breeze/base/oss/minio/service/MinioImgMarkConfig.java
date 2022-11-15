@@ -14,29 +14,37 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.base.oss.minio.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.dto.DictSearchDTO;
+import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.FileUtil;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.awt.*;
 
 /**
- * 系统字典项服务
+ * minio配置
  *
- * @author gaoweixuan
- * @date 2022-09-02
+ * @author breeze
+ * @date 2022-11-15
  */
-public interface SysDictItemService extends IService<SysDictItem> {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MinioImgMarkConfig {
 
-    /**
-     * 字典列表项
-     *
-     * @param dictSearchDTO dict dto
-     * @return {@link List}<{@link SysDictItem}>
-     */
-    List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);
+    private String pressText;
+
+    private Image pressImg = ImgUtil.read(FileUtil.file("D:/logo.jpg"));
+
+    private int x;
+
+    private int y;
+
+    private float alpha;
 
 }
-

@@ -24,7 +24,7 @@ import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
-import com.breeze.boot.system.dto.RoleDTO;
+import com.breeze.boot.system.dto.RoleSearchDTO;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,14 +64,14 @@ public class SysRoleController {
     /**
      * 列表
      *
-     * @param roleDTO 角色dto
+     * @param roleSearchDTO 角色dto
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result<Page<SysRole>> list(@RequestBody RoleDTO roleDTO) {
-        return Result.ok(this.sysRoleService.listPage(roleDTO));
+    public Result<Page<SysRole>> list(@RequestBody RoleSearchDTO roleSearchDTO) {
+        return Result.ok(this.sysRoleService.listPage(roleSearchDTO));
     }
 
     /**

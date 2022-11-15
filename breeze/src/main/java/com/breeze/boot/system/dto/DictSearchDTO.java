@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
  *
@@ -22,27 +21,41 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 /**
- * 租户查询参数DTO
+ * 字典查询参数DTO
  *
  * @author gaoweixuan
- * @date 2022-11-06
+ * @date 2022-09-02
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "租户查询参数DTO")
-public class TenantDTO extends PageDTO {
+@Schema(description = "字典查询参数DTO")
+public class DictSearchDTO extends PageDTO {
 
     /**
-     * 租户名称
+     * 字典 id
      */
-    @Schema(description = "租户名称")
-    private String tenantName;
+    @Schema(description = "字典ID")
+    private Long id;
 
     /**
-     * 租户编码
+     * 字典 名称
      */
-    private String tenantCode;
+    @Schema(description = "字典名称")
+    private String dictName;
+
+    /**
+     * 字典 编码
+     */
+    @Schema(description = "字典编码")
+    private String dictCode;
+
+    /**
+     * 是否开启
+     */
+    @Schema(description = "是否开启")
+    private Integer isOpen;
+
 }

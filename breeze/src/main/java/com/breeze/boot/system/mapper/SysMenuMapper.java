@@ -19,7 +19,7 @@ package com.breeze.boot.system.mapper;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.dto.MenuDTO;
+import com.breeze.boot.system.dto.MenuSearchDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,10 +46,10 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
     /**
      * 菜单列表
      *
-     * @param menuDTO 菜单dto
+     * @param menuSearchDTO 菜单dto
      * @return {@link List}<{@link SysMenu}>
      */
-    List<SysMenu> listMenu(@Param("menuDTO") MenuDTO menuDTO);
+    List<SysMenu> listMenu(@Param("menuSearchDTO") MenuSearchDTO menuSearchDTO);
 
     /**
      * 选择菜单角色id
