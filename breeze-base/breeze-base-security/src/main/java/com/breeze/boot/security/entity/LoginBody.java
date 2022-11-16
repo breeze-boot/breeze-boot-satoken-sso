@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 登录实体
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-14
  */
 @Data

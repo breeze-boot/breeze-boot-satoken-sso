@@ -47,6 +47,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
+
 /**
  * 系统用户服务impl
  *
@@ -191,7 +193,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    @CacheEvict(cacheNames = "sys:login_user", key = "#sysUser.username")
+    @CacheEvict(cacheNames = LOGIN_USER, key = "#sysUser.username")
     public Result<Boolean> removeUser(SysUser sysUser) {
         boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, sysUser.getId()));
         if (remove) {

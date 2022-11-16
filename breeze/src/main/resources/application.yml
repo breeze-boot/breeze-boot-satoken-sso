@@ -47,6 +47,7 @@ management:
 breeze:
   security:
     ignore-urls:
+      - "/ws/**"
       - "/img/**"
       - "/actuator/**"
       - "/captcha/**"

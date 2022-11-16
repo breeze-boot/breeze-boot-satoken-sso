@@ -25,13 +25,8 @@ package com.breeze.boot.core.constants;
 public class CacheConstants {
 
     /**
-     * oauth令牌
+     * 登录用户
      */
-    public static final String OAUTH_TOKEN = "oauth:token:";
-
-    /**
-     * 客户关键细节
-     */
-    public static final String CLIENT_DETAILS_KEY = "oauth:client:details";
+    public static final String LOGIN_USER = "sys:login_user";
 
 }

@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
 /**
  * minio配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-09-27
  */
 @Configuration

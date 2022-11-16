@@ -37,8 +37,6 @@ import java.util.Objects;
  */
 public class MybatisPlusConfiguration {
 
-    private final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
-
     /**
      * 自定义 SqlInjector 包含自定义的全局方法
      */

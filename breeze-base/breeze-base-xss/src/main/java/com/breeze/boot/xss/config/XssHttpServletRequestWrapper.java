@@ -20,6 +20,7 @@ import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HtmlUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -45,6 +46,7 @@ import java.util.Map;
  * @author gaoweixuan
  * @date 2022-10-21
  */
+@Slf4j
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     /**

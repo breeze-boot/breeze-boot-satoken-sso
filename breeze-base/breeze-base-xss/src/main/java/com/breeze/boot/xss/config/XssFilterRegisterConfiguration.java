@@ -32,6 +32,11 @@ import javax.servlet.Filter;
 @Configuration
 public class XssFilterRegisterConfiguration {
 
+    /**
+     * xss过滤器登记
+     *
+     * @return {@link FilterRegistrationBean}<{@link Filter}>
+     */
     @Bean
     public FilterRegistrationBean<Filter> xssFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();

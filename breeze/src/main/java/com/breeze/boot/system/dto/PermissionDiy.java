@@ -22,7 +22,7 @@ import lombok.*;
 /**
  * 自定义权限
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-12
  */
 @Data

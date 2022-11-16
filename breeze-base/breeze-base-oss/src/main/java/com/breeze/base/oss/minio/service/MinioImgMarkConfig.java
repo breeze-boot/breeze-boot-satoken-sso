@@ -28,7 +28,7 @@ import java.awt.*;
 /**
  * minio配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-15
  */
 @Data

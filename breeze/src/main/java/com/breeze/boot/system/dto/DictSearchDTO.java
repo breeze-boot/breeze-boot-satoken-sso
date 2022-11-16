@@ -35,7 +35,7 @@ import lombok.*;
 public class DictSearchDTO extends PageDTO {
 
     /**
-     * 字典 id
+     * 字典 ID
      */
     @Schema(description = "字典ID")
     private Long id;

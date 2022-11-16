@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * minio属性
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-14
  */
 @Getter

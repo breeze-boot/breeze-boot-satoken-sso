@@ -28,16 +28,33 @@ import java.io.IOException;
  */
 public class XssFilter implements Filter {
 
+    /**
+     * 初始化
+     *
+     * @param config 配置
+     */
     @Override
     public void init(FilterConfig config) {
     }
 
+    /**
+     * 过滤器
+     *
+     * @param request  请求
+     * @param response 响应
+     * @param chain    链
+     * @throws IOException      ioexception
+     * @throws ServletException servlet异常
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
     }
 
+    /**
+     * 销毁
+     */
     @Override
     public void destroy() {
     }

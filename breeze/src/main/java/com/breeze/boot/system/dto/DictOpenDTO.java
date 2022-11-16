@@ -34,7 +34,7 @@ import lombok.*;
 public class DictOpenDTO {
 
     /**
-     * 字典 id
+     * 字典 ID
      */
     @Schema(description = "字典ID")
     private Long id;

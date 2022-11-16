@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 /**
  * minio 请求服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-14
  */
 @Slf4j

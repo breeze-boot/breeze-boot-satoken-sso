@@ -35,6 +35,11 @@ public class SysLogConfig {
     @Autowired
     private SysLogService sysLogService;
 
+    /**
+     * 侦听器
+     *
+     * @return {@link SysLogSaveEventListener}
+     */
     @Bean
     public SysLogSaveEventListener listener() {
         return new SysLogSaveEventListener((sysLog) -> this.sysLogService.saveSysLog((SysLogDTO) sysLog.getSource()));

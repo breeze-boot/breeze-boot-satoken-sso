@@ -13,6 +13,7 @@
     <description>基础模块</description>
 
     <modules>
+        <module>breeze-base-websocket</module>
         <module>breeze-base-datasource</module>
         <module>breeze-base-mail</module>
         <module>breeze-base-oss</module>

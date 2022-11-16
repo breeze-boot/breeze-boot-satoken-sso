@@ -60,7 +60,7 @@ public class BreezeInsertAllBatch extends AbstractMethod {
     }
 
     /**
-     * 准备现场sql
+     * 拼装sql
      *
      * @param tableInfo 表信息
      * @return {@link StringBuilder}

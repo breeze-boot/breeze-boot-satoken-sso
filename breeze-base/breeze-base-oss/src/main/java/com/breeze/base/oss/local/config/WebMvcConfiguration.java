@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * web mvc配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-11-14
  */
 @Configuration

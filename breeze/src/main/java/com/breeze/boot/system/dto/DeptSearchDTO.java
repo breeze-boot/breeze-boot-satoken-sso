@@ -34,8 +34,9 @@ import lombok.*;
 public class DeptSearchDTO {
 
     /**
-     * id
+     * ID
      */
+    @Schema(description = "ID")
     private Long id;
 
     /**

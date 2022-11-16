@@ -32,6 +32,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Objects;
 
+import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
+
 /**
  * 安全跑龙套
  *
@@ -101,7 +103,7 @@ public class SecurityUtils {
 
     public static LoginUserDTO getCurrentUser() {
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
-        LoginUserDTO loginUserDTO = cacheManager.getCache("sys:login_user").get(SecurityUtils.getUsername(), LoginUserDTO.class);
+        LoginUserDTO loginUserDTO = cacheManager.getCache(LOGIN_USER).get(SecurityUtils.getUsername(), LoginUserDTO.class);
         if (Objects.isNull(loginUserDTO)) {
             throw new AccessDeniedException("用户未登录");
         }

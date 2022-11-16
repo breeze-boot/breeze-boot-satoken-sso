@@ -8,9 +8,9 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>breeze-base-xss</artifactId>
+    <artifactId>breeze-base-websocket</artifactId>
     <packaging>jar</packaging>
-    <description>XSS Filter starter</description>
+    <description>websocket starter</description>
 
     <dependencies>
         <dependency>
@@ -22,6 +22,11 @@
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
 </project>
