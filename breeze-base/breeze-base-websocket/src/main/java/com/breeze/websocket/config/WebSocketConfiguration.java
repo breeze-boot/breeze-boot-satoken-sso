@@ -17,7 +17,6 @@
 package com.breeze.websocket.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -32,7 +31,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @Configuration
 @EnableWebSocketMessageBroker
-@Import(BreezeChannelInterceptorAdapter.class)
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     /**
@@ -52,7 +50,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 开启简单基于内存的消息代理
-        config.enableSimpleBroker("/user", "/topic");
+        config.enableSimpleBroker("/queue", "/topic");
         // 点对点消息的订阅前缀
         config.setUserDestinationPrefix("/user");
         // 客户端发送消息的前缀
@@ -63,4 +61,5 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new BreezeChannelInterceptorAdapter());
     }
+
 }

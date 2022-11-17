@@ -20,10 +20,15 @@ import com.breeze.boot.core.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * WebSocket消息模块接口
@@ -36,7 +41,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "webSocket消息模块", description = "WebSocketMsgController")
 public class WebSocketMsgController {
 
-    @Operation(summary = "")
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Operation(summary = "发送信息到所有用户")
     @MessageMapping("/sendMsg")
     @SendTo("/topic/msg")
     public Result<?> sendMsg(String msg) {
@@ -44,11 +52,18 @@ public class WebSocketMsgController {
         return Result.ok(msg);
     }
 
-    @Operation(summary = "")
+    @Operation(summary = "发送信息到指定用户")
     @MessageMapping("/sendUserMsg")
-    @SendToUser("/userMsg")
-    public Result<?> sendUserMsg(String msg) {
-        log.info(msg);
+    @SendToUser("/queue/userMsg")
+    public Result<?> sendUserMsg(Principal principal, @Payload String msg) {
+        log.info("msg {}, username： {}", msg, principal.getName());
+        return Result.ok(msg);
+    }
+
+    @Operation(summary = "发送信息给指定的用户")
+    @MessageMapping("/toSendUserMsg")
+    public Result<?> sendUserMsg1(Principal principal, @Payload String msg) {
+        this.simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/queue/userMsg", msg);
         return Result.ok(msg);
     }
 

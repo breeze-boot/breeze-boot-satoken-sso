@@ -16,13 +16,21 @@
 
 package com.breeze.websocket.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
+
+import java.security.Principal;
+import java.util.List;
 
 /**
  * 通道拦截器适配器
@@ -30,13 +38,8 @@ import org.springframework.messaging.support.ChannelInterceptor;
  * @author gaoweixuan
  * @date 2022-11-16
  */
+@Slf4j
 public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
-
-    /**
-     * 简单消息模板
-     */
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * 收到之前
@@ -57,15 +60,29 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
      * @return {@link Message}<{@link ?}>
      */
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+    public Message<?> preSend(Message<?> message, @NotNull MessageChannel channel) {
+        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         StompCommand command = accessor.getCommand();
+        log.info("{}", command);
+        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+            List<String> nativeHeader = accessor.getNativeHeader("username");
+            if (CollUtil.isEmpty(nativeHeader)) {
+                return null;
+            }
+            String username = nativeHeader.get(0);
+            if (StrUtil.isAllBlank(username)) {
+                return null;
+            }
+            log.info(username);
+            Principal principal = () -> username;
+            accessor.setUser(principal);
+            return message;
+        }
         // 检测用户订阅内容（防止用户订阅不合法频道）
         if (StompCommand.SUBSCRIBE.equals(command)) {
-            // 如果该用户订阅的频道不合法直接返回null前端用户就接受不到该频道信息
+            // TODO
         }
         return message;
-
     }
 
     /**
@@ -78,13 +95,14 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
      */
     @Override
     public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
+        SimpMessagingTemplate simpMessagingTemplate = SpringUtil.getBean(SimpMessagingTemplate.class);
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         StompCommand command = accessor.getCommand();
         if (StompCommand.SUBSCRIBE.equals(command)) {
-            this.simpMessagingTemplate.convertAndSend("/topic/sendMsg", "消息发送成功");
+            simpMessagingTemplate.convertAndSend("/topic/sendMsg", "消息发送成功");
         }
         if (StompCommand.DISCONNECT.equals(command)) {
-            this.simpMessagingTemplate.convertAndSend("/topic/sendMsg", "{'msg':'用户断开连接'}");
+            simpMessagingTemplate.convertAndSend("/topic/sendMsg", "{'msg':'用户断开连接'}");
         }
     }
 }
