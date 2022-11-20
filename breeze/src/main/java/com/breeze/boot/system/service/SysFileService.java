@@ -25,6 +25,7 @@ import com.breeze.boot.system.dto.FileSearchDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 系统文件服务
@@ -67,5 +68,13 @@ public interface SysFileService extends IService<SysFile> {
      * @param response 响应
      */
     void download(Long fileId, HttpServletResponse response);
+
+    /**
+     * 通过id删除文件
+     *
+     * @param asList 正如列表
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> removeFileByIds(List<Long> asList);
 
 }

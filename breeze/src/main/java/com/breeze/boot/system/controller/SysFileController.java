@@ -117,7 +117,7 @@ public class SysFileController {
     @PreAuthorize("hasAnyAuthority('sys:file:delete')")
     @BreezeSysLog(description = "文件信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return Result.ok(this.sysFileService.removeByIds(Arrays.asList(ids)));
+        return this.sysFileService.removeFileByIds(Arrays.asList(ids));
     }
 
 }

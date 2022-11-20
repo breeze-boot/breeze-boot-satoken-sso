@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -67,6 +69,14 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                 .page(logEntityPage);
     }
 
+    /**
+     * 上传
+     *
+     * @param fileDTO  文件dto
+     * @param request  请求
+     * @param response 响应
+     * @return {@link Result}<{@link Boolean}>
+     */
     @SneakyThrows
     @Override
     public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
@@ -104,6 +114,28 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             throw new RuntimeException("");
         }
         this.ossStoreService.download(sysFile.getOssStyle(), sysFile.getNewFileName(), response);
+    }
+
+    /**
+     * 通过id删除文件
+     *
+     * @param asList 正如列表
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Override
+    public Result<Boolean> removeFileByIds(List<Long> asList) {
+        List<SysFile> sysFileList = this.listByIds(asList);
+        if (CollUtil.isNotEmpty(sysFileList)) {
+            return Result.fail(Boolean.FALSE, "文件不存在");
+        }
+        for (SysFile sysFile : sysFileList) {
+            Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getNewFileName());
+            if (remove) {
+                continue;
+            }
+            this.removeById(sysFile.getId());
+        }
+        return Result.ok(Boolean.TRUE, "删除成功");
     }
 
 }

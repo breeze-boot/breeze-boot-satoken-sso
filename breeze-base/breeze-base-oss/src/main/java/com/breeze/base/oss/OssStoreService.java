@@ -44,22 +44,20 @@ public class OssStoreService {
     private MinioService minioService;
 
     /**
-     * 文件下载
+     * 下载
      *
      * @param response response
+     * @param ossStyle 存储方式
+     * @param fileName 文件名称
      */
     public void download(Integer ossStyle, String fileName, HttpServletResponse response) {
         switch (ossStyle) {
             case 0:
-                if (Objects.isNull(this.localFileService)) {
-                    throw new RuntimeException("未配置本地存储方式");
-                }
+                beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
                 this.localFileService.download(fileName, response);
                 break;
             case 1:
-                if (Objects.isNull(this.minioService)) {
-                    throw new RuntimeException("未配置minio存储方式");
-                }
+                beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
                 this.minioService.download(fileName, response);
                 break;
             default:
@@ -68,7 +66,13 @@ public class OssStoreService {
     }
 
     /**
-     * 文件上传
+     * 上传
+     *
+     * @param ossStyle    存储方式
+     * @param file        文件
+     * @param path        路径
+     * @param newFileName 新文件名字
+     * @return {@link Optional}<{@link FileBO}>
      */
     @SneakyThrows
     public Optional<FileBO> upload(Integer ossStyle, MultipartFile file, String path, String newFileName) {
@@ -91,21 +95,18 @@ public class OssStoreService {
      * 图片预览
      *
      * @param fileName 文件名称
-     * @return
+     * @param ossStyle 存储方式
+     * @return {@link Optional}<{@link String}>
      */
     public Optional<String> preview(Integer ossStyle, String fileName) {
         Optional<String> preView;
         switch (ossStyle) {
             case 0:
-                if (Objects.isNull(this.localFileService)) {
-                    throw new RuntimeException("未配置本地存储方式");
-                }
+                beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
                 preView = this.localFileService.previewImg(fileName);
                 break;
             case 1:
-                if (Objects.isNull(this.minioService)) {
-                    throw new RuntimeException("未配置minio存储方式");
-                }
+                beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
                 preView = this.minioService.previewImg(fileName);
                 break;
             default:
@@ -116,12 +117,25 @@ public class OssStoreService {
     }
 
     /**
-     * 文件删除
+     * bean是否存在
      *
-     * @param fileName 文件名称
-     * @param response response
+     * @param aNull 一个空
+     * @param msg   信息
      */
-    public Boolean remove(String fileName, HttpServletResponse response) {
+    private void beanIsExists(boolean aNull, String msg) {
+        if (aNull) {
+            throw new RuntimeException(msg);
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param ossStyle 存储方式
+     * @param fileName 文件名称
+     * @return {@link Boolean}
+     */
+    public Boolean remove(Integer ossStyle, String fileName) {
         return true;
     }
 
