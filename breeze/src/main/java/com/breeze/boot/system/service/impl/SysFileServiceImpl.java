@@ -20,20 +20,25 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.base.oss.dto.FileDTO;
+import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.local.service.LocalFileService;
 import com.breeze.base.oss.minio.service.MinioService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysFile;
+import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
 import com.breeze.boot.system.mapper.SysFileMapper;
 import com.breeze.boot.system.service.SysFileService;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -42,6 +47,7 @@ import java.util.UUID;
  * @author gaoweixuan
  * @date 2022-09-02
  */
+@Slf4j
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
 
@@ -69,18 +75,73 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 
     @SneakyThrows
     @Override
-    public Result<Boolean> upload(FileDTO file, HttpServletRequest request, HttpServletResponse response) {
-        FileDTO fileDTO = this.localFileService.uploadFile(file.getFile());
-        FileDTO breeze = this.minioService.upload2Minio(file.getFile().getInputStream(), file.getFile().getSize(), "/test", UUID.randomUUID().toString());
+    public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
+        Optional<FileBO> optionalFileBO;
+        MultipartFile file = fileDTO.getFile();
+        switch (fileDTO.getOssStyle()) {
+            case 0:
+                optionalFileBO = this.localFileService.uploadFile(file);
+                break;
+            case 1:
+                optionalFileBO = this.minioService.upload2Minio(file.getInputStream(), fileDTO.getFile().getSize(), "/test", UUID.randomUUID().toString().replace("-", ""), file.getContentType());
+                break;
+            default:
+                optionalFileBO = Optional.empty();
+                log.error("存储类型错误");
+        }
+        FileBO fileBO = optionalFileBO.orElseThrow(RuntimeException::new);
         SysFile sysFile = SysFile.builder()
-                .title(file.getTitle())
-                .newFileName(fileDTO.getNewFileName())
-                .originalFileName(fileDTO.getOriginalFilename())
-                // .userId(SecurityUtils.getCurrentUser().getId())
-                .path(fileDTO.getPath())
+                .title(fileDTO.getTitle())
+                .newFileName(fileBO.getNewFileName())
+                .originalFileName(fileBO.getOriginalFilename())
+                .path(fileBO.getPath())
                 .build();
-        this.minioService.download("testd074fbdc-3e61-492b-8d3c-f370d2432d36", response);
         return Result.ok(this.save(sysFile));
+    }
+
+    /**
+     * 预览
+     *
+     * @param fileId 文件ID
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Override
+    public Result<Boolean> preview(Long fileId) {
+        SysFile sysFile = this.getById(fileId);
+        if (Objects.isNull(sysFile)) {
+            return Result.fail(Boolean.FALSE, "文件不存在");
+        }
+        Optional<String> preView;
+        switch (sysFile.getOssStyle()) {
+            case 0:
+                preView = this.localFileService.previewImg(sysFile.getNewFileName());
+                break;
+            case 1:
+                preView = this.minioService.previewImg(sysFile.getNewFileName());
+                break;
+            default:
+                preView = Optional.empty();
+                log.error("存储类型错误");
+        }
+        return Result.ok(Boolean.TRUE, preView.get());
+    }
+
+    @Override
+    public void download(Long fileId, HttpServletResponse response) {
+        SysFile sysFile = this.getById(fileId);
+        if (Objects.isNull(sysFile)) {
+            throw new RuntimeException("");
+        }
+        switch (sysFile.getOssStyle()) {
+            case 0:
+                this.localFileService.download(sysFile.getNewFileName(), response);
+                break;
+            case 1:
+                this.minioService.download(sysFile.getNewFileName(), response);
+                break;
+            default:
+                log.error("存储类型错误");
+        }
     }
 
 }

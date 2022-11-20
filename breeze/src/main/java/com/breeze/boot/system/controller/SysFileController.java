@@ -17,12 +17,12 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.base.oss.dto.FileDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysFile;
+import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
 import com.breeze.boot.system.service.SysFileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,12 +68,38 @@ public class SysFileController {
     }
 
     /**
+     * 图片预览
+     *
+     * @param fileId 文件ID
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "图片预览")
+    @PostMapping("/preview")
+    @PreAuthorize("hasAnyAuthority('sys:file:preview')")
+    public Result<Boolean> preview(Long fileId) {
+        return this.sysFileService.preview(fileId);
+    }
+
+    /**
+     * 文件下载
+     *
+     * @param fileId 文件ID
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "文件下载")
+    @PostMapping("/download")
+    @PreAuthorize("hasAnyAuthority('sys:file:download')")
+    public void download(Long fileId, HttpServletResponse response) {
+        this.sysFileService.download(fileId, response);
+    }
+
+    /**
      * 文件上传
      *
      * @return {@link Result}
      */
     @NoAuthentication
-    @Operation(summary = "保存")
+    @Operation(summary = "文件上传")
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('sys:file:upload')")
     public Result<?> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {

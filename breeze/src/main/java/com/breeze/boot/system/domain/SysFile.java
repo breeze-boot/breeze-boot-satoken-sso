@@ -47,4 +47,11 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
      */
     @Schema(description = "路径")
     private String path;
+
+    /**
+     * 存储方式
+     */
+    @Schema(description = "存储方式 0 本地 1 minio")
+    private Integer ossStyle;
+
 }

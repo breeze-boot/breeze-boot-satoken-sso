@@ -35,7 +35,7 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
      * @param permissionDTO 许可dto
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> editPermission(MenuPermissionDTO permissionDTO);
+    Result<Boolean> modifyPermission(MenuPermissionDTO permissionDTO);
 
 }
 

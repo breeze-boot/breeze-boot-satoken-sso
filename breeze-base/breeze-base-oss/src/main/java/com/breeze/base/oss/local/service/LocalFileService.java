@@ -17,16 +17,18 @@
 package com.breeze.base.oss.local.service;
 
 import cn.hutool.core.lang.UUID;
-import com.breeze.base.oss.dto.FileDTO;
+import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.local.config.LocalProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * 本地上传 工具
@@ -65,9 +67,9 @@ public class LocalFileService {
      * 上传文件
      *
      * @param file 文件
-     * @return {@link FileDTO}
+     * @return {@link FileBO}
      */
-    public FileDTO uploadFile(MultipartFile file) {
+    public Optional<FileBO> uploadFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new RuntimeException("文件错误");
         }
@@ -90,12 +92,19 @@ public class LocalFileService {
             log.error("上传失败 {}", e.getMessage());
             e.printStackTrace();
         }
-        return FileDTO.builder()
+        return Optional.ofNullable(FileBO.builder()
                 .originalFilename(originalFilename)
                 .newFileName(newFileName)
                 .path(newFilePath.getPath())
                 .contentType(contentType)
-                .build();
+                .build());
     }
 
+    public void download(String newFileName, HttpServletResponse response) {
+
+    }
+
+    public Optional<String> previewImg(String newFileName) {
+        return Optional.empty();
+    }
 }

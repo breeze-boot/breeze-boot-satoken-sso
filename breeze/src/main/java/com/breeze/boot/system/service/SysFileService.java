@@ -18,9 +18,9 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.base.oss.dto.FileDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysFile;
+import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,11 +45,27 @@ public interface SysFileService extends IService<SysFile> {
     /**
      * 上传
      *
-     * @param fileDTO  文件dto
+     * @param fileDTO  文件DTO
      * @param request
      * @param response
      * @return {@link Result}<{@link ?}>
      */
     Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 预览
+     *
+     * @param fileId 文件ID
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> preview(Long fileId);
+
+    /**
+     * 下载
+     *
+     * @param fileId   文件标识
+     * @param response 响应
+     */
+    void download(Long fileId, HttpServletResponse response);
 
 }

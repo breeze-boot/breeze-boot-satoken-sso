@@ -52,7 +52,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> editPermission(MenuPermissionDTO menuPermissionDTO) {
+    public Result<Boolean> modifyPermission(MenuPermissionDTO menuPermissionDTO) {
         this.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, menuPermissionDTO.getRoleId()));
         List<SysRoleMenu> sysRoleMenuList = menuPermissionDTO.getPermissionIds().stream().map(menuId -> {
             SysRoleMenu sysRoleMenu = new SysRoleMenu();

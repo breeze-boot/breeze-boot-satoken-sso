@@ -18,7 +18,7 @@ package com.breeze.base.oss.minio.service;
 
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.StrUtil;
-import com.breeze.base.oss.dto.FileDTO;
+import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.minio.config.BreezeMinioProperties;
 import io.minio.*;
 import io.minio.http.Method;
@@ -40,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -77,12 +78,12 @@ public class MinioService {
      * @param path               路径
      * @param fileName           文件名称
      * @param minioImgMarkConfig minio img配置
-     * @return {@link FileDTO}
+     * @return {@link FileBO}
      */
-    public FileDTO uploadFileByImgMark(MultipartFile file,
-                                       String path,
-                                       String fileName,
-                                       MinioImgMarkConfig minioImgMarkConfig) {
+    public Optional<FileBO> uploadFileByImgMark(MultipartFile file,
+                                                String path,
+                                                String fileName,
+                                                MinioImgMarkConfig minioImgMarkConfig) {
         if (file.isEmpty()) {
             throw new RuntimeException("文件为空");
         }
@@ -103,7 +104,7 @@ public class MinioService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return this.uploadImg(this.minioProperties.getBucketName(), path, fileName, (BufferedImage) image);
+        return this.uploadImg(path, fileName, (BufferedImage) image);
     }
 
     /**
@@ -113,12 +114,12 @@ public class MinioService {
      * @param path               路径
      * @param fileName           文件名称
      * @param minioImgMarkConfig minio img配置
-     * @return {@link FileDTO}
+     * @return {@link FileBO}
      */
-    public FileDTO uploadFileByTextMark(MultipartFile file,
-                                        String path,
-                                        String fileName,
-                                        MinioImgMarkConfig minioImgMarkConfig) {
+    public Optional<FileBO> uploadFileByTextMark(MultipartFile file,
+                                                 String path,
+                                                 String fileName,
+                                                 MinioImgMarkConfig minioImgMarkConfig) {
 
         if (file.isEmpty()) {
             throw new RuntimeException("文件为空");
@@ -139,56 +140,53 @@ public class MinioService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return this.uploadImg(this.minioProperties.getBucketName(), path, fileName, (BufferedImage) image);
+        return this.uploadImg(path, fileName, (BufferedImage) image);
     }
 
     /**
      * 上传img
      *
-     * @param bucketName bucket名称
-     * @param path       路径
-     * @param fileName   文件名称
-     * @param image      图像
-     * @return {@link FileDTO}
+     * @param path     路径
+     * @param fileName 文件名称
+     * @param image    图像
+     * @return {@link FileBO}
      */
-    public FileDTO uploadImg(String bucketName, String path, String fileName, BufferedImage image) {
+    public Optional<FileBO> uploadImg(String path, String fileName, BufferedImage image) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, "jpeg", os);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return this.upload2Minio(new ByteArrayInputStream(os.toByteArray()), os.size(), path, fileName);
+        return this.upload2Minio(new ByteArrayInputStream(os.toByteArray()), os.size(), path, fileName, "image/jpeg");
     }
 
     /**
      * 上传minio
      *
      * @param is       文件
-     * @param path     路径
-     * @param fileName 文件名称
      * @param size     大小
-     * @return {@link FileDTO}
+     * @param path     路径 ()
+     * @param fileName 文件名称
+     * @return {@link FileBO}
      */
-    public FileDTO upload2Minio(InputStream is, long size, String path, String fileName) {
-        createBucket(this.minioProperties.getBucketName());
+    public Optional<FileBO> upload2Minio(InputStream is, long size, String path, String fileName, String contentType) {
+        this.createBucket(this.minioProperties.getBucketName());
         try {
             this.minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(this.minioProperties.getBucketName())
                             .object(path + fileName)
                             .stream(is, size, -1)
-                            //文件类型 已经全部转为JPG
-                            .contentType("image/jpeg")
+                            .contentType(contentType)
                             .build());
         } catch (Exception e) {
             e.printStackTrace();
         }
         String savePath = this.minioProperties.getBucketName() + path + fileName;
         String imageUrl = this.minioProperties.getNginxHost() + savePath;
-        log.info(" \n {}", imageUrl);
-        return FileDTO.builder().newFileName(fileName).path(savePath).build();
-
+        log.info(" \n {} \n {}", savePath, imageUrl);
+        return Optional.ofNullable(FileBO.builder().newFileName(fileName).path(savePath).contentType(contentType).build());
     }
 
     /**
@@ -352,7 +350,7 @@ public class MinioService {
      * @param fileName 文件名称
      * @return {@link String}
      */
-    public String previewImg(String fileName) {
+    public Optional<String> previewImg(String fileName) {
         // 查看文件地址
         GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
                 .bucket("breeze")
@@ -360,11 +358,11 @@ public class MinioService {
                 .method(Method.GET)
                 .build();
         try {
-            return this.minioClient.getPresignedObjectUrl(build);
+            return Optional.ofNullable(this.minioClient.getPresignedObjectUrl(build));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return Optional.empty();
     }
 
     /**
