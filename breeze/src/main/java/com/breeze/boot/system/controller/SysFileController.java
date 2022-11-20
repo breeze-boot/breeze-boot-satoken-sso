@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,20 +68,6 @@ public class SysFileController {
     }
 
     /**
-     * 保存
-     *
-     * @param sysFile 文件实体
-     * @return {@link Result}
-     */
-    @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:file:save')")
-    @BreezeSysLog(description = "文件信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysFile sysFile) {
-        return Result.ok(sysFileService.save(sysFile));
-    }
-
-    /**
      * 文件上传
      *
      * @return {@link Result}
@@ -90,23 +75,9 @@ public class SysFileController {
     @NoAuthentication
     @Operation(summary = "保存")
     @PostMapping("/upload")
-//    @PreAuthorize("hasAnyAuthority('sys:file:upload')")
+    @PreAuthorize("hasAnyAuthority('sys:file:upload')")
     public Result<?> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         return this.sysFileService.upload(fileDTO, request, response);
-    }
-
-    /**
-     * 修改
-     *
-     * @param sysFile 文件实体
-     * @return {@link Result}
-     */
-    @Operation(summary = "修改")
-    @PutMapping("/修改")
-    @PreAuthorize("hasAnyAuthority('sys:file:edit')")
-    @BreezeSysLog(description = "文件信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysFile sysFile) {
-        return Result.ok(sysFileService.updateById(sysFile));
     }
 
     /**
