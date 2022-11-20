@@ -8,7 +8,6 @@
         <id property="id" column="id"/>
         <result property="newFileName" column="new_file_name"/>
         <result property="originalFileName" column="original_file_name"/>
-        <result property="userId" column="user_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>

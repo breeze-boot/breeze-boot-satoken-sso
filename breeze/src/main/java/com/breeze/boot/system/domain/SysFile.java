@@ -43,12 +43,6 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
     private String newFileName;
 
     /**
-     * 用户ID
-     */
-    @Schema(description = "用户ID")
-    private Long userId;
-
-    /**
      * 路径
      */
     @Schema(description = "路径")
