@@ -99,10 +99,10 @@ public class SysMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:msg:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:msg:modify')")
     @BreezeSysLog(description = "消息信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysMsg msg) {
+    public Result<Boolean> modify(@Validated @RequestBody SysMsg msg) {
         return Result.ok(this.sysMsgService.updateById(msg));
     }
 

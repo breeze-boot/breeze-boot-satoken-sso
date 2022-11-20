@@ -107,10 +107,10 @@ public class SysPlatformController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:platform:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:platform:modify')")
     @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysPlatform sysPlatform) {
+    public Result<Boolean> modify(@Validated @RequestBody SysPlatform sysPlatform) {
         return Result.ok(this.sysPlatformService.updateById(sysPlatform));
     }
 

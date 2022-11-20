@@ -108,10 +108,10 @@ public class SysPermissionController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:permission:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:permission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysPermission SysPermission) {
+    public Result<Boolean> modify(@Validated @RequestBody SysPermission SysPermission) {
         return Result.ok(this.sysPermissionService.updateById(SysPermission));
     }
 

@@ -97,10 +97,10 @@ public class SysDeptController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:dept:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:dept:modify')")
     @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysDept sysDept) {
+    public Result<Boolean> modify(@Validated @RequestBody SysDept sysDept) {
         return Result.ok(this.sysDeptService.updateById(sysDept));
     }
 

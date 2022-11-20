@@ -102,10 +102,10 @@ public class SysUserController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysUser sysUser) {
+    public Result<Boolean> modify(@Validated @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
@@ -117,7 +117,7 @@ public class SysUserController {
      */
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
-    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
     public Result<Boolean> resetPass(@Validated @RequestBody UserResetPasswordDTO userResetPassword) {
         return Result.ok(sysUserService.resetPass(userResetPassword));
@@ -131,7 +131,7 @@ public class SysUserController {
      */
     @Operation(summary = "用户锁定开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户锁定", type = LogType.EDIT)
     public Result<Boolean> open(@Validated @RequestBody UserOpenDTO openDTO) {
         return Result.ok(sysUserService.open(openDTO));
@@ -145,7 +145,7 @@ public class SysUserController {
      */
     @Operation(summary = "用户分配角色")
     @PutMapping("/userAddRole")
-    @PreAuthorize("hasAnyAuthority('sys:user:edit')")
+    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
     public Result<Boolean> userAddRole(@Validated @RequestBody UserRolesDTO userRolesDTO) {
         return sysUserService.userAddRole(userRolesDTO);

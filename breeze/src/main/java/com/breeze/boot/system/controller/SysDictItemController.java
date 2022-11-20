@@ -85,10 +85,10 @@ public class SysDictItemController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:dict:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典项信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysDictItem sysDictItem) {
+    public Result<Boolean> modify(@Validated @RequestBody SysDictItem sysDictItem) {
         return Result.ok(this.sysDictItemService.updateById(sysDictItem));
     }
 

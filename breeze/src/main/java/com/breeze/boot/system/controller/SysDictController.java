@@ -85,8 +85,8 @@ public class SysDictController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:dict:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息修改", type = LogType.EDIT)
     public Result<Boolean> update(@Validated @RequestBody SysDict sysDict) {
         return Result.ok(this.sysDictService.updateById(sysDict));
@@ -100,7 +100,7 @@ public class SysDictController {
      */
     @Operation(summary = "开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:dict:edit')")
+    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息开关", type = LogType.EDIT)
     public Result<Boolean> open(@Validated @RequestBody DictOpenDTO dictOpenDTO) {
         return Result.ok(this.sysDictService.open(dictOpenDTO));

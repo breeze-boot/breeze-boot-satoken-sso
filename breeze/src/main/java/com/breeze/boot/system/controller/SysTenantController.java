@@ -98,10 +98,10 @@ public class SysTenantController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:tenant:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysTenant sysPost) {
+    public Result<Boolean> modify(@Validated @RequestBody SysTenant sysPost) {
         return Result.ok(this.sysTenantService.updateById(sysPost));
     }
 

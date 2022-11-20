@@ -97,10 +97,10 @@ public class SysPostController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:post:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:post:modify')")
     @BreezeSysLog(description = "岗位信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysPost sysPost) {
+    public Result<Boolean> modify(@Validated @RequestBody SysPost sysPost) {
         return Result.ok(this.sysPostService.updateById(sysPost));
     }
 

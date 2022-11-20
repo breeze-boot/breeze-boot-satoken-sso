@@ -94,11 +94,11 @@ public class SysRoleController {
      * @return {@link Result}
      */
     @Operation(summary = "编辑权限")
-    @PutMapping("/editPermission")
-    @PreAuthorize("hasAnyAuthority('sys:role:edit')")
+    @PutMapping("/modifyPermission")
+    @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> editPermission(@Validated @RequestBody MenuPermissionDTO menuRoleDTO) {
-        return this.sysRoleMenuService.editPermission(menuRoleDTO);
+    public Result<Boolean> modifyPermission(@Validated @RequestBody MenuPermissionDTO menuRoleDTO) {
+        return this.sysRoleMenuService.modifyPermission(menuRoleDTO);
     }
 
     /**
@@ -135,10 +135,10 @@ public class SysRoleController {
      * @return {@link Result}
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:role:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysRole sysRole) {
+    public Result<Boolean> modify(@Validated @RequestBody SysRole sysRole) {
         return Result.ok(sysRoleService.updateById(sysRole));
     }
 

@@ -76,6 +76,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                     if (Objects.equals(deptSearchDTO.getId(), sysDept.getId())) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
+                    leafMap.put("isChecked", Boolean.FALSE);
                     leafMap.put("value", sysDept.getId());
                     leafMap.put("label", sysDept.getDeptName());
                     treeNode.setExtra(leafMap);

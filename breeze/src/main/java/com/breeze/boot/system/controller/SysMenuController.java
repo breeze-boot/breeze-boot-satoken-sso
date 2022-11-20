@@ -121,10 +121,10 @@ public class SysMenuController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/edit")
-    @PreAuthorize("hasAnyAuthority('sys:menu:edit')")
+    @PutMapping("/modify")
+    @PreAuthorize("hasAnyAuthority('sys:menu:modify')")
     @BreezeSysLog(description = "菜单信息修改", type = LogType.EDIT)
-    public Result<Boolean> edit(@Validated @RequestBody SysMenu sysMenu) {
+    public Result<Boolean> modify(@Validated @RequestBody SysMenu sysMenu) {
         return sysMenuService.updateMenuById(sysMenu);
     }
 
