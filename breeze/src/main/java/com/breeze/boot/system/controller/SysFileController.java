@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 系统文件控制器
@@ -57,14 +56,14 @@ public class SysFileController {
     /**
      * 列表
      *
-     * @param fileSearchDTO 文件dto
-     * @return {@link Result}<{@link List}<{@link SysFile}>>
+     * @param fileSearchDTO 文件搜索DTO
+     * @return {@link Result}<{@link Page}<{@link SysFile}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
     public Result<Page<SysFile>> list(@RequestBody FileSearchDTO fileSearchDTO) {
-        return Result.ok(this.sysFileService.listFile(fileSearchDTO));
+        return Result.ok(this.sysFileService.listPage(fileSearchDTO));
     }
 
     /**
@@ -74,7 +73,7 @@ public class SysFileController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "图片预览")
-    @PostMapping("/preview")
+    @GetMapping("/preview")
     @PreAuthorize("hasAnyAuthority('sys:file:preview')")
     public Result<Boolean> preview(Long fileId) {
         return this.sysFileService.preview(fileId);
@@ -87,16 +86,21 @@ public class SysFileController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "文件下载")
-    @PostMapping("/download")
+    @GetMapping("/download")
     @PreAuthorize("hasAnyAuthority('sys:file:download')")
-    public void download(Long fileId, HttpServletResponse response) {
+    public void download(Long fileId, HttpServletResponse response, HttpServletRequest request) {
+        String responseType = request.getHeader("responseType");
+        response.setHeader("responseType", responseType);
         this.sysFileService.download(fileId, response);
     }
 
     /**
      * 文件上传
      *
-     * @return {@link Result}
+     * @param fileDTO  文件dto
+     * @param request  请求
+     * @param response 响应
+     * @return {@link Result}<{@link ?}>
      */
     @NoAuthentication
     @Operation(summary = "文件上传")
@@ -110,7 +114,7 @@ public class SysFileController {
      * 删除
      *
      * @param ids ids
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

@@ -23,6 +23,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.base.oss.OssStoreService;
 import com.breeze.base.oss.dto.FileBO;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.FileDTO;
@@ -51,17 +53,20 @@ import java.util.Optional;
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
 
+    /**
+     * oss存储服务
+     */
     @Autowired
     private OssStoreService ossStoreService;
 
     /**
-     * 列表文件
+     * 列表页面
      *
-     * @param fileSearchDTO 日志dto
+     * @param fileSearchDTO 文件搜索DTO
      * @return {@link Page}<{@link SysFile}>
      */
     @Override
-    public Page<SysFile> listFile(FileSearchDTO fileSearchDTO) {
+    public Page<SysFile> listPage(FileSearchDTO fileSearchDTO) {
         Page<SysFile> logEntityPage = new Page<>(fileSearchDTO.getCurrent(), fileSearchDTO.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
                 .like(StrUtil.isAllNotBlank(fileSearchDTO.getNewFileName()), SysFile::getNewFileName, fileSearchDTO.getNewFileName())
@@ -72,7 +77,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     /**
      * 上传
      *
-     * @param fileDTO  文件dto
+     * @param fileDTO  文件DTO
      * @param request  请求
      * @param response 响应
      * @return {@link Result}<{@link Boolean}>
@@ -104,27 +109,34 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         if (Objects.isNull(sysFile)) {
             return Result.fail(Boolean.FALSE, "文件不存在");
         }
-        return Result.ok(Boolean.TRUE, this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getNewFileName()).get());
+        String preview = this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getNewFileName());
+        return Result.ok(Boolean.TRUE, preview);
     }
 
+    /**
+     * 下载
+     *
+     * @param fileId   文件ID
+     * @param response 响应
+     */
     @Override
     public void download(Long fileId, HttpServletResponse response) {
         SysFile sysFile = this.getById(fileId);
         if (Objects.isNull(sysFile)) {
-            throw new RuntimeException("");
+            throw new SystemServiceException(ResultCode.exception("文件不存在"));
         }
-        this.ossStoreService.download(sysFile.getOssStyle(), sysFile.getNewFileName(), response);
+        this.ossStoreService.download(sysFile.getOssStyle(), sysFile.getNewFileName(), sysFile.getPath(), response);
     }
 
     /**
      * 通过id删除文件
      *
-     * @param asList 正如列表
+     * @param fileIds 文件IDS
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> removeFileByIds(List<Long> asList) {
-        List<SysFile> sysFileList = this.listByIds(asList);
+    public Result<Boolean> removeFileByIds(List<Long> fileIds) {
+        List<SysFile> sysFileList = this.listByIds(fileIds);
         if (CollUtil.isNotEmpty(sysFileList)) {
             return Result.fail(Boolean.FALSE, "文件不存在");
         }

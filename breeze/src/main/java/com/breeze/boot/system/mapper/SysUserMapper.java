@@ -34,9 +34,9 @@ import org.apache.ibatis.annotations.Param;
 public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
 
     /**
-     * 选择用户
+     * 用户列表
      *
-     * @param page          对象页面
+     * @param page          分页
      * @param userSearchDTO 用户dto
      * @return {@link IPage}<{@link SysUser}>
      */

@@ -41,9 +41,18 @@ import java.security.Principal;
 @Tag(name = "webSocket消息模块", description = "WebSocketMsgController")
 public class WebSocketMsgController {
 
+    /**
+     * 简单消息模板
+     */
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    /**
+     * 送消息
+     *
+     * @param msg 消息
+     * @return {@link Result}<{@link ?}>
+     */
     @Operation(summary = "发送信息到所有用户")
     @MessageMapping("/sendMsg")
     @SendTo("/topic/msg")
@@ -52,6 +61,13 @@ public class WebSocketMsgController {
         return Result.ok(msg);
     }
 
+    /**
+     * 发送用户消息
+     *
+     * @param principal 主要
+     * @param msg       消息
+     * @return {@link Result}<{@link ?}>
+     */
     @Operation(summary = "发送信息到指定用户")
     @MessageMapping("/sendUserMsg")
     @SendToUser("/queue/userMsg")
@@ -60,6 +76,13 @@ public class WebSocketMsgController {
         return Result.ok(msg);
     }
 
+    /**
+     * 发送用户msg1
+     *
+     * @param principal 主要
+     * @param msg       消息
+     * @return {@link Result}<{@link ?}>
+     */
     @Operation(summary = "发送信息给指定的用户")
     @MessageMapping("/toSendUserMsg")
     public Result<?> sendUserMsg1(Principal principal, @Payload String msg) {

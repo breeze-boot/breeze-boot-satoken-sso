@@ -17,12 +17,10 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysMsg;
-import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.dto.MsgSearchDTO;
 import com.breeze.boot.system.service.SysMsgService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,7 +53,8 @@ public class SysMsgController {
     /**
      * 列表
      *
-     * @return {@link Result}<{@link Page}<{@link SysPlatform}>>
+     * @param msgSearchDTO 消息搜索DTO
+     * @return {@link Result}<{@link IPage}<{@link SysMsg}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -68,7 +67,7 @@ public class SysMsgController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysMsg}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -92,10 +91,9 @@ public class SysMsgController {
     }
 
     /**
-     * 编辑
      * 修改
      *
-     * @param msg 味精
+     * @param msg 信息
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")

@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.ex.AccessException;
 import com.breeze.boot.security.utils.SecurityUtils;
@@ -91,8 +92,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 列表页面
      *
-     * @param userSearchDTO 用户dto
-     * @return {@link Page}<{@link SysUser}>
+     * @param userSearchDTO 用户搜索DTO
+     * @return {@link IPage}<{@link SysUser}>
      */
     @Override
     public IPage<SysUser> listPage(UserSearchDTO userSearchDTO) {
@@ -122,7 +123,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 更新用户ById
+     * 通过Id更新用户
      *
      * @param sysUser 系统用户
      * @return {@link Boolean}
@@ -139,6 +140,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return update;
     }
 
+    /**
+     * 保存用户角色
+     *
+     * @param sysUser 系统用户
+     */
     private void saveUserRole(SysUser sysUser) {
         List<SysUserRole> userRoleList = Optional.ofNullable(sysUser.getRoleIds())
                 .orElseGet(Lists::newArrayList).stream().map(id -> {
@@ -187,7 +193,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 按用户名名单删除
+     * 删除用户
      *
      * @param sysUser 用户
      * @return {@link Result}<{@link Boolean}>
@@ -204,6 +210,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 
+    /**
+     * 用户添加角色
+     *
+     * @param userRolesDTO 用户角色dto
+     * @return {@link Result}<{@link Boolean}>
+     */
     @Override
     public Result<Boolean> userAddRole(UserRolesDTO userRolesDTO) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesDTO.getUsername()));
@@ -218,6 +230,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(Boolean.TRUE, "分配成功");
     }
 
+    /**
+     * 通过ID查询用户
+     *
+     * @param id id
+     * @return {@link Result}<{@link SysUser}>
+     */
     @Override
     public Result<SysUser> getUserById(Long id) {
         SysUser sysUser = this.getById(id);
@@ -246,7 +264,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
         if (Objects.isNull(sysRole)) {
-            throw new AccessException("登录失败,小程序身份不存在");
+            throw new AccessException(ResultCode.FORBIDDEN);
         }
         this.sysUserRoleService.save(SysUserRole.builder().userId(registerUser.getId()).roleId(sysRole.getId()).build());
         return user;

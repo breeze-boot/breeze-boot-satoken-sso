@@ -16,14 +16,22 @@
 
 package com.breeze.boot.security.ex;
 
+import com.breeze.boot.core.enums.ResultCode;
+import lombok.Data;
+
 /**
  * 访问异常
  *
  * @author gaoweixuan
  * @date 2022-08-31
  */
+@Data
 public class AccessException extends RuntimeException {
 
+    /**
+     * 代码
+     */
+    private final int code;
     /**
      * 信息
      */
@@ -32,10 +40,11 @@ public class AccessException extends RuntimeException {
     /**
      * 访问异常
      *
-     * @param msg 信息
+     * @param resultCode 结果代码
      */
-    public AccessException(String msg) {
-        super(msg);
-        this.msg = msg;
+    public AccessException(ResultCode resultCode) {
+        super(resultCode.getMsg());
+        this.msg = resultCode.getMsg();
+        this.code = resultCode.getCode();
     }
 }

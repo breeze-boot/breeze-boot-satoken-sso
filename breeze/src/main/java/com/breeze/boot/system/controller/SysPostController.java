@@ -53,8 +53,8 @@ public class SysPostController {
     /**
      * 列表
      *
-     * @param postSearchDTO 岗位dto
-     * @return {@link Result}
+     * @param postSearchDTO 岗位搜索DTO
+     * @return {@link Result}<{@link IPage}<{@link SysPost}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -67,7 +67,7 @@ public class SysPostController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysPost}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -80,7 +80,7 @@ public class SysPostController {
      * 保存
      *
      * @param post 平台实体入参
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -94,7 +94,7 @@ public class SysPostController {
      * 修改
      *
      * @param sysPost 平台实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")

@@ -37,6 +37,12 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
     private String originalFileName;
 
     /**
+     * 文件格式
+     */
+    @Schema(description = "文件格式")
+    private String contentType;
+
+    /**
      * 新文件名字
      */
     @Schema(description = "新文件名字")

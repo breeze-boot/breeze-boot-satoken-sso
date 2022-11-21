@@ -64,10 +64,10 @@ public class SysDeptController {
     }
 
     /**
-     * 详情
+     * 信息
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysDept}>
      */
     @Operation(summary = "详情", description = "目前详情接口未使用")
     @GetMapping("/info/{id}")
@@ -80,7 +80,7 @@ public class SysDeptController {
      * 保存
      *
      * @param sysDept 部门实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -94,7 +94,7 @@ public class SysDeptController {
      * 修改
      *
      * @param sysDept 部门实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
@@ -108,7 +108,7 @@ public class SysDeptController {
      * 删除
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

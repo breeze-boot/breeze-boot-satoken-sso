@@ -34,9 +34,9 @@ import java.util.List;
 public interface SysDictService extends IService<SysDict> {
 
     /**
-     * 字典类型列表
+     * 字典列表
      *
-     * @param dictSearchDto 字典 dto
+     * @param dictSearchDto 字典搜索DTO
      * @return {@link Page}<{@link SysDict}>
      */
     Page<SysDict> listDict(DictSearchDTO dictSearchDto);
@@ -50,10 +50,10 @@ public interface SysDictService extends IService<SysDict> {
     Boolean open(DictOpenDTO dictOpenDTO);
 
     /**
-     * 删除
+     * 删除字典通过IDS
      *
      * @param ids id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> deleteByIds(List<Long> ids);
 

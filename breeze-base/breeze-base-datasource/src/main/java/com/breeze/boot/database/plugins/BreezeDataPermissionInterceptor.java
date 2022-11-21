@@ -22,6 +22,8 @@ import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import com.breeze.boot.database.annotation.DataPermission;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.security.entity.PermissionDTO;
@@ -137,7 +139,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             }
             LoginUserDTO currentUser = SecurityUtils.getCurrentUser();
             if (currentUser == null) {
-                throw new RuntimeException("未登录，数据权限不可实现");
+                throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
             }
             List<PermissionDTO> permissionList = currentUser.getPermissions();
 

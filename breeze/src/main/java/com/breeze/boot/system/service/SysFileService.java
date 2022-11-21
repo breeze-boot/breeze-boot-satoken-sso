@@ -36,20 +36,20 @@ import java.util.List;
 public interface SysFileService extends IService<SysFile> {
 
     /**
-     * 列表文件
+     * 列表页面
      *
-     * @param fileSearchDTO 文件dto
+     * @param fileSearchDTO 文件搜索DTO
      * @return {@link Page}<{@link SysFile}>
      */
-    Page<SysFile> listFile(FileSearchDTO fileSearchDTO);
+    Page<SysFile> listPage(FileSearchDTO fileSearchDTO);
 
     /**
      * 上传
      *
      * @param fileDTO  文件DTO
-     * @param request
-     * @param response
-     * @return {@link Result}<{@link ?}>
+     * @param request  请求
+     * @param response 响应
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
 
@@ -72,9 +72,9 @@ public interface SysFileService extends IService<SysFile> {
     /**
      * 通过id删除文件
      *
-     * @param asList 正如列表
+     * @param fileIds 文件IDS
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> removeFileByIds(List<Long> asList);
+    Result<Boolean> removeFileByIds(List<Long> fileIds);
 
 }

@@ -32,7 +32,7 @@ public interface SysMsgService extends IService<SysMsg> {
     /**
      * 列表页面
      *
-     * @param msgSearchDTO 消息搜索dto
+     * @param msgSearchDTO 消息搜索DTO
      * @return {@link IPage}<{@link SysMsg}>
      */
     IPage<SysMsg> listPage(MsgSearchDTO msgSearchDTO);

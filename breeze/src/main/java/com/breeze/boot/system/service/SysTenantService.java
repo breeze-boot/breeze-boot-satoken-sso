@@ -35,13 +35,13 @@ public interface SysTenantService extends IService<SysTenant> {
     /**
      * 列表页面
      *
-     * @param tenantSearchDTO 租户dto
+     * @param tenantSearchDTO 租户搜索dto
      * @return {@link IPage}<{@link SysTenant}>
      */
     IPage<SysTenant> listPage(TenantSearchDTO tenantSearchDTO);
 
     /**
-     * 删除租户id
+     * 通过IDS删除租户
      *
      * @param ids id
      * @return {@link Result}<{@link Boolean}>

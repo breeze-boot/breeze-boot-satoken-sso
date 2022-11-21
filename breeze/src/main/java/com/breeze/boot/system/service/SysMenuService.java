@@ -38,7 +38,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * 用户菜单权限列表
      *
      * @param roleDTOList 角色列表
-     * @return {@link List}<{@link String}>
+     * @return {@link Set}<{@link String}>
      */
     Set<String> listUserMenuPermission(Set<UserRoleDTO> roleDTOList);
 
@@ -53,8 +53,8 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 菜单列表
      *
-     * @param menuSearchDTO 菜单dto
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param menuSearchDTO 菜单搜索dto
+     * @return {@link Result}<{@link ?}>
      */
     Result<?> listMenu(MenuSearchDTO menuSearchDTO);
 
@@ -69,7 +69,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * 删除通过id
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> deleteById(Long id);
 
@@ -77,12 +77,12 @@ public interface SysMenuService extends IService<SysMenu> {
      * 保存菜单
      *
      * @param menuEntity 菜单实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> saveMenu(SysMenu menuEntity);
 
     /**
-     * 更新菜单通过id
+     * 更新菜单通过ID
      *
      * @param menuEntity 菜单实体
      * @return {@link Result}<{@link Boolean}>

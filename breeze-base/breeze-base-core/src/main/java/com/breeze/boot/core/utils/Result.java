@@ -92,7 +92,7 @@ public class Result<T> implements Serializable {
      * 成功
      *
      * @param data 数据
-     * @param msg  味精
+     * @param msg  信息
      * @return {@link Result}
      */
     public static <T> Result<T> ok(T data, String msg) {
@@ -178,7 +178,7 @@ public class Result<T> implements Serializable {
     /**
      * 失败
      *
-     * @param resultCode 结果代码
+     * @param resultCode 结果代码枚举
      * @return {@link Result}<{@link T}>
      */
     public static <T> Result<T> fail(ResultCode resultCode) {
@@ -191,13 +191,13 @@ public class Result<T> implements Serializable {
     /**
      * 失败
      *
-     * @param resultCode 结果代码
-     * @param msg        味精
+     * @param code 结果代码
+     * @param msg  信息
      * @return {@link Result}<{@link String}>
      */
-    public static Result<String> fail(ResultCode resultCode, String msg) {
+    public static Result<String> fail(Integer code, String msg) {
         Result<String> result = new Result<>();
-        result.setCode(resultCode.getCode());
+        result.setCode(code);
         result.setMessage(msg);
         return result;
     }

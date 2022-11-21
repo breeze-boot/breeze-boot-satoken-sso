@@ -19,15 +19,15 @@ package com.breeze.base.oss.local.service;
 import cn.hutool.core.lang.UUID;
 import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.local.config.LocalProperties;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Optional;
 
 /**
@@ -71,7 +71,7 @@ public class LocalFileService {
      */
     public Optional<FileBO> uploadFile(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new RuntimeException("文件错误");
+            throw new SystemServiceException(ResultCode.exception("上传文件为空"));
         }
         //文件大小
         long size = file.getSize();
@@ -100,11 +100,47 @@ public class LocalFileService {
                 .build());
     }
 
-    public void download(String newFileName, HttpServletResponse response) {
-
+    public void download(String path, HttpServletResponse response) {
+        File file = new File(path);
+        String fileName = file.getName();
+        if (!file.exists()) {
+            throw new SystemServiceException(ResultCode.exception("下载文件失败"));
+        }
+        response.setContentType("image/jpeg");
+        response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        byte[] buffer = new byte[1024];
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        try {
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    public Optional<String> previewImg(String newFileName) {
-        return Optional.empty();
+    public String previewImg(String newFileName) {
+        return "";
     }
 }

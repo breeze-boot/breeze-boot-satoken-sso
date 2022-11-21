@@ -40,8 +40,16 @@ import java.util.Map;
 @Service
 public class MateDataServiceImpl implements MateService {
 
+    /**
+     * 连接
+     */
     Connection connection;
+
+    /**
+     * 元数据
+     */
     DatabaseMetaData metaData;
+
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 

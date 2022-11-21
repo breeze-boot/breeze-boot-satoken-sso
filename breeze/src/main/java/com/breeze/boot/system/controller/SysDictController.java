@@ -54,7 +54,7 @@ public class SysDictController {
     /**
      * 列表
      *
-     * @param dictSearchDTO 字典dto
+     * @param dictSearchDTO 字典搜索DTO
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @Operation(summary = "列表", description = "分页")
@@ -81,7 +81,7 @@ public class SysDictController {
     /**
      * 修改
      *
-     * @param sysDict 字典 实体
+     * @param sysDict 字典实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")

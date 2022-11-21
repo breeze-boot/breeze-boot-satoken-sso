@@ -64,8 +64,8 @@ public class SysPermissionController {
     /**
      * 列表
      *
-     * @param permissionDTO 数据权限dto
-     * @return {@link Result}
+     * @param permissionDTO 权限dto
+     * @return {@link Result}<{@link Page}<{@link SysPermission}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -78,7 +78,7 @@ public class SysPermissionController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysPermission}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -91,7 +91,7 @@ public class SysPermissionController {
      * 保存
      *
      * @param permission 数据权限实体入参
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -105,7 +105,7 @@ public class SysPermissionController {
      * 修改
      *
      * @param SysPermission 数据权限实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
@@ -119,7 +119,7 @@ public class SysPermissionController {
      * 删除
      *
      * @param ids id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

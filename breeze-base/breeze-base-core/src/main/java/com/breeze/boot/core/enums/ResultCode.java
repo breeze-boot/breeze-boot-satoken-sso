@@ -48,7 +48,7 @@ public enum ResultCode {
      */
     USERNAME_NOT_FOUND_EXCEPTION(1005, "用户名或者密码错误"),
     /**
-     * 假装内部身份验证服务异常
+     * 内部身份验证服务异常
      */
     FEIGN_INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(5003, "内部身份验证服务异常"),
     /**
@@ -56,17 +56,17 @@ public enum ResultCode {
      */
     UNAUTHORIZED(401, "未授权资源，请联系管理员授权"),
     /**
-     * 资源不可用
+     * 身份验证异常
      */
-    FORBIDDEN(403, "资源不可用"),
-    /**
-     * 400
-     */
-    PARAMETER_IS_INCORRECT(400, "参数不正确"),
+    FORBIDDEN(403, "身份验证异常"),
     /**
      * 服务器错误
      */
     INTERNAL_SERVER_ERROR(500, "服务器错误"),
+    /**
+     * http消息转换异常
+     */
+    HTTP_MESSAGE_CONVERSION_EXCEPTION(500, "请求参数错误"),
     /**
      * 成功
      */
@@ -78,17 +78,20 @@ public enum ResultCode {
     /**
      * 失败
      */
-    FAIL(0, "请求失败");
+    FAIL(0, "请求失败"),
+    /**
+     * 系统异常
+     */
+    EXCEPTION(500, "系统异常");
 
     /**
-     * 代码
+     * 响应代码
      */
     private final int code;
-
     /**
-     * msg
+     * 响应信息
      */
-    private final String msg;
+    private String msg;
 
     /**
      * 返回结果代码
@@ -99,6 +102,17 @@ public enum ResultCode {
     ResultCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    /**
+     * 系统异常 返回结果代码
+     *
+     * @param msg msg
+     * @return {@link ResultCode}
+     */
+    public static ResultCode exception(String msg) {
+        EXCEPTION.msg = msg;
+        return ResultCode.EXCEPTION;
     }
 
 }

@@ -37,7 +37,7 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     /**
      * 字典列表项
      *
-     * @param dictSearchDTO dict dto
+     * @param dictSearchDTO 字典搜索DTO
      * @return {@link List}<{@link SysDictItem}>
      */
     @Override

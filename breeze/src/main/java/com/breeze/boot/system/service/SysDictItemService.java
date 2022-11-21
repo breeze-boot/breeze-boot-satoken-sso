@@ -33,7 +33,7 @@ public interface SysDictItemService extends IService<SysDictItem> {
     /**
      * 字典列表项
      *
-     * @param dictSearchDTO dict dto
+     * @param dictSearchDTO 字典搜索DTO
      * @return {@link List}<{@link SysDictItem}>
      */
     List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);

@@ -34,7 +34,7 @@ public interface SysPlatformService extends IService<SysPlatform> {
     /**
      * 列表页面
      *
-     * @param platformSearchDTO 平台dto
+     * @param platformSearchDTO 平台搜索DTO
      * @return {@link Page}<{@link SysPlatform}>
      */
     Page<SysPlatform> listPage(PlatformSearchDTO platformSearchDTO);

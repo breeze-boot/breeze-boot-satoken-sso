@@ -53,7 +53,7 @@ public class SysMenuController {
     /**
      * 列表
      *
-     * @param menuSearchDTO 菜单dto
+     * @param menuSearchDTO 菜单搜索DTO
      * @return {@link Result}
      */
     @Operation(summary = "列表")

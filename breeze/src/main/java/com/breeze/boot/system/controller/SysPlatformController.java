@@ -63,8 +63,8 @@ public class SysPlatformController {
     /**
      * 列表
      *
-     * @param platformSearchDTO 平台dto
-     * @return {@link Result}
+     * @param platformSearchDTO 平台搜索DTO
+     * @return {@link Result}<{@link Page}<{@link SysPlatform}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -77,7 +77,7 @@ public class SysPlatformController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysPlatform}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -90,7 +90,7 @@ public class SysPlatformController {
      * 保存
      *
      * @param platform 平台实体入参
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -104,7 +104,7 @@ public class SysPlatformController {
      * 修改
      *
      * @param sysPlatform 平台实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
@@ -118,7 +118,7 @@ public class SysPlatformController {
      * 删除
      *
      * @param ids id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

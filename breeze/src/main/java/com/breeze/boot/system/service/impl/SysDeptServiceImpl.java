@@ -57,7 +57,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 部门列表
      *
-     * @param deptSearchDTO 部门dto
+     * @param deptSearchDTO 部门搜索DTO
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     @Override
@@ -90,7 +90,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * 删除通过id
      *
      * @param id id
-     * @return {@link Boolean}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Override
     public Result<Boolean> deleteById(Long id) {
@@ -110,7 +110,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     /**
-     * 选择部门id
+     * 选择部门通过id
      *
      * @param permissions 权限
      * @return {@link List}<{@link Long}>

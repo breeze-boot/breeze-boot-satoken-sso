@@ -45,7 +45,7 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 列表页面
      *
-     * @param roleSearchDTO 角色dto
+     * @param roleSearchDTO 角色搜索DTO
      * @return {@link Page}<{@link SysRole}>
      */
     Page<SysRole> listPage(RoleSearchDTO roleSearchDTO);
@@ -54,7 +54,7 @@ public interface SysRoleService extends IService<SysRole> {
      * 删除由ids
      *
      * @param ids id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> deleteByIds(List<Long> ids);
 

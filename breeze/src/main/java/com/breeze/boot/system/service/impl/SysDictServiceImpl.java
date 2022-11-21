@@ -42,7 +42,7 @@ import java.util.List;
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     /**
-     * sys dict项目服务
+     * 系统字典项服务
      */
     @Autowired
     private SysDictItemService sysDictItemService;
@@ -50,7 +50,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     /**
      * dict类型列表
      *
-     * @param dictSearchDto dict dto
+     * @param dictSearchDto 字典搜索DTO
      * @return {@link Page}<{@link SysDict}>
      */
     @Override
@@ -61,7 +61,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     /**
      * 开关
      *
-     * @param dictOpenDTO 字典开关 dto
+     * @param dictOpenDTO 字典开关DTO
      * @return {@link Boolean}
      */
     @Override
@@ -72,7 +72,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     /**
-     * 删除由ids
+     * 删除字典通过IDS
      *
      * @param ids id
      * @return {@link Result}<{@link Boolean}>

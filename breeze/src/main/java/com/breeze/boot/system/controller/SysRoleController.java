@@ -64,8 +64,8 @@ public class SysRoleController {
     /**
      * 列表
      *
-     * @param roleSearchDTO 角色dto
-     * @return {@link Result}
+     * @param roleSearchDTO 角色搜索DTO
+     * @return {@link Result}<{@link Page}<{@link SysRole}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -75,10 +75,12 @@ public class SysRoleController {
     }
 
     /**
-     * 获取树形权限列表 选中数据
+     * 获取树形权限列表
+     * <p>
+     * 选中数据
      *
      * @param roleId 角色id
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link SysRoleMenu}>>
      */
     @Operation(summary = "获取树形权限列表", description = "选中的行的回显")
     @GetMapping("/listRolesPermission")
@@ -88,24 +90,24 @@ public class SysRoleController {
     }
 
     /**
-     * 编辑权限
+     * 修改权限
      *
-     * @param menuRoleDTO dto菜单权限
-     * @return {@link Result}
+     * @param menuPermissionDTO 菜单权限DTO
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "编辑权限")
     @PutMapping("/modifyPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modifyPermission(@Validated @RequestBody MenuPermissionDTO menuRoleDTO) {
-        return this.sysRoleMenuService.modifyPermission(menuRoleDTO);
+    public Result<Boolean> modifyPermission(@Validated @RequestBody MenuPermissionDTO menuPermissionDTO) {
+        return this.sysRoleMenuService.modifyPermission(menuPermissionDTO);
     }
 
     /**
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysRole}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -118,7 +120,7 @@ public class SysRoleController {
      * 保存
      *
      * @param sysRole 角色实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -132,7 +134,7 @@ public class SysRoleController {
      * 修改
      *
      * @param sysRole 角色实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
@@ -146,7 +148,7 @@ public class SysRoleController {
      * 删除
      *
      * @param ids id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

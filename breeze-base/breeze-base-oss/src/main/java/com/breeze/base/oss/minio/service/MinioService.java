@@ -20,6 +20,8 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.minio.config.BreezeMinioProperties;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -85,7 +87,7 @@ public class MinioService {
                                                 String fileName,
                                                 MinioImgMarkConfig minioImgMarkConfig) {
         if (file.isEmpty()) {
-            throw new RuntimeException("文件为空");
+            throw new SystemServiceException(ResultCode.exception("上传文件为空"));
         }
         BufferedImage read;
         Image image = null;
@@ -122,7 +124,7 @@ public class MinioService {
                                                  MinioImgMarkConfig minioImgMarkConfig) {
 
         if (file.isEmpty()) {
-            throw new RuntimeException("文件为空");
+            throw new SystemServiceException(ResultCode.exception("文件不存在"));
         }
         BufferedImage read;
         Image image = null;
@@ -265,7 +267,7 @@ public class MinioService {
     public List<String> getOneBucketAllObjName(String bucketName) {
         boolean isExists = this.bucketIsExists(bucketName);
         if (!isExists) {
-            throw new RuntimeException("不存在");
+            throw new SystemServiceException(ResultCode.exception("文件不存在"));
         }
         List<String> objNameList = Lists.newArrayList();
         try {
@@ -350,7 +352,7 @@ public class MinioService {
      * @param fileName 文件名称
      * @return {@link String}
      */
-    public Optional<String> previewImg(String fileName) {
+    public String previewImg(String fileName) {
         // 查看文件地址
         GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
                 .bucket("breeze")
@@ -358,20 +360,21 @@ public class MinioService {
                 .method(Method.GET)
                 .build();
         try {
-            return Optional.ofNullable(this.minioClient.getPresignedObjectUrl(build));
+            return this.minioClient.getPresignedObjectUrl(build);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        return "";
     }
 
     /**
      * 文件下载
      *
      * @param fileName 文件名称
+     * @param path     TODO
      * @param response response
      */
-    public void download(String fileName, HttpServletResponse response) {
+    public void download(String fileName, String path, HttpServletResponse response) {
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(this.minioProperties.getBucketName())
                 .object(fileName).build();
         try (GetObjectResponse objectResponse = this.minioClient.getObject(objectArgs);

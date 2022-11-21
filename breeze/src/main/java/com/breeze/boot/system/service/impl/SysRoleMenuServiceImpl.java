@@ -48,7 +48,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
     /**
      * 编辑权限
      *
-     * @param menuPermissionDTO 菜单权限dto
+     * @param menuPermissionDTO 菜单权限DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Override

@@ -35,7 +35,7 @@ public interface SysDeptService extends IService<SysDept> {
     /**
      * 部门列表
      *
-     * @param deptSearchDTO 部门dto
+     * @param deptSearchDTO 部门搜索DTO
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     List<Tree<Long>> listDept(DeptSearchDTO deptSearchDTO);
@@ -44,7 +44,7 @@ public interface SysDeptService extends IService<SysDept> {
      * 删除通过id
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> deleteById(Long id);
 

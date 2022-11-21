@@ -35,15 +35,15 @@ public interface SysPostService extends IService<SysPost> {
     /**
      * 列表页面
      *
-     * @param postSearchDTO 帖子dto
-     * @return {@link IPage}<{@link List}<{@link SysPost}>>
+     * @param postSearchDTO 岗位搜索DTO
+     * @return {@link IPage}<{@link SysPost}>
      */
     IPage<SysPost> listPage(PostSearchDTO postSearchDTO);
 
     /**
-     * id s
+     * 通过IDS删除
      *
-     * @param ids id
+     * @param ids IDS
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> removePostByIds(List<Long> ids);

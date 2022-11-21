@@ -52,7 +52,7 @@ public class SysLogController {
     /**
      * 列表
      *
-     * @param logSearchDTO 日志dto
+     * @param logSearchDTO 日志搜索DTO
      * @return {@link Result}<{@link Page}<{@link BreezeSysLog}>>
      */
     @PostMapping("/list")
@@ -63,8 +63,6 @@ public class SysLogController {
 
     /**
      * 清空日志表
-     *
-     * @return {@link Result}
      */
     @Operation(summary = "清空")
     @DeleteMapping("/clear")
@@ -77,8 +75,8 @@ public class SysLogController {
     /**
      * 删除
      *
-     * @param ids id
-     * @return {@link Result}
+     * @param ids ids
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")

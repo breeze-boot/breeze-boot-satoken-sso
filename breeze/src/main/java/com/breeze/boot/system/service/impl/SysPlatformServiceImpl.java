@@ -38,9 +38,9 @@ import java.util.List;
 public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPlatform> implements SysPlatformService {
 
     /**
-     * 列表
+     * 列表页面
      *
-     * @param platformSearchDTO 平台dto
+     * @param platformSearchDTO 平台搜索DTO
      * @return {@link Page}<{@link SysPlatform}>
      */
     @Override
@@ -53,10 +53,10 @@ public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPl
     }
 
     /**
-     * 列表
+     * 批量保存
      *
      * @param platformSearchDTOList 平台List
-     * @return {@link Page}<{@link SysPlatform}>
+     * @return {@link Boolean}
      */
     @Override
     public Boolean saveAllBatch(List<PlatformSearchDTO> platformSearchDTOList) {

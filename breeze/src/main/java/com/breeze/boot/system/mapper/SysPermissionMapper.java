@@ -35,7 +35,7 @@ public interface SysPermissionMapper extends BreezeBaseMapper<SysPermission> {
     /**
      * 列表分页
      *
-     * @param permissionDTO 许可dto
+     * @param permissionDTO 权限dto
      * @param page          页面
      * @return {@link Page}<{@link SysPermission}>
      */

@@ -32,10 +32,10 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
     /**
      * 编辑权限
      *
-     * @param permissionDTO 许可dto
+     * @param menuPermissionDTO 菜单权限DTO
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> modifyPermission(MenuPermissionDTO permissionDTO);
+    Result<Boolean> modifyPermission(MenuPermissionDTO menuPermissionDTO);
 
 }
 

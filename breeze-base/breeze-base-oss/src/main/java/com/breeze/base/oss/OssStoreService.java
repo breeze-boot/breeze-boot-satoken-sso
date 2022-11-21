@@ -19,6 +19,8 @@ package com.breeze.base.oss;
 import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.local.service.LocalFileService;
 import com.breeze.base.oss.minio.service.MinioService;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +51,17 @@ public class OssStoreService {
      * @param response response
      * @param ossStyle 存储方式
      * @param fileName 文件名称
+     * @param path     路径
      */
-    public void download(Integer ossStyle, String fileName, HttpServletResponse response) {
+    public void download(Integer ossStyle, String fileName, String path, HttpServletResponse response) {
         switch (ossStyle) {
             case 0:
                 beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
-                this.localFileService.download(fileName, response);
+                this.localFileService.download(path, response);
                 break;
             case 1:
                 beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
-                this.minioService.download(fileName, response);
+                this.minioService.download(fileName, path, response);
                 break;
             default:
                 log.error("存储类型错误");
@@ -98,8 +101,8 @@ public class OssStoreService {
      * @param ossStyle 存储方式
      * @return {@link Optional}<{@link String}>
      */
-    public Optional<String> preview(Integer ossStyle, String fileName) {
-        Optional<String> preView;
+    public String preview(Integer ossStyle, String fileName) {
+        String preView = "";
         switch (ossStyle) {
             case 0:
                 beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
@@ -110,7 +113,6 @@ public class OssStoreService {
                 preView = this.minioService.previewImg(fileName);
                 break;
             default:
-                preView = Optional.empty();
                 log.error("存储类型错误");
         }
         return preView;
@@ -124,7 +126,7 @@ public class OssStoreService {
      */
     private void beanIsExists(boolean aNull, String msg) {
         if (aNull) {
-            throw new RuntimeException(msg);
+            throw new SystemServiceException(ResultCode.exception(msg));
         }
     }
 

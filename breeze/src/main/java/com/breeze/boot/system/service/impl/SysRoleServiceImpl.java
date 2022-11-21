@@ -74,7 +74,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 列表页面
      *
-     * @param roleSearchDTO 角色dto
+     * @param roleSearchDTO 角色搜索DTO
      * @return {@link Page}<{@link SysRole}>
      */
     @Override
@@ -86,6 +86,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .page(platformEntityPage);
     }
 
+    /**
+     * 通过IDS删除
+     *
+     * @param ids id
+     * @return {@link Result}<{@link Boolean}>
+     */
     @Override
     public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysRole> roleEntityList = this.listByIds(ids);

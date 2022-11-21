@@ -33,7 +33,7 @@ public interface SysLogService extends IService<SysLog> {
     /**
      * 日志列表
      *
-     * @param logSearchDTO 日志dto
+     * @param logSearchDTO 日志搜索dto
      * @return {@link Page}<{@link SysLog}>
      */
     Page<SysLog> listLog(LogSearchDTO logSearchDTO);

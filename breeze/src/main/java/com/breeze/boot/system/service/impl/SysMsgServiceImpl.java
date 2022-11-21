@@ -39,7 +39,7 @@ public class SysMsgServiceImpl extends ServiceImpl<SysMsgMapper, SysMsg> impleme
     /**
      * 列表页面
      *
-     * @param msgSearchDTO 消息搜索dto
+     * @param msgSearchDTO 消息搜索DTO
      * @return {@link IPage}<{@link SysMsg}>
      */
     @Override

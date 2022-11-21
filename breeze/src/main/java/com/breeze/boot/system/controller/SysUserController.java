@@ -58,8 +58,8 @@ public class SysUserController {
     /**
      * 列表
      *
-     * @param userSearchDTO 用户dto
-     * @return {@link Result}
+     * @param userSearchDTO 用户搜索DTO
+     * @return {@link Result}<{@link IPage}<{@link SysUser}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -72,7 +72,7 @@ public class SysUserController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysUser}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -85,7 +85,7 @@ public class SysUserController {
      * 保存
      *
      * @param sysUser 系统用户
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -99,7 +99,7 @@ public class SysUserController {
      * 修改
      *
      * @param sysUser 系统用户
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
@@ -127,7 +127,7 @@ public class SysUserController {
      * 开启关闭锁定
      *
      * @param openDTO 打开dto
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户锁定开关")
     @PutMapping("/open")

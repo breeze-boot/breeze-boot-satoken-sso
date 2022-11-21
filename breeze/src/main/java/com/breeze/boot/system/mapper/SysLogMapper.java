@@ -30,7 +30,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SysLogMapper extends BreezeBaseMapper<SysLog> {
 
     /**
-     * 清晰
+     * 清空
      */
     void clear();
 

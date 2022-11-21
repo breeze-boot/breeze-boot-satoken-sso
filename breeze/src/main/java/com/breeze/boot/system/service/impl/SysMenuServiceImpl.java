@@ -69,7 +69,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 用户菜单权限列表
      *
      * @param roleDTOList 角色列表
-     * @return {@link List}<{@link String}>
+     * @return {@link Set}<{@link String}>
      */
     @Override
     public Set<String> listUserMenuPermission(Set<UserRoleDTO> roleDTOList) {
@@ -100,7 +100,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      *
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
-    private Result<List<Tree<Long>>> listTreeRolePermissionData() {
+    private Result<List<Tree<Long>>> listTreeRolePermission() {
         List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
                 .in(SysMenu::getType, 0, 1, 2)
                 .orderByAsc(SysMenu::getSort));
@@ -113,8 +113,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 菜单列表
      *
-     * @param menuSearchDTO 菜单dto
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @param menuSearchDTO 菜单搜索dto
+     * @return {@link Result}<{@link ?}>
      */
     @Override
     public Result<?> listMenu(MenuSearchDTO menuSearchDTO) {
@@ -138,11 +138,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
-        return this.listTreeRolePermissionData();
+        return this.listTreeRolePermission();
     }
 
     /**
-     * 删除通过id
+     * 删除通过ID
      *
      * @param id id
      * @return {@link Result}
@@ -164,6 +164,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return Result.fail(Boolean.FALSE, "删除失败");
     }
 
+    /**
+     * 保存菜单
+     *
+     * @param menuEntity 菜单实体
+     * @return {@link Result}<{@link Boolean}>
+     */
     @Override
     public Result<Boolean> saveMenu(SysMenu menuEntity) {
         SysMenu sysMenu = this.getById(menuEntity.getParentId());

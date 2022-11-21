@@ -42,7 +42,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     /**
      * 日志列表
      *
-     * @param logSearchDTO 日志dto
+     * @param logSearchDTO 日志搜索DTO
      * @return {@link Page}<{@link SysLog}>
      */
     @Override
@@ -63,7 +63,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     /**
      * 保存系统日志
      *
-     * @param sysLogDTO 系统日志dto
+     * @param sysLogDTO 系统日志DTO
      */
     @Override
     public void saveSysLog(SysLogDTO sysLogDTO) {

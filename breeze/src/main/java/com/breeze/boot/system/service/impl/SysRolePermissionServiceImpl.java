@@ -38,7 +38,7 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
     /**
      * 角色权限列表
      *
-     * @param roleIdSet 角色id设置
+     * @param roleIdSet 角色idSet
      * @return {@link List}<{@link PermissionDTO}>
      */
     @Override

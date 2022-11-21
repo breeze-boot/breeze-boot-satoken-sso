@@ -32,17 +32,17 @@ import com.breeze.boot.system.dto.SysPermissionDTO;
 public interface SysPermissionService extends IService<SysPermission> {
 
     /**
-     * 分页列表
+     * 列表页面
      *
-     * @param permissionDTO 许可dto
+     * @param permissionDTO 权限DTO
      * @return {@link Page}<{@link SysPermission}>
      */
     Page<SysPermission> listPage(PermissionDTO permissionDTO);
 
     /**
-     * 保存许可
+     * 保存权限
      *
-     * @param permission 许可
+     * @param permission 权限
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> savePermission(SysPermissionDTO permission);

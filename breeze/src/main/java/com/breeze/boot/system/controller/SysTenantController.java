@@ -54,8 +54,8 @@ public class SysTenantController {
     /**
      * 列表
      *
-     * @param tenantSearchDTO 租户dto
-     * @return {@link Result}
+     * @param tenantSearchDTO 租户搜索dto
+     * @return {@link Result}<{@link IPage}<{@link SysTenant}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
@@ -68,7 +68,7 @@ public class SysTenantController {
      * 详情
      *
      * @param id id
-     * @return {@link Result}
+     * @return {@link Result}<{@link SysTenant}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
@@ -81,7 +81,7 @@ public class SysTenantController {
      * 保存
      *
      * @param tenant 平台实体入参
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/save")
@@ -95,7 +95,7 @@ public class SysTenantController {
      * 修改
      *
      * @param sysPost 平台实体
-     * @return {@link Result}
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")

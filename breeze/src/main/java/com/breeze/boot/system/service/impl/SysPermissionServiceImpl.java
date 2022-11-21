@@ -51,9 +51,9 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     private SysDeptService sysDeptService;
 
     /**
-     * 列表分页
+     * 列表页面
      *
-     * @param permissionDTO 许可dto
+     * @param permissionDTO 权限DTO
      * @return {@link Page}<{@link SysPermission}>
      */
     @Override
@@ -62,9 +62,9 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     /**
-     * 保存许可
+     * 保存权限
      *
-     * @param permission 许可
+     * @param permission 权限
      * @return {@link Result}<{@link Boolean}>
      */
     @Override

@@ -16,12 +16,12 @@
 
 package com.breeze.boot.system.exception;
 
-import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,26 +46,40 @@ public class GlobalControllerExceptionHandler {
      * eg: @RequestBody上使用@Valid 实体上使用@NotNull
      *
      * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @return {@link Result}<{@link ?}>
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        log.error("methodArgumentNotValidExceptionHandler: {}", ex.getMessage());
+        log.error("MethodArgumentNotValidException 处理请求参数格式错误：", ex);
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+        return Result.warning(message);
     }
 
     /**
+     * http请求方法不支持异常
+     *
+     * @param ex 异常
+     * @return {@link Result}<{@link ?}>
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        log.error("HttpRequestMethodNotSupportedException 请求类型不支持：", ex);
+        return Result.warning(ex.getMessage());
+    }
+
+    /**
+     * 绑定异常处理程序
+     * <p>
      * 处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常
      *
      * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @return {@link Result}<{@link ?}>
      */
     @ExceptionHandler(BindException.class)
     public Result<?> bindExceptionHandler(BindException ex) {
-        log.error("bindExceptionHandler: {}", ex.getMessage());
+        log.error("BindException 验证路径中请求实体校验失败后抛出的异常：", ex);
         String message = ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+        return Result.warning(message);
     }
 
     /**
@@ -74,26 +88,27 @@ public class GlobalControllerExceptionHandler {
      * eg: @RequestParam上validate失败后抛出的异常是ConstraintViolationException
      *
      * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @return {@link Result}<{@link ?}>
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public Result<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
-        log.error("constraintViolationExceptionHandler: {}", ex.getMessage());
+        log.error("ConstraintViolationException 处理请求参数格式错误：", ex);
         String message = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
-        return Result.warning(ResultCode.WARNING.getCode(), message);
+        return Result.warning(message);
     }
 
     /**
      * http消息不可读异常处理程序
+     * <p>
      * 参数格式异常
      *
      * @param ex 异常
-     * @return {@link Result}<{@link ?} {@link extends} {@link Object}>
+     * @return {@link Result}<{@link ?}>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
-        log.error("httpMessageNotReadableExceptionHandler: {}", ex.getMessage());
-        return Result.warning(ResultCode.WARNING.getCode(), "参数格式异常");
+        log.error("HttpMessageNotReadableException 参数格式异常：", ex);
+        return Result.warning("参数格式异常");
     }
 
 }

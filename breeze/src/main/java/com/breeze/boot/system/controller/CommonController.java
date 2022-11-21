@@ -100,6 +100,7 @@ public class CommonController {
     /**
      * 菜单树形下拉框
      *
+     * @param id id
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "菜单树形下拉框", description = "下拉框接口")
@@ -146,7 +147,8 @@ public class CommonController {
     /**
      * 部门下拉框
      *
-     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     * @param id id
+     * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "部门下拉框", description = "下拉框接口")
     @GetMapping("/selectDept")

@@ -44,14 +44,17 @@ import java.util.List;
 @Service
 public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> implements SysPostService {
 
+    /**
+     * 系统用户服务
+     */
     @Autowired
     private SysUserService sysUserService;
 
     /**
      * 列表页面
      *
-     * @param postSearchDTO 帖子dto
-     * @return {@link IPage}<{@link List}<{@link SysPost}>>
+     * @param postSearchDTO 岗位搜索DTO
+     * @return {@link IPage}<{@link SysPost}>
      */
     @Override
     public IPage<SysPost> listPage(PostSearchDTO postSearchDTO) {
@@ -64,7 +67,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
     }
 
     /**
-     * 删除后由ids
+     * 通过IDS删除
      *
      * @param ids id
      * @return {@link Result}<{@link Boolean}>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.exception;
+package com.breeze.boot.core.ex;
 
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.Getter;
@@ -30,18 +30,12 @@ public class SystemServiceException extends RuntimeException {
 
     private final int code;
 
-    private final String description;
+    private final String msg;
 
-    public SystemServiceException(ResultCode resultCode, String description) {
+    public SystemServiceException(ResultCode resultCode) {
         super(resultCode.getMsg());
         this.code = resultCode.getCode();
-        this.description = description;
-    }
-
-    public SystemServiceException(String message, int code, String description) {
-        super(message);
-        this.code = code;
-        this.description = description;
+        this.msg = resultCode.getMsg();
     }
 
 }

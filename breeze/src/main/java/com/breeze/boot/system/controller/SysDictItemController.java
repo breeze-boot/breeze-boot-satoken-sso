@@ -20,7 +20,6 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictItemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,8 +53,8 @@ public class SysDictItemController {
     /**
      * 列表
      *
-     * @param dictSearchDTO 字典dto
-     * @return {@link Result}<{@link List}<{@link SysFile}>>
+     * @param dictSearchDTO 字典搜索DTO
+     * @return {@link Result}<{@link List}<{@link SysDictItem}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")

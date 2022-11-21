@@ -17,7 +17,6 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysUser;
@@ -37,8 +36,8 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 列表页面
      *
-     * @param userSearchDTO 用户dto
-     * @return {@link Page}<{@link SysUser}>
+     * @param userSearchDTO 用户搜索DTO
+     * @return {@link IPage}<{@link SysUser}>
      */
     IPage<SysUser> listPage(UserSearchDTO userSearchDTO);
 
@@ -46,12 +45,12 @@ public interface SysUserService extends IService<SysUser> {
      * 保存用户
      *
      * @param sysUser 系统用户
-     * @return {@link Boolean}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> saveUser(SysUser sysUser);
 
     /**
-     * 更新用户id
+     * 通过id更新用户
      *
      * @param sysUser 系统用户
      * @return {@link Boolean}
@@ -61,7 +60,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 开启关闭锁定
      *
-     * @param openDTO 打开dto
+     * @param openDTO 打开DTO
      * @return {@link Boolean}
      */
     Boolean open(UserOpenDTO openDTO);
@@ -75,7 +74,7 @@ public interface SysUserService extends IService<SysUser> {
     Boolean resetPass(UserResetPasswordDTO userResetPasswordDTO);
 
     /**
-     * 删除由ids
+     * 删除用户
      *
      * @param sysUser 用户
      * @return {@link Result}<{@link Boolean}>
@@ -86,7 +85,7 @@ public interface SysUserService extends IService<SysUser> {
      * 用户分配角色
      *
      * @param userRolesDTO 用户角色dto
-     * @return {@link Boolean}
+     * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> userAddRole(UserRolesDTO userRolesDTO);
 
@@ -94,7 +93,7 @@ public interface SysUserService extends IService<SysUser> {
      * 通过ID查询用户
      *
      * @param id id
-     * @return {@link SysUser}
+     * @return {@link Result}<{@link SysUser}>
      */
     Result<SysUser> getUserById(Long id);
 
