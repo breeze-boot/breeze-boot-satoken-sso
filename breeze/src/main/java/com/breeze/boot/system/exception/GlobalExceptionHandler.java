@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NullPointerException.class)
     public Result<?> nullPointerException(NullPointerException ex) {
-        log.error("NullPointerException 空指针异常： {}", ex);
+        log.error("NullPointerException 空指针异常：", ex);
         return Result.fail(INTERNAL_SERVER_ERROR);
     }
 

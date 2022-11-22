@@ -48,40 +48,38 @@ public class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint 
      */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-        log.error("{} {}", e.getClass().getName(), e.getMessage());
-        e.printStackTrace();
+        log.error("{}", e.getClass().getName(), e);
         if (response.isCommitted()) {
             return;
         }
 
         Throwable throwable = e.fillInStackTrace();
         String errMsg = "认证失败";
-
         if (throwable instanceof BadCredentialsException) {
             errMsg = e.getMessage();
-        } else {
-            Throwable cause = e.getCause();
+            ResponseUtil.response(response, errMsg);
+        }
 
-            if (cause instanceof JwtValidationException) {
-                log.warn("JWT Token 过期，具体内容:" + cause.getMessage());
-                errMsg = "无效的token信息";
-            } else if (cause instanceof BadJwtException) {
-                log.warn("JWT 签名异常，具体内容：" + cause.getMessage());
-                errMsg = "无效的token信息";
-            } else if (cause instanceof AccountExpiredException) {
-                errMsg = "账户已过期";
-            } else if (cause instanceof LockedException) {
-                errMsg = "账户已被锁定";
-            } else if (throwable instanceof InsufficientAuthenticationException) {
-                String message = throwable.getMessage();
-                if (message.contains("Invalid token does not contain resource id")) {
-                    errMsg = "未经授权的资源服务器";
-                } else if (message.contains("Full authentication is required to access this resource")) {
-                    errMsg = "访问需要登录";
-                }
-            } else {
-                errMsg = "验证异常";
+        Throwable cause = e.getCause();
+        if (cause instanceof JwtValidationException) {
+            log.error("JWT Token 过期", cause);
+            errMsg = "无效的token信息";
+        } else if (cause instanceof BadJwtException) {
+            log.error("JWT 签名异常", cause);
+            errMsg = "无效的token信息";
+        } else if (cause instanceof AccountExpiredException) {
+            errMsg = "账户已过期";
+        } else if (cause instanceof LockedException) {
+            errMsg = "账户已被锁定";
+        } else if (throwable instanceof InsufficientAuthenticationException) {
+            String message = throwable.getMessage();
+            if (message.contains("Invalid token does not contain resource id")) {
+                errMsg = "未经授权的资源服务器";
+            } else if (message.contains("Full authentication is required to access this resource")) {
+                errMsg = "访问需要登录";
             }
+        } else {
+            errMsg = "验证异常";
         }
         ResponseUtil.response(response, errMsg);
     }

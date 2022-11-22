@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -87,7 +88,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Override
     public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         MultipartFile file = fileDTO.getFile();
-        Optional<FileBO> optionalFileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, "/breeze/", UUID.randomUUID().toString().replace("-", ""));
+        Optional<FileBO> optionalFileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, String.valueOf(LocalDate.now().getDayOfMonth()), UUID.randomUUID().toString().replace("-", ""));
         FileBO fileBO = optionalFileBO.orElseThrow(RuntimeException::new);
         SysFile sysFile = SysFile.builder()
                 .title(fileDTO.getTitle())

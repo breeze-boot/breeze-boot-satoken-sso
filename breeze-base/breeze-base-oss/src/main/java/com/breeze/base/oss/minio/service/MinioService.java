@@ -34,14 +34,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -180,17 +176,17 @@ public class MinioService {
             this.minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(this.minioProperties.getBucketName())
-                            .object(path + fileName)
+                            .object(path + "/" + fileName)
                             .stream(is, size, -1)
                             .contentType(contentType)
                             .build());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String savePath = this.minioProperties.getBucketName() + path + fileName;
-        String imageUrl = this.minioProperties.getNginxHost() + savePath;
+        String savePath = this.minioProperties.getBucketName() + "/" + path + "/" + fileName;
+        String imageUrl = this.minioProperties.getNginxHost() + "/" + savePath;
         log.info(" \n {} \n {}", savePath, imageUrl);
-        return Optional.ofNullable(FileBO.builder().newFileName(fileName).path(savePath).contentType(contentType).build());
+        return Optional.ofNullable(FileBO.builder().newFileName(fileName).path(path).contentType(contentType).build());
     }
 
     /**
@@ -333,8 +329,9 @@ public class MinioService {
     public boolean remove(String path, String fileName) {
         try {
             this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(this.minioProperties.getBucketName())
-                    .object(path + fileName).build());
+                    .object(path + "/" + fileName).build());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -373,7 +370,7 @@ public class MinioService {
         // 查看文件地址
         GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
                 .bucket(this.minioProperties.getBucketName())
-                .object(path + fileName)
+                .object(path + "/" + fileName)
                 .method(Method.GET)
                 .build();
         try {
@@ -393,21 +390,17 @@ public class MinioService {
      */
     public void download(String path, String fileName, HttpServletResponse response) {
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(this.minioProperties.getBucketName())
-                .object(path + fileName).build();
-        try (GetObjectResponse objectResponse = this.minioClient.getObject(objectArgs);
-             ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            ServletOutputStream stream = response.getOutputStream();
+                .object(path + "/" + fileName).build();
+        try (GetObjectResponse objectResponse = this.minioClient.getObject(objectArgs)) {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("image/jpeg");
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            OutputStream os = response.getOutputStream();
             byte[] buf = new byte[1024];
             int len;
             while ((len = objectResponse.read(buf)) != -1) {
                 os.write(buf, 0, len);
             }
-            byte[] bytes = os.toByteArray();
-            response.setCharacterEncoding("utf-8");
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
-            stream.write(bytes);
-            stream.flush();
-            os.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }

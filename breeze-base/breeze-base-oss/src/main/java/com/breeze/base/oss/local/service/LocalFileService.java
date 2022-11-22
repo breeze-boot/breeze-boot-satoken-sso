@@ -99,7 +99,6 @@ public class LocalFileService {
             FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(new File(newFilePath, newFileName)));
         } catch (IOException e) {
             log.error("上传失败 {}", e.getMessage());
-            e.printStackTrace();
         }
         return Optional.ofNullable(FileBO.builder()
                 .path(path)
@@ -121,37 +120,19 @@ public class LocalFileService {
         if (!file.exists()) {
             throw new SystemServiceException(ResultCode.exception("下载文件失败"));
         }
+        response.setCharacterEncoding("utf-8");
         response.setContentType("image/jpeg");
         response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
-        byte[] buffer = new byte[1024];
-        FileInputStream fis = null;
-        BufferedInputStream bis = null;
-        try {
-            fis = new FileInputStream(file);
-            bis = new BufferedInputStream(fis);
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
             OutputStream os = response.getOutputStream();
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
+            int len;
+            byte[] buffer = new byte[1024];
+            while ((len = bis.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -168,7 +149,7 @@ public class LocalFileService {
      * @return {@link String}
      */
     public String previewImg(String path, String fileName) {
-        return this.localProperties.getNginxHost() + path + fileName;
+        return this.localProperties.getNginxHost() + "/" + path + "/" + fileName;
     }
 
     /**
