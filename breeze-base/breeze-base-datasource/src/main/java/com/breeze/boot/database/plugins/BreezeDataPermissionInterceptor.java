@@ -123,7 +123,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             // 获取Mapper类
             clazz = Class.forName(ms.getId().substring(0, ms.getId().lastIndexOf(".")));
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("类未发现异常", e);
         }
 
         // 获取方法名

@@ -66,7 +66,7 @@ public class MinioService {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Bucket 创建失败", e);
         }
     }
 
@@ -100,8 +100,8 @@ public class MinioService {
                     //y坐标修正值。 默认在中间，偏移量相对于中间偏移
                     0,
                     0.8f);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("", e);
         }
         return this.uploadImg(path, fileName, (BufferedImage) image);
     }
@@ -137,7 +137,7 @@ public class MinioService {
                     0,
                     0.8F);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("上传失败", e);
         }
         return this.uploadImg(path, fileName, (BufferedImage) image);
     }
@@ -155,7 +155,7 @@ public class MinioService {
         try {
             ImageIO.write(image, "jpeg", os);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("文件转换 bs IO 异常", e);
         }
         return this.upload2Minio(new ByteArrayInputStream(os.toByteArray()), os.size(), path, fileName, "image/jpeg");
     }
@@ -181,7 +181,7 @@ public class MinioService {
                             .contentType(contentType)
                             .build());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("文件上传失败", e);
         }
         String savePath = this.minioProperties.getBucketName() + "/" + path + "/" + fileName;
         String imageUrl = this.minioProperties.getNginxHost() + "/" + savePath;
@@ -212,7 +212,7 @@ public class MinioService {
         try {
             return minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Bucket 获取失败", e);
             return false;
         }
     }
@@ -234,7 +234,7 @@ public class MinioService {
                 items.add(result.get());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取文件对象失败", e);
         }
         return items;
     }
@@ -263,7 +263,7 @@ public class MinioService {
                             .bucket(bucketName)
                             .build());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("删除Bucket失败", e);
             return false;
         }
         return true;
@@ -286,7 +286,7 @@ public class MinioService {
             resultIterable.forEach(result -> this.getItem(objNameList, result));
             return objNameList;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("", e);
         }
         return Lists.newArrayList();
     }
@@ -302,7 +302,7 @@ public class MinioService {
             Item item = resultItem.get();
             objNameList.add(item.objectName());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("", e);
         }
     }
 
@@ -315,7 +315,7 @@ public class MinioService {
         try {
             return minioClient.listBuckets();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取失败", e);
         }
         return Lists.newArrayList();
     }
@@ -331,7 +331,7 @@ public class MinioService {
             this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(this.minioProperties.getBucketName())
                     .object(path + "/" + fileName).build());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("删除失败", e);
             return false;
         }
         return true;
@@ -354,7 +354,7 @@ public class MinioService {
             this.minioClient.removeObjects(RemoveObjectsArgs.builder().bucket(bucket).objects(deleteObjList).build());
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("删除失败", e);
         }
         return false;
     }
@@ -376,7 +376,7 @@ public class MinioService {
         try {
             return this.minioClient.getPresignedObjectUrl(build);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取资源失败", e);
         }
         return "";
     }
@@ -402,7 +402,7 @@ public class MinioService {
                 os.write(buf, 0, len);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("下载失败", e);
         }
     }
 

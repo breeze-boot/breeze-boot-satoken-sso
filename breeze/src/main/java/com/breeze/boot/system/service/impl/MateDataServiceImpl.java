@@ -18,6 +18,7 @@ package com.breeze.boot.system.service.impl;
 
 import com.breeze.boot.system.service.MateService;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @author gaoweixuan
  * @date 2022-11-12
  */
+@Slf4j
 @Service
 public class MateDataServiceImpl implements MateService {
 
@@ -59,7 +61,7 @@ public class MateDataServiceImpl implements MateService {
         try {
             metaData = connection.getMetaData();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("获取数据库连接失败", e);
         }
     }
 
@@ -81,7 +83,7 @@ public class MateDataServiceImpl implements MateService {
                 tableList.add(selectMap);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL异常 ", e);
         }
         return tableList;
     }
@@ -105,7 +107,7 @@ public class MateDataServiceImpl implements MateService {
                 columnList.add(selectMap);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQL异常", e);
         }
         return columnList;
     }

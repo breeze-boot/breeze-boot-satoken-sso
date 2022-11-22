@@ -1,6 +1,7 @@
 package com.breeze.base.mail;
 
 import cn.hutool.core.collection.CollUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +23,7 @@ import java.util.Set;
  * 邮件发送工具
  */
 @Component
+@Slf4j
 public class MailSender {
 
     /**
@@ -87,7 +89,7 @@ public class MailSender {
                 }
             }
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("邮件消息发送失败", e);
         }
         // 发送邮件
         this.javaMailSender.send(mimeMessage);
@@ -132,8 +134,8 @@ public class MailSender {
             //设置整个邮件内容为最终组合出的MimeMultipart对象
             mimeMessage.setContent(allMultipart);
             mimeMessage.saveChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (MessagingException e) {
+            log.error("邮件消息发送失败", e);
         }
         // 发送邮件
         this.javaMailSender.send(mimeMessage);
@@ -174,7 +176,7 @@ public class MailSender {
             // 将MimeMultipart对象保存到MimeBodyPart对象
             contentMimeBodyPart.setContent(contentMimeMultipart);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("邮件消息发送失败", e);
         }
         return contentMimeBodyPart;
     }
@@ -193,7 +195,7 @@ public class MailSender {
             mimeBodyPart.setDataHandler(new DataHandler(fileDataSource));
             mimeBodyPart.setFileName(fileDataSource.getName());
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("邮件消息发送失败", e);
         }
         return mimeBodyPart;
     }

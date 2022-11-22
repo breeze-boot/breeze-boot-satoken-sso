@@ -17,6 +17,7 @@
 package com.breeze.boot.core.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 
 import javax.servlet.ServletOutputStream;
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
  * @author gaoweixuan
  * @date 2021/10/2
  */
+@Slf4j
 public class ResponseUtil {
 
     /**
@@ -48,7 +50,7 @@ public class ResponseUtil {
             ObjectMapper objectMapper = new ObjectMapper();
             out.write(objectMapper.writeValueAsString(Result.fail(resultMsg)).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("response 响应失败", e);
         } finally {
             try {
                 if (out != null) {
@@ -58,7 +60,7 @@ public class ResponseUtil {
                     out.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("IO关闭异常", e);
             }
         }
     }

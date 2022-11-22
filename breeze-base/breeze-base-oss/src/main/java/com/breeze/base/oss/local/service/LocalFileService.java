@@ -132,7 +132,7 @@ public class LocalFileService {
                 os.write(buffer, 0, len);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("下载失败", e);
         }
     }
 
