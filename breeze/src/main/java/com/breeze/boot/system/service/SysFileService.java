@@ -59,7 +59,7 @@ public interface SysFileService extends IService<SysFile> {
      * @param fileId 文件ID
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> preview(Long fileId);
+    Result<String> preview(Long fileId);
 
     /**
      * 下载

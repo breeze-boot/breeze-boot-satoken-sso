@@ -36,4 +36,9 @@ public class LocalProperties {
      */
     private String path;
 
+    /**
+     * 访问地址
+     */
+    private String nginxHost;
+
 }

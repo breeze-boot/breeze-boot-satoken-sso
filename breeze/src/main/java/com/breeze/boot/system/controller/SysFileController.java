@@ -75,7 +75,7 @@ public class SysFileController {
     @Operation(summary = "图片预览")
     @GetMapping("/preview")
     @PreAuthorize("hasAnyAuthority('sys:file:preview')")
-    public Result<Boolean> preview(Long fileId) {
+    public Result<String> preview(Long fileId) {
         return this.sysFileService.preview(fileId);
     }
 
@@ -89,8 +89,6 @@ public class SysFileController {
     @GetMapping("/download")
     @PreAuthorize("hasAnyAuthority('sys:file:download')")
     public void download(Long fileId, HttpServletResponse response, HttpServletRequest request) {
-        String responseType = request.getHeader("responseType");
-        response.setHeader("responseType", responseType);
         this.sysFileService.download(fileId, response);
     }
 

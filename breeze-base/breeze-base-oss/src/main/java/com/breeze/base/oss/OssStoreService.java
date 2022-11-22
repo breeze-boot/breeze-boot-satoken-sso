@@ -48,20 +48,20 @@ public class OssStoreService {
     /**
      * 下载
      *
-     * @param response response
      * @param ossStyle 存储方式
-     * @param fileName 文件名称
      * @param path     路径
+     * @param fileName 文件名称
+     * @param response response
      */
-    public void download(Integer ossStyle, String fileName, String path, HttpServletResponse response) {
+    public void download(Integer ossStyle, String path, String fileName, HttpServletResponse response) {
         switch (ossStyle) {
             case 0:
                 beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
-                this.localFileService.download(path, response);
+                this.localFileService.download(path, fileName, response);
                 break;
             case 1:
                 beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
-                this.minioService.download(fileName, path, response);
+                this.minioService.download(path, fileName, response);
                 break;
             default:
                 log.error("存储类型错误");
@@ -79,13 +79,16 @@ public class OssStoreService {
      */
     @SneakyThrows
     public Optional<FileBO> upload(Integer ossStyle, MultipartFile file, String path, String newFileName) {
+        String originalFileName = file.getOriginalFilename();
+        assert originalFileName != null;
+        String substring = originalFileName.substring(originalFileName.lastIndexOf("."));
         Optional<FileBO> optionalFileBO;
         switch (ossStyle) {
             case 0:
-                optionalFileBO = this.localFileService.uploadFile(file);
+                optionalFileBO = this.localFileService.uploadFile(file, path, newFileName + substring);
                 break;
             case 1:
-                optionalFileBO = this.minioService.upload2Minio(file.getInputStream(), file.getSize(), path, newFileName, file.getContentType());
+                optionalFileBO = this.minioService.upload2Minio(file, path, newFileName + substring);
                 break;
             default:
                 optionalFileBO = Optional.empty();
@@ -97,20 +100,21 @@ public class OssStoreService {
     /**
      * 图片预览
      *
-     * @param fileName 文件名称
      * @param ossStyle 存储方式
-     * @return {@link Optional}<{@link String}>
+     * @param path     路径
+     * @param fileName 文件名称
+     * @return {@link String}
      */
-    public String preview(Integer ossStyle, String fileName) {
+    public String preview(Integer ossStyle, String path, String fileName) {
         String preView = "";
         switch (ossStyle) {
             case 0:
                 beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
-                preView = this.localFileService.previewImg(fileName);
+                preView = this.localFileService.previewImg(path, fileName);
                 break;
             case 1:
                 beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
-                preView = this.minioService.previewImg(fileName);
+                preView = this.minioService.previewImg(path, fileName);
                 break;
             default:
                 log.error("存储类型错误");
@@ -121,7 +125,7 @@ public class OssStoreService {
     /**
      * bean是否存在
      *
-     * @param aNull 一个空
+     * @param aNull 是否空
      * @param msg   信息
      */
     private void beanIsExists(boolean aNull, String msg) {
@@ -137,8 +141,21 @@ public class OssStoreService {
      * @param fileName 文件名称
      * @return {@link Boolean}
      */
-    public Boolean remove(Integer ossStyle, String fileName) {
-        return true;
+    public Boolean remove(Integer ossStyle, String path, String fileName) {
+        Boolean remove = Boolean.FALSE;
+        switch (ossStyle) {
+            case 0:
+                beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");
+                remove = this.localFileService.remove(path, fileName);
+                break;
+            case 1:
+                beanIsExists(Objects.isNull(this.minioService), "未配置minio存储方式");
+                remove = this.minioService.remove(path, fileName);
+                break;
+            default:
+                log.error("存储类型错误");
+        }
+        return remove;
     }
 
 }

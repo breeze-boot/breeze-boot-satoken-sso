@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * 系统文件服务impl
@@ -86,13 +87,14 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Override
     public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         MultipartFile file = fileDTO.getFile();
-        Optional<FileBO> optionalFileBO = this.ossStoreService.upload(1, file, "", "");
+        Optional<FileBO> optionalFileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, "/breeze/", UUID.randomUUID().toString().replace("-", ""));
         FileBO fileBO = optionalFileBO.orElseThrow(RuntimeException::new);
         SysFile sysFile = SysFile.builder()
                 .title(fileDTO.getTitle())
                 .newFileName(fileBO.getNewFileName())
                 .originalFileName(fileBO.getOriginalFilename())
                 .path(fileBO.getPath())
+                .ossStyle(fileDTO.getOssStyle())
                 .build();
         return Result.ok(this.save(sysFile));
     }
@@ -104,13 +106,13 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> preview(Long fileId) {
+    public Result<String> preview(Long fileId) {
         SysFile sysFile = this.getById(fileId);
         if (Objects.isNull(sysFile)) {
-            return Result.fail(Boolean.FALSE, "文件不存在");
+            return Result.fail("文件不存在");
         }
-        String preview = this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getNewFileName());
-        return Result.ok(Boolean.TRUE, preview);
+        String preview = this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName());
+        return Result.ok(preview);
     }
 
     /**
@@ -125,7 +127,8 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         if (Objects.isNull(sysFile)) {
             throw new SystemServiceException(ResultCode.exception("文件不存在"));
         }
-        this.ossStoreService.download(sysFile.getOssStyle(), sysFile.getNewFileName(), sysFile.getPath(), response);
+        response.setHeader("original-file-name", sysFile.getOriginalFileName());
+        this.ossStoreService.download(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName(), response);
     }
 
     /**
@@ -137,12 +140,12 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Override
     public Result<Boolean> removeFileByIds(List<Long> fileIds) {
         List<SysFile> sysFileList = this.listByIds(fileIds);
-        if (CollUtil.isNotEmpty(sysFileList)) {
+        if (CollUtil.isEmpty(sysFileList)) {
             return Result.fail(Boolean.FALSE, "文件不存在");
         }
         for (SysFile sysFile : sysFileList) {
-            Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getNewFileName());
-            if (remove) {
+            Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName());
+            if (!remove) {
                 continue;
             }
             this.removeById(sysFile.getId());

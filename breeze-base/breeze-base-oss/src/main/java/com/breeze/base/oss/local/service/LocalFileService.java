@@ -17,11 +17,13 @@
 package com.breeze.base.oss.local.service;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
 import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.local.config.LocalProperties;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.ex.SystemServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +46,7 @@ public class LocalFileService {
     private LocalProperties localProperties;
 
     /**
-     * 得到扩展
+     * 获取扩展名
      *
      * @param originalFileName 原始文件名字
      * @return {@link String}
@@ -66,10 +68,12 @@ public class LocalFileService {
     /**
      * 上传文件
      *
-     * @param file 文件
-     * @return {@link FileBO}
+     * @param file        文件
+     * @param path        路径
+     * @param newFileName 新文件名字
+     * @return {@link Optional}<{@link FileBO}>
      */
-    public Optional<FileBO> uploadFile(MultipartFile file) {
+    public Optional<FileBO> uploadFile(MultipartFile file, String path, String newFileName) {
         if (file.isEmpty()) {
             throw new SystemServiceException(ResultCode.exception("上传文件为空"));
         }
@@ -77,32 +81,43 @@ public class LocalFileService {
         long size = file.getSize();
         //文件真实名称
         String originalFilename = file.getOriginalFilename();
-        assert originalFilename != null;
-        String extension = this.getExtension(originalFilename);
-        //文件类型
+        if (StrUtil.isEmpty(newFileName)) {
+            assert originalFilename != null;
+            String extension = this.getExtension(originalFilename);
+            //文件类型
+            newFileName = getNewFileName(extension);
+        }
         String contentType = file.getContentType();
-        String newFileName = getNewFileName(extension);
-        File newFilePath = new File(localProperties.getPath() + File.separator + newFileName);
+        File newFilePath = new File(localProperties.getPath() + path);
+        if (!newFilePath.exists()) {
+            newFilePath.mkdirs();
+        }
         try {
             if (log.isInfoEnabled()) {
                 log.info("文件名： [{}]， 类型: [{}]，文件大小 [{}]", originalFilename, contentType, size);
             }
-            FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(newFilePath));
+            FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(new File(newFilePath, newFileName)));
         } catch (IOException e) {
             log.error("上传失败 {}", e.getMessage());
             e.printStackTrace();
         }
         return Optional.ofNullable(FileBO.builder()
+                .path(path)
                 .originalFilename(originalFilename)
                 .newFileName(newFileName)
-                .path(newFilePath.getPath())
                 .contentType(contentType)
                 .build());
     }
 
-    public void download(String path, HttpServletResponse response) {
-        File file = new File(path);
-        String fileName = file.getName();
+    /**
+     * 下载
+     *
+     * @param path     路径
+     * @param fileName 文件名称
+     * @param response 响应
+     */
+    public void download(String path, String fileName, HttpServletResponse response) {
+        File file = getFile(path, fileName);
         if (!file.exists()) {
             throw new SystemServiceException(ResultCode.exception("下载文件失败"));
         }
@@ -140,7 +155,34 @@ public class LocalFileService {
         }
     }
 
-    public String previewImg(String newFileName) {
-        return "";
+    @NotNull
+    private File getFile(String path, String fileName) {
+        return new File(new File(this.localProperties.getPath(), path), fileName);
+    }
+
+    /**
+     * 预览
+     *
+     * @param path     路径
+     * @param fileName 文件名称
+     * @return {@link String}
+     */
+    public String previewImg(String path, String fileName) {
+        return this.localProperties.getNginxHost() + path + fileName;
+    }
+
+    /**
+     * 删除
+     *
+     * @param fileName 文件名称
+     * @return boolean
+     */
+    public boolean remove(String path, String fileName) {
+        File file = getFile(path, fileName);
+        if (!file.exists()) {
+            log.error("文件不存在");
+            return false;
+        }
+        return file.delete();
     }
 }

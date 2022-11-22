@@ -37,12 +37,24 @@ import java.awt.*;
 @NoArgsConstructor
 public class MinioImgMarkConfig {
 
+    /**
+     * 水印文本
+     */
     private String pressText;
 
+    /**
+     * 水印图片
+     */
     private Image pressImg = ImgUtil.read(FileUtil.file("D:/logo.jpg"));
 
+    /**
+     * x
+     */
     private int x;
 
+    /**
+     * y
+     */
     private int y;
 
     private float alpha;

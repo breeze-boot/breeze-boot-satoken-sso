@@ -27,6 +27,7 @@ import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,11 +167,12 @@ public class MinioService {
     /**
      * 上传minio
      *
-     * @param is       文件
-     * @param size     大小
-     * @param path     路径 ()
-     * @param fileName 文件名称
-     * @return {@link FileBO}
+     * @param is          文件
+     * @param size        大小
+     * @param path        路径 ()
+     * @param fileName    文件名称
+     * @param contentType 内容类型
+     * @return {@link Optional}<{@link FileBO}>
      */
     public Optional<FileBO> upload2Minio(InputStream is, long size, String path, String fileName, String contentType) {
         this.createBucket(this.minioProperties.getBucketName());
@@ -189,6 +191,19 @@ public class MinioService {
         String imageUrl = this.minioProperties.getNginxHost() + savePath;
         log.info(" \n {} \n {}", savePath, imageUrl);
         return Optional.ofNullable(FileBO.builder().newFileName(fileName).path(savePath).contentType(contentType).build());
+    }
+
+    /**
+     * 上传minio
+     *
+     * @param file     文件
+     * @param path     路径
+     * @param fileName 文件名称
+     * @return {@link Optional}<{@link FileBO}>
+     */
+    @SneakyThrows
+    public Optional<FileBO> upload2Minio(MultipartFile file, String path, String fileName) {
+        return upload2Minio(file.getInputStream(), file.getSize(), path, fileName, file.getContentType());
     }
 
     /**
@@ -315,9 +330,10 @@ public class MinioService {
      * @param fileName 文件名称
      * @return boolean
      */
-    public boolean remove(String fileName) {
+    public boolean remove(String path, String fileName) {
         try {
-            this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(this.minioProperties.getBucketName()).object(fileName).build());
+            this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(this.minioProperties.getBucketName())
+                    .object(path + fileName).build());
         } catch (Exception e) {
             return false;
         }
@@ -349,14 +365,15 @@ public class MinioService {
     /**
      * 预览图片
      *
+     * @param path     路径
      * @param fileName 文件名称
      * @return {@link String}
      */
-    public String previewImg(String fileName) {
+    public String previewImg(String path, String fileName) {
         // 查看文件地址
         GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
-                .bucket("breeze")
-                .object(fileName)
+                .bucket(this.minioProperties.getBucketName())
+                .object(path + fileName)
                 .method(Method.GET)
                 .build();
         try {
@@ -368,15 +385,15 @@ public class MinioService {
     }
 
     /**
-     * 文件下载
+     * 下载
      *
+     * @param path     路径
      * @param fileName 文件名称
-     * @param path     TODO
      * @param response response
      */
-    public void download(String fileName, String path, HttpServletResponse response) {
+    public void download(String path, String fileName, HttpServletResponse response) {
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(this.minioProperties.getBucketName())
-                .object(fileName).build();
+                .object(path + fileName).build();
         try (GetObjectResponse objectResponse = this.minioClient.getObject(objectArgs);
              ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ServletOutputStream stream = response.getOutputStream();
