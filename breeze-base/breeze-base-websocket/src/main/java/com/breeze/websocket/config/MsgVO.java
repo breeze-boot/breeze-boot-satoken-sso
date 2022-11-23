@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.websocket.config;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
 
 /**
- * 系统消息实体
+ * 消息VO
  *
- * @author gaoweixuan
- * @date 2022-11-06
+ * @author breeze
+ * @date 2022-11-23
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_msg")
-@Schema(description = "系统消息实体")
-public class SysMsg extends BaseModel<SysMsg> implements Serializable {
+@Schema(description = "消息VO")
+public class MsgVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,16 +44,10 @@ public class SysMsg extends BaseModel<SysMsg> implements Serializable {
     private String msgTitle;
 
     /**
-     * 消息类型 0 通知 1 公告
+     * 消息类型 1 公告 2 通知
      */
     @Schema(description = "消息类型")
-    private Integer msgType;
-
-    /**
-     * 消息编码
-     */
-    @Schema(description = "消息编码")
-    private String msgCode;
+    private Integer type;
 
     /**
      * 内容
