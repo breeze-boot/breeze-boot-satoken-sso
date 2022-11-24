@@ -55,9 +55,15 @@ public class WebSocketMsgController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    /**
+     * 系统消息服务
+     */
     @Autowired
     private SysMsgService sysMsgService;
 
+    /**
+     * 系统用户服务
+     */
     @Autowired
     private SysUserService sysUserService;
 
@@ -65,30 +71,35 @@ public class WebSocketMsgController {
     /**
      * 消息广播
      *
-     * @param msg 消息
+     * @param msgId 消息ID
      * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "广播消息")
     @MessageMapping("/sendMsg")
     @SendTo("/topic/msg")
-    public Result<MsgVO> sendMsg(@Payload String msg) {
-        log.info(msg);
-        return Result.ok(MsgVO.builder().msgTitle("通知").content(msg).type(2).build());
+    public Result<MsgVO> sendMsg(@Payload Long msgId) {
+        SysMsg sysMsg = this.sysMsgService.getById(msgId);
+        return Result.ok(MsgVO.builder().msgTitle(sysMsg.getMsgTitle())
+                .msgLevel(sysMsg.getMsgLevel())
+                .msgType(sysMsg.getMsgType())
+                .content(sysMsg.getContent())
+                .build());
     }
 
     /**
      * 发送消息给一个用户
      *
-     * @param msgId 消息ID
-     * @return {@link Result}<{@link ?}>
+     * @param msgId     消息ID
+     * @param principal 主要
+     * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "发送消息给一个用户")
-    @MessageMapping("/sendUserMsg")
+    @MessageMapping("/sendMsgUser")
     @SendToUser("/queue/userMsg")
-    public Result<MsgVO> sendUserMsg(Principal principal, @Payload Long msgId) {
+    public Result<MsgVO> sendMsgUser(Principal principal, @Payload Long msgId) {
         log.info("msgId {}, username： {}", msgId, principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgId);
-        return Result.ok(MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).type(sysMsg.getMsgType()).build());
+        return Result.ok(MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).msgType(sysMsg.getMsgType()).build());
     }
 
     /**
@@ -100,7 +111,7 @@ public class WebSocketMsgController {
     @MessageMapping("/sendDeptUserMsg")
     public void sendDeptUserMsg(@Payload MsgDTO msgDTO) {
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
-        MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).type(sysMsg.getMsgType()).build();
+        MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).msgType(sysMsg.getMsgType()).build();
         List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, msgDTO.getDeptIds()));
         for (SysUser sysUser : sysUserList) {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", msgVO);
@@ -116,7 +127,7 @@ public class WebSocketMsgController {
     @MessageMapping("/sendMsgToManyUser")
     public void sendMsgToManyUser(@Payload MsgDTO msgDTO) {
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
-        MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).type(sysMsg.getMsgType()).build();
+        MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle()).content(sysMsg.getContent()).msgType(sysMsg.getMsgType()).build();
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
         for (SysUser sysUser : sysUserList) {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", msgVO);

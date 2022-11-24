@@ -47,16 +47,22 @@ public class SysMsg extends BaseModel<SysMsg> implements Serializable {
     private String msgTitle;
 
     /**
-     * 消息类型 0 通知 1 公告
+     * 消息编码
+     */
+    @Schema(description = "消息编码")
+    private Integer msgCode;
+
+    /**
+     * 消息类型 1 通知 2 公告
      */
     @Schema(description = "消息类型")
     private Integer msgType;
 
     /**
-     * 消息编码
+     * 消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息
      */
-    @Schema(description = "消息编码")
-    private String msgCode;
+    @Schema(description = "消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息")
+    private String msgLevel;
 
     /**
      * 内容

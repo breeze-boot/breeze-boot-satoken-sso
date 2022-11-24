@@ -24,6 +24,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
+import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Maps;
@@ -66,6 +67,12 @@ public class CommonController {
      */
     @Autowired
     private SysPlatformService platformService;
+
+    /**
+     * 用户服务
+     */
+    @Autowired
+    private SysUserService userService;
 
     /**
      * 平台服务
@@ -154,6 +161,17 @@ public class CommonController {
     @GetMapping("/selectDept")
     public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
         return Result.ok(this.deptService.listDept(DeptSearchDTO.builder().id(id).build()));
+    }
+
+    /**
+     * 用户下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
+     */
+    @Operation(summary = "用户下拉框", description = "下拉框接口")
+    @GetMapping("/selectUser")
+    public Result<List<SysUser>> selectUser() {
+        return Result.ok(this.userService.list());
     }
 
     /**

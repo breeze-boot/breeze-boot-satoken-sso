@@ -51,12 +51,6 @@ public class MsgDTO implements Serializable {
     private List<Long> userIds;
 
     /**
-     * 消息类型 1 紧急消息（error多次提醒） 2 一般消息（info提醒） 3 警示消息（warning） 4 正常消息（success提醒） 0 临时消息
-     */
-    @Schema(description = "消息类型")
-    private Integer type;
-
-    /**
      * 消息ID
      */
     @Schema(description = "消息ID")
