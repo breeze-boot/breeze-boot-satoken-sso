@@ -19,6 +19,7 @@ package com.breeze.boot.system.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class MsgDTO implements Serializable {
      * 消息ID
      */
     @Schema(description = "消息ID")
+    @NotNull(message = "消息不能为空")
     private Long msgId;
 
     /**

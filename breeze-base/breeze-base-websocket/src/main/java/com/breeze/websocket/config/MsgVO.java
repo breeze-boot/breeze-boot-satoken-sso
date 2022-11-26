@@ -44,6 +44,12 @@ public class MsgVO implements Serializable {
     private String msgTitle;
 
     /**
+     * 消息Code
+     */
+    @Schema(description = "消息Code")
+    private String msgCode;
+
+    /**
      * 消息类型 1 通知 2 公告
      */
     @Schema(description = "消息类型")

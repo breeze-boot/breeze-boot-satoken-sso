@@ -50,7 +50,7 @@ public class SysMsg extends BaseModel<SysMsg> implements Serializable {
      * 消息编码
      */
     @Schema(description = "消息编码")
-    private Integer msgCode;
+    private String msgCode;
 
     /**
      * 消息类型 1 通知 2 公告
