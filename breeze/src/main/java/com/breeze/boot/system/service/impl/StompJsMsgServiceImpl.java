@@ -19,6 +19,7 @@ package com.breeze.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.log.config.SysLogSaveEvent;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserMsg;
@@ -28,8 +29,11 @@ import com.breeze.boot.system.service.SysUserMsgService;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import com.breeze.boot.system.service.SysUserService;
 import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.dto.UserMsgDTO;
 import com.breeze.websocket.service.MsgService;
+import com.breeze.websocket.service.PublisherSaveMsgEvent;
 import com.breeze.websocket.vo.MsgVO;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -53,6 +57,12 @@ public class StompJsMsgServiceImpl extends MsgService {
      */
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    /**
+     * 事件
+     */
+    @Autowired
+    private PublisherSaveMsgEvent publisherSaveMsgEvent;
 
     /**
      * 系统用户消息服务
@@ -123,12 +133,18 @@ public class StompJsMsgServiceImpl extends MsgService {
         // 查询用户
         SysUserMsg userMsg = SysUserMsg.builder().userId(1L).msgSnapshotId(userMsgContent.getId()).build();
         this.sysUserMsgService.save(userMsg);
+
         return Result.ok(MsgVO.builder()
                 .msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
                 .msgLevel(sysMsg.getMsgLevel())
                 .content(sysMsg.getContent())
                 .msgType(sysMsg.getMsgType()).build());
+
+    }
+
+    public void saveMsg(UserMsgDTO userMsgDTO) {
+        // TODO
     }
 
     /**
@@ -152,21 +168,14 @@ public class StompJsMsgServiceImpl extends MsgService {
         userMsgContent.setMsgId(sysMsg.getId());
         this.sysUserMsgSnapshotService.save(userMsgContent);
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
+        List<SysUserMsg> sysUserMsgList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
-            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
-            this.sysUserMsgService.save(userMsg);
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
+            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
+            sysUserMsgList.add(userMsg);
         }
+        this.publisherSaveMsgEvent.publisherEvent(new SysLogSaveEvent(null));
     }
 
-    /**
-     * 保存发送消息
-     *
-     * @param msgDTO 消息dto
-     */
-    @Override
-    public void saveSendMsg(MsgDTO msgDTO) {
-
-    }
 
 }

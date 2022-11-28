@@ -57,11 +57,4 @@ public abstract class MsgService {
      */
     public abstract void sendMsgToUser(Principal principal, MsgDTO msgDTO);
 
-    /**
-     * 异步保存发送信息
-     *
-     * @param msgDTO 消息DTO
-     */
-    public abstract void saveSendMsg(MsgDTO msgDTO);
-
 }

@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.config;
+package com.breeze.websocket.service;
 
-import com.breeze.boot.log.config.SysLogSaveEventListener;
-import com.breeze.boot.log.dto.SysLogDTO;
-import com.breeze.boot.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
- * 系统日志收集的配置
+ * 发布保存消息事件
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @date 2022-11-28
  */
-@Configuration
-public class SysLogConfig {
-
-    @Autowired
-    private SysLogService sysLogService;
+public class PublisherSaveMsgEvent {
 
     /**
-     * 侦听器
-     *
-     * @return {@link SysLogSaveEventListener}
+     * 应用程序事件发布者
      */
-    @Bean
-    public SysLogSaveEventListener listener() {
-        return new SysLogSaveEventListener((sysLog) -> this.sysLogService.saveSysLog((SysLogDTO) sysLog.getSource()));
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    /**
+     * 发布事件
+     *
+     * @param applicationEvent 应用程序事件
+     */
+    public void publisherEvent(ApplicationEvent applicationEvent) {
+        applicationEventPublisher.publishEvent(applicationEvent);
     }
 
 }
+

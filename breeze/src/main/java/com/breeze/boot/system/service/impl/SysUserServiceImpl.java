@@ -270,5 +270,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return user;
     }
 
+    @Override
+    public List<SysUser> listUserByDeptId(List<Long> deptIds) {
+        return this.baseMapper.listUserByDeptId(deptIds);
+    }
+
 }
 
