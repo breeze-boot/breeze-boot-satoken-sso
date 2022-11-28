@@ -14,54 +14,40 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * 消息VO
+ * 系统用户消息
  *
  * @author breeze
- * @date 2022-11-23
+ * @date 2022-11-26
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "消息DTO")
-public class MsgDTO implements Serializable {
+@TableName(value = "sys_user_msg")
+@Schema(description = "系统用户消息实体")
+public class SysUserMsg extends BaseModel<SysUserMsg> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 部门IDs
+     * 用户ID
      */
-    @Schema(description = "部门IDs")
-    private List<Long> deptIds;
+    private Long userId;
 
     /**
-     * 用户IDs
+     * 消息快照ID
      */
-    @Schema(description = "用户IDs")
-    private List<Long> userIds;
-
-    /**
-     * 消息ID
-     */
-    @Schema(description = "消息ID")
-    @NotNull(message = "消息不能为空")
-    private Long msgId;
-
-    /**
-     * 临时消息
-     */
-    @Schema(description = "临时消息")
-    private String msg;
+    private Long msgSnapshotId;
 
 }

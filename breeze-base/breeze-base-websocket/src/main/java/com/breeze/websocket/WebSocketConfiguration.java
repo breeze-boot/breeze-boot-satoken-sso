@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.breeze.websocket.config;
+package com.breeze.websocket;
 
+import com.breeze.websocket.config.BreezeChannelInterceptorAdapter;
+import com.breeze.websocket.config.BreezeHandShakeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

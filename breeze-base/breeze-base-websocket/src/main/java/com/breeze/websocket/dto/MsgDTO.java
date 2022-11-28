@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.websocket.config;
+package com.breeze.websocket.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * 消息VO
+ * 消息DTO
  *
  * @author breeze
  * @date 2022-11-23
@@ -32,39 +34,28 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "消息VO")
-public class MsgVO implements Serializable {
+@Schema(description = "消息DTO")
+public class MsgDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 消息标题
+     * 用户IDs
      */
-    @Schema(description = "消息标题")
-    private String msgTitle;
+    @Schema(description = "用户IDs")
+    private List<Long> userIds;
 
     /**
-     * 消息Code
+     * 消息ID
      */
-    @Schema(description = "消息Code")
-    private String msgCode;
+    @Schema(description = "消息ID")
+    @NotNull(message = "消息不能为空")
+    private Long msgId;
 
     /**
-     * 消息类型 1 通知 2 公告
+     * 消息内容
      */
-    @Schema(description = "消息类型")
-    private Integer msgType;
-
-    /**
-     * 消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息
-     */
-    @Schema(description = "消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息")
-    private String msgLevel;
-
-    /**
-     * 内容
-     */
-    @Schema(description = "内容")
-    private String content;
+    @Schema(description = "临时消息")
+    private String msg;
 
 }

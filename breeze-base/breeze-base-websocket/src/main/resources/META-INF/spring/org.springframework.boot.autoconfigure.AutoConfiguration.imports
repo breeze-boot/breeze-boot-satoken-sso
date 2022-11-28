@@ -1,1 +1,2 @@
-com.breeze.websocket.config.WebSocketConfiguration
+com.breeze.websocket.WebSocketConfiguration
+com.breeze.websocket.controller.MsgController

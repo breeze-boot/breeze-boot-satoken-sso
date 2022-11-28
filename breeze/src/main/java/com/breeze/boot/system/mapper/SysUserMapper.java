@@ -24,6 +24,8 @@ import com.breeze.boot.system.dto.UserSearchDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 系统用户映射器
  *
@@ -41,5 +43,13 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      * @return {@link IPage}<{@link SysUser}>
      */
     IPage<SysUser> listPage(Page<Object> page, @Param("userSearchDTO") UserSearchDTO userSearchDTO);
+
+    /**
+     * 用户通过部门id列表
+     *
+     * @param deptIds 部门id
+     * @return {@link List}<{@link SysUser}>
+     */
+    List<SysUser> listUserByDeptId(@Param("deptIds") List<Long> deptIds);
 
 }

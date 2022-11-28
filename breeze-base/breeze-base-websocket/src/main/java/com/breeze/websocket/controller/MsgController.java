@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.websocket.controller;
 
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.MsgDTO;
-import com.breeze.boot.system.service.impl.StompJsMsgService;
-import com.breeze.websocket.config.MsgVO;
+import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.service.MsgService;
+import com.breeze.websocket.vo.MsgVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -29,73 +28,64 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
- * WebSocket消息模块接口
+ * 消息模块接口
  *
  * @author gaoweixuan
  * @date 2022-10-08
  */
 @Slf4j
 @RestController
-@Tag(name = "webSocket消息模块", description = "WebSocketMsgController")
-public class StompJsMsgController {
+@Tag(name = "消息模块", description = "MsgController")
+public class MsgController {
 
+    /**
+     * 消息服务
+     */
     @Autowired
-    private StompJsMsgService stompJsMsgService;
+    private MsgService msgService;
 
     /**
      * 消息广播
      *
-     * @param msgId 消息ID
+     * @param msgDTO 广播消息
      * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "广播消息")
-    @MessageMapping("/sendMsg")
+    @MessageMapping("/sendBroadcastMsg")
     @SendTo("/topic/msg")
-    public Result<MsgVO> sendMsg(@Payload Long msgId) {
-        return stompJsMsgService.sendMsg(msgId);
+    public Result<MsgVO> sendBroadcastMsg(@Payload MsgDTO msgDTO) {
+        return this.msgService.sendBroadcastMsg(msgDTO);
     }
 
     /**
      * 发送消息给用户
      *
-     * @param msgId     消息ID
      * @param principal 主要
+     * @param msgDTO    用户消息
      * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "发送消息给用户")
     @MessageMapping("/sendMsgUser")
     @SendToUser("/queue/userMsg")
-    public Result<MsgVO> sendMsgUser(Principal principal, @Payload Long msgId) {
-        return stompJsMsgService.sendMsgUser(principal, msgId);
+    public Result<MsgVO> sendMsgUser(Principal principal, @Payload MsgDTO msgDTO) {
+        return this.msgService.sendMsgToSingleUser(principal, msgDTO);
     }
 
     /**
      * 发送信息给指定的用户
      *
      * @param principal 主要
-     * @param msgDTO    消息
+     * @param msgDTO    用户消息
      */
     @Operation(summary = "发送信息给指定的用户")
     @MessageMapping("/sendMsgToUser")
     public void sendMsgToUser(Principal principal, @Payload MsgDTO msgDTO) {
-        stompJsMsgService.sendMsgToUser(principal, msgDTO);
-    }
-
-    /**
-     * 用户通过部门id列表
-     */
-    @Operation(summary = "用户通过部门id列表")
-    @PostMapping("/listUserByDeptId")
-    public Result<List<SysUser>> listUserByDeptId(@RequestBody List<Long> deptIds) {
-        return stompJsMsgService.listUserByDeptId(deptIds);
+        this.msgService.sendMsgToUser(principal, msgDTO);
     }
 
 }

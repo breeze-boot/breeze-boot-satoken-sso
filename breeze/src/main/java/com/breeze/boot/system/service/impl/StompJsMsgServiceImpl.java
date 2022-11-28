@@ -16,14 +16,20 @@
 
 package com.breeze.boot.system.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.MsgDTO;
+import com.breeze.boot.system.domain.SysUserMsg;
+import com.breeze.boot.system.domain.SysUserMsgSnapshot;
 import com.breeze.boot.system.service.SysMsgService;
+import com.breeze.boot.system.service.SysUserMsgService;
+import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import com.breeze.boot.system.service.SysUserService;
-import com.breeze.websocket.config.MsgVO;
+import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.service.MsgService;
+import com.breeze.websocket.vo.MsgVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -33,20 +39,32 @@ import java.security.Principal;
 import java.util.List;
 
 /**
- * WebSocket消息模块接口
+ * stompJs 消息模块接口impl
  *
  * @author gaoweixuan
  * @date 2022-10-08
  */
 @Slf4j
-@Service
-public class StompJsMsgService {
+@Service("stompJsMsgService")
+public class StompJsMsgServiceImpl extends MsgService {
 
     /**
      * 简单消息模板
      */
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    /**
+     * 系统用户消息服务
+     */
+    @Autowired
+    private SysUserMsgService sysUserMsgService;
+
+    /**
+     * 系统用户消息快照服务
+     */
+    @Autowired
+    private SysUserMsgSnapshotService sysUserMsgSnapshotService;
 
     /**
      * 系统消息服务
@@ -63,11 +81,21 @@ public class StompJsMsgService {
     /**
      * 消息广播
      *
-     * @param msgId 消息ID
+     * @param msgDTO 消息dto
      * @return {@link Result}<{@link MsgVO}>
      */
-    public Result<MsgVO> sendMsg(Long msgId) {
-        SysMsg sysMsg = this.sysMsgService.getById(msgId);
+    @Override
+    public Result<MsgVO> sendBroadcastMsg(MsgDTO msgDTO) {
+        SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
+        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
+        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        userMsgContent.setMsgId(sysMsg.getId());
+        this.sysUserMsgSnapshotService.save(userMsgContent);
+        List<SysUser> sysUserList = this.sysUserService.list();
+        for (SysUser sysUser : sysUserList) {
+            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
+            this.sysUserMsgService.save(userMsg);
+        }
         return Result.ok(MsgVO.builder()
                 .msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
@@ -78,15 +106,23 @@ public class StompJsMsgService {
     }
 
     /**
-     * 发送消息给多个用户
+     * 发送消息给用户
      *
-     * @param msgId     消息ID
+     * @param msgDTO    消息ID
      * @param principal 主要
      * @return {@link Result}<{@link MsgVO}>
      */
-    public Result<MsgVO> sendMsgUser(Principal principal, Long msgId) {
-        log.info("msgId {}, username： {}", msgId, principal.getName());
-        SysMsg sysMsg = this.sysMsgService.getById(msgId);
+    @Override
+    public Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgDTO msgDTO) {
+        log.info("msgId {}, username： {}", msgDTO, principal.getName());
+        SysMsg sysMsg = this.sysMsgService.getById(msgDTO);
+        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
+        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        userMsgContent.setMsgId(sysMsg.getId());
+        this.sysUserMsgSnapshotService.save(userMsgContent);
+        // 查询用户
+        SysUserMsg userMsg = SysUserMsg.builder().userId(1L).msgSnapshotId(userMsgContent.getId()).build();
+        this.sysUserMsgService.save(userMsg);
         return Result.ok(MsgVO.builder()
                 .msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
@@ -98,30 +134,39 @@ public class StompJsMsgService {
     /**
      * 发送信息给指定用户
      *
-     * @param msgDTO 消息DTO
+     * @param msgDTO    消息DTO
+     * @param principal 主要
      */
+    @Override
     public void sendMsgToUser(Principal principal, MsgDTO msgDTO) {
         log.info("msgId {}, username： {}", msgDTO.getMsgId(), principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
+
         MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
                 .msgLevel(sysMsg.getMsgLevel())
                 .content(sysMsg.getContent())
                 .msgType(sysMsg.getMsgType()).build();
+        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
+        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        userMsgContent.setMsgId(sysMsg.getId());
+        this.sysUserMsgSnapshotService.save(userMsgContent);
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
         for (SysUser sysUser : sysUserList) {
+            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
+            this.sysUserMsgService.save(userMsg);
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
         }
     }
 
     /**
-     * 用户通过部门id列表
+     * 保存发送消息
      *
-     * @param deptIds 部门id
-     * @return {@link Result}<{@link List}<{@link SysUser}>>
+     * @param msgDTO 消息dto
      */
-    public Result<List<SysUser>> listUserByDeptId(List<Long> deptIds) {
-        return Result.ok(this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, deptIds)));
+    @Override
+    public void saveSendMsg(MsgDTO msgDTO) {
+
     }
 
 }

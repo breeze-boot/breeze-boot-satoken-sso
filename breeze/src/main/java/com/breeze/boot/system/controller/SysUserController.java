@@ -82,6 +82,18 @@ public class SysUserController {
     }
 
     /**
+     * 用户通过部门id列表
+     *
+     * @param deptIds 部门id
+     * @return {@link Result}<{@link List}<{@link SysUser}>>
+     */
+    @Operation(summary = "用户通过部门id列表")
+    @PostMapping("/listUserByDeptId")
+    public Result<List<SysUser>> listUserByDeptId(@RequestBody List<Long> deptIds) {
+        return Result.ok(this.sysUserService.listUserByDeptId(deptIds));
+    }
+
+    /**
      * 保存
      *
      * @param sysUser 系统用户
