@@ -7,6 +7,9 @@
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysUserMsg">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="msgCode" column="msg_code" jdbcType="VARCHAR"/>
+        <result property="markRead" column="mark_read" jdbcType="INTEGER"/>
+        <result property="markClose" column="mark_close" jdbcType="INTEGER"/>
         <result property="msgSnapshotId" column="msg_snapshot_id" jdbcType="BIGINT"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>

@@ -19,15 +19,11 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.system.domain.SysMsg;
+import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.mapper.SysUserMsgMapper;
-import com.breeze.boot.system.service.SysMsgService;
 import com.breeze.boot.system.service.SysUserMsgService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 /**
  * 系统用户消息服务impl
@@ -39,12 +35,6 @@ import java.util.Objects;
 public class SysUserMsgServiceImpl extends ServiceImpl<SysUserMsgMapper, SysUserMsg> implements SysUserMsgService {
 
     /**
-     * 系统消息服务
-     */
-    @Autowired
-    private SysMsgService sysMsgService;
-
-    /**
      * 关闭
      *
      * @param msgCode 消息编码
@@ -52,23 +42,10 @@ public class SysUserMsgServiceImpl extends ServiceImpl<SysUserMsgMapper, SysUser
      */
     @Override
     public Result<Boolean> close(String msgCode) {
-        SysMsg sysMsg = getSysMsg(msgCode);
-        if (Objects.isNull(sysMsg)) {
-            return Result.fail("消息不存在");
-        }
-        return Result.ok(this.update(Wrappers.<SysUserMsg>lambdaUpdate().set(SysUserMsg::getClose, 1).eq(SysUserMsg::getId, msgCode)));
+        return Result.ok(this.update(Wrappers.<SysUserMsg>lambdaUpdate().set(SysUserMsg::getMarkClose, 1)
+                .eq(SysUserMsg::getMsgCode, msgCode)
+                .eq(SysUserMsg::getUserId, SecurityUtils.getCurrentUser().getId())));
     }
-
-    /**
-     * 得到系统消息
-     *
-     * @param msgCode 消息代码
-     * @return {@link SysMsg}
-     */
-    private SysMsg getSysMsg(String msgCode) {
-        return this.sysMsgService.getSysMsg(msgCode);
-    }
-
 
     /**
      * 标记已读
@@ -78,10 +55,9 @@ public class SysUserMsgServiceImpl extends ServiceImpl<SysUserMsgMapper, SysUser
      */
     @Override
     public Result<Boolean> read(String msgCode) {
-        SysMsg sysMsg = getSysMsg(msgCode);
-        if (Objects.isNull(sysMsg)) {
-            return Result.fail("消息不存在");
-        }
-        return Result.ok(this.update(Wrappers.<SysUserMsg>lambdaUpdate().set(SysUserMsg::getRead, 1).eq(SysUserMsg::getId, msgCode)));
+        return Result.ok(this.update(Wrappers.<SysUserMsg>lambdaUpdate().set(SysUserMsg::getMarkRead, 1)
+                .eq(SysUserMsg::getId, msgCode)
+                .eq(SysUserMsg::getUserId, SecurityUtils.getCurrentUser().getId())));
+
     }
 }

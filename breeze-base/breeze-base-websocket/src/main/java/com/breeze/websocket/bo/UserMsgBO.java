@@ -58,6 +58,11 @@ public class UserMsgBO implements Serializable {
         private Long userId;
 
         /**
+         * 消息编码
+         */
+        private String msgCode;
+
+        /**
          * 消息快照ID
          */
         private Long msgSnapshotId;
@@ -83,11 +88,6 @@ public class UserMsgBO implements Serializable {
          * 消息标题
          */
         private String msgTitle;
-
-        /**
-         * 消息编码
-         */
-        private String msgCode;
 
         /**
          * 消息类型 0 通知 1 公告

@@ -75,9 +75,9 @@ public class SysUserMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "关闭")
-    @GetMapping("/close/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:userMsg:edit')")
-    public Result<Boolean> close(@PathVariable("msgCode") String msgCode) {
+    @PutMapping("/close/{msgCode}")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:modify')")
+    public Result<Boolean> close(@PathVariable String msgCode) {
         return this.sysUserMsgService.close(msgCode);
     }
 
@@ -88,9 +88,9 @@ public class SysUserMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "已读")
-    @GetMapping("/read/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:userMsg:info')")
-    public Result<Boolean> read(@PathVariable("msgCode") String msgCode) {
+    @PutMapping("/read/{msgCode}")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:edit')")
+    public Result<Boolean> read(@PathVariable String msgCode) {
         return this.sysUserMsgService.read(msgCode);
     }
 

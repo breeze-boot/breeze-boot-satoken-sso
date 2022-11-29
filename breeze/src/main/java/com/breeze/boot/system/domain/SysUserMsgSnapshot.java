@@ -52,11 +52,6 @@ public class SysUserMsgSnapshot extends BaseModel<SysUserMsgSnapshot> implements
     private String msgTitle;
 
     /**
-     * 消息编码
-     */
-    private String msgCode;
-
-    /**
      * 消息类型 0 通知 1 公告
      */
     private Integer msgType;
@@ -82,5 +77,11 @@ public class SysUserMsgSnapshot extends BaseModel<SysUserMsgSnapshot> implements
      */
     @TableField(exist = false)
     private Integer read;
+
+    /**
+     * 消息编码
+     */
+    @TableField(exist = false)
+    private String msgCode;
 
 }

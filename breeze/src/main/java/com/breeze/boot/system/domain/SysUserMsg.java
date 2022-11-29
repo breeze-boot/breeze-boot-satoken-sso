@@ -46,14 +46,19 @@ public class SysUserMsg extends BaseModel<SysUserMsg> implements Serializable {
     private Long userId;
 
     /**
+     * 消息编码
+     */
+    private String msgCode;
+
+    /**
      * 关闭
      */
-    private Integer close;
+    private Integer markClose;
 
     /**
      * 已读
      */
-    private Integer read;
+    private Integer markRead;
 
     /**
      * 消息快照ID
