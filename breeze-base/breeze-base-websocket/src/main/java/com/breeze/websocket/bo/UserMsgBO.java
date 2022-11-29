@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.websocket.dto;
+package com.breeze.websocket.bo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -34,13 +34,13 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "消息DTO")
-public class UserMsgDTO implements Serializable {
+public class UserMsgBO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private SysUserMsgDTO sysUserMsgDTO;
+    private SysUserMsgSnapshotBO sysUserMsgSnapshotBO;
 
-    private List<SysUserMsgSnapshotDTO> sysUserMsgSnapshotDTOList;
+    private List<SysUserMsgBO> sysUserMsgBOList;
 
     @Data
     @Builder
@@ -48,7 +48,7 @@ public class UserMsgDTO implements Serializable {
     @AllArgsConstructor
     @EqualsAndHashCode(callSuper = false)
     @Schema(description = "用户消息")
-    static class SysUserMsgDTO implements Serializable {
+    public static class SysUserMsgBO implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class UserMsgDTO implements Serializable {
     @AllArgsConstructor
     @EqualsAndHashCode(callSuper = false)
     @Schema(description = "系统用户消息快照")
-    static class SysUserMsgSnapshotDTO implements Serializable {
+    public static class SysUserMsgSnapshotBO implements Serializable {
 
         private static final long serialVersionUID = 1L;
 

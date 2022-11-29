@@ -18,7 +18,9 @@ package com.breeze.websocket;
 
 import com.breeze.websocket.config.BreezeChannelInterceptorAdapter;
 import com.breeze.websocket.config.BreezeHandShakeInterceptor;
+import com.breeze.websocket.service.PublisherSaveMsgEvent;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -33,6 +35,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @Configuration
 @EnableWebSocketMessageBroker
+@Import(PublisherSaveMsgEvent.class)
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     /**

@@ -14,34 +14,42 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.system.dto;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.system.domain.SysUserMsg;
+import com.breeze.boot.core.entity.PageDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
- * 系统用户消息服务
+ * 用户消息查询参数DTO
  *
- * @author breeze
- * @date 2022-11-26
+ * @author gaoweixuan
+ * @date 2022-11-20
  */
-public interface SysUserMsgService extends IService<SysUserMsg> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "用户消息查询参数DTO")
+public class UserMsgSearchDTO extends PageDTO {
 
     /**
-     * 关闭
-     *
-     * @param id id
-     * @return {@link Result}<{@link Boolean}>
+     * 消息Id
      */
-    Result<Boolean> close(Long id);
+    @Schema(description = "消息Id")
+    private String msgId;
 
     /**
-     * 标记已读
-     *
-     * @param id id
-     * @return {@link Result}<{@link Boolean}>
+     * 用户名称
      */
-    Result<Boolean> read(Long id);
+    @Schema(description = "用户名称")
+    private String username;
+
+    /**
+     * 用户ID
+     */
+    @Schema(description = "用户Id")
+    private Long userId;
 
 }

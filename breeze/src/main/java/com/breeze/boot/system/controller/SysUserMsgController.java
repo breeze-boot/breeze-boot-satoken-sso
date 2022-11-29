@@ -20,88 +20,78 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
-import com.breeze.boot.system.domain.SysMsg;
-import com.breeze.boot.system.dto.MsgSearchDTO;
-import com.breeze.boot.system.service.SysMsgService;
+import com.breeze.boot.system.domain.SysUserMsgSnapshot;
+import com.breeze.boot.system.dto.UserMsgSearchDTO;
+import com.breeze.boot.system.service.SysUserMsgService;
+import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
- * 系统消息控制器
+ * 系统用户消息控制器
  *
  * @author gaoweixuan
  * @date 2022-11-20
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/sys/msg")
-@Tag(name = "系统消息管理模块", description = "SysMsgController")
-public class SysMsgController {
+@RequestMapping("/sys/userMsg")
+@Tag(name = "系统用户消息管理模块", description = "SysUserMsgController")
+public class SysUserMsgController {
 
     /**
-     * 系统消息服务
+     * 系统用户消息快照服务
      */
-    private final SysMsgService sysMsgService;
+    private final SysUserMsgSnapshotService sysUserMsgSnapshotService;
+
+    /**
+     * 系统用户消息服务
+     */
+    private final SysUserMsgService sysUserMsgService;
 
     /**
      * 列表
      *
-     * @param msgSearchDTO 消息搜索DTO
-     * @return {@link Result}<{@link IPage}<{@link SysMsg}>>
+     * @param userMsgSearchDTO 消息搜索DTO
+     * @return {@link Result}<{@link IPage}<{@link SysUserMsgSnapshot}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('sys:msg:list')")
-    public Result<IPage<SysMsg>> list(@RequestBody MsgSearchDTO msgSearchDTO) {
-        return Result.ok(this.sysMsgService.listPage(msgSearchDTO));
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:list')")
+    public Result<IPage<SysUserMsgSnapshot>> list(@RequestBody UserMsgSearchDTO userMsgSearchDTO) {
+        return Result.ok(this.sysUserMsgSnapshotService.listPage(userMsgSearchDTO));
     }
 
     /**
-     * 详情
+     * 关闭
      *
      * @param id id
-     * @return {@link Result}<{@link SysMsg}>
+     * @return {@link Result}<{@link Boolean}>
      */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:msg:info')")
-    public Result<SysMsg> info(@PathVariable("id") Long id) {
-        return Result.ok(this.sysMsgService.getById(id));
+    @Operation(summary = "关闭")
+    @GetMapping("/close/{id}")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:edit')")
+    public Result<Boolean> close(@PathVariable("id") Long id) {
+        return this.sysUserMsgService.close(id);
     }
 
     /**
-     * 保存
+     * 标记已读
      *
-     * @param msg 消息
+     * @param id id
      * @return {@link Result}<{@link Boolean}>
      */
-    @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:msg:save')")
-    @BreezeSysLog(description = "消息信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysMsg msg) {
-        return Result.ok(this.sysMsgService.save(msg));
-    }
-
-    /**
-     * 修改
-     *
-     * @param msg 信息
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Operation(summary = "修改")
-    @PutMapping("/modify")
-    @PreAuthorize("hasAnyAuthority('sys:msg:modify')")
-    @BreezeSysLog(description = "消息信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysMsg msg) {
-        return Result.ok(this.sysMsgService.updateById(msg));
+    @Operation(summary = "已读")
+    @GetMapping("/read/{id}")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:info')")
+    public Result<Boolean> read(@PathVariable("id") Long id) {
+        return this.sysUserMsgService.read(id);
     }
 
     /**
@@ -112,10 +102,10 @@ public class SysMsgController {
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('sys:msg:delete')")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:delete')")
     @BreezeSysLog(description = "消息信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return Result.ok(this.sysMsgService.removeByIds(Arrays.asList(ids)));
+        return Result.ok(this.sysUserMsgService.removeByIds(Arrays.asList(ids)));
     }
 
 }

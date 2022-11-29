@@ -16,9 +16,14 @@
 
 package com.breeze.boot.system.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
+import com.breeze.boot.system.dto.UserMsgSearchDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 系统用户消息快照映射器
@@ -28,5 +33,14 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysUserMsgSnapshotMapper extends BreezeBaseMapper<SysUserMsgSnapshot> {
+
+    /**
+     * 列表页面
+     *
+     * @param page             页面
+     * @param userMsgSearchDTO 用户搜索DTO消息
+     * @return {@link IPage}<{@link SysUserMsg}>
+     */
+    IPage<SysUserMsgSnapshot> listPage(Page<SysUserMsg> page, @Param("userMsgSearchDTO") UserMsgSearchDTO userMsgSearchDTO);
 
 }

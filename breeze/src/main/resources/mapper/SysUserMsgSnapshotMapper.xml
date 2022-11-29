@@ -24,4 +24,34 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+        a.id,
+        a.user_id,
+        b.msg_id,
+        b.msg_title,
+        b.msg_code,
+        b.msg_type,
+        b.content,
+        b.msg_level,
+        b.create_time,
+        b.create_name,
+        b.create_by
+        FROM
+        sys_user_msg AS a
+        INNER JOIN sys_user_msg_snapshot AS b ON b.id = a.msg_snapshot_id
+        INNER JOIN sys_user AS c ON a.user_id = c.id
+        <where>
+            a.is_delete = 0
+            AND b.is_delete = 0
+            AND c.is_delete = 0
+            <if test="userMsgSearchDTO.userId != null and userMsgSearchDTO.userId != ''">
+                AND a.user_id = #{userId}
+            </if>
+            <if test="userMsgSearchDTO.username != null and userMsgSearchDTO.username != ''">
+                AND a.username like CONCAT('%' , #{userMsgSearchDTO.username}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

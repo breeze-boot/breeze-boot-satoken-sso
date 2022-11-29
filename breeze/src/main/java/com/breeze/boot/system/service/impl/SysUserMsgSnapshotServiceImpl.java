@@ -16,8 +16,12 @@
 
 package com.breeze.boot.system.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
+import com.breeze.boot.system.dto.UserMsgSearchDTO;
 import com.breeze.boot.system.mapper.SysUserMsgSnapshotMapper;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import org.springframework.stereotype.Service;
@@ -30,5 +34,16 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserMsgSnapshotServiceImpl extends ServiceImpl<SysUserMsgSnapshotMapper, SysUserMsgSnapshot> implements SysUserMsgSnapshotService {
+
+    /**
+     * 列表页面
+     *
+     * @param userMsgSearchDTO 用户搜索DTO消息
+     * @return {@link IPage}<{@link SysUserMsg}>
+     */
+    @Override
+    public IPage<SysUserMsgSnapshot> listPage(UserMsgSearchDTO userMsgSearchDTO) {
+        return this.baseMapper.listPage(new Page<>(userMsgSearchDTO.getCurrent(), userMsgSearchDTO.getSize()), userMsgSearchDTO);
+    }
 
 }

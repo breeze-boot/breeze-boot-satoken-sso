@@ -19,7 +19,6 @@ package com.breeze.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.log.config.SysLogSaveEvent;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserMsg;
@@ -28,8 +27,9 @@ import com.breeze.boot.system.service.SysMsgService;
 import com.breeze.boot.system.service.SysUserMsgService;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import com.breeze.boot.system.service.SysUserService;
+import com.breeze.websocket.bo.UserMsgBO;
 import com.breeze.websocket.dto.MsgDTO;
-import com.breeze.websocket.dto.UserMsgDTO;
+import com.breeze.websocket.service.MsgSaveEvent;
 import com.breeze.websocket.service.MsgService;
 import com.breeze.websocket.service.PublisherSaveMsgEvent;
 import com.breeze.websocket.vo.MsgVO;
@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * stompJs 消息模块接口impl
@@ -59,7 +60,7 @@ public class StompJsMsgServiceImpl extends MsgService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
-     * 事件
+     * 保存消息事件
      */
     @Autowired
     private PublisherSaveMsgEvent publisherSaveMsgEvent;
@@ -97,15 +98,12 @@ public class StompJsMsgServiceImpl extends MsgService {
     @Override
     public Result<MsgVO> sendBroadcastMsg(MsgDTO msgDTO) {
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
-        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
-        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
-        userMsgContent.setMsgId(sysMsg.getId());
-        this.sysUserMsgSnapshotService.save(userMsgContent);
         List<SysUser> sysUserList = this.sysUserService.list();
+        List<UserMsgBO.SysUserMsgBO> sysUserMsgList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
-            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
-            this.sysUserMsgService.save(userMsg);
+            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder().userId(sysUser.getId()).build());
         }
+        this.toAsyncSendMsg(sysMsg, sysUserMsgList);
         return Result.ok(MsgVO.builder()
                 .msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
@@ -126,29 +124,61 @@ public class StompJsMsgServiceImpl extends MsgService {
     public Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgDTO msgDTO) {
         log.info("msgId {}, username： {}", msgDTO, principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO);
-        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
-        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
-        userMsgContent.setMsgId(sysMsg.getId());
-        this.sysUserMsgSnapshotService.save(userMsgContent);
-        // 查询用户
-        SysUserMsg userMsg = SysUserMsg.builder().userId(1L).msgSnapshotId(userMsgContent.getId()).build();
-        this.sysUserMsgService.save(userMsg);
-
+        // TODO
+        this.toAsyncSendMsg(sysMsg, Lists.newArrayList());
         return Result.ok(MsgVO.builder()
                 .msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
                 .msgLevel(sysMsg.getMsgLevel())
                 .content(sysMsg.getContent())
                 .msgType(sysMsg.getMsgType()).build());
-
-    }
-
-    public void saveMsg(UserMsgDTO userMsgDTO) {
-        // TODO
     }
 
     /**
-     * 发送信息给指定用户
+     * 异步发送消息
+     *
+     * @param sysMsg           系统消息
+     * @param sysUserMsgBOList 系统用户消息DTO列表
+     */
+    private void toAsyncSendMsg(SysMsg sysMsg, List<UserMsgBO.SysUserMsgBO> sysUserMsgBOList) {
+        UserMsgBO userMsgBO = new UserMsgBO();
+        userMsgBO.setSysUserMsgBOList(sysUserMsgBOList);
+        userMsgBO.setSysUserMsgSnapshotBO(this.buildSysUserMsgSnapshotDTO(sysMsg));
+        this.publisherSaveMsgEvent.publisherEvent(new MsgSaveEvent(userMsgBO));
+    }
+
+    /**
+     * 构建系统用户消息快照dto
+     *
+     * @param sysMsg sys消息
+     * @return
+     */
+    private UserMsgBO.SysUserMsgSnapshotBO buildSysUserMsgSnapshotDTO(SysMsg sysMsg) {
+        UserMsgBO.SysUserMsgSnapshotBO userMsgSnapshotDTO = UserMsgBO.SysUserMsgSnapshotBO.builder().build();
+        BeanUtil.copyProperties(sysMsg, userMsgSnapshotDTO, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        userMsgSnapshotDTO.setMsgId(sysMsg.getId());
+        return userMsgSnapshotDTO;
+    }
+
+    /**
+     * 保存消息
+     *
+     * @param userMsgBO 用户消息dto
+     */
+    public void saveMsg(UserMsgBO userMsgBO) {
+        // 保存的实体
+        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
+        BeanUtil.copyProperties(userMsgBO.getSysUserMsgSnapshotBO(), userMsgContent,
+                CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        this.sysUserMsgSnapshotService.save(userMsgContent);
+        List<SysUserMsg> sysUserMsgList = userMsgBO.getSysUserMsgBOList().stream()
+                .map(sysUserMsgBO -> SysUserMsg.builder().userId(sysUserMsgBO.getUserId()).msgSnapshotId(userMsgContent.getId()).build())
+                .collect(Collectors.toList());
+        this.sysUserMsgService.saveBatch(sysUserMsgList);
+    }
+
+    /**
+     * 发送消息给指定用户
      *
      * @param msgDTO    消息DTO
      * @param principal 主要
@@ -157,24 +187,18 @@ public class StompJsMsgServiceImpl extends MsgService {
     public void sendMsgToUser(Principal principal, MsgDTO msgDTO) {
         log.info("msgId {}, username： {}", msgDTO.getMsgId(), principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
-
         MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
                 .msgLevel(sysMsg.getMsgLevel())
                 .content(sysMsg.getContent())
                 .msgType(sysMsg.getMsgType()).build();
-        SysUserMsgSnapshot userMsgContent = SysUserMsgSnapshot.builder().build();
-        BeanUtil.copyProperties(sysMsg, userMsgContent, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
-        userMsgContent.setMsgId(sysMsg.getId());
-        this.sysUserMsgSnapshotService.save(userMsgContent);
+        List<UserMsgBO.SysUserMsgBO> sysUserMsgList = Lists.newArrayList();
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
-        List<SysUserMsg> sysUserMsgList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
-            SysUserMsg userMsg = SysUserMsg.builder().userId(sysUser.getId()).msgSnapshotId(userMsgContent.getId()).build();
-            sysUserMsgList.add(userMsg);
+            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder().userId(sysUser.getId()).build());
         }
-        this.publisherSaveMsgEvent.publisherEvent(new SysLogSaveEvent(null));
+        this.toAsyncSendMsg(sysMsg, sysUserMsgList);
     }
 
 

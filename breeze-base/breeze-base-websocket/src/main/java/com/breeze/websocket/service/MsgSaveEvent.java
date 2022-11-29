@@ -16,7 +16,7 @@
 
 package com.breeze.websocket.service;
 
-import com.breeze.websocket.dto.UserMsgDTO;
+import com.breeze.websocket.bo.UserMsgBO;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -30,10 +30,10 @@ public class MsgSaveEvent extends ApplicationEvent {
     /**
      * 消息保存事件
      *
-     * @param userMsgDTO 消息dto
+     * @param userMsgBO 消息dto
      */
-    public MsgSaveEvent(UserMsgDTO userMsgDTO) {
-        super(userMsgDTO);
+    public MsgSaveEvent(UserMsgBO userMsgBO) {
+        super(userMsgBO);
     }
 
 }
