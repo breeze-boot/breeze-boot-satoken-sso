@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -69,5 +70,17 @@ public class SysUserMsgSnapshot extends BaseModel<SysUserMsgSnapshot> implements
      * 消息内容
      */
     private String content;
+
+    /**
+     * 关闭
+     */
+    @TableField(exist = false)
+    private Integer close;
+
+    /**
+     * 已读
+     */
+    @TableField(exist = false)
+    private Integer read;
 
 }

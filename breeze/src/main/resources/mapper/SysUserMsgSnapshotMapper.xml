@@ -24,7 +24,7 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <select id="listPage" resultMap="BaseResultMap">
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysUserMsgSnapshot">
         SELECT
         a.id,
         a.user_id,
@@ -36,11 +36,12 @@
         b.msg_level,
         b.create_time,
         b.create_name,
-        b.create_by
+        b.create_by,
+        a.`read`
         FROM
         sys_user_msg AS a
-        INNER JOIN sys_user_msg_snapshot AS b ON b.id = a.msg_snapshot_id
-        INNER JOIN sys_user AS c ON a.user_id = c.id
+        LEFT JOIN sys_user_msg_snapshot AS b ON b.id = a.msg_snapshot_id
+        LEFT JOIN sys_user AS c ON a.user_id = c.id
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
