@@ -101,7 +101,9 @@ public class StompJsMsgServiceImpl extends MsgService {
         List<SysUser> sysUserList = this.sysUserService.list();
         List<UserMsgBO.SysUserMsgBO> sysUserMsgList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
-            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder().userId(sysUser.getId()).build());
+            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder()
+                    .msgCode(sysMsg.getMsgCode()).userId(sysUser.getId())
+                    .build());
         }
         this.toAsyncSendMsg(sysMsg, sysUserMsgList);
         return Result.ok(MsgVO.builder()
@@ -151,7 +153,7 @@ public class StompJsMsgServiceImpl extends MsgService {
      * 构建系统用户消息快照dto
      *
      * @param sysMsg sys消息
-     * @return
+     * @return {@link UserMsgBO.SysUserMsgSnapshotBO}
      */
     private UserMsgBO.SysUserMsgSnapshotBO buildSysUserMsgSnapshotDTO(SysMsg sysMsg) {
         UserMsgBO.SysUserMsgSnapshotBO userMsgSnapshotDTO = UserMsgBO.SysUserMsgSnapshotBO.builder().build();
@@ -172,7 +174,11 @@ public class StompJsMsgServiceImpl extends MsgService {
                 CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
         this.sysUserMsgSnapshotService.save(userMsgContent);
         List<SysUserMsg> sysUserMsgList = userMsgBO.getSysUserMsgBOList().stream()
-                .map(sysUserMsgBO -> SysUserMsg.builder().userId(sysUserMsgBO.getUserId()).msgSnapshotId(userMsgContent.getId()).build())
+                .map(sysUserMsgBO -> SysUserMsg.builder()
+                        .userId(sysUserMsgBO.getUserId())
+                        .msgCode(sysUserMsgBO.getMsgCode())
+                        .msgSnapshotId(userMsgContent.getId())
+                        .build())
                 .collect(Collectors.toList());
         this.sysUserMsgService.saveBatch(sysUserMsgList);
     }
@@ -196,7 +202,9 @@ public class StompJsMsgServiceImpl extends MsgService {
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
         for (SysUser sysUser : sysUserList) {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
-            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder().userId(sysUser.getId()).build());
+            sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder()
+                    .msgCode(sysMsg.getMsgCode()).userId(sysUser.getId())
+                    .build());
         }
         this.toAsyncSendMsg(sysMsg, sysUserMsgList);
     }

@@ -89,7 +89,7 @@ public class SysUserMsgController {
      */
     @Operation(summary = "已读")
     @PutMapping("/read/{msgCode}")
-    @PreAuthorize("hasAnyAuthority('sys:userMsg:edit')")
+    @PreAuthorize("hasAnyAuthority('sys:userMsg:modify')")
     public Result<Boolean> read(@PathVariable String msgCode) {
         return this.sysUserMsgService.read(msgCode);
     }

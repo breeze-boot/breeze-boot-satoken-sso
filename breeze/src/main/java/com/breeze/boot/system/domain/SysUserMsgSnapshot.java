@@ -70,13 +70,13 @@ public class SysUserMsgSnapshot extends BaseModel<SysUserMsgSnapshot> implements
      * 关闭
      */
     @TableField(exist = false)
-    private Integer close;
+    private Integer markClose;
 
     /**
      * 已读
      */
     @TableField(exist = false)
-    private Integer read;
+    private Integer markRead;
 
     /**
      * 消息编码
