@@ -31,17 +31,17 @@ public interface SysUserMsgService extends IService<SysUserMsg> {
     /**
      * 关闭
      *
-     * @param id id
+     * @param msgCode 消息编码
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> close(Long id);
+    Result<Boolean> close(String msgCode);
 
     /**
      * 标记已读
      *
-     * @param id id
+     * @param msgCode 消息编码
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> read(Long id);
+    Result<Boolean> read(String msgCode);
 
 }

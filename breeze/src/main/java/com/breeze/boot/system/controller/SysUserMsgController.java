@@ -71,27 +71,27 @@ public class SysUserMsgController {
     /**
      * 关闭
      *
-     * @param id id
+     * @param msgCode 消息编码
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "关闭")
     @GetMapping("/close/{id}")
     @PreAuthorize("hasAnyAuthority('sys:userMsg:edit')")
-    public Result<Boolean> close(@PathVariable("id") Long id) {
-        return this.sysUserMsgService.close(id);
+    public Result<Boolean> close(@PathVariable("msgCode") String msgCode) {
+        return this.sysUserMsgService.close(msgCode);
     }
 
     /**
      * 标记已读
      *
-     * @param id id
+     * @param msgCode 消息编码
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "已读")
     @GetMapping("/read/{id}")
     @PreAuthorize("hasAnyAuthority('sys:userMsg:info')")
-    public Result<Boolean> read(@PathVariable("id") Long id) {
-        return this.sysUserMsgService.read(id);
+    public Result<Boolean> read(@PathVariable("msgCode") String msgCode) {
+        return this.sysUserMsgService.read(msgCode);
     }
 
     /**

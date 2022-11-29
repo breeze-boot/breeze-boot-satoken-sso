@@ -18,6 +18,7 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -49,5 +50,16 @@ public class SysMsgServiceImpl extends ServiceImpl<SysMsgMapper, SysMsg> impleme
                 .like(StrUtil.isAllNotBlank(msgSearchDTO.getMsgTitle()), SysMsg::getMsgTitle, msgSearchDTO.getMsgTitle())
                 .like(StrUtil.isAllNotBlank(msgSearchDTO.getMsgCode()), SysMsg::getMsgCode, msgSearchDTO.getMsgCode())
                 .page(msgPage);
+    }
+
+    /**
+     * 得到系统消息
+     *
+     * @param msgCode 消息代码
+     * @return {@link SysMsg}
+     */
+    @Override
+    public SysMsg getSysMsg(String msgCode) {
+        return this.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getMsgCode, msgCode));
     }
 }
