@@ -14,42 +14,72 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.system.vo;
 
-import com.breeze.boot.core.entity.PageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
- * 用户消息查询参数DTO
+ * 系统用户消息内容
  *
- * @author gaoweixuan
- * @date 2022-11-20
+ * @author breeze
+ * @date 2022-11-26
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户消息查询参数DTO")
-public class UserMsgSearchDTO extends PageDTO {
+@Schema(description = "系统用户消息快照VO")
+public class SysUserMsgSnapshotVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 消息ID
+     */
+    private Long msgId;
 
     /**
      * 消息标题
      */
-    @Schema(description = "消息标题")
     private String msgTitle;
+
+    /**
+     * 消息类型 0 通知 1 公告
+     */
+    private Integer msgType;
+
+    /**
+     * 消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息
+     */
+    private String msgLevel;
+
+    /**
+     * 消息内容
+     */
+    private String content;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 关闭
+     */
+    private Integer markClose;
+
+    /**
+     * 已读
+     */
+    private Integer markRead;
 
     /**
      * 消息编码
      */
-    @Schema(description = "消息编码")
     private String msgCode;
-
-    /**
-     * 用户名称
-     */
-    @Schema(description = "用户名称")
-    private String username;
 
 }

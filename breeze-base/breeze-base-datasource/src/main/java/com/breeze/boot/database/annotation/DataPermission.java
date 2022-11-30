@@ -36,10 +36,8 @@ import java.lang.annotation.*;
 @ConditionalOnBean(MybatisPlusAutoConfiguration.class)
 public @interface DataPermission {
 
-    String scope() default "dept_id";
+    String scope() default "";
 
     String own() default "create_by";
-
-    boolean diy() default false;
 
 }

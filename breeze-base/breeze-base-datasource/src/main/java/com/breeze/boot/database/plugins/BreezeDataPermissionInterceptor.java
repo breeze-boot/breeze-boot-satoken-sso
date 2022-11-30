@@ -116,6 +116,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
 
         PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
         String originalSql = boundSql.getSql();
+
         // 采用判断方法注解方式进行数据权限
         Class<?> clazz = null;
 
@@ -134,8 +135,14 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         for (Method method : methods) {
             DataPermission annotation = method.getAnnotation(DataPermission.class);
             // 判断是否存在注解且方法名一致
-            if (annotation == null || !methodName.equals(method.getName())) {
+            if (Objects.isNull(annotation) || !methodName.equals(method.getName())) {
                 continue;
+            }
+            if (StrUtil.isAllBlank(annotation.scope()) && !originalSql.contains("dept_id")) {
+                throw new SystemServiceException(ResultCode.exception("sql中缺少字段 dept_id"));
+            }
+            if (StrUtil.isAllNotBlank(annotation.scope()) && !originalSql.contains(annotation.scope())) {
+                throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + annotation.scope()));
             }
             LoginUserDTO currentUser = SecurityUtils.getCurrentUser();
             if (currentUser == null) {
@@ -172,7 +179,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
                     continue;
                 }
-                sb.append(String.format("OR ( a.%s = '", dataPermission.own()));
+                sb.append(String.format("OR ( a.%s = '", dataPermission.scope()));
                 sb.append(SecurityUtils.getUserCode());
                 sb.append(" ' ) ");
             } else if (Objects.equals(permission.getPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getPermissionType(), DEPT_LEVEL)) {

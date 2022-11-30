@@ -19,12 +19,14 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
 import com.breeze.boot.system.dto.UserMsgSearchDTO;
 import com.breeze.boot.system.mapper.SysUserMsgSnapshotMapper;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
+import com.breeze.boot.system.vo.SysUserMsgSnapshotVO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 系统用户消息快照服务impl
@@ -39,11 +41,22 @@ public class SysUserMsgSnapshotServiceImpl extends ServiceImpl<SysUserMsgSnapsho
      * 列表页面
      *
      * @param userMsgSearchDTO 用户搜索DTO消息
-     * @return {@link IPage}<{@link SysUserMsg}>
+     * @return {@link IPage}<{@link SysUserMsgSnapshotVO}>
      */
     @Override
-    public IPage<SysUserMsgSnapshot> listPage(UserMsgSearchDTO userMsgSearchDTO) {
+    public IPage<SysUserMsgSnapshotVO> listPage(UserMsgSearchDTO userMsgSearchDTO) {
         return this.baseMapper.listPage(new Page<>(userMsgSearchDTO.getCurrent(), userMsgSearchDTO.getSize()), userMsgSearchDTO);
+    }
+
+    /**
+     * 获取消息列表通过用户名
+     *
+     * @param username 用户名
+     * @return {@link List}<{@link SysUserMsgSnapshotVO}>
+     */
+    @Override
+    public List<SysUserMsgSnapshotVO> listMsgByUsername(String username) {
+        return this.baseMapper.listMsgByUsername(username);
     }
 
 }

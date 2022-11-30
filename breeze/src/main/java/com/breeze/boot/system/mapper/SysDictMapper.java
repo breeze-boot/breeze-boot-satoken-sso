@@ -17,7 +17,6 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.database.annotation.DataPermission;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysDict;
 import com.breeze.boot.system.dto.DictSearchDTO;
@@ -35,13 +34,11 @@ public interface SysDictMapper extends BreezeBaseMapper<SysDict> {
 
     /**
      * 字典列表
-     * -- 测试使用
      *
      * @param page          分页
      * @param dictSearchDto 字典 dto
      * @return {@link Page}<{@link SysDict}>
      */
-    @DataPermission(scope = "dept_id")
     Page<SysDict> listDict(Page<SysDict> page, @Param("dictSearchDto") DictSearchDTO dictSearchDto);
 
 }

@@ -18,12 +18,16 @@ package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.database.annotation.DataPermission;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
 import com.breeze.boot.system.dto.UserMsgSearchDTO;
+import com.breeze.boot.system.vo.SysUserMsgSnapshotVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统用户消息快照映射器
@@ -41,6 +45,15 @@ public interface SysUserMsgSnapshotMapper extends BreezeBaseMapper<SysUserMsgSna
      * @param userMsgSearchDTO 用户搜索DTO消息
      * @return {@link IPage}<{@link SysUserMsg}>
      */
-    IPage<SysUserMsgSnapshot> listPage(Page<SysUserMsg> page, @Param("userMsgSearchDTO") UserMsgSearchDTO userMsgSearchDTO);
+    @DataPermission(scope = "dept_id")
+    IPage<SysUserMsgSnapshotVO> listPage(Page<SysUserMsg> page, @Param("userMsgSearchDTO") UserMsgSearchDTO userMsgSearchDTO);
+
+    /**
+     * 获取消息列表通过用户名
+     *
+     * @param username 用户名
+     * @return {@link List}<{@link SysUserMsgSnapshotVO}>
+     */
+    List<SysUserMsgSnapshotVO> listMsgByUsername(String username);
 
 }

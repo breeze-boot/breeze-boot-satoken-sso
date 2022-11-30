@@ -20,6 +20,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysUserMsg;
 
+import java.util.List;
+
 /**
  * 系统用户消息服务
  *
@@ -43,5 +45,13 @@ public interface SysUserMsgService extends IService<SysUserMsg> {
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> read(String msgCode);
+
+    /**
+     * 删除用户的消息通过ids
+     *
+     * @param ids id
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> removeUserMsgByIds(List<Long> ids);
 
 }

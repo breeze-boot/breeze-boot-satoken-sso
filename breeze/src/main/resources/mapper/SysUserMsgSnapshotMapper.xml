@@ -12,6 +12,7 @@
         <result property="msgType" column="msg_type" jdbcType="TINYINT"/>
         <result property="msgLevel" column="msg_level" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -23,7 +24,7 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.system.domain.SysUserMsgSnapshot">
+    <select id="listPage" resultType="com.breeze.boot.system.vo.SysUserMsgSnapshotVO">
         SELECT
         a.id,
         a.user_id,
@@ -34,24 +35,50 @@
         b.content,
         b.msg_level,
         b.create_time,
-        b.create_name,
-        b.create_by,
+        c.username,
+        a.create_name,
+        a.dept_id,
         a.`mark_read`
-        FROM
-        sys_user_msg AS a
+        FROM sys_user_msg AS a
         LEFT JOIN sys_user_msg_snapshot AS b ON b.id = a.msg_snapshot_id
         LEFT JOIN sys_user AS c ON a.user_id = c.id
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
             AND c.is_delete = 0
-            <if test="userMsgSearchDTO.userId != null and userMsgSearchDTO.userId != ''">
-                AND a.user_id = #{userId}
+            <if test="userMsgSearchDTO.msgTitle != null and userMsgSearchDTO.msgTitle != ''">
+                AND b.msg_title LIKE CONCAT('%' , #{userMsgSearchDTO.msgTitle}, '%')
+            </if>
+            <if test="userMsgSearchDTO.msgCode != null and userMsgSearchDTO.msgCode != ''">
+                AND a.msg_code LIKE CONCAT('%' , #{userMsgSearchDTO.msgCode}, '%')
             </if>
             <if test="userMsgSearchDTO.username != null and userMsgSearchDTO.username != ''">
-                AND a.username like CONCAT('%' , #{userMsgSearchDTO.username}, '%')
+                AND c.username LIKE CONCAT('%' , #{userMsgSearchDTO.username}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="listMsgByUsername" resultType="com.breeze.boot.system.vo.SysUserMsgSnapshotVO">
+        SELECT a.id,
+               a.user_id,
+               b.msg_id,
+               b.msg_title,
+               a.msg_code,
+               b.msg_type,
+               b.content,
+               b.msg_level,
+               b.create_time,
+               c.username,
+               a.create_name,
+               a.`mark_read`
+        FROM sys_user_msg AS a
+                 LEFT JOIN sys_user_msg_snapshot AS b ON b.id = a.msg_snapshot_id
+                 LEFT JOIN sys_user AS c ON a.user_id = c.id
+        WHERE a.is_delete = 0
+          AND b.is_delete = 0
+          AND c.is_delete = 0
+          AND a.mark_close = 0
+          AND c.username = #{username}
     </select>
 
 </mapper>

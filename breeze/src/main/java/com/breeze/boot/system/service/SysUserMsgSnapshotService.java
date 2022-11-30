@@ -20,6 +20,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
 import com.breeze.boot.system.dto.UserMsgSearchDTO;
+import com.breeze.boot.system.vo.SysUserMsgSnapshotVO;
+
+import java.util.List;
 
 /**
  * 系统用户消息快照服务
@@ -33,7 +36,16 @@ public interface SysUserMsgSnapshotService extends IService<SysUserMsgSnapshot> 
      * 列表页面
      *
      * @param userMsgSearchDTO 用户搜索DTO消息
-     * @return {@link IPage}<{@link SysUserMsgSnapshot}>
+     * @return {@link IPage}<{@link SysUserMsgSnapshotVO}>
      */
-    IPage<SysUserMsgSnapshot> listPage(UserMsgSearchDTO userMsgSearchDTO);
+    IPage<SysUserMsgSnapshotVO> listPage(UserMsgSearchDTO userMsgSearchDTO);
+
+    /**
+     * 获取消息列表通过用户名
+     *
+     * @param username 用户名
+     * @return {@link List}<{@link SysUserMsgSnapshotVO}>
+     */
+    List<SysUserMsgSnapshotVO> listMsgByUsername(String username);
+
 }
