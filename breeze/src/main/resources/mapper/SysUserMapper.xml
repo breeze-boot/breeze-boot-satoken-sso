@@ -68,6 +68,7 @@
                 AND a.user_code like CONCAT('%' , #{userSearchDTO.userCode}, '%')
             </if>
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
     <select id="listUserByDeptId" resultType="com.breeze.boot.system.domain.SysUser">
@@ -102,6 +103,7 @@
                 </foreach>
             </if>
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

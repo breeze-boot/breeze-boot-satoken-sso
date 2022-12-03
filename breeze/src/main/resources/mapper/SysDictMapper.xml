@@ -32,6 +32,7 @@
                 AND a.dict_code LIKE CONCAT( '%', #{dictSearchDto.dictCode}, '%')
             </if>
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

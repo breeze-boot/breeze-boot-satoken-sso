@@ -20,12 +20,4 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id
-        ,post_code,post_name,
-        description,create_by,create_name,
-        create_time,update_by,update_name,
-        update_time,is_delete,delete_by,
-        tenant_id
-    </sql>
 </mapper>

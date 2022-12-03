@@ -31,6 +31,7 @@
             a.is_delete = 0
             AND a.dict_id = #{pdictId}
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
     <select id="loadDictByCode" resultType="com.breeze.boot.system.domain.SysDictItem">
@@ -45,6 +46,7 @@
             AND b.is_delete = 0
             AND b.dict_code = #{dictCode}
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

@@ -26,6 +26,7 @@
         WHERE a.is_delete = 0
           AND b.is_delete = 0
           AND b.user_id = #{userId}
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

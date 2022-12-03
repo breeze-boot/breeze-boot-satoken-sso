@@ -56,6 +56,7 @@
                 AND c.username LIKE CONCAT('%' , #{userMsgSearchDTO.username}, '%')
             </if>
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
     <select id="listMsgByUsername" resultType="com.breeze.boot.system.vo.SysUserMsgSnapshotVO">
@@ -79,6 +80,7 @@
           AND c.is_delete = 0
           AND a.mark_close = 0
           AND c.username = #{username}
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

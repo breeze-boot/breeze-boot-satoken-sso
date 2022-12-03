@@ -43,7 +43,7 @@
                 AND a.permission_code LIKE CONCAT('%' , #{dataPermissionDTO.permissionCode}, '%')
             </if>
         </where>
-
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

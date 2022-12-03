@@ -28,6 +28,7 @@
         FROM sys_dept AS a
         WHERE a.id = #{id}
           AND a.is_delete = 0
+        ORDER BY a.create_time DESC
     </select>
 
     <select id="selectDeptByParentId" resultMap="sysDeptMap">
@@ -36,6 +37,7 @@
         FROM sys_dept AS a
         WHERE a.parent_id = #{parentId}
           AND a.is_delete = 0
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>

@@ -26,6 +26,7 @@
         WHERE role.is_delete = 0
           AND ru.is_delete = 0
           AND ru.user_id = #{userId}
+        ORDER BY role.create_time DESC
     </select>
 
 </mapper>
