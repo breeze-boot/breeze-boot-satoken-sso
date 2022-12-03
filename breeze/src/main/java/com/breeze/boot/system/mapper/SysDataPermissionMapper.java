@@ -16,35 +16,29 @@
 
 package com.breeze.boot.system.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.system.domain.SysDictItem;
+import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.boot.system.domain.SysDataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
- * 系统字典项映射器
+ * 系统数据权限映射器
  *
  * @author gaoweixuan
- * @date 2022-09-02
+ * @date 2022-10-30
  */
 @Mapper
-public interface SysDictItemMapper extends BreezeBaseMapper<SysDictItem> {
+public interface SysDataPermissionMapper extends BreezeBaseMapper<SysDataPermission> {
 
     /**
-     * 字典列表项
+     * 列表分页
      *
-     * @param pdictId 字典ID
-     * @return {@link List}<{@link SysDictItem}>
+     * @param dataPermissionDTO 数据权限DTO
+     * @param page              页面
+     * @return {@link Page}<{@link SysDataPermission}>
      */
-    List<SysDictItem> listDictDetailByDictId(@Param("pdictId") Long pdictId);
+    Page<SysDataPermission> listPage(Page<SysDataPermission> page, @Param("dataPermissionDTO") DataPermissionDTO dataPermissionDTO);
 
-    /**
-     * 加载字典通过代码
-     *
-     * @param dictCode dict类型代码
-     * @return {@link List}<{@link SysDictItem}>
-     */
-    List<SysDictItem> loadDictByCode(@Param("dictCode") String dictCode);
 }

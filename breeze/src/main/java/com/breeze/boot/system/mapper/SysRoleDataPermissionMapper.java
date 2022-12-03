@@ -16,29 +16,34 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.security.entity.PermissionDTO;
-import com.breeze.boot.system.domain.SysPermission;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Set;
+
 /**
- * 系统权限映射器
+ * 系统角色权限映射器
  *
  * @author gaoweixuan
  * @date 2022-10-30
  */
 @Mapper
-public interface SysPermissionMapper extends BreezeBaseMapper<SysPermission> {
+public interface SysRoleDataPermissionMapper extends BaseMapper<SysRoleDataPermission> {
 
     /**
-     * 列表分页
+     * 角色数据权限列表
      *
-     * @param permissionDTO 权限dto
-     * @param page          页面
-     * @return {@link Page}<{@link SysPermission}>
+     * @param roleIdSet 角色ID Set
+     * @return {@link List}<{@link DataPermissionDTO}>
      */
-    Page<SysPermission> listPage(Page<SysPermission> page, @Param("permissionDTO") PermissionDTO permissionDTO);
+    List<DataPermissionDTO> listRoleDataPermissionByRoleIds(@Param("roleIdSet") Set<Long> roleIdSet);
 
 }
+
+
+
+

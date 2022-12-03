@@ -14,36 +14,29 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.mapper;
+package com.breeze.boot.system.service;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.security.entity.PermissionDTO;
-import com.breeze.boot.system.domain.SysRolePermission;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 
 import java.util.List;
 import java.util.Set;
 
 /**
- * 系统角色权限映射器
+ * 系统角色数据权限服务
  *
  * @author gaoweixuan
  * @date 2022-10-30
  */
-@Mapper
-public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {
+public interface SysRoleDataPermissionService extends IService<SysRoleDataPermission> {
 
     /**
-     * 角色权限列表
+     * 角色数据权限列表
      *
-     * @param roleIdSet 角色id列表
-     * @return {@link List}<{@link PermissionDTO}>
+     * @param roleIdSet 角色ID Set
+     * @return {@link List}<{@link DataPermissionDTO}>
      */
-    List<PermissionDTO> listRolesPermission(@Param("roleIdSet") Set<Long> roleIdSet);
+    List<DataPermissionDTO> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet);
 
 }
-
-
-
-

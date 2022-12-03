@@ -16,7 +16,7 @@
         </collection>
     </resultMap>
 
-    <select id="listDict" resultMap="sysDictMap">
+    <select id="listPage" resultMap="sysDictMap">
         SELECT
         a.id,
         a.dict_name,

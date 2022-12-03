@@ -34,12 +34,12 @@ import java.util.List;
 public interface SysDictService extends IService<SysDict> {
 
     /**
-     * 字典列表
+     * 字典分页
      *
      * @param dictSearchDto 字典搜索DTO
      * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDict> listDict(DictSearchDTO dictSearchDto);
+    Page<SysDict> listPage(DictSearchDTO dictSearchDto);
 
     /**
      * 开关

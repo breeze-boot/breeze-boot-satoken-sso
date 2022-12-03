@@ -33,7 +33,6 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +82,6 @@ public class LoginController {
      * @param userLoginBody 登录
      * @return {@link Result}
      */
-    @Operation(security = {@SecurityRequirement(name = "bearer")}, summary = "用户名登录")
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@Validated @RequestBody UserLoginBody userLoginBody) {
         Instant now = Instant.now();

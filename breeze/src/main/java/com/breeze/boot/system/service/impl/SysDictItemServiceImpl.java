@@ -17,6 +17,7 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.mapper.SysDictItemMapper;
@@ -44,4 +45,17 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     public List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO) {
         return this.baseMapper.listDictDetailByDictId(dictSearchDTO.getId());
     }
+
+    /**
+     * 加载字典通过代码
+     *
+     * @param dictCode dict类型代码
+     * @return {@link Result}<{@link List}<{@link SysDictItem}>>
+     */
+    @Override
+    public Result<List<SysDictItem>> loadDictByCode(String dictCode) {
+        return Result.ok(this.baseMapper.loadDictByCode(dictCode));
+    }
+
+
 }

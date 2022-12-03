@@ -56,12 +56,13 @@ breeze:
       - "/**/*.png"
       - "/**/*.ico"
       - "/druid/**"
-      - "/swagger-ui.html"
-      - "/swagger-ui/"
       - "/*.html"
       - "/**/*.html"
+      - "/swagger-ui/**"
       - "/swagger-resources/**"
       - "/v3/api-docs/**"
+      - "/webjars/**"
+      - "/doc.html"
   jwt:
     rsa-private-key: classpath:app.key
     rsa-public-key: classpath:app.pub
@@ -79,10 +80,10 @@ springdoc:
   api-docs:
     # 修改api-docs路径
     path: /v3/api-docs
-    # 开启api-docs
-    enabled: true
     # 配置需要生成接口文档的扫描包
     # packages-to-scan: com.breeze.boot.*.controller
+    # 开启api-docs
+    enabled: true
 
 # 滑动验证，底图路径，不配置将使用默认图片
 # 支持全路径

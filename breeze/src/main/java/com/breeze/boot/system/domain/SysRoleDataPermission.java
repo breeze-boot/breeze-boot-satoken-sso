@@ -24,62 +24,32 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 系统权限实体
+ * 系统角色数据权限实体
  *
  * @author gaoweixuan
- * @date 2022-10-30
+ * @date 2021-12-06 22:03:39
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_permission")
-@Schema(description = "系统权限实体")
-public class SysPermission extends BaseModel<SysPermission> implements Serializable {
+@TableName(value = "sys_role_data_permission")
+@Schema(description = "角色权限实体")
+public class SysRoleDataPermission extends BaseModel<SysRoleDataPermission> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 数据权限名称
+     * 数据权限id
      */
-    @Schema(description = "数据权限名称")
-    private String permissionName;
+    @Schema(description = "数据权限ID")
+    private Long dataPermissionId;
 
     /**
-     * 数据权限编码
+     * 角色id
      */
-    @Schema(description = "数据权限编码")
-    private String permissionCode;
-
-    /**
-     * 数据权限标识
-     */
-    @Schema(description = "数据权限标识")
-    private String permissionType;
-
-    /**
-     * 操作符
-     */
-    @Schema(description = "操作符")
-    private String operator;
-
-    /**
-     * sql
-     */
-    @Schema(description = "自定义SQL")
-    private String strSql;
-
-    /**
-     * 权限
-     */
-    @Schema(description = "权限")
-    private String permissions;
-
-    /**
-     * 承租者id
-     */
-    @Schema(description = "租户ID")
-    private Long tenantId;
+    @Schema(description = "角色ID")
+    private Long roleId;
 
 }

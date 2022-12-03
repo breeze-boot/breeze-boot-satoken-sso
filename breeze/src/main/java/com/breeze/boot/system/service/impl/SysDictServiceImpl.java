@@ -48,14 +48,14 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     private SysDictItemService sysDictItemService;
 
     /**
-     * dict类型列表
+     * 字典分页
      *
      * @param dictSearchDto 字典搜索DTO
      * @return {@link Page}<{@link SysDict}>
      */
     @Override
-    public Page<SysDict> listDict(DictSearchDTO dictSearchDto) {
-        return this.baseMapper.listDict(new Page<>(dictSearchDto.getCurrent(), dictSearchDto.getSize()), dictSearchDto);
+    public Page<SysDict> listPage(DictSearchDTO dictSearchDto) {
+        return this.baseMapper.listPage(new Page<>(dictSearchDto.getCurrent(), dictSearchDto.getSize()), dictSearchDto);
     }
 
     /**

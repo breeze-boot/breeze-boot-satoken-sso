@@ -25,8 +25,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.ex.SystemServiceException;
 import com.breeze.boot.database.annotation.DataPermission;
+import com.breeze.boot.security.entity.DataPermissionDTO;
 import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
@@ -148,23 +148,23 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             if (currentUser == null) {
                 throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
             }
-            List<PermissionDTO> permissionList = currentUser.getPermissions();
+            List<DataPermissionDTO> dataPermissionList = currentUser.getPermissions();
 
-            if (CollUtil.isEmpty(permissionList)) {
+            if (CollUtil.isEmpty(dataPermissionList)) {
                 continue;
             }
-            String sql = this.getSql(permissionList, annotation);
+            String sql = this.getSql(dataPermissionList, annotation);
             originalSql = String.format("SELECT a.* FROM (%s) a %s", originalSql, sql);
         }
         mpBs.sql(originalSql);
     }
 
     @NotNull
-    private String getSql(List<PermissionDTO> permissions, DataPermission dataPermission) {
+    private String getSql(List<DataPermissionDTO> dataPermissionDTOList, DataPermission dataPermission) {
         StringBuilder sb = new StringBuilder();
         String operator = "";
         sb.append(" WHERE ");
-        for (PermissionDTO permission : permissions) {
+        for (DataPermissionDTO permission : dataPermissionDTOList) {
             operator = permission.getOperator();
             // 自定义sql
             String sql = permission.getStrSql();

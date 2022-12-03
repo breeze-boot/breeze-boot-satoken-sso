@@ -33,4 +33,18 @@
         </where>
     </select>
 
+    <select id="loadDictByCode" resultType="com.breeze.boot.system.domain.SysDictItem">
+        SELECT
+        a.label,
+        a.`value`
+        FROM sys_dict_item AS a
+        LEFT JOIN sys_dict AS b ON a.dict_id = b.id
+        <where>
+            a.is_delete = 0
+            AND b.is_open = 1
+            AND b.is_delete = 0
+            AND b.dict_code = #{dictCode}
+        </where>
+    </select>
+
 </mapper>

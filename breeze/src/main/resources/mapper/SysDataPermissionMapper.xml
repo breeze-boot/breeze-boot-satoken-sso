@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.system.mapper.SysPermissionMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysDataPermissionMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysPermission">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysDataPermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
         <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
@@ -23,7 +23,7 @@
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.system.domain.SysPermission">
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysDataPermission">
         SELECT
         a.id,
         a.`permission_name`,
@@ -33,14 +33,14 @@
         a.str_sql,
         a.permissions
         FROM
-        sys_permission AS a
+        sys_data_permission AS a
         <where>
             a.is_delete = 0
-            <if test="permissionDTO.permissionName != null and permissionDTO.permissionName != ''">
-                AND a.permission_name LIKE CONCAT('%' , #{permissionDTO.permissionName}, '%')
+            <if test="dataPermissionDTO.permissionName != null and dataPermissionDTO.permissionName != ''">
+                AND a.permission_name LIKE CONCAT('%' , #{dataPermissionDTO.permissionName}, '%')
             </if>
-            <if test="permissionDTO.permissionCode != null and permissionDTO.permissionCode != ''">
-                AND a.permission_code LIKE CONCAT('%' , #{permissionDTO.permissionCode}, '%')
+            <if test="dataPermissionDTO.permissionCode != null and dataPermissionDTO.permissionCode != ''">
+                AND a.permission_code LIKE CONCAT('%' , #{dataPermissionDTO.permissionCode}, '%')
             </if>
         </where>
 

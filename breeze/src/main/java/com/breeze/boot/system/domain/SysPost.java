@@ -36,7 +36,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_post")
 @Schema(description = "系统岗位实体")
-public class SysPost extends BaseModel<SysRolePermission> implements Serializable {
+public class SysPost extends BaseModel<SysRoleDataPermission> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

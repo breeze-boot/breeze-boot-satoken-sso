@@ -39,6 +39,6 @@ public interface SysDictMapper extends BreezeBaseMapper<SysDict> {
      * @param dictSearchDto 字典 dto
      * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDict> listDict(Page<SysDict> page, @Param("dictSearchDto") DictSearchDTO dictSearchDto);
+    Page<SysDict> listPage(Page<SysDict> page, @Param("dictSearchDto") DictSearchDTO dictSearchDto);
 
 }

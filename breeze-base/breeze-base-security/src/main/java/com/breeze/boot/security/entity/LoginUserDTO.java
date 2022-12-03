@@ -121,13 +121,13 @@ public class LoginUserDTO implements Serializable {
     private Set<String> authorities;
 
     /**
-     * 承租者id
+     * 租户ID
      */
     private Long tenantId;
 
     /**
      * 数据权限
      */
-    private List<PermissionDTO> permissions;
+    private List<DataPermissionDTO> permissions;
 
 }

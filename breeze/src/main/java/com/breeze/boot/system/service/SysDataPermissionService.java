@@ -19,9 +19,11 @@ package com.breeze.boot.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.PermissionDTO;
-import com.breeze.boot.system.domain.SysPermission;
-import com.breeze.boot.system.dto.SysPermissionDTO;
+import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.boot.system.domain.SysDataPermission;
+import com.breeze.boot.system.dto.SysDataPermissionDTO;
+
+import java.util.List;
 
 /**
  * 系统数据权限服务
@@ -29,22 +31,30 @@ import com.breeze.boot.system.dto.SysPermissionDTO;
  * @author gaoweixuan
  * @date 2022-10-30
  */
-public interface SysPermissionService extends IService<SysPermission> {
+public interface SysDataPermissionService extends IService<SysDataPermission> {
 
     /**
      * 列表页面
      *
-     * @param permissionDTO 权限DTO
-     * @return {@link Page}<{@link SysPermission}>
+     * @param dataPermissionDTO 权限DTO
+     * @return {@link Page}<{@link SysDataPermission}>
      */
-    Page<SysPermission> listPage(PermissionDTO permissionDTO);
+    Page<SysDataPermission> listPage(DataPermissionDTO dataPermissionDTO);
 
     /**
-     * 保存权限
+     * 保存数据权限
      *
-     * @param permission 权限
+     * @param dataPermissionDTO 权限
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> savePermission(SysPermissionDTO permission);
+    Result<Boolean> saveDataPermission(SysDataPermissionDTO dataPermissionDTO);
+
+    /**
+     * 删除数据权限通过IDS
+     *
+     * @param ids ids
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> removePermissionByIds(List<Long> ids);
 
 }

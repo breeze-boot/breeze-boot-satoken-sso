@@ -14,48 +14,64 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.system.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * 系统平台实体
+ * 系统数据权限实体
  *
  * @author gaoweixuan
- * @date 2021-12-06 22:03:39
+ * @date 2022-10-30
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_role_permission")
-@Schema(description = "角色权限实体")
-public class SysRolePermission extends BaseModel<SysRolePermission> implements Serializable {
+@Schema(description = "系统数据权限添加DTO")
+public class SysDataPermissionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 权限id
+     * 权限名称
      */
-    @Schema(description = "数据权限ID")
-    private Long permissionId;
+    @Schema(description = "权限名称")
+    private String permissionName;
 
     /**
-     * 角色id
+     * 权限编码
      */
-    @Schema(description = "角色ID")
-    private Long roleId;
+    @Schema(description = "权限编码")
+    private String permissionCode;
 
     /**
-     * 承租者id
+     * 权限类型
      */
-    @Schema(description = "租户ID")
-    private Long tenantId;
+    @Schema(description = "权限类型")
+    private String permissionType;
+
+    /**
+     * 操作符
+     */
+    @Schema(description = "操作符")
+    private String operator;
+
+    /**
+     * 权限
+     */
+    @Schema(description = "权限")
+    private List<String> permissions;
+
+    /**
+     * diy权限
+     */
+    @Schema(description = "DIY权限")
+    private List<PermissionDiy> permissionDiy;
 
 }

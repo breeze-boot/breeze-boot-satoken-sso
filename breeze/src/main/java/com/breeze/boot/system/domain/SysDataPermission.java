@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.entity;
+package com.breeze.boot.system.domain;
 
-import com.breeze.boot.core.entity.PageDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.entity.BaseModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
- * 数据权限DTO
+ * 系统数据权限实体
  *
  * @author gaoweixuan
  * @date 2022-10-30
@@ -31,37 +34,52 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class PermissionDTO extends PageDTO {
+@TableName(value = "sys_data_permission")
+@Schema(description = "系统数据权限实体")
+public class SysDataPermission extends BaseModel<SysDataPermission> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 名称
+     * 数据权限名称
      */
-    @JsonIgnore
+    @Schema(description = "数据权限名称")
     private String permissionName;
 
     /**
-     * 编码
+     * 数据权限编码
      */
+    @Schema(description = "数据权限编码")
     private String permissionCode;
 
     /**
-     * 权限类型
+     * 数据权限标识
      */
+    @Schema(description = "数据权限标识")
     private String permissionType;
 
     /**
      * 操作符
      */
+    @Schema(description = "操作符")
     private String operator;
 
     /**
-     * 权限过滤 sql
+     * sql
      */
+    @Schema(description = "自定义SQL")
     private String strSql;
 
     /**
-     * 权限 部门ID
+     * 权限
      */
+    @Schema(description = "权限")
     private String permissions;
+
+    /**
+     * 租户ID
+     */
+    @Schema(description = "租户ID")
+    private Long tenantId;
 
 }

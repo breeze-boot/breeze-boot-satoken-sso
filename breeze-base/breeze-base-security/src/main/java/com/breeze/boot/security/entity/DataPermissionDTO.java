@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.dto;
+package com.breeze.boot.security.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.breeze.boot.core.entity.PageDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import java.io.Serializable;
-import java.util.List;
-
 /**
- * 系统权限实体
+ * 数据权限DTO
  *
  * @author gaoweixuan
  * @date 2022-10-30
@@ -33,45 +31,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "系统数据权限添加DTO")
-public class SysPermissionDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class DataPermissionDTO extends PageDTO {
 
     /**
-     * 权限名称
+     * 名称
      */
-    @Schema(description = "权限名称")
+    @JsonIgnore
     private String permissionName;
 
     /**
-     * 权限编码
+     * 编码
      */
-    @Schema(description = "权限编码")
     private String permissionCode;
 
     /**
      * 权限类型
      */
-    @Schema(description = "权限类型")
     private String permissionType;
 
     /**
      * 操作符
      */
-    @Schema(description = "操作符")
     private String operator;
 
     /**
-     * 权限
+     * 权限过滤 sql
      */
-    @Schema(description = "权限")
-    private List<String> permissions;
+    private String strSql;
 
     /**
-     * diy权限
+     * 权限 部门ID
      */
-    @Schema(description = "DIY权限")
-    private List<PermissionDiy> permissionDiy;
+    private String permissions;
 
 }

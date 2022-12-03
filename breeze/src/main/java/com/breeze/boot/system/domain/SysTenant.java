@@ -36,7 +36,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_tenant")
 @Schema(description = "系统租户实体")
-public class SysTenant extends BaseModel<SysRolePermission> implements Serializable {
+public class SysTenant extends BaseModel<SysTenant> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

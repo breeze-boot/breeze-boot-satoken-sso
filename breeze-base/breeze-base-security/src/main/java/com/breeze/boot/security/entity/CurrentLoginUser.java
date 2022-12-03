@@ -93,7 +93,7 @@ public class CurrentLoginUser extends User implements UserDetails {
     /**
      * 权限
      */
-    private List<PermissionDTO> permissions;
+    private List<DataPermissionDTO> permissions;
 
     /**
      * 微信OpenId

@@ -17,10 +17,10 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.security.entity.PermissionDTO;
-import com.breeze.boot.system.domain.SysRolePermission;
-import com.breeze.boot.system.mapper.SysRolePermissionMapper;
-import com.breeze.boot.system.service.SysRolePermissionService;
+import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
+import com.breeze.boot.system.mapper.SysRoleDataPermissionMapper;
+import com.breeze.boot.system.service.SysRoleDataPermissionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,17 +33,17 @@ import java.util.Set;
  * @date 2022-10-30
  */
 @Service
-public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionMapper, SysRolePermission> implements SysRolePermissionService {
+public class SysRoleDataPermissionServiceImpl extends ServiceImpl<SysRoleDataPermissionMapper, SysRoleDataPermission> implements SysRoleDataPermissionService {
 
     /**
-     * 角色权限列表
+     * 角色数据权限列表
      *
-     * @param roleIdSet 角色idSet
-     * @return {@link List}<{@link PermissionDTO}>
+     * @param roleIdSet 角色ID Set
+     * @return {@link List}<{@link DataPermissionDTO}>
      */
     @Override
-    public List<PermissionDTO> listRolesPermission(Set<Long> roleIdSet) {
-        return this.baseMapper.listRolesPermission(roleIdSet);
+    public List<DataPermissionDTO> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet) {
+        return this.baseMapper.listRoleDataPermissionByRoleIds(roleIdSet);
     }
 
 }

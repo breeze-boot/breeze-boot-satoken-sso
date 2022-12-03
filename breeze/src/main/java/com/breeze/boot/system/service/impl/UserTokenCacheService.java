@@ -19,19 +19,17 @@ package com.breeze.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.entity.PermissionDTO;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
-import com.breeze.boot.system.service.SysRolePermissionService;
+import com.breeze.boot.system.service.SysRoleDataPermissionService;
 import com.breeze.boot.system.service.SysRoleService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,10 +56,10 @@ public class UserTokenCacheService {
     private SysMenuService sysMenuService;
 
     /**
-     * 系统角色权限服务
+     * 系统角色数据权限服务
      */
     @Autowired
-    private SysRolePermissionService sysRolePermissionService;
+    private SysRoleDataPermissionService sysRoleDataPermissionService;
 
     /**
      * 系统部门服务
@@ -102,9 +100,8 @@ public class UserTokenCacheService {
         loginUser.setUserRoleCodes(roleCodeList);
         // 角色权限
         loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
-        // 用户的多个数据权限汇总
-        List<PermissionDTO> permissionDTOList = this.sysRolePermissionService.listRolesPermission(roleIdSet);
-        loginUser.setPermissions(permissionDTOList);
+        // 用户的多个数据权限
+        loginUser.setPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
         this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUser);
         return loginUser;
     }

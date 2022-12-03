@@ -21,8 +21,10 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDict;
+import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictOpenDTO;
 import com.breeze.boot.system.dto.DictSearchDTO;
+import com.breeze.boot.system.service.SysDictItemService;
 import com.breeze.boot.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 系统字典控制器
@@ -52,6 +55,12 @@ public class SysDictController {
     private SysDictService sysDictService;
 
     /**
+     * 系统字典项服务
+     */
+    @Autowired
+    private SysDictItemService sysDictItemService;
+
+    /**
      * 列表
      *
      * @param dictSearchDTO 字典搜索DTO
@@ -61,7 +70,20 @@ public class SysDictController {
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
     public Result<Page<SysDict>> list(@RequestBody DictSearchDTO dictSearchDTO) {
-        return Result.ok(this.sysDictService.listDict(dictSearchDTO));
+        return Result.ok(this.sysDictService.listPage(dictSearchDTO));
+    }
+
+    /**
+     * 加载字典信息
+     *
+     * @param dictCode 字典编码
+     * @return {@link Result}<{@link Page}<{@link SysDict}>>
+     */
+    @Operation(summary = "获取字典")
+    @GetMapping("/loadDict/{dictCode}")
+    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    public Result<List<SysDictItem>> loadDict(@PathVariable("dictCode") String dictCode) {
+        return this.sysDictItemService.loadDictByCode(dictCode);
     }
 
     /**
