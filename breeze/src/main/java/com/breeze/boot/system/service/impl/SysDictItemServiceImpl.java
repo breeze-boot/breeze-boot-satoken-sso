@@ -47,14 +47,14 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     }
 
     /**
-     * 加载字典通过代码
+     * 查询字典通过代码
      *
      * @param dictCode dict类型代码
      * @return {@link Result}<{@link List}<{@link SysDictItem}>>
      */
     @Override
-    public Result<List<SysDictItem>> loadDictByCode(String dictCode) {
-        return Result.ok(this.baseMapper.loadDictByCode(dictCode));
+    public Result<List<SysDictItem>> listDictByCode(String dictCode) {
+        return Result.ok(this.baseMapper.listDictByCode(dictCode));
     }
 
 

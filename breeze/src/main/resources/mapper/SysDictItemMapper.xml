@@ -34,7 +34,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="loadDictByCode" resultType="com.breeze.boot.system.domain.SysDictItem">
+    <select id="listDictByCode" resultType="com.breeze.boot.system.domain.SysDictItem">
         SELECT
         a.label,
         a.`value`

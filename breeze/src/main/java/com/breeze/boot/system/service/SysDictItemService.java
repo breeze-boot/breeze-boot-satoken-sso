@@ -40,11 +40,11 @@ public interface SysDictItemService extends IService<SysDictItem> {
     List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);
 
     /**
-     * 加载字典通过类型代码
+     * 查询字典通过类型代码
      *
      * @param dictCode dict类型代码
      * @return {@link Result}<{@link List}<{@link SysDictItem}>>
      */
-    Result<List<SysDictItem>> loadDictByCode(String dictCode);
+    Result<List<SysDictItem>> listDictByCode(String dictCode);
 }
 

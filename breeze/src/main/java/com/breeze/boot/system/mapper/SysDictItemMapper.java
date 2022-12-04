@@ -41,10 +41,10 @@ public interface SysDictItemMapper extends BreezeBaseMapper<SysDictItem> {
     List<SysDictItem> listDictDetailByDictId(@Param("pdictId") Long pdictId);
 
     /**
-     * 加载字典通过代码
+     * 查询字典通过代码
      *
      * @param dictCode dict类型代码
      * @return {@link List}<{@link SysDictItem}>
      */
-    List<SysDictItem> loadDictByCode(@Param("dictCode") String dictCode);
+    List<SysDictItem> listDictByCode(@Param("dictCode") String dictCode);
 }

@@ -74,16 +74,16 @@ public class SysDictController {
     }
 
     /**
-     * 加载字典信息
+     * 查询字典信息
      *
      * @param dictCode 字典编码
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @Operation(summary = "获取字典")
-    @GetMapping("/loadDict/{dictCode}")
+    @GetMapping("/listDict/{dictCode}")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> loadDict(@PathVariable("dictCode") String dictCode) {
-        return this.sysDictItemService.loadDictByCode(dictCode);
+    public Result<List<SysDictItem>> listDict(@PathVariable("dictCode") String dictCode) {
+        return this.sysDictItemService.listDictByCode(dictCode);
     }
 
     /**
