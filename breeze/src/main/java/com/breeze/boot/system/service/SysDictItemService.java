@@ -22,6 +22,7 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统字典项服务
@@ -42,9 +43,9 @@ public interface SysDictItemService extends IService<SysDictItem> {
     /**
      * 查询字典通过类型代码
      *
-     * @param dictCode dict类型代码
-     * @return {@link Result}<{@link List}<{@link SysDictItem}>>
+     * @param dictCodes dict类型代码
+     * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link Map}<{@link String}, {@link Object}>>>>
      */
-    Result<List<SysDictItem>> listDictByCode(String dictCode);
+    Result<Map<String, List<Map<String, Object>>>> listDictByCode(List<String> dictCodes);
 }
 

@@ -34,17 +34,21 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listDictByCode" resultType="com.breeze.boot.system.domain.SysDictItem">
+    <select id="listDictByCode" resultType="java.util.Map">
         SELECT
         a.label,
-        a.`value`
+        a.`value`,
+        b.dict_code as dictCode
         FROM sys_dict_item AS a
         LEFT JOIN sys_dict AS b ON a.dict_id = b.id
         <where>
             a.is_delete = 0
             AND b.is_open = 1
             AND b.is_delete = 0
-            AND b.dict_code = #{dictCode}
+            AND b.dict_code IN
+            <foreach collection="dictCodes" index="index" item="dictCode" open="(" close=")" separator=",">
+                #{dictCode}
+            </foreach>
         </where>
         ORDER BY a.create_time DESC
     </select>

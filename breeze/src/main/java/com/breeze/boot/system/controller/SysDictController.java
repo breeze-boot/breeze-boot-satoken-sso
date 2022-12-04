@@ -21,7 +21,6 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.system.domain.SysDict;
-import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictOpenDTO;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictItemService;
@@ -36,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统字典控制器
@@ -76,14 +76,14 @@ public class SysDictController {
     /**
      * 查询字典信息
      *
-     * @param dictCode 字典编码
-     * @return {@link Result}<{@link Page}<{@link SysDict}>>
+     * @param dictCodes 字典编码
+     * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link Map}<{@link String}, {@link Object}>>>>
      */
     @Operation(summary = "获取字典")
-    @GetMapping("/listDict/{dictCode}")
+    @PostMapping("/listDict")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> listDict(@PathVariable("dictCode") String dictCode) {
-        return this.sysDictItemService.listDictByCode(dictCode);
+    public Result<Map<String, List<Map<String, Object>>>> listDict(@RequestBody List<String> dictCodes) {
+        return this.sysDictItemService.listDictByCode(dictCodes);
     }
 
     /**

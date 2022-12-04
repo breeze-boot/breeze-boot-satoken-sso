@@ -22,6 +22,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统字典项映射器
@@ -43,8 +44,8 @@ public interface SysDictItemMapper extends BreezeBaseMapper<SysDictItem> {
     /**
      * 查询字典通过代码
      *
-     * @param dictCode dict类型代码
-     * @return {@link List}<{@link SysDictItem}>
+     * @param dictCodes dict类型代码
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
-    List<SysDictItem> listDictByCode(@Param("dictCode") String dictCode);
+    List<Map<String, Object>> listDictByCode(@Param("dictCodes") List<String> dictCodes);
 }
