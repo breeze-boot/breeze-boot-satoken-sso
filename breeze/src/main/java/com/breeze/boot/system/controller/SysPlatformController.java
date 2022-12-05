@@ -28,8 +28,9 @@ import com.breeze.boot.system.dto.PlatformSearchDTO;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysPlatformService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ import java.util.List;
  * @date 2021-12-06
  */
 @RestController
-@AllArgsConstructor
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/platform")
 @Tag(name = "系统平台管理模块", description = "SysPlatformController")
 public class SysPlatformController {
@@ -53,12 +54,14 @@ public class SysPlatformController {
     /**
      * 系统平台服务
      */
-    private final SysPlatformService sysPlatformService;
+    @Autowired
+    private SysPlatformService sysPlatformService;
 
     /**
      * 系统菜单服务
      */
-    private final SysMenuService sysMenuService;
+    @Autowired
+    private SysMenuService sysMenuService;
 
     /**
      * 列表

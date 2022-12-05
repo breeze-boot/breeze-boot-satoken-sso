@@ -35,9 +35,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ListenerConfig {
 
+    /**
+     * 系统日志服务
+     */
     @Autowired
     private SysLogService sysLogService;
 
+    /**
+     * stomp js消息服务
+     */
     @Autowired
     private StompJsMsgServiceImpl stompJsMsgService;
 

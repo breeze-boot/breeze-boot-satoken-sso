@@ -25,8 +25,9 @@ import com.breeze.boot.system.service.SysUserMsgService;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import com.breeze.boot.system.vo.SysUserMsgSnapshotVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ import java.util.List;
  * @date 2022-11-20
  */
 @RestController
-@AllArgsConstructor
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/userMsg")
 @Tag(name = "系统用户消息管理模块", description = "SysUserMsgController")
 public class SysUserMsgController {
@@ -49,12 +50,14 @@ public class SysUserMsgController {
     /**
      * 系统用户消息快照服务
      */
-    private final SysUserMsgSnapshotService sysUserMsgSnapshotService;
+    @Autowired
+    private SysUserMsgSnapshotService sysUserMsgSnapshotService;
 
     /**
      * 系统用户消息服务
      */
-    private final SysUserMsgService sysUserMsgService;
+    @Autowired
+    private SysUserMsgService sysUserMsgService;
 
     /**
      * 列表

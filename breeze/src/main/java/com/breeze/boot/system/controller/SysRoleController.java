@@ -28,6 +28,7 @@ import com.breeze.boot.system.dto.RoleSearchDTO;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,6 +46,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/role")
 @Tag(name = "系统角色管理模块", description = "SysRoleController")
 public class SysRoleController {

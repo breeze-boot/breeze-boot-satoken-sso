@@ -29,6 +29,7 @@ import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.dto.UserSearchDTO;
 import com.breeze.boot.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,6 +46,7 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/user")
 @Tag(name = "系统用户管理模块", description = "SysUserController")
 public class SysUserController {

@@ -31,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 /**
@@ -41,6 +42,7 @@ import java.security.Principal;
  */
 @Slf4j
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/test")
 public class HelloController {
 
@@ -126,7 +128,7 @@ public class HelloController {
      */
     @NoAuthentication
     @GetMapping("/v4/test/{a}/{b}")
-    public void test(@PathVariable("a") String a, @PathVariable("b") String b) {
+    public void test(@PathVariable("a") String a, @PathVariable("b") String b, HttpServletRequest request) {
         log.info("{}, {}", a, b);
     }
 

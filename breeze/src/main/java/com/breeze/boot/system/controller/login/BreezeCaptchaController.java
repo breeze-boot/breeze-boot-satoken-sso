@@ -5,6 +5,7 @@ import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
 import com.anji.captcha.util.StringUtils;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2022/09/18
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping({"/captcha"})
 public class BreezeCaptchaController {
 
@@ -31,8 +33,6 @@ public class BreezeCaptchaController {
     @Autowired
     private CaptchaService captchaService;
 
-    public BreezeCaptchaController() {
-    }
 
     /**
      * 获取远程id

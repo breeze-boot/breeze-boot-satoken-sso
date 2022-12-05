@@ -21,11 +21,9 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 /**
  * spring文档配置
@@ -74,34 +72,26 @@ public class SpringDocConfiguration {
     @Bean
     public GroupedOpenApi loginApi() {
         return GroupedOpenApi.builder()
-                .addOperationCustomizer((operation, handlerMethod) -> {
-                    operation.addSecurityItem(new SecurityRequirement().addList("basicScheme"));
-                    return operation;
-                })
                 .group("Security Jwt登录")
                 .pathsToMatch("/jwt/**")
                 .build();
     }
 
     @Bean
-    @Profile("!prod")
-    public OpenAPI openApi() {
-        return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
-                .components(new Components().
-                        addSecuritySchemes(SECURITY_SCHEME_NAME,
-                                new SecurityScheme()
-                                        .name(SECURITY_SCHEME_NAME)
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic")
-                                        .bearerFormat("JWT")))
-                .info(new Info().title("晴风咸蛋小项目 API 文档")
+    public OpenAPI breezeOpenAPI() {
+        return new OpenAPI().info(new Info().title("晴风咸蛋小项目 API 文档")
                         .description("晴风咸蛋小项目")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0").url("")))
                 .externalDocs(new ExternalDocumentation()
                         .description("晴风咸蛋小项目 文档")
-                        .url("https://github.com/Memory1998/breeze-boot.git"));
+                        .url("https://github.com/Memory1998/breeze-boot.git"))
+                .components(new Components().addSecuritySchemes(SECURITY_SCHEME_NAME,
+                        new SecurityScheme()
+                                .name(SECURITY_SCHEME_NAME)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("Bearer")
+                                .bearerFormat("JWT")));
     }
 
 }

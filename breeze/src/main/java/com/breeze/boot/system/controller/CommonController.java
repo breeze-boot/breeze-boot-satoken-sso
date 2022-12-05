@@ -29,6 +29,7 @@ import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
  * @date 2022-10-08
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/common")
 @Tag(name = "通用接口管理模块", description = "CommonController")
 public class CommonController {

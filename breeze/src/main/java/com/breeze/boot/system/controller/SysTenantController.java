@@ -24,8 +24,9 @@ import com.breeze.boot.system.domain.SysTenant;
 import com.breeze.boot.system.dto.TenantSearchDTO;
 import com.breeze.boot.system.service.SysTenantService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ import java.util.List;
  * @date 2022-11-06
  */
 @RestController
-@AllArgsConstructor
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/tenant")
 @Tag(name = "系统租户管理模块", description = "SysTenantController")
 public class SysTenantController {
@@ -49,7 +50,8 @@ public class SysTenantController {
     /**
      * 系统租户服务
      */
-    private final SysTenantService sysTenantService;
+    @Autowired
+    private SysTenantService sysTenantService;
 
     /**
      * 列表

@@ -23,6 +23,7 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictItemService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +41,7 @@ import java.util.List;
  * @date 2022-09-02
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/dictItem")
 @Tag(name = "系统字典项管理模块", description = "SysDictItemController")
 public class SysDictItemController {

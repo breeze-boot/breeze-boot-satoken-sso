@@ -25,8 +25,9 @@ import com.breeze.boot.system.domain.SysDataPermission;
 import com.breeze.boot.system.dto.SysDataPermissionDTO;
 import com.breeze.boot.system.service.SysDataPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ import java.util.Arrays;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@AllArgsConstructor
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/dataPermission")
 @Tag(name = "系统数据权限管理模块", description = "SysDataPermissionController")
 public class SysDataPermissionController {
@@ -49,7 +50,8 @@ public class SysDataPermissionController {
     /**
      * 系统数据权限服务
      */
-    private final SysDataPermissionService sysDataPermissionService;
+    @Autowired
+    private SysDataPermissionService sysDataPermissionService;
 
     /**
      * 列表

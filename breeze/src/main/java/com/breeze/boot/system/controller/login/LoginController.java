@@ -33,6 +33,7 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,9 @@ import java.util.stream.Collectors;
  * @date 2022-08-31
  */
 @Slf4j
-@NoAuthentication
 @RestController
+@NoAuthentication
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/jwt")
 @Tag(name = "jwt登录", description = "LoginController")
 public class LoginController {

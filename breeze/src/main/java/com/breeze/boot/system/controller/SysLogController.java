@@ -24,6 +24,7 @@ import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogSearchDTO;
 import com.breeze.boot.system.service.SysLogService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +40,7 @@ import java.util.Arrays;
  * @date 2022-09-02
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/log")
 @Tag(name = "系统日志管理模块", description = "SysLogController")
 public class SysLogController {

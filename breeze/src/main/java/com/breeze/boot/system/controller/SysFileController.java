@@ -25,6 +25,7 @@ import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
 import com.breeze.boot.system.service.SysFileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +43,7 @@ import java.util.Arrays;
  * @date 2022-09-02
  */
 @RestController
+@SecurityRequirement(name = "Bearer")
 @RequestMapping("/sys/file")
 @Tag(name = "系统文件管理模块", description = "SysFileController")
 public class SysFileController {
