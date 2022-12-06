@@ -35,6 +35,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -88,8 +88,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Override
     public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         MultipartFile file = fileDTO.getFile();
-        Optional<FileBO> optionalFileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, String.valueOf(LocalDate.now().getDayOfMonth()), UUID.randomUUID().toString().replace("-", ""));
-        FileBO fileBO = optionalFileBO.orElseThrow(RuntimeException::new);
+        FileBO fileBO = null;
+        try {
+            fileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, String.valueOf(LocalDate.now().getDayOfMonth()), UUID.randomUUID().toString().replace("-", ""));
+        } catch (Exception ex) {
+            log.error("", ex);
+        }
+        if (Objects.isNull(fileBO)) {
+            return Result.fail("上传失败");
+        }
         SysFile sysFile = SysFile.builder()
                 .title(fileDTO.getTitle())
                 .newFileName(fileBO.getNewFileName())
@@ -139,6 +146,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeFileByIds(List<Long> fileIds) {
         List<SysFile> sysFileList = this.listByIds(fileIds);
         if (CollUtil.isEmpty(sysFileList)) {
@@ -147,7 +155,8 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         for (SysFile sysFile : sysFileList) {
             Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName());
             if (!remove) {
-                continue;
+                // TODO
+                return Result.fail(Boolean.FALSE, "删除失败");
             }
             this.removeById(sysFile.getId());
         }

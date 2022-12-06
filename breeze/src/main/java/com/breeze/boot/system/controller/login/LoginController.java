@@ -20,10 +20,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
 import com.breeze.boot.security.config.JwtConfiguration;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
-import com.breeze.boot.security.entity.CurrentLoginUser;
-import com.breeze.boot.security.entity.EmailLoginBody;
-import com.breeze.boot.security.entity.SmsLoginBody;
-import com.breeze.boot.security.entity.UserLoginBody;
+import com.breeze.boot.security.entity.*;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationToken;
 import com.breeze.boot.security.wx.WxCodeAuthenticationToken;
 import com.breeze.boot.system.dto.WxLoginDTO;
@@ -128,23 +125,23 @@ public class LoginController {
     private Map<String, Object> createJwtToken(Instant now, long expiry, Authentication authentication) {
         CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
         String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        LoginUserDTO loginUserDTO = currentLoginUser.getLoginUserDTO();
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .issuer("self")
                 .issueTime(new Date(now.toEpochMilli()))
                 .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
                 .subject(authentication.getName())
-                .claim("userId", currentLoginUser.getUserId())
-                .claim("tenantId", currentLoginUser.getTenantId())
-                .claim("username", currentLoginUser.getUsername())
-                .claim("userCode", currentLoginUser.getUserCode())
+                .claim("userId", loginUserDTO.getId())
+                .claim("tenantId", loginUserDTO.getTenantId())
+                .claim("username", loginUserDTO.getUsername())
+                .claim("userCode", loginUserDTO.getUserCode())
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJwt = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("user_info", currentLoginUser);
+        resultMap.put("user_info", loginUserDTO);
         resultMap.put("access_token", jwtConfiguration.sign(signedJwt).serialize());
-        resultMap.put("permissions", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return resultMap;
     }
 

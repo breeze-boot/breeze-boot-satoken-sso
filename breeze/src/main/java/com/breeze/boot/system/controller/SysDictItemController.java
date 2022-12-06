@@ -66,14 +66,14 @@ public class SysDictItemController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param sysDictItem 字典项保存DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:dict:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典项信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysDictItem sysDictItem) {
         return Result.ok(sysDictItemService.save(sysDictItem));

@@ -16,6 +16,8 @@
 
 package com.breeze.boot.security.config;
 
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.ex.SystemServiceException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 系统租户加载过滤器
@@ -35,8 +38,11 @@ public class SysTenantLoadFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String tenantId = request.getHeader("TENANT-ID");
-        BreezeThreadLocal.set(tenantId == null ? 1L : Long.parseLong(tenantId));
+        String tenantId = request.getHeader("B_TENANT_ID");
+        if (Objects.isNull(tenantId)) {
+            throw new SystemServiceException(ResultCode.exception("缺少租户信息"));
+        }
+        BreezeThreadLocal.set(Long.parseLong(tenantId));
         filterChain.doFilter(request, response);
     }
 }

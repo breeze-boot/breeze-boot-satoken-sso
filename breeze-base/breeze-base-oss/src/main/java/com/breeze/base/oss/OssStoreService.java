@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * minio 请求服务
@@ -75,26 +74,26 @@ public class OssStoreService {
      * @param file        文件
      * @param path        路径
      * @param newFileName 新文件名字
-     * @return {@link Optional}<{@link FileBO}>
+     * @return {@link FileBO}
      */
     @SneakyThrows
-    public Optional<FileBO> upload(Integer ossStyle, MultipartFile file, String path, String newFileName) {
+    public FileBO upload(Integer ossStyle, MultipartFile file, String path, String newFileName) {
         String originalFileName = file.getOriginalFilename();
         assert originalFileName != null;
         String substring = originalFileName.substring(originalFileName.lastIndexOf("."));
-        Optional<FileBO> optionalFileBO;
+        FileBO fileBO;
         switch (ossStyle) {
             case 0:
-                optionalFileBO = this.localFileService.uploadFile(file, path, newFileName + substring);
+                fileBO = this.localFileService.uploadFile(file, path, newFileName + substring);
                 break;
             case 1:
-                optionalFileBO = this.minioService.upload2Minio(file, path, newFileName + substring);
+                fileBO = this.minioService.upload2Minio(file, path, newFileName + substring);
                 break;
             default:
-                optionalFileBO = Optional.empty();
+                fileBO = null;
                 log.error("存储类型错误");
         }
-        return optionalFileBO;
+        return fileBO;
     }
 
     /**
@@ -142,7 +141,7 @@ public class OssStoreService {
      * @return {@link Boolean}
      */
     public Boolean remove(Integer ossStyle, String path, String fileName) {
-        Boolean remove = Boolean.FALSE;
+        boolean remove = Boolean.FALSE;
         switch (ossStyle) {
             case 0:
                 beanIsExists(Objects.isNull(this.localFileService), "未配置本地存储方式");

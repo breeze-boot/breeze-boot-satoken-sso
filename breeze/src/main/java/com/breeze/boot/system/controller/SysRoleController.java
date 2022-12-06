@@ -119,14 +119,14 @@ public class SysRoleController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param sysRole 角色实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:role:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:role:create')")
     @BreezeSysLog(description = "角色信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysRole sysRole) {
         return Result.ok(sysRoleService.save(sysRole));

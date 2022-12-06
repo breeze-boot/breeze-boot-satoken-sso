@@ -144,11 +144,11 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             if (StrUtil.isAllNotBlank(annotation.scope()) && !originalSql.contains(annotation.scope())) {
                 throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + annotation.scope()));
             }
-            LoginUserDTO currentUser = SecurityUtils.getCurrentUser();
-            if (currentUser == null) {
+            LoginUserDTO loginUserDTO = SecurityUtils.getCurrentUser();
+            if (loginUserDTO == null) {
                 throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
             }
-            List<DataPermissionDTO> dataPermissionList = currentUser.getPermissions();
+            List<DataPermissionDTO> dataPermissionList = loginUserDTO.getDataPermissions();
 
             if (CollUtil.isEmpty(dataPermissionList)) {
                 continue;
@@ -174,7 +174,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(sql);
                 sb.append(" ) ");
             }
-            if (Objects.equals(permission.getPermissionType(), OWN)) {
+            if (Objects.equals(permission.getDataPermissionType(), OWN)) {
                 // create_by 字段
                 if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
                     continue;
@@ -182,7 +182,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(String.format("OR ( a.%s = '", dataPermission.scope()));
                 sb.append(SecurityUtils.getUserCode());
                 sb.append(" ' ) ");
-            } else if (Objects.equals(permission.getPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getPermissionType(), DEPT_LEVEL)) {
+            } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
                 String deptIds = permission.getPermissions();
                 // deptId 字段
                 if (StrUtil.isAllBlank(deptIds)) {
@@ -191,9 +191,9 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(String.format("OR ( a.%s IN ( ", dataPermission.scope()));
                 sb.append(deptIds);
                 sb.append(" ) ) ");
-            } else if (Objects.equals(permission.getPermissionType(), ALL)) {
+            } else if (Objects.equals(permission.getDataPermissionType(), ALL)) {
                 return sb.toString().replaceFirst("WHERE", "");
-            } else if (Objects.equals(permission.getPermissionType(), DIY_DEPT)) {
+            } else if (Objects.equals(permission.getDataPermissionType(), DIY_DEPT)) {
                 return sb.toString().replaceFirst("WHERE", "");
             }
         }

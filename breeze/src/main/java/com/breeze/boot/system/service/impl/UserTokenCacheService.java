@@ -80,30 +80,30 @@ public class UserTokenCacheService {
      * @return {@link LoginUserDTO}
      */
     public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
-        LoginUserDTO loginUser = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUser, loginUser);
+        LoginUserDTO loginUserDTO = new LoginUserDTO();
+        BeanUtil.copyProperties(sysUser, loginUserDTO);
         // 获取部门名称
-        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
+        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUserDTO.setDeptName(sysDept.getDeptName()));
         // 查询 用户的角色
         Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
         if (CollUtil.isEmpty(roleDtoSet)) {
-            loginUser.setAuthorities(Sets.newHashSet());
-            return loginUser;
+            loginUserDTO.setAuthorities(Sets.newHashSet());
+            return loginUserDTO;
         }
 
-        loginUser.setUserRoleList(roleDtoSet);
+        loginUserDTO.setUserRoleList(roleDtoSet);
         // 角色ID
         Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
-        loginUser.setUserRoleIds(roleIdSet);
+        loginUserDTO.setUserRoleIds(roleIdSet);
         // 角色CODE
         Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
-        loginUser.setUserRoleCodes(roleCodeList);
+        loginUserDTO.setUserRoleCodes(roleCodeList);
         // 角色权限
-        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
+        loginUserDTO.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
         // 用户的多个数据权限
-        loginUser.setPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
-        this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUser);
-        return loginUser;
+        loginUserDTO.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
+        this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUserDTO);
+        return loginUserDTO;
     }
 
 }

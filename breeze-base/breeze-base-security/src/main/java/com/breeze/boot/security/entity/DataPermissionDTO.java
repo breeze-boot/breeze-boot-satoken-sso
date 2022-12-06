@@ -34,20 +34,20 @@ import lombok.*;
 public class DataPermissionDTO extends PageDTO {
 
     /**
-     * 名称
+     * 数据权限名称
      */
     @JsonIgnore
-    private String permissionName;
+    private String dataPermissionName;
 
     /**
-     * 编码
+     * 数据权限代码
      */
-    private String permissionCode;
+    private String dataPermissionCode;
 
     /**
-     * 权限类型
+     * 数据限类型
      */
-    private String permissionType;
+    private String dataPermissionType;
 
     /**
      * 操作符

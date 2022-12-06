@@ -82,7 +82,7 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
         SysDataPermission sysDataPermission = SysDataPermission.builder().build();
         BeanUtil.copyProperties(dataPermissionDTO, sysDataPermission);
         sysDataPermission.setPermissions(String.join(",", dataPermissionDTO.getPermissions()));
-        if (StrUtil.equals(dataPermissionDTO.getPermissionType(), "DIY")) {
+        if (StrUtil.equals(dataPermissionDTO.getDataPermissionType(), "DIY")) {
             // 自定义
             List<PermissionDiy> divList = dataPermissionDTO.getPermissionDiy();
             StrBuilder strBuilder = new StrBuilder();
@@ -96,7 +96,7 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
                     .append(" ) "));
             String sql = strBuilder.toString();
             sysDataPermission.setStrSql(sql.replaceFirst("OR", ""));
-        } else if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", dataPermissionDTO.getPermissionType())) {
+        } else if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", dataPermissionDTO.getDataPermissionType())) {
             // 本级部门及其以下部门
             List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getPermissions()));
             sysDataPermission.setPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));

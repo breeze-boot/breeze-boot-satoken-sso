@@ -2,6 +2,7 @@ package com.breeze.boot.security.utils;
 
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.security.entity.CurrentLoginUser;
+import com.breeze.boot.security.entity.LoginUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -31,13 +32,13 @@ public class LoginCheck {
      * @param authentication 身份验证
      * @param loginUser      登录用户
      */
-    public void checkCode(CurrentLoginUser loginUser, AbstractAuthenticationToken authentication, Function<CurrentLoginUser, String> function) {
+    public void checkCode(CurrentLoginUser loginUser, AbstractAuthenticationToken authentication, Function<LoginUserDTO, String> function) {
         if (Objects.isNull(authentication.getCredentials())) {
             log.debug("Failed to authenticate since no credentials provided");
             throw new BadCredentialsException(this.messages
                     .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         }
-        String code = function.apply(loginUser);
+        String code = function.apply(loginUser.getLoginUserDTO());
         String presentCode = authentication.getCredentials().toString();
         if (!StrUtil.equals(presentCode, String.valueOf(code))) {
             log.debug("Failed to authenticate since password does not match stored value");

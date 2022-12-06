@@ -21,8 +21,8 @@
 
     <select id="listRoleDataPermissionByRoleIds" resultType="com.breeze.boot.security.entity.DataPermissionDTO">
         SELECT
-        a.permission_code,
-        a.permission_type,
+        a.data_permission_code,
+        a.data_permission_type,
         b.role_id,
         a.operator,
         a.`str_sql`,

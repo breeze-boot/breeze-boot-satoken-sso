@@ -6,9 +6,9 @@
 
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysDataPermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
-        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
-        <result property="permissionType" column="permission_type" jdbcType="VARCHAR"/>
+        <result property="dataPermissionName" column="data_permission_name" jdbcType="VARCHAR"/>
+        <result property="dataPermissionCode" column="data_permission_code" jdbcType="VARCHAR"/>
+        <result property="dataPermissionType" column="data_permission_type" jdbcType="VARCHAR"/>
         <result property="operator" column="operator" jdbcType="VARCHAR"/>
         <result property="strSql" column="str_sql" jdbcType="VARCHAR"/>
         <result property="permissions" column="permissions" jdbcType="VARCHAR"/>
@@ -26,9 +26,9 @@
     <select id="listPage" resultType="com.breeze.boot.system.domain.SysDataPermission">
         SELECT
         a.id,
-        a.`permission_name`,
-        a.`permission_code`,
-        a.`permission_type`,
+        a.`data_permission_name`,
+        a.`data_permission_code`,
+        a.`data_permission_type`,
         a.operator,
         a.str_sql,
         a.permissions
@@ -36,11 +36,11 @@
         sys_data_permission AS a
         <where>
             a.is_delete = 0
-            <if test="dataPermissionDTO.permissionName != null and dataPermissionDTO.permissionName != ''">
-                AND a.permission_name LIKE CONCAT('%' , #{dataPermissionDTO.permissionName}, '%')
+            <if test="dataPermissionDTO.dataPermissionName != null and dataPermissionDTO.dataPermissionName != ''">
+                AND a.data_permission_name LIKE CONCAT('%' , #{dataPermissionDTO.dataPermissionName}, '%')
             </if>
-            <if test="dataPermissionDTO.permissionCode != null and dataPermissionDTO.permissionCode != ''">
-                AND a.permission_code LIKE CONCAT('%' , #{dataPermissionDTO.permissionCode}, '%')
+            <if test="dataPermissionDTO.dataPermissionCode != null and dataPermissionDTO.dataPermissionCode != ''">
+                AND a.data_permission_code LIKE CONCAT('%' , #{dataPermissionDTO.dataPermissionCode}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

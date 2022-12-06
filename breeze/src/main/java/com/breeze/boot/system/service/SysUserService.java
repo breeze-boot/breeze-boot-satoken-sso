@@ -62,7 +62,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 开启关闭锁定
      *
-     * @param openDTO 打开DTO
+     * @param openDTO 用户开关 DTO
      * @return {@link Boolean}
      */
     Boolean open(UserOpenDTO openDTO);

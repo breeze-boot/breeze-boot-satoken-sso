@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Optional;
 
 /**
  * 本地上传 工具
@@ -71,9 +70,9 @@ public class LocalFileService {
      * @param file        文件
      * @param path        路径
      * @param newFileName 新文件名字
-     * @return {@link Optional}<{@link FileBO}>
+     * @return {@link FileBO}
      */
-    public Optional<FileBO> uploadFile(MultipartFile file, String path, String newFileName) {
+    public FileBO uploadFile(MultipartFile file, String path, String newFileName) {
         if (file.isEmpty()) {
             throw new SystemServiceException(ResultCode.exception("上传文件为空"));
         }
@@ -99,13 +98,14 @@ public class LocalFileService {
             FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(new File(newFilePath, newFileName)));
         } catch (IOException e) {
             log.error("上传失败 {}", e.getMessage());
+            return null;
         }
-        return Optional.ofNullable(FileBO.builder()
+        return FileBO.builder()
                 .path(path)
                 .originalFilename(originalFilename)
                 .newFileName(newFileName)
                 .contentType(contentType)
-                .build());
+                .build();
     }
 
     /**

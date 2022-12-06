@@ -90,14 +90,14 @@ public class SysPlatformController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param platform 平台实体入参
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:platform:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:platform:create')")
     @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysPlatform platform) {
         return Result.ok(this.sysPlatformService.save(platform));

@@ -24,8 +24,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 /**
  * 登录用户的扩展类
@@ -41,64 +39,9 @@ public class CurrentLoginUser extends User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户ID
+     * 登录用户信息数据DTO
      */
-    private Long userId;
-
-    /**
-     * 租户ID
-     */
-    private Long tenantId;
-
-    /**
-     * 用户CODE
-     */
-    private String userCode;
-
-    /**
-     * 用户的角色CODE
-     */
-    private Set<String> userRoleCodes;
-
-    /**
-     * 用户的角色ID
-     */
-    private Set<Long> userRoleIds;
-
-    /**
-     * 登录后显示的账户名称
-     */
-    private String amountName;
-
-    /**
-     * 部门ID
-     */
-    private Long deptId;
-
-    /**
-     * 部门name
-     */
-    private String deptName;
-
-    /**
-     * 电子邮件
-     */
-    private String email;
-
-    /**
-     * 电话
-     */
-    private String phone;
-
-    /**
-     * 权限
-     */
-    private List<DataPermissionDTO> permissions;
-
-    /**
-     * 微信OpenId
-     */
-    private String openId;
+    private LoginUserDTO loginUserDTO;
 
     /**
      * 当前登录用户
@@ -107,7 +50,7 @@ public class CurrentLoginUser extends User implements UserDetails {
      * @param accountNonExpired     账户是否过期
      * @param credentialsNonExpired 凭证是否过期
      * @param accountNonLocked      账户是否锁定
-     * @param authorities           用户的权限集， 默认需要添加ROLE_ 前缀
+     * @param authorities           用户的权限集， 角色默认需要添加ROLE_ 前缀
      * @param loginUserDTO          登录用户DTO
      */
     public CurrentLoginUser(LoginUserDTO loginUserDTO
@@ -118,18 +61,7 @@ public class CurrentLoginUser extends User implements UserDetails {
             , Collection<? extends GrantedAuthority> authorities) {
         super(loginUserDTO.getUsername(), loginUserDTO.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         // 扩展自定义属性
-        this.userId = loginUserDTO.getId();
-        this.amountName = loginUserDTO.getAmountName();
-        this.userCode = loginUserDTO.getUserCode();
-        this.userRoleCodes = loginUserDTO.getUserRoleCodes();
-        this.userRoleIds = loginUserDTO.getUserRoleIds();
-        this.deptId = loginUserDTO.getDeptId();
-        this.deptName = loginUserDTO.getDeptName();
-        this.email = loginUserDTO.getEmail();
-        this.phone = loginUserDTO.getPhone();
-        this.openId = loginUserDTO.getOpenId();
-        this.tenantId = loginUserDTO.getTenantId();
-        this.permissions = loginUserDTO.getPermissions();
+        this.loginUserDTO = loginUserDTO;
     }
 
     /**
@@ -141,7 +73,7 @@ public class CurrentLoginUser extends User implements UserDetails {
      * @param accountNonExpired     账户不过期
      * @param credentialsNonExpired 凭证不过期
      * @param accountNonLocked      非锁定账户
-     * @param authorities           当局
+     * @param authorities           用户的权限集， 角色默认需要添加ROLE_ 前缀
      */
     public CurrentLoginUser(String username,
                             String password,

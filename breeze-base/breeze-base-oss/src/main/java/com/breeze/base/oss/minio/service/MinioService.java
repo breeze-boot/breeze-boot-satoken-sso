@@ -39,7 +39,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -79,10 +79,10 @@ public class MinioService {
      * @param minioImgMarkConfig minio img配置
      * @return {@link FileBO}
      */
-    public Optional<FileBO> uploadFileByImgMark(MultipartFile file,
-                                                String path,
-                                                String fileName,
-                                                MinioImgMarkConfig minioImgMarkConfig) {
+    public FileBO uploadFileByImgMark(MultipartFile file,
+                                      String path,
+                                      String fileName,
+                                      MinioImgMarkConfig minioImgMarkConfig) {
         if (file.isEmpty()) {
             throw new SystemServiceException(ResultCode.exception("上传文件为空"));
         }
@@ -115,10 +115,10 @@ public class MinioService {
      * @param minioImgMarkConfig minio img配置
      * @return {@link FileBO}
      */
-    public Optional<FileBO> uploadFileByTextMark(MultipartFile file,
-                                                 String path,
-                                                 String fileName,
-                                                 MinioImgMarkConfig minioImgMarkConfig) {
+    public FileBO uploadFileByTextMark(MultipartFile file,
+                                       String path,
+                                       String fileName,
+                                       MinioImgMarkConfig minioImgMarkConfig) {
 
         if (file.isEmpty()) {
             throw new SystemServiceException(ResultCode.exception("文件不存在"));
@@ -150,7 +150,7 @@ public class MinioService {
      * @param image    图像
      * @return {@link FileBO}
      */
-    public Optional<FileBO> uploadImg(String path, String fileName, BufferedImage image) {
+    public FileBO uploadImg(String path, String fileName, BufferedImage image) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, "jpeg", os);
@@ -168,12 +168,13 @@ public class MinioService {
      * @param path        路径 ()
      * @param fileName    文件名称
      * @param contentType 内容类型
-     * @return {@link Optional}<{@link FileBO}>
+     * @return {@link FileBO}
      */
-    public Optional<FileBO> upload2Minio(InputStream is, long size, String path, String fileName, String contentType) {
+    public FileBO upload2Minio(InputStream is, long size, String path, String fileName, String contentType) {
         this.createBucket(this.minioProperties.getBucketName());
+        ObjectWriteResponse response = null;
         try {
-            this.minioClient.putObject(
+            response = this.minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(this.minioProperties.getBucketName())
                             .object(path + "/" + fileName)
@@ -183,10 +184,13 @@ public class MinioService {
         } catch (Exception e) {
             log.error("文件上传失败", e);
         }
+        if (Objects.isNull(response)) {
+            return null;
+        }
         String savePath = this.minioProperties.getBucketName() + "/" + path + "/" + fileName;
         String imageUrl = this.minioProperties.getNginxHost() + "/" + savePath;
         log.info(" \n {} \n {}", savePath, imageUrl);
-        return Optional.ofNullable(FileBO.builder().newFileName(fileName).path(path).contentType(contentType).build());
+        return FileBO.builder().newFileName(fileName).path(path).contentType(contentType).build();
     }
 
     /**
@@ -195,10 +199,10 @@ public class MinioService {
      * @param file     文件
      * @param path     路径
      * @param fileName 文件名称
-     * @return {@link Optional}<{@link FileBO}>
+     * @return {@link FileBO}
      */
     @SneakyThrows
-    public Optional<FileBO> upload2Minio(MultipartFile file, String path, String fileName) {
+    public FileBO upload2Minio(MultipartFile file, String path, String fileName) {
         return upload2Minio(file.getInputStream(), file.getSize(), path, fileName, file.getContentType());
     }
 

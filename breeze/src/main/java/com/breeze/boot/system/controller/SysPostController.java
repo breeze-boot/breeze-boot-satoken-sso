@@ -79,14 +79,14 @@ public class SysPostController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param post 平台实体入参
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:post:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:post:create')")
     @BreezeSysLog(description = "岗位信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysPost post) {
         return Result.ok(this.sysPostService.save(post));

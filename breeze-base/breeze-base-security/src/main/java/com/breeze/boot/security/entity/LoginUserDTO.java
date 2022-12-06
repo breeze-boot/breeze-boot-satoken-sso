@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 用户的扩展信息DTO redis存储实体
+ *
  * @author gaoweixuan
  * @date 2022-01-28
  */
@@ -128,6 +130,6 @@ public class LoginUserDTO implements Serializable {
     /**
      * 数据权限
      */
-    private List<DataPermissionDTO> permissions;
+    private List<DataPermissionDTO> dataPermissions;
 
 }

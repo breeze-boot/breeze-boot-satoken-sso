@@ -79,14 +79,14 @@ public class SysMsgController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param msg 消息
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:msg:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:msg:create')")
     @BreezeSysLog(description = "消息信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysMsg msg) {
         return Result.ok(this.sysMsgService.save(msg));

@@ -80,14 +80,14 @@ public class SysTenantController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param tenant 平台实体入参
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:tenant:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:tenant:create')")
     @BreezeSysLog(description = "租户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysTenant tenant) {
         return Result.ok(this.sysTenantService.save(tenant));

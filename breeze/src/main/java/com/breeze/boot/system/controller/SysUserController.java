@@ -96,14 +96,14 @@ public class SysUserController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param sysUser 系统用户
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:user:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:user:create')")
     @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysUser sysUser) {
         return sysUserService.saveUser(sysUser);
@@ -131,7 +131,7 @@ public class SysUserController {
      */
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
-    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
+    @PreAuthorize("hasAnyAuthority('sys:user:resetPass')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
     public Result<Boolean> resetPass(@Validated @RequestBody UserResetPasswordDTO userResetPassword) {
         return Result.ok(sysUserService.resetPass(userResetPassword));
@@ -140,7 +140,7 @@ public class SysUserController {
     /**
      * 开启关闭锁定
      *
-     * @param openDTO 打开dto
+     * @param openDTO 用户开关 DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户锁定开关")
@@ -159,7 +159,7 @@ public class SysUserController {
      */
     @Operation(summary = "用户分配角色")
     @PutMapping("/userAddRole")
-    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
+    @PreAuthorize("hasAnyAuthority('sys:user:userSetRole')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
     public Result<Boolean> userAddRole(@Validated @RequestBody UserRolesDTO userRolesDTO) {
         return sysUserService.userAddRole(userRolesDTO);

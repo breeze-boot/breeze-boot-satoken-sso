@@ -42,19 +42,19 @@ public class SysDataPermissionDTO implements Serializable {
      * 权限名称
      */
     @Schema(description = "权限名称")
-    private String permissionName;
+    private String dataPermissionName;
 
     /**
      * 权限编码
      */
     @Schema(description = "权限编码")
-    private String permissionCode;
+    private String dataPermissionCode;
 
     /**
      * 权限类型
      */
     @Schema(description = "权限类型")
-    private String permissionType;
+    private String dataPermissionType;
 
     /**
      * 操作符

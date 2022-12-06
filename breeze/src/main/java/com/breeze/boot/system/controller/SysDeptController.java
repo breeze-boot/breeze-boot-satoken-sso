@@ -79,14 +79,14 @@ public class SysDeptController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param sysDept 部门实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:dept:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:dept:create')")
     @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysDept sysDept) {
         return Result.ok(sysDeptService.save(sysDept));

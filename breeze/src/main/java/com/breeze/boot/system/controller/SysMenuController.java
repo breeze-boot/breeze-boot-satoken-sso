@@ -103,14 +103,14 @@ public class SysMenuController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param sysMenu 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:menu:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:menu:create')")
     @BreezeSysLog(description = "菜单信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysMenu sysMenu) {
         return this.sysMenuService.saveMenu(sysMenu);

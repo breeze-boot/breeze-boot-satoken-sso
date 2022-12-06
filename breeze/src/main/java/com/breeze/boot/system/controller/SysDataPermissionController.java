@@ -80,14 +80,14 @@ public class SysDataPermissionController {
     }
 
     /**
-     * 保存
+     * 创建
      *
      * @param dataPermissionDTO 数据权限实体入参
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('sys:dataPermission:save')")
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('sys:dataPermission:create')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysDataPermissionDTO dataPermissionDTO) {
         return this.sysDataPermissionService.saveDataPermission(dataPermissionDTO);

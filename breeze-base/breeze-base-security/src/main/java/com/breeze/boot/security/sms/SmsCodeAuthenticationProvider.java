@@ -100,8 +100,8 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(SMS_NOT_FOUND_CODE);
         }
-        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUser -> {
-            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getPhone());
+        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUserDTO -> {
+            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUserDTO.getPhone());
             if (Objects.isNull(token)) {
                 log.debug("Failed to authenticate since no credentials provided");
                 throw new BadCredentialsException(this.messages

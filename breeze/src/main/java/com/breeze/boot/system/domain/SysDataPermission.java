@@ -44,19 +44,19 @@ public class SysDataPermission extends BaseModel<SysDataPermission> implements S
      * 数据权限名称
      */
     @Schema(description = "数据权限名称")
-    private String permissionName;
+    private String dataPermissionName;
 
     /**
      * 数据权限编码
      */
     @Schema(description = "数据权限编码")
-    private String permissionCode;
+    private String dataPermissionCode;
 
     /**
      * 数据权限标识
      */
     @Schema(description = "数据权限标识")
-    private String permissionType;
+    private String dataPermissionType;
 
     /**
      * 操作符
