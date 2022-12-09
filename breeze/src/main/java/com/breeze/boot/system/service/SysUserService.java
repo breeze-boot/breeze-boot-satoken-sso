@@ -25,6 +25,7 @@ import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.dto.UserSearchDTO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -108,10 +109,18 @@ public interface SysUserService extends IService<SysUser> {
     SysUser registerUser(SysUser sysUser);
 
     /**
-     * 用户通过部门id列表
+     * 查询用户通过部门id
      *
-     * @param deptIds 部门id
+     * @param deptIds 部门IDS
      * @return {@link List}<{@link SysUser}>
      */
     List<SysUser> listUserByDeptId(List<Long> deptIds);
+
+    /**
+     * 导出
+     *
+     * @param response 响应
+     */
+    void export(HttpServletResponse response);
+
 }

@@ -36,6 +36,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -84,15 +85,26 @@ public class SysUserController {
     }
 
     /**
-     * 用户通过部门id列表
+     * 查询用户通过部门id
      *
      * @param deptIds 部门id
      * @return {@link Result}<{@link List}<{@link SysUser}>>
      */
-    @Operation(summary = "用户通过部门id列表")
+    @Operation(summary = "查询用户通过部门id")
     @PostMapping("/listUserByDeptId")
     public Result<List<SysUser>> listUserByDeptId(@RequestBody List<Long> deptIds) {
         return Result.ok(this.sysUserService.listUserByDeptId(deptIds));
+    }
+
+    /**
+     * 导出
+     *
+     * @param response 响应
+     */
+    @Operation(summary = "导出")
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) {
+        this.sysUserService.export(response);
     }
 
     /**

@@ -22,6 +22,7 @@ import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.mapper.SysDictItemMapper;
 import com.breeze.boot.system.service.SysDictItemService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  * @date 2022-09-02
  */
 @Service
-public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
+public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService, InitializingBean {
 
     /**
      * 字典列表项
@@ -61,4 +62,9 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
         return Result.ok(resultMap);
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        //   List<Map<String, Object>> dictItemListMap = this.baseMapper.listDictByCode(Lists.newArrayList());
+        //  Map<String, List<Map<String, Object>>> resultMap = dictItemListMap.stream().collect(Collectors.groupingBy(dict -> (String) dict.get("dictCode")));
+    }
 }

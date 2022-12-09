@@ -18,17 +18,14 @@ package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
-import com.breeze.boot.security.config.JwtConfiguration;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
-import com.breeze.boot.security.entity.*;
+import com.breeze.boot.security.entity.EmailLoginBody;
+import com.breeze.boot.security.entity.SmsLoginBody;
+import com.breeze.boot.security.entity.UserLoginBody;
+import com.breeze.boot.security.entity.WxLoginBody;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationToken;
 import com.breeze.boot.security.wx.WxCodeAuthenticationToken;
-import com.breeze.boot.system.dto.WxLoginDTO;
-import com.google.common.collect.Maps;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
+import com.breeze.boot.system.service.impl.UserTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,18 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 登录控制器
@@ -59,15 +49,9 @@ import java.util.stream.Collectors;
 @RestController
 @NoAuthentication
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/jwt")
-@Tag(name = "jwt登录", description = "LoginController")
+@RequestMapping("/breeze")
+@Tag(name = "登录", description = "LoginController")
 public class LoginController {
-
-    /**
-     * jwt配置
-     */
-    @Autowired
-    private JwtConfiguration jwtConfiguration;
 
     /**
      * 身份验证管理器
@@ -76,90 +60,70 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     /**
+     * 用户令牌服务
+     */
+    @Autowired
+    private UserTokenService userTokenService;
+
+    /**
      * 用户名登录
      *
      * @param userLoginBody 登录
-     * @return {@link Result}
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@Validated @RequestBody UserLoginBody userLoginBody) {
-        Instant now = Instant.now();
-        // 用户验证
-        long expiry = 36000L;
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(userLoginBody.getUsername(), userLoginBody.getPassword());
-        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(usernamePasswordAuthenticationToken)));
+        return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(usernamePasswordAuthenticationToken)));
     }
 
     /**
      * 手机登录
      *
      * @param smsLoginBody 手机登录
-     * @return {@link Result}
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @PostMapping("/sms")
     @Operation(summary = "手机登录")
     public Result<Map<String, Object>> sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
-        Instant now = Instant.now();
-        // 用户验证
-        long expiry = 36000L;
         SmsCodeAuthenticationToken smsCodeAuthenticationToken = SmsCodeAuthenticationToken.unauthenticated(smsLoginBody.getPhone(), smsLoginBody.getCode());
-        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(smsCodeAuthenticationToken)));
+        return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(smsCodeAuthenticationToken)));
     }
 
     /**
      * 用户邮箱登录
      *
      * @param emailLoginBody 登录
-     * @return {@link Result}
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "邮箱登录")
     @PostMapping("/email")
     public Result<Map<String, Object>> email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
-        Instant now = Instant.now();
-        // 用户验证
-        long expiry = 36000L;
         EmailCodeAuthenticationToken emailCodeAuthenticationToken = EmailCodeAuthenticationToken.unauthenticated(emailLoginBody.getEmail(), emailLoginBody.getCode());
-        return Result.ok(this.createJwtToken(now, expiry, authenticationManager.authenticate(emailCodeAuthenticationToken)));
-    }
-
-    private Map<String, Object> createJwtToken(Instant now, long expiry, Authentication authentication) {
-        CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
-        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
-        LoginUserDTO loginUserDTO = currentLoginUser.getLoginUserDTO();
-        JWTClaimsSet claims = new JWTClaimsSet.Builder()
-                .issuer("self")
-                .issueTime(new Date(now.toEpochMilli()))
-                .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
-                .subject(authentication.getName())
-                .claim("userId", loginUserDTO.getId())
-                .claim("tenantId", loginUserDTO.getTenantId())
-                .claim("username", loginUserDTO.getUsername())
-                .claim("userCode", loginUserDTO.getUserCode())
-                .claim("scope", scope)
-                .build();
-        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
-        SignedJWT signedJwt = new SignedJWT(header, claims);
-        Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("user_info", loginUserDTO);
-        resultMap.put("access_token", jwtConfiguration.sign(signedJwt).serialize());
-        return resultMap;
+        return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(emailCodeAuthenticationToken)));
     }
 
     /**
-     * wx登录
+     * 微信登录
      *
-     * @param wxLoginDTO wx登录dto
-     * @return {@link Map}<{@link String}, {@link Object}>
+     * @param wxLoginBody 微信登录参数
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @PostMapping("/wxLogin")
-    public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginDTO wxLoginDTO) {
-        Map<String, Object> resultMap = Maps.newHashMap();
-        // 用户验证
-        long expiry = 36000L;
-        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginDTO.getCode(), "");
-        Instant now = Instant.now();
-        resultMap.putAll(this.createJwtToken(now, expiry, authenticationManager.authenticate(wxCodeAuthenticationToken)));
-        return Result.ok(resultMap);
+    public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginBody wxLoginBody) {
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginBody.getCode(), "");
+        return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(wxCodeAuthenticationToken)));
+    }
+
+    /**
+     * 登出
+     *
+     * @param username 用户名
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    @GetMapping("/logout")
+    public Result<Boolean> logout(@RequestParam String username, HttpServletRequest request) {
+        return this.userTokenService.logout(username, request);
     }
 
 }

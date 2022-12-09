@@ -17,22 +17,30 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.config.JwtConfiguration;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.LoginUserDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 用户令牌服务
@@ -42,6 +50,12 @@ import java.util.Set;
  */
 @Service
 public class UserTokenService {
+
+    /**
+     * jwt配置
+     */
+    @Autowired
+    private JwtConfiguration jwtConfiguration;
 
     /**
      * 用户令牌缓存服务
@@ -148,8 +162,48 @@ public class UserTokenService {
                 authorities);
     }
 
+    /**
+     * 获得权限列表
+     *
+     * @param auth        身份验证
+     * @param authorities 当局
+     */
     private void getAuthorityList(Set<String> auth, List<GrantedAuthority> authorities) {
         authorities.addAll(AuthorityUtils.createAuthorityList(auth.toArray(new String[0])));
     }
 
+    /**
+     * 创建jwt牌
+     *
+     * @param expiry         到期
+     * @param authentication 身份验证
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    public Map<String, Object> createJwtToken(long expiry, Authentication authentication) {
+        Instant now = Instant.now();
+        CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
+        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        LoginUserDTO loginUserDTO = currentLoginUser.getLoginUserDTO();
+        JWTClaimsSet claims = new JWTClaimsSet.Builder()
+                .issuer("self")
+                .issueTime(new Date(now.toEpochMilli()))
+                .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
+                .subject(authentication.getName())
+                .claim("userId", loginUserDTO.getId())
+                .claim("tenantId", loginUserDTO.getTenantId())
+                .claim("username", loginUserDTO.getUsername())
+                .claim("userCode", loginUserDTO.getUserCode())
+                .claim("scope", scope)
+                .build();
+        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
+        SignedJWT signedJwt = new SignedJWT(header, claims);
+        Map<String, Object> resultMap = Maps.newHashMap();
+        resultMap.put("user_info", loginUserDTO);
+        resultMap.put("access_token", jwtConfiguration.sign(signedJwt).serialize());
+        return resultMap;
+    }
+
+    public Result<Boolean> logout(String username, HttpServletRequest request) {
+        return Result.ok(this.userTokenCacheService.clearUserInfo(username, request));
+    }
 }

@@ -52,4 +52,11 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      */
     List<SysUser> listUserByDeptId(@Param("deptIds") List<Long> deptIds);
 
+    /**
+     * 查出所有用户
+     *
+     * @return {@link List}<{@link SysUser}>
+     */
+    List<SysUser> listAllUser();
+
 }

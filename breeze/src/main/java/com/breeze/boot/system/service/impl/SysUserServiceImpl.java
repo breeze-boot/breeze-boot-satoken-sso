@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.ex.AccessException;
 import com.breeze.boot.security.utils.SecurityUtils;
@@ -43,6 +44,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -270,9 +272,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return user;
     }
 
+    /**
+     * 查询用户通过部门id
+     *
+     * @param deptIds 部门IDS
+     * @return {@link List}<{@link SysUser}>
+     */
     @Override
     public List<SysUser> listUserByDeptId(List<Long> deptIds) {
         return this.baseMapper.listUserByDeptId(deptIds);
+    }
+
+    /**
+     * 导出
+     *
+     * @param response 响应
+     */
+    @Override
+    public void export(HttpServletResponse response) {
+        List<SysUser> userList = this.baseMapper.listAllUser();
+        try {
+            EasyExcelExport.export(response, "用户数据", "用户数据", userList, SysUser.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

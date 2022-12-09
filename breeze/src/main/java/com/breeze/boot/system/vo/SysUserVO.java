@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.system.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -22,10 +22,7 @@ import com.alibaba.excel.annotation.write.style.*;
 import com.alibaba.excel.enums.poi.BorderStyleEnum;
 import com.alibaba.excel.enums.poi.HorizontalAlignmentEnum;
 import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.config.DictConverter;
-import com.breeze.boot.core.entity.BaseModel;
+import com.breeze.boot.system.domain.SysRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -35,7 +32,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 系统用户实体
+ * 系统用户VO
  *
  * @author gaoweixuan
  * @date 2021-12-06 22:03:39
@@ -56,16 +53,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_user")
-@Schema(description = "系统用户实体")
-public class SysUser extends BaseModel<SysUser> implements Serializable {
+@Schema(description = "系统用户VO")
+public class SysUserVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户名
      */
-    @NotBlank(message = "用户名不可为空")
     @Schema(description = "用户名称")
     @ExcelProperty(value = "用户名称", index = 0)
     private String username;
@@ -93,13 +88,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     private String avatar;
 
     /**
-     * 用户密码
-     */
-    @ExcelIgnore
-    @Schema(description = "用户密码")
-    private String password;
-
-    /**
      * 岗位ID
      */
     @ExcelIgnore
@@ -109,7 +97,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     /**
      * 岗位名称
      */
-    @TableField(exist = false)
     @Schema(description = "岗位名称")
     @ExcelProperty(value = "岗位名称", index = 4)
     private String postName;
@@ -125,18 +112,15 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     /**
      * 部门名称
      */
-    @TableField(exist = false)
     @Schema(description = "部门名称")
     @ExcelProperty(value = "部门名称", index = 5)
     private String deptName;
-
 
     /**
      * 性别 0 女性 1 男性
      */
     @Schema(description = "性别 0 女性 1 男性")
-//    @ExcelProperty(value = "性别", index = 6)
-    @ExcelProperty(value = "创建人姓名", converter = DictConverter.class)
+    @ExcelProperty(value = "性别", index = 6)
     private Integer sex;
 
     /**
@@ -187,7 +171,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      * 查询用户详情返回使用
      */
     @ExcelIgnore
-    @TableField(exist = false)
     @Schema(description = "用户角色")
     private List<SysRole> sysRoles;
 
@@ -197,7 +180,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      * 查询用户详情返回使用
      */
     @ExcelIgnore
-    @TableField(exist = false)
     @Schema(description = "用户角色ID")
     private List<Long> roleIds;
 

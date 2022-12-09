@@ -14,42 +14,41 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.security.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.io.Serializable;
-
 /**
- * 系统租户实体
+ * 微信登录参数
  *
  * @author gaoweixuan
- * @date 2022-11-06
+ * @date 2022-11-09
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_tenant")
-@Schema(description = "系统租户实体")
-public class SysTenant extends BaseModel<SysTenant> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Schema(description = "微信登录参数")
+public class WxLoginBody {
 
     /**
-     * 租户名称
+     * 用户昵称
      */
-    @Schema(description = "租户名称")
-    private String tenantName;
+    @Schema(description = "用户昵称")
+    private String nickName;
 
     /**
-     * 租户编码
+     * 头像 url
      */
-    @Schema(description = "租户编码")
-    private String tenantCode;
+    @Schema(description = "头像地址")
+    private String avatarUrl;
+
+    /**
+     * code
+     */
+    @Schema(description = "code")
+    private String code;
 
 }

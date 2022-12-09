@@ -43,31 +43,37 @@ public class SysUserMsgSnapshot extends BaseModel<SysUserMsgSnapshot> implements
     /**
      * 消息ID
      */
+    @Schema(description = "消息ID")
     private Long msgId;
 
     /**
      * 消息标题
      */
+    @Schema(description = "消息标题")
     private String msgTitle;
 
     /**
      * 消息类型 0 通知 1 公告
      */
+    @Schema(description = "消息类型 0 通知 1 公告")
     private Integer msgType;
 
     /**
      * 消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息
      */
+    @Schema(description = "消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息")
     private String msgLevel;
 
     /**
      * 消息内容
      */
+    @Schema(description = "消息内容")
     private String content;
 
     /**
      * 部门ID
      */
+    @Schema(description = "部门ID")
     private Long deptId;
 
 }

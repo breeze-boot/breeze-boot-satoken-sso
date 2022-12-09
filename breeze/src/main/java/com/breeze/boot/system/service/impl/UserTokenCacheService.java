@@ -28,11 +28,15 @@ import com.breeze.boot.system.service.SysRoleService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 用户令牌服务impl
@@ -102,8 +106,14 @@ public class UserTokenCacheService {
         loginUserDTO.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
         // 用户的多个数据权限
         loginUserDTO.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
-        this.redisTemplate.opsForValue().set("sys:login_user:" + sysUser.getUsername(), loginUserDTO);
+        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUserDTO);
         return loginUserDTO;
     }
 
+    public Boolean clearUserInfo(String username, HttpServletRequest request) {
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        // 使用的无状态的JWT，使用黑名单机制退出登录
+        // this.redisTemplate.opsForValue().set(BLACK_JWT + username, authorization,36000L);
+        return this.redisTemplate.delete(LOGIN_USER + username);
+    }
 }

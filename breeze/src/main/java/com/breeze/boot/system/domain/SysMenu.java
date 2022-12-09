@@ -102,12 +102,6 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     @Schema(description = "组件路径")
     private String component;
 
-    /**
-     * 此菜单拥有的所有的权限
-     */
-    @Schema(description = "此菜单拥有的所有的权限")
-    @TableField(exist = false)
-    private List<String> permissions;
 
     /**
      * 权限标识
@@ -139,4 +133,10 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     @Schema(description = "顺序")
     private Integer sort;
 
+    /**
+     * 此菜单拥有的所有的权限
+     */
+    @Schema(description = "此菜单拥有的所有的权限")
+    @TableField(exist = false)
+    private List<String> permissions;
 }

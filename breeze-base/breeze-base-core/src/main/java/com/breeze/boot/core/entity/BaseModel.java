@@ -17,6 +17,8 @@
 package com.breeze.boot.core.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.converters.localdatetime.LocalDateTimeStringConverter;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -64,7 +66,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     private String deleteBy;
 
     /**
-     * createdBy
+     * 创建人
      */
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
@@ -72,7 +74,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     private String createBy;
 
     /**
-     * createdTime
+     * 创建人姓名
      */
     @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
@@ -83,9 +85,9 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ExcelIgnore
     @TableField(fill = FieldFill.INSERT)
     @Schema(hidden = true, description = "创建时间")
+    @ExcelProperty(value = "创建时间", converter = LocalDateTimeStringConverter.class)
     private LocalDateTime createTime;
 
     /**
@@ -97,8 +99,9 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     private String updateBy;
 
     /**
-     * 修改人
+     * 修改人姓名
      */
+    @ExcelIgnore
     @TableField(fill = FieldFill.UPDATE)
     @Schema(description = "修改人姓名", hidden = true)
     private String updateName;
@@ -106,6 +109,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改时间
      */
+    @ExcelIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @Schema(description = "修改时间", hidden = true)

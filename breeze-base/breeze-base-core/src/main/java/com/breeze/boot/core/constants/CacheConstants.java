@@ -29,4 +29,9 @@ public class CacheConstants {
      */
     public static final String LOGIN_USER = "sys:login_user";
 
+    /**
+     * 黑名单jwt
+     */
+    public static final String BLACK_JWT = "sys:black:jwt";
+
 }
