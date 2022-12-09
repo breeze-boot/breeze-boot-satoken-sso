@@ -74,7 +74,7 @@ public class SysDataPermission extends BaseModel<SysDataPermission> implements S
      * 权限
      */
     @Schema(description = "权限")
-    private String permissions;
+    private String dataPermissions;
 
     /**
      * 租户ID

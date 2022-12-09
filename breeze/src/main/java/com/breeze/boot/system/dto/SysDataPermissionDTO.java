@@ -66,12 +66,12 @@ public class SysDataPermissionDTO implements Serializable {
      * 权限
      */
     @Schema(description = "权限")
-    private List<String> permissions;
+    private List<String> dataPermissions;
 
     /**
      * diy权限
      */
     @Schema(description = "DIY权限")
-    private List<PermissionDiy> permissionDiy;
+    private List<PermissionDiy> dataPermissionDiy;
 
 }

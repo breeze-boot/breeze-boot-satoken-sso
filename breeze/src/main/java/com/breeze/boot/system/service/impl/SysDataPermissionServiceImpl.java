@@ -17,6 +17,7 @@
 package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.StrUtil;
@@ -81,25 +82,31 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
     public Result<Boolean> saveDataPermission(SysDataPermissionDTO dataPermissionDTO) {
         SysDataPermission sysDataPermission = SysDataPermission.builder().build();
         BeanUtil.copyProperties(dataPermissionDTO, sysDataPermission);
-        sysDataPermission.setPermissions(String.join(",", dataPermissionDTO.getPermissions()));
-        if (StrUtil.equals(dataPermissionDTO.getDataPermissionType(), "DIY")) {
-            // 自定义
-            List<PermissionDiy> divList = dataPermissionDTO.getPermissionDiy();
-            StrBuilder strBuilder = new StrBuilder();
-            divList.forEach(div -> strBuilder
-                    .append(" OR ( a.")
-                    .append(div.getColumn())
-                    .append(" ")
-                    .append(div.getCompare())
-                    .append(" ")
-                    .append(div.getConditions())
-                    .append(" ) "));
-            String sql = strBuilder.toString();
-            sysDataPermission.setStrSql(sql.replaceFirst("OR", ""));
-        } else if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", dataPermissionDTO.getDataPermissionType())) {
+        if (CollUtil.isNotEmpty(dataPermissionDTO.getDataPermissions())) {
+            sysDataPermission.setDataPermissions(String.join(",", dataPermissionDTO.getDataPermissions()));
+        }
+        // 自定义
+        List<PermissionDiy> divList = dataPermissionDTO.getDataPermissionDiy();
+        StrBuilder strBuilder = new StrBuilder(" OR ");
+        if (CollUtil.isNotEmpty(divList)) {
+            strBuilder.append(" ( ");
+            divList.forEach(div ->
+                    strBuilder.append(div.getOperator())
+                            .append(" ( a.")
+                            .append(div.getColumn())
+                            .append(" ")
+                            .append(div.getCompare())
+                            .append(" ")
+                            .append(div.getConditions())
+                            .append(" ) "));
+            strBuilder.append(" ) ");
+        }
+        String sql = strBuilder.toString();
+        sysDataPermission.setStrSql(sql);
+        if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", dataPermissionDTO.getDataPermissionType())) {
             // 本级部门及其以下部门
-            List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getPermissions()));
-            sysDataPermission.setPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));
+            List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getDataPermissions()));
+            sysDataPermission.setDataPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
         return Result.ok(this.save(sysDataPermission));
     }

@@ -51,4 +51,10 @@ public class PermissionDiy {
     @Schema(description = "比较")
     private String compare;
 
+    /**
+     * 运算符
+     */
+    @Schema(description = "运算符")
+    private String operator;
+
 }

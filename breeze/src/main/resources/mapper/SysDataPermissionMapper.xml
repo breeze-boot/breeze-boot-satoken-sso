@@ -11,7 +11,7 @@
         <result property="dataPermissionType" column="data_permission_type" jdbcType="VARCHAR"/>
         <result property="operator" column="operator" jdbcType="VARCHAR"/>
         <result property="strSql" column="str_sql" jdbcType="VARCHAR"/>
-        <result property="permissions" column="permissions" jdbcType="VARCHAR"/>
+        <result property="dataPermissions" column="data_permissions" jdbcType="VARCHAR"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -31,7 +31,7 @@
         a.`data_permission_type`,
         a.operator,
         a.str_sql,
-        a.permissions
+        a.data_permissions
         FROM
         sys_data_permission AS a
         <where>

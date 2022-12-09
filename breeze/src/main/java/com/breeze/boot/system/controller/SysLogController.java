@@ -55,7 +55,7 @@ public class SysLogController {
      * 列表
      *
      * @param logSearchDTO 日志搜索DTO
-     * @return {@link Result}<{@link Page}<{@link BreezeSysLog}>>
+     * @return {@link Result}<{@link Page}<{@link SysLog}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
