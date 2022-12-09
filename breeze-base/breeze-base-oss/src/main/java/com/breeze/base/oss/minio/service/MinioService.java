@@ -17,6 +17,7 @@
 package com.breeze.base.oss.minio.service;
 
 import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.base.oss.dto.FileBO;
 import com.breeze.base.oss.minio.config.BreezeMinioProperties;
@@ -400,11 +401,7 @@ public class MinioService {
             response.setContentType("image/jpeg");
             response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
             OutputStream os = response.getOutputStream();
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = objectResponse.read(buf)) != -1) {
-                os.write(buf, 0, len);
-            }
+            IoUtil.copy(objectResponse, os);
         } catch (Exception e) {
             log.error("下载失败", e);
         }

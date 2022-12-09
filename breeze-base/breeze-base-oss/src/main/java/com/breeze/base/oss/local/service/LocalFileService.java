@@ -16,6 +16,7 @@
 
 package com.breeze.base.oss.local.service;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.base.oss.dto.FileBO;
@@ -123,14 +124,9 @@ public class LocalFileService {
         response.setCharacterEncoding("utf-8");
         response.setContentType("image/jpeg");
         response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
-        try (FileInputStream fis = new FileInputStream(file);
-             BufferedInputStream bis = new BufferedInputStream(fis)) {
+        try (FileInputStream fis = new FileInputStream(file)) {
             OutputStream os = response.getOutputStream();
-            int len;
-            byte[] buffer = new byte[1024];
-            while ((len = bis.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
+            IoUtil.copy(fis, os);
         } catch (Exception e) {
             log.error("下载失败", e);
         }
