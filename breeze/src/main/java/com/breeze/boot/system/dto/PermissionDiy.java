@@ -37,7 +37,7 @@ public class PermissionDiy {
      * 列
      */
     @Schema(description = "列")
-    private String column;
+    private String tableColumn;
 
     /**
      * 条件

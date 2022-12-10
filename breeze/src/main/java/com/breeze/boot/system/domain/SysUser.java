@@ -24,7 +24,6 @@ import com.alibaba.excel.enums.poi.HorizontalAlignmentEnum;
 import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.config.DictConverter;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -135,8 +134,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      * 性别 0 女性 1 男性
      */
     @Schema(description = "性别 0 女性 1 男性")
-//    @ExcelProperty(value = "性别", index = 6)
-    @ExcelProperty(value = "创建人姓名", converter = DictConverter.class)
+    @ExcelProperty(value = "性别", index = 6)
     private Integer sex;
 
     /**

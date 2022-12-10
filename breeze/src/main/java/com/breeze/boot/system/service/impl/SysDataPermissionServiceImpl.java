@@ -27,10 +27,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
+import com.breeze.boot.system.domain.SysDataPermissionCustom;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.dto.PermissionDiy;
 import com.breeze.boot.system.dto.SysDataPermissionDTO;
 import com.breeze.boot.system.mapper.SysDataPermissionMapper;
+import com.breeze.boot.system.service.SysDataPermissionCustomService;
 import com.breeze.boot.system.service.SysDataPermissionService;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysRoleDataPermissionService;
@@ -39,6 +41,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.constants.DataPermissionType.DEPT_AND_LOWER_LEVEL;
 
 /**
  * 系统数据权限服务 impl
@@ -54,6 +58,12 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
      */
     @Autowired
     private SysDeptService sysDeptService;
+
+    /**
+     * 系统数据权限自定义服务
+     */
+    @Autowired
+    private SysDataPermissionCustomService sysDataPermissionCustomService;
 
     /**
      * 系统角色数据权限服务
@@ -93,7 +103,7 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
             divList.forEach(div ->
                     strBuilder.append(div.getOperator())
                             .append(" ( a.")
-                            .append(div.getColumn())
+                            .append(div.getTableColumn())
                             .append(" ")
                             .append(div.getCompare())
                             .append(" ")
@@ -103,12 +113,22 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
         }
         String sql = strBuilder.toString();
         sysDataPermission.setStrSql(sql);
-        if (StrUtil.equals("DEPT_AND_LOWER_LEVEL", dataPermissionDTO.getDataPermissionType())) {
+        if (StrUtil.equals(DEPT_AND_LOWER_LEVEL, dataPermissionDTO.getDataPermissionType())) {
             // 本级部门及其以下部门
             List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getDataPermissions()));
             sysDataPermission.setDataPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
-        return Result.ok(this.save(sysDataPermission));
+        this.save(sysDataPermission);
+        if (StrUtil.isAllNotBlank(sql)) {
+            List<SysDataPermissionCustom> sysDataPermissionList = divList.stream().map(diy -> {
+                SysDataPermissionCustom permissionCustom = SysDataPermissionCustom.builder().build();
+                BeanUtil.copyProperties(diy, permissionCustom);
+                permissionCustom.setDataPermissionId(sysDataPermission.getId());
+                return permissionCustom;
+            }).collect(Collectors.toList());
+            this.sysDataPermissionCustomService.saveBatch(sysDataPermissionList);
+        }
+        return Result.ok();
     }
 
     /**

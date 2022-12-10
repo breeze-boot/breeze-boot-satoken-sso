@@ -26,7 +26,7 @@
         b.role_id,
         a.operator,
         a.`str_sql`,
-        a.permissions
+        a.data_permissions
         FROM
         sys_data_permission AS a
         LEFT JOIN sys_role_data_permission AS b ON a.id = b.data_permission_id

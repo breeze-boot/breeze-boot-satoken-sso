@@ -24,56 +24,45 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 系统文件实体
+ * 系统数据权限自定义
  *
- * @author gaoweixuan
- * @date 2022-09-02
+ * @author breeze
+ * @date 2022-12-10
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_file")
-@Schema(description = "系统文件实体")
-public class SysFile extends BaseModel<SysFile> implements Serializable {
+@TableName(value = "sys_data_permission_custom")
+@Schema(description = "系统数据权限自定义实体")
+public class SysDataPermissionCustom extends BaseModel<SysDataPermissionCustom> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 文件标题
+     * 数据权限ID
      */
-    @Schema(description = "文件标题")
-    private String title;
+    private Long dataPermissionId;
 
     /**
-     * 原文件名称
+     * 比较
      */
-    @Schema(description = "原文件名称")
-    private String originalFileName;
+    private String compare;
 
     /**
-     * 文件格式
+     * 字段名
      */
-    @Schema(description = "文件格式")
-    private String contentType;
+    private String tableColumn;
 
     /**
-     * 新文件名字
+     * 运算符号
      */
-    @Schema(description = "新文件名字")
-    private String newFileName;
+    private String operator;
 
     /**
-     * 路径
+     * 条件
      */
-    @Schema(description = "路径")
-    private String path;
-
-    /**
-     * 存储方式
-     */
-    @Schema(description = "存储方式 0 本地 1 minio")
-    private Integer ossStyle;
+    private String conditions;
 
 }
