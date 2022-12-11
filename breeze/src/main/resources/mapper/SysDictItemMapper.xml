@@ -8,7 +8,7 @@
         <id property="id" column="id" javaType="java.lang.Long"/>
         <result property="dictId" column="dict_id" javaType="java.lang.Long"/>
         <result property="value" column="value"/>
-        <result property="label" column="label"/>
+        <result property="key" column="key"/>
         <result property="sort" column="sort"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -24,7 +24,7 @@
         a.id,
         a.`dict_id`,
         a.`value`,
-        a.label,
+        a.`key`,
         a.sort
         FROM sys_dict_item AS a
         <where>
@@ -36,7 +36,7 @@
 
     <select id="listDictByCode" resultType="java.util.Map">
         SELECT
-        a.label,
+        a.key,
         a.`value`,
         b.dict_code as dictCode
         FROM sys_dict_item AS a

@@ -126,8 +126,8 @@ public class CommonController {
                     if (Objects.equals(menu.getId(), id)) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
-                    leafMap.put("label", menu.getTitle());
-                    leafMap.put("value", menu.getId());
+                    leafMap.put("value", menu.getTitle());
+                    leafMap.put("key", menu.getId());
                     treeNode.setExtra(leafMap);
                     return treeNode;
                 }
@@ -146,8 +146,8 @@ public class CommonController {
         List<SysPlatform> platformList = this.platformService.list();
         List<Map<String, Object>> collect = platformList.stream().map(sysPlatform -> {
             HashMap<String, Object> map = Maps.newHashMap();
-            map.put("value", sysPlatform.getId());
-            map.put("label", sysPlatform.getPlatformName());
+            map.put("key", sysPlatform.getId());
+            map.put("value", sysPlatform.getPlatformName());
             return map;
         }).collect(Collectors.toList());
         return Result.ok(collect);
@@ -186,8 +186,8 @@ public class CommonController {
     public Result<List<Map<String, Object>>> selectRole() {
         return Result.ok(this.roleService.list().stream().map(sysRole -> {
             Map<@Nullable String, @Nullable Object> roleMap = Maps.newHashMap();
-            roleMap.put("value", sysRole.getId());
-            roleMap.put("label", sysRole.getRoleName());
+            roleMap.put("key", sysRole.getId());
+            roleMap.put("value", sysRole.getRoleName());
             return roleMap;
         }).collect(Collectors.toList()));
     }
@@ -203,8 +203,8 @@ public class CommonController {
     public Result<List<Map<String, Object>>> selectTenant() {
         return Result.ok(this.tenantService.list().stream().map(tanent -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", tanent.getId());
-            tenantMap.put("label", tanent.getTenantName());
+            tenantMap.put("key", tanent.getId());
+            tenantMap.put("value", tanent.getTenantName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }
@@ -219,8 +219,8 @@ public class CommonController {
     public Result<List<Map<String, Object>>> selectPost() {
         return Result.ok(this.postService.list().stream().map(post -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", post.getId());
-            tenantMap.put("label", post.getPostName());
+            tenantMap.put("key", post.getId());
+            tenantMap.put("value", post.getPostName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }

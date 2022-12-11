@@ -25,6 +25,7 @@ import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -156,6 +157,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "微信OpenID")
     @ExcelProperty(value = "微信OpenID", index = 9)
+    @JsonIgnore
     private String openId;
 
     /**

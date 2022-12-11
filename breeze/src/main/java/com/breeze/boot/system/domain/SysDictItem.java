@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,16 +53,18 @@ public class SysDictItem extends BaseModel<SysDictItem> implements Serializable 
     /**
      * 字典项的值
      */
-    @NotBlank(message = "value不可为空")
+    @NotBlank(message = "字典项的值不可为空")
     @Schema(description = "字典项的值")
+    @TableField("`value`")
     private String value;
 
     /**
      * 字典项的名称
      */
-    @NotBlank(message = "label不可为空")
-    @Schema(description = "字典项名称")
-    private String label;
+    @NotBlank(message = "key不可为空")
+    @Schema(description = "字典项KEY")
+    @TableField("`key`")
+    private String key;
 
     /**
      * 排序

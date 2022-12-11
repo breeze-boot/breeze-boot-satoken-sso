@@ -78,8 +78,8 @@ public class MateDataServiceImpl implements MateService {
             ResultSet rs = metaData.getTables(connection.getCatalog(), null, "%", new String[]{"table"});
             while (rs.next()) {
                 Map<String, Object> selectMap = Maps.newHashMap();
+                selectMap.put("key", rs.getString("TABLE_NAME"));
                 selectMap.put("value", rs.getString("TABLE_NAME"));
-                selectMap.put("label", rs.getString("TABLE_NAME"));
                 tableList.add(selectMap);
             }
         } catch (SQLException e) {
@@ -91,8 +91,8 @@ public class MateDataServiceImpl implements MateService {
     /**
      * 字段下拉框
      *
-     * @param tableName
-     * @return {@link List}<{@link String}>
+     * @param tableName 表名
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Override
     public List<Map<String, Object>> selectColumn(String tableName) {
@@ -102,8 +102,8 @@ public class MateDataServiceImpl implements MateService {
             ResultSet rs = metaData.getColumns(connection.getCatalog(), null, tableName, null);
             while (rs.next()) {
                 Map<String, Object> selectMap = Maps.newHashMap();
+                selectMap.put("key", rs.getString("COLUMN_NAME"));
                 selectMap.put("value", rs.getString("COLUMN_NAME"));
-                selectMap.put("label", rs.getString("COLUMN_NAME"));
                 columnList.add(selectMap);
             }
         } catch (SQLException e) {
