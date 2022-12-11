@@ -86,11 +86,13 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      */
     @SneakyThrows
     @Override
-    public Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
+    public Result<String> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         MultipartFile file = fileDTO.getFile();
         FileBO fileBO = null;
         try {
-            fileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file, String.valueOf(LocalDate.now().getDayOfMonth()), UUID.randomUUID().toString().replace("-", ""));
+            fileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file,
+                    String.valueOf(LocalDate.now().getDayOfMonth()),
+                    UUID.randomUUID().toString().replace("-", ""));
         } catch (Exception ex) {
             log.error("", ex);
         }
@@ -104,7 +106,8 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                 .path(fileBO.getPath())
                 .ossStyle(fileDTO.getOssStyle())
                 .build();
-        return Result.ok(this.save(sysFile));
+        this.save(sysFile);
+        return Result.ok(this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName()));
     }
 
     /**

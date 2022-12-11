@@ -51,7 +51,7 @@ public interface SysFileService extends IService<SysFile> {
      * @param response 响应
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
+    Result<String> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 预览
