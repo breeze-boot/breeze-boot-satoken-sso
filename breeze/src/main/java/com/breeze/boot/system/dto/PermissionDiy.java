@@ -32,6 +32,13 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "系统数据权限自定义添加DTO")
 public class PermissionDiy {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 系统数据权限自定义ID
+     */
+    @Schema(description = "系统数据权限自定义ID")
+    private String id;
 
     /**
      * 列

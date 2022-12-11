@@ -67,19 +67,6 @@ public class SysDataPermissionController {
     }
 
     /**
-     * 详情
-     *
-     * @param id id
-     * @return {@link Result}<{@link SysDataPermission}>
-     */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dataPermission:info')")
-    public Result<SysDataPermission> info(@PathVariable("id") Long id) {
-        return Result.ok(this.sysDataPermissionService.getById(id));
-    }
-
-    /**
      * 创建
      *
      * @param dataPermissionDTO 数据权限实体入参
@@ -96,15 +83,15 @@ public class SysDataPermissionController {
     /**
      * 修改
      *
-     * @param sysDataPermission 数据权限实体
+     * @param dataPermissionDTO 数据权限DTO
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:dataPermission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysDataPermission sysDataPermission) {
-        return Result.ok(this.sysDataPermissionService.updateById(sysDataPermission));
+    public Result<Boolean> modify(@Validated @RequestBody SysDataPermissionDTO dataPermissionDTO) {
+        return this.sysDataPermissionService.modifyDataPermission(dataPermissionDTO);
     }
 
     /**

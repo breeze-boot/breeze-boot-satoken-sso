@@ -57,4 +57,12 @@ public interface SysDataPermissionService extends IService<SysDataPermission> {
      */
     Result<Boolean> removePermissionByIds(List<Long> ids);
 
+    /**
+     * 修改数据权限
+     *
+     * @param dataPermissionDTO 数据权限dto
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> modifyDataPermission(SysDataPermissionDTO dataPermissionDTO);
+
 }

@@ -21,4 +21,25 @@
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
+
+    <select id="listDataPermissionCustom" resultType="com.breeze.boot.system.domain.SysDataPermissionCustom">
+        SELECT a.id,
+               a.data_permission_id,
+               a.compare,
+               a.table_column,
+               a.operator,
+               a.conditions,
+               a.create_by,
+               a.create_name,
+               a.create_time,
+               a.update_by,
+               a.update_name,
+               a.update_time,
+               a.is_delete,
+               a.delete_by,
+               a.tenant_id
+        FROM sys_data_permission_custom AS a
+        WHERE a.is_delete = 0
+          AND a.data_permission_id = #{dataPermissionId}
+    </select>
 </mapper>

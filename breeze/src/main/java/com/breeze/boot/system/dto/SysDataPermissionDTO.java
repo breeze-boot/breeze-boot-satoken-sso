@@ -39,6 +39,12 @@ public class SysDataPermissionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 权限ID
+     */
+    @Schema(description = "权限ID")
+    private String id;
+
+    /**
      * 权限名称
      */
     @Schema(description = "权限名称")
@@ -72,6 +78,6 @@ public class SysDataPermissionDTO implements Serializable {
      * diy权限
      */
     @Schema(description = "DIY权限")
-    private List<PermissionDiy> dataPermissionDiy;
+    private List<PermissionDiy> dataPermissionTableSqlDiyData;
 
 }

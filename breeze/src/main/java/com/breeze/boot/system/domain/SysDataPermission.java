@@ -16,12 +16,15 @@
 
 package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统数据权限实体
@@ -68,6 +71,7 @@ public class SysDataPermission extends BaseModel<SysDataPermission> implements S
      * sql
      */
     @Schema(description = "自定义SQL")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String strSql;
 
     /**
@@ -82,4 +86,10 @@ public class SysDataPermission extends BaseModel<SysDataPermission> implements S
     @Schema(description = "租户ID")
     private Long tenantId;
 
+    /**
+     * 系统数据权限自定义列表
+     */
+    @TableField(exist = false)
+    @Schema(description = "系统数据权限自定义列表")
+    private List<SysDataPermissionCustom> dataPermissionTableSqlDiyData;
 }

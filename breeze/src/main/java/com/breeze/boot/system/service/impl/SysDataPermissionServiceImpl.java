@@ -96,10 +96,10 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
             sysDataPermission.setDataPermissions(String.join(",", dataPermissionDTO.getDataPermissions()));
         }
         // 自定义
-        List<PermissionDiy> divList = dataPermissionDTO.getDataPermissionDiy();
-        StrBuilder strBuilder = new StrBuilder(" OR ");
+        List<PermissionDiy> divList = dataPermissionDTO.getDataPermissionTableSqlDiyData();
+        StrBuilder strBuilder = new StrBuilder();
         if (CollUtil.isNotEmpty(divList)) {
-            strBuilder.append(" ( ");
+            strBuilder.append(" OR ( ");
             divList.forEach(div ->
                     strBuilder.append(div.getOperator())
                             .append(" ( a.")
@@ -144,11 +144,57 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
         if (CollectionUtil.isNotEmpty(rolePermissionList)) {
             return Result.warning(Boolean.FALSE, "该数据权限已被使用");
         }
+        this.sysDataPermissionCustomService.removeBatchByIds(ids);
         return Result.ok(this.removeBatchByIds(ids));
     }
 
+    @Override
+    public Result<Boolean> modifyDataPermission(SysDataPermissionDTO dataPermissionDTO) {
+        SysDataPermission sysDataPermission = SysDataPermission.builder().build();
+        BeanUtil.copyProperties(dataPermissionDTO, sysDataPermission);
+        if (CollUtil.isNotEmpty(dataPermissionDTO.getDataPermissions())) {
+            sysDataPermission.setDataPermissions(String.join(",", dataPermissionDTO.getDataPermissions()));
+        }
+        // 自定义
+        List<PermissionDiy> divList = dataPermissionDTO.getDataPermissionTableSqlDiyData();
+        StrBuilder strBuilder = new StrBuilder();
+        String sql = "";
+        if (CollUtil.isNotEmpty(divList)) {
+            strBuilder.append(" OR ( ");
+            divList.forEach(div ->
+                    strBuilder.append(div.getOperator())
+                            .append(" ( a.")
+                            .append(div.getTableColumn())
+                            .append(" ")
+                            .append(div.getCompare())
+                            .append(" ")
+                            .append(div.getConditions())
+                            .append(" ) "));
+            strBuilder.append(" ) ");
+            sql = strBuilder.toString();
+            sysDataPermission.setStrSql(sql);
+        } else {
+            sysDataPermission.setStrSql("");
+        }
+        if (StrUtil.equals(DEPT_AND_LOWER_LEVEL, dataPermissionDTO.getDataPermissionType())) {
+            // 本级部门及其以下部门
+            List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getDataPermissions()));
+            sysDataPermission.setDataPermissions(selectDeptId.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
+        this.updateById(sysDataPermission);
+
+        List<SysDataPermissionCustom> customs = this.sysDataPermissionCustomService.list(Wrappers.<SysDataPermissionCustom>lambdaQuery().eq(SysDataPermissionCustom::getDataPermissionId, dataPermissionDTO.getId()));
+        this.sysDataPermissionCustomService.removeBatchByIds(customs.stream().map(SysDataPermissionCustom::getId).collect(Collectors.toList()));
+        if (StrUtil.isAllNotBlank(sql)) {
+            List<SysDataPermissionCustom> sysDataPermissionList = divList.stream().map(diy -> {
+                SysDataPermissionCustom permissionCustom = SysDataPermissionCustom.builder().build();
+                BeanUtil.copyProperties(diy, permissionCustom);
+                permissionCustom.setDataPermissionId(sysDataPermission.getId());
+                permissionCustom.setId(null);
+                return permissionCustom;
+            }).collect(Collectors.toList());
+            this.sysDataPermissionCustomService.saveBatch(sysDataPermissionList);
+        }
+        return Result.ok();
+    }
 }
-
-
-
-

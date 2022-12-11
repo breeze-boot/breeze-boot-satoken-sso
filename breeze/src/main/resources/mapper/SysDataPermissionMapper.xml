@@ -21,9 +21,14 @@
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
         <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
+        <collection property="dataPermissionTableSqlDiyData" javaType="java.util.List"
+                    ofType="com.breeze.boot.system.domain.SysDictItem"
+                    column="{dataPermissionId=id}"
+                    select="com.breeze.boot.system.mapper.SysDataPermissionCustomMapper.listDataPermissionCustom">
+        </collection>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.system.domain.SysDataPermission">
+    <select id="listPage" resultMap="BaseResultMap">
         SELECT
         a.id,
         a.`data_permission_name`,

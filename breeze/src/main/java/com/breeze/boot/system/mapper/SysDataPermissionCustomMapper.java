@@ -19,6 +19,9 @@ package com.breeze.boot.system.mapper;
 import com.breeze.boot.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysDataPermissionCustom;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统数据权限自定义映射器
@@ -29,8 +32,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysDataPermissionCustomMapper extends BreezeBaseMapper<SysDataPermissionCustom> {
 
+    /**
+     * 列表数据权限自定义
+     *
+     * @param dataPermissionId 数据权限id
+     * @return {@link List}<{@link SysDataPermissionCustom}>
+     */
+    List<SysDataPermissionCustom> listDataPermissionCustom(@Param("dataPermissionId") Long dataPermissionId);
+
 }
-
-
-
-
