@@ -28,7 +28,6 @@ import com.breeze.boot.system.service.SysRoleService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +110,7 @@ public class UserTokenCacheService {
     }
 
     public Boolean clearUserInfo(String username, HttpServletRequest request) {
-        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        // String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         // 使用的无状态的JWT，使用黑名单机制退出登录
         // this.redisTemplate.opsForValue().set(BLACK_JWT + username, authorization,36000L);
         return this.redisTemplate.delete(LOGIN_USER + username);

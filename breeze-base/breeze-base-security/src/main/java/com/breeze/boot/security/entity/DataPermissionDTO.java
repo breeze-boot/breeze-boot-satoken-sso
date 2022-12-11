@@ -62,6 +62,5 @@ public class DataPermissionDTO extends PageDTO {
     /**
      * 权限 部门ID
      */
-    private String permissions;
-
+    private String dataPermissions;
 }

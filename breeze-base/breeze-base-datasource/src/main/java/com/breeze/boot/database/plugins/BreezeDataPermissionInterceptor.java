@@ -162,45 +162,44 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
     @NotNull
     private String getSql(List<DataPermissionDTO> dataPermissionDTOList, DataPermission dataPermission) {
         StringBuilder sb = new StringBuilder();
-        String operator = "";
+        String operator = dataPermissionDTOList.get(0).getOperator();
+        String sql = "";
         sb.append(" WHERE ");
         for (DataPermissionDTO permission : dataPermissionDTOList) {
-            operator = permission.getOperator();
+            if (Objects.equals(permission.getDataPermissionType(), OWN)) {
+                // 没有自定义SQL
+                // create_by 字段
+                if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
+                    continue;
+                }
+                sb.append(String.format("%s a.%s = '", permission.getOperator(), dataPermission.scope()));
+                sb.append(SecurityUtils.getUserCode());
+            } else if (Objects.equals(permission.getDataPermissionType(), ALL)) {
+                // 没有自定义SQL
+                return sb.toString().replaceFirst("WHERE", "");
+            } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
+                String deptIds = permission.getDataPermissions();
+                // deptId 字段
+                if (StrUtil.isAllBlank(deptIds)) {
+                    continue;
+                }
+                sb.append(String.format("%s a.%s IN ( ", permission.getOperator(), dataPermission.scope()));
+                sb.append(deptIds);
+                sb.append(" ) ");
+            }
             // 自定义sql
-            String sql = permission.getStrSql();
+            sql = permission.getStrSql();
             if (StrUtil.isAllNotBlank(sql)) {
                 sb.append(permission.getOperator());
                 sb.append(" ( ");
                 sb.append(sql);
                 sb.append(" ) ");
             }
-            if (Objects.equals(permission.getDataPermissionType(), OWN)) {
-                // create_by 字段
-                if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
-                    continue;
-                }
-                sb.append(String.format("OR ( a.%s = '", dataPermission.scope()));
-                sb.append(SecurityUtils.getUserCode());
-                sb.append(" ' ) ");
-            } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
-                String deptIds = permission.getPermissions();
-                // deptId 字段
-                if (StrUtil.isAllBlank(deptIds)) {
-                    continue;
-                }
-                sb.append(String.format("OR ( a.%s IN ( ", dataPermission.scope()));
-                sb.append(deptIds);
-                sb.append(" ) ) ");
-            } else if (Objects.equals(permission.getDataPermissionType(), ALL)) {
-                return sb.toString().replaceFirst("WHERE", "");
-            } else if (Objects.equals(permission.getDataPermissionType(), DIY_DEPT)) {
-                return sb.toString().replaceFirst("WHERE", "");
-            }
         }
-        if (StrUtil.isAllBlank(operator)) {
-            return sb.toString().replaceFirst("OR", "");
+        if (StrUtil.isAllNotBlank(sb.toString())) {
+            return sb.toString().replaceFirst(operator, "");
         }
-        return sb.toString().replaceFirst(operator, "");
+        return sb.toString();
     }
 
 }

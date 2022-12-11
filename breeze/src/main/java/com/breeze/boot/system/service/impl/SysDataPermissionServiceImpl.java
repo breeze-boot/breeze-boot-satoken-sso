@@ -112,7 +112,7 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
             strBuilder.append(" ) ");
         }
         String sql = strBuilder.toString();
-        sysDataPermission.setStrSql(sql);
+        sysDataPermission.setStrSql(sql.replaceFirst("OR", ""));
         if (StrUtil.equals(DEPT_AND_LOWER_LEVEL, dataPermissionDTO.getDataPermissionType())) {
             // 本级部门及其以下部门
             List<Long> selectDeptId = this.sysDeptService.selectDeptById(String.join(",", dataPermissionDTO.getDataPermissions()));
@@ -172,7 +172,8 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
                             .append(" ) "));
             strBuilder.append(" ) ");
             sql = strBuilder.toString();
-            sysDataPermission.setStrSql(sql);
+            sysDataPermission.setStrSql(sql
+                    .replaceFirst("OR", ""));
         } else {
             sysDataPermission.setStrSql("");
         }

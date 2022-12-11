@@ -122,7 +122,7 @@ public class LoginController {
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @GetMapping("/logout")
-    public Result<Boolean> logout(@RequestParam String username, HttpServletRequest request) {
+    public Result<Boolean> logout(@RequestParam("username") String username, HttpServletRequest request) {
         return this.userTokenService.logout(username, request);
     }
 

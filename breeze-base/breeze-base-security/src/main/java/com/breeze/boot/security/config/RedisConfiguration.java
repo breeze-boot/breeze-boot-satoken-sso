@@ -79,10 +79,10 @@ public class RedisConfiguration {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
         RedisSerializer<String> strSerializer = new StringRedisSerializer();
 
-
         // 自定义缓存数据序列化方式和有效期限
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .computePrefixWith(name -> name + ":")
+                // 前缀
+                .computePrefixWith(name -> name + "")
                 // 设置缓存过期时间为1天
                 .entryTtl(Duration.ofDays(1))
                 // 使用 strSerializer 对key进行数据类型转换
