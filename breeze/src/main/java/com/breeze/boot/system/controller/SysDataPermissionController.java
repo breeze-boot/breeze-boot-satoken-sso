@@ -22,8 +22,10 @@ import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
 import com.breeze.boot.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.dto.SysDataPermissionDTO;
 import com.breeze.boot.system.service.SysDataPermissionService;
+import com.breeze.boot.system.service.SysRoleDataPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 系统数据权限控制器
@@ -52,6 +55,12 @@ public class SysDataPermissionController {
      */
     @Autowired
     private SysDataPermissionService sysDataPermissionService;
+
+    /**
+     * 系统角色数据权限服务
+     */
+    @Autowired
+    private SysRoleDataPermissionService sysRoleDataPermissionService;
 
     /**
      * 列表
@@ -106,6 +115,20 @@ public class SysDataPermissionController {
     @BreezeSysLog(description = "数据权限信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysDataPermissionService.removePermissionByIds(Arrays.asList(ids));
+    }
+
+    /**
+     * 编辑角色数据权限
+     *
+     * @param roleDataPermissionList 角色数据权限list
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "编辑角色数据权限")
+    @PostMapping("/editRoleDataPermission")
+    @PreAuthorize("hasAnyAuthority('sys:dataPermission:editRoleDataPermission')")
+    @BreezeSysLog(description = "编辑角色数据权限", type = LogType.EDIT)
+    public Result<Boolean> editRoleDataPermission(@RequestBody List<SysRoleDataPermission> roleDataPermissionList) {
+        return this.sysRoleDataPermissionService.editRoleDataPermission(roleDataPermissionList);
     }
 
 }

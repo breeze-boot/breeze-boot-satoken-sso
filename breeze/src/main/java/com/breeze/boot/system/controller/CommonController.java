@@ -107,6 +107,12 @@ public class CommonController {
     private MateService mateService;
 
     /**
+     * 数据权限服务
+     */
+    @Autowired
+    private SysDataPermissionService dataPermissionService;
+
+    /**
      * 菜单树形下拉框
      *
      * @param id id
@@ -248,4 +254,19 @@ public class CommonController {
         return Result.ok(this.mateService.selectColumn(tableName));
     }
 
+    /**
+     * 数据权限下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Operation(summary = "数据权限下拉框", description = "下拉框接口")
+    @GetMapping("/selectDataPermission")
+    public Result<List<Map<String, Object>>> selectDataPermission() {
+        return Result.ok(this.dataPermissionService.list().stream().map(dataPermission -> {
+            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
+            tenantMap.put("key", dataPermission.getId());
+            tenantMap.put("value", dataPermission.getDataPermissionName());
+            return tenantMap;
+        }).collect(Collectors.toList()));
+    }
 }

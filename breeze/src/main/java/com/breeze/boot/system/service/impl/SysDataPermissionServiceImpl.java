@@ -198,4 +198,5 @@ public class SysDataPermissionServiceImpl extends ServiceImpl<SysDataPermissionM
         }
         return Result.ok();
     }
+
 }
