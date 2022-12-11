@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,5 +55,12 @@ public class SysRole extends BaseModel<SysRole> implements Serializable {
     @NotBlank(message = "角色名称不可为空")
     @Schema(description = "角色名称")
     private String roleName;
+
+    /**
+     * 数据权限名称
+     */
+    @Schema(description = "数据权限名称")
+    @TableField(exist = false)
+    private String dataPermissionName;
 
 }

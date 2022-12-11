@@ -29,4 +29,38 @@
         ORDER BY role.create_time DESC
     </select>
 
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysRole">
+        SELECT
+        a.id,
+        a.role_code,
+        a.role_name,
+        b.data_permission_name
+        FROM
+        sys_role AS a
+        LEFT JOIN (
+        SELECT
+        a.role_id,
+        GROUP_CONCAT( b.data_permission_name ) data_permission_name
+        FROM
+        sys_role_data_permission AS a
+        LEFT JOIN sys_data_permission AS b ON a.data_permission_id = b.id
+        WHERE
+        a.is_delete = 0
+        AND b.is_delete = 0
+        GROUP BY
+        a.role_id
+        ) b ON a.id = b.role_id
+        <where>
+            a.is_delete = 0
+            <if test="roleSearchDTO.roleName != null and roleSearchDTO.roleName != ''">
+                a.role_name LIKE CONCAT( '%', #{roleSearchDTO.roleName}, '%')
+            </if>
+            <if test="roleSearchDTO.roleCode != null and roleSearchDTO.roleCode != ''">
+                a.role_code LIKE CONCAT( '%', #{roleSearchDTO.roleCode}, '%')
+            </if>
+        </where>
+        ORDER BY
+        a.create_time DESC
+    </select>
+
 </mapper>

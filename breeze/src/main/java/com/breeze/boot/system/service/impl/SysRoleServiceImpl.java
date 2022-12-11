@@ -18,17 +18,17 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.RoleSearchDTO;
 import com.breeze.boot.system.mapper.SysRoleMapper;
+import com.breeze.boot.system.service.SysRoleDataPermissionService;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +52,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
+
+    /**
+     * 数据权限服务系统作用
+     */
+    @Autowired
+    private SysRoleDataPermissionService sysRoleDataPermissionService;
 
     /**
      * 用户角色列表
@@ -79,11 +85,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public Page<SysRole> listPage(RoleSearchDTO roleSearchDTO) {
-        Page<SysRole> platformEntityPage = new Page<>(roleSearchDTO.getCurrent(), roleSearchDTO.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(roleSearchDTO.getRoleName()), SysRole::getRoleName, roleSearchDTO.getRoleName())
-                .like(StrUtil.isAllNotBlank(roleSearchDTO.getRoleCode()), SysRole::getRoleCode, roleSearchDTO.getRoleCode())
-                .page(platformEntityPage);
+        Page<SysRole> rolePage = new Page<>(roleSearchDTO.getCurrent(), roleSearchDTO.getSize());
+        return this.baseMapper.listPage(rolePage, roleSearchDTO);
     }
 
     /**
@@ -100,10 +103,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         boolean remove = this.removeByIds(ids);
         if (remove) {
+            List<Long> collect = roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList());
             // 删除用户角色关系
-            this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery()
-                    .in(SysRoleMenu::getRoleId,
-                            roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList())));
+            this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().in(SysRoleMenu::getRoleId, collect));
+            // 删除角色数据权限关系
+            this.sysRoleDataPermissionService.remove(Wrappers.<SysRoleDataPermission>lambdaQuery().in(SysRoleDataPermission::getRoleId, collect));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }
