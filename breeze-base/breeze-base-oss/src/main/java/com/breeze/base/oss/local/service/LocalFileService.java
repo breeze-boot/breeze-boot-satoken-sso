@@ -19,7 +19,7 @@ package com.breeze.base.oss.local.service;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
-import com.breeze.base.oss.dto.FileBO;
+import com.breeze.base.oss.bo.FileBO;
 import com.breeze.base.oss.local.config.LocalProperties;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.ex.SystemServiceException;

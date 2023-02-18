@@ -49,20 +49,20 @@ public class LocalUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByEmail(String email) {
-        return emailFunction.apply(email);
+        return this.emailFunction.apply(email);
     }
 
     public UserDetails loadUserByPhone(String phone) {
-        return phoneFunction.apply(phone);
+        return this.phoneFunction.apply(phone);
     }
 
     public UserDetails createOrLoadUserByOpenId(String openId) {
-        return wxFunction.apply(openId);
+        return this.wxFunction.apply(openId);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usernameFunction.apply(username);
+        return this.usernameFunction.apply(username);
     }
 
 }

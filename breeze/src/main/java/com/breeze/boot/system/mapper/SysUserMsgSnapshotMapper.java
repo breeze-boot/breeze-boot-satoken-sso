@@ -45,7 +45,7 @@ public interface SysUserMsgSnapshotMapper extends BreezeBaseMapper<SysUserMsgSna
      * @param userMsgSearchDTO 用户搜索DTO消息
      * @return {@link IPage}<{@link SysUserMsg}>
      */
-    @DataPermission(scope = "dept_id")
+    @DataPermission(scope = "dept_id", own = "user_code")
     IPage<SysUserMsgSnapshotVO> listPage(Page<SysUserMsg> page, @Param("userMsgSearchDTO") UserMsgSearchDTO userMsgSearchDTO);
 
     /**

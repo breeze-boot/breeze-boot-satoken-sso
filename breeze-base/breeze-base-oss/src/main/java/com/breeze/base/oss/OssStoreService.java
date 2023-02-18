@@ -16,7 +16,7 @@
 
 package com.breeze.base.oss;
 
-import com.breeze.base.oss.dto.FileBO;
+import com.breeze.base.oss.bo.FileBO;
 import com.breeze.base.oss.local.service.LocalFileService;
 import com.breeze.base.oss.minio.service.MinioService;
 import com.breeze.boot.core.enums.ResultCode;

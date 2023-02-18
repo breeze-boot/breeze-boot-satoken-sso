@@ -38,6 +38,11 @@ public @interface BreezeSysLog {
      */
     String description() default "";
 
+    /**
+     * 类型
+     *
+     * @return {@link LogType}
+     */
     LogType type();
 
 }

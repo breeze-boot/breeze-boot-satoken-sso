@@ -38,6 +38,6 @@ public @interface DataPermission {
 
     String scope() default "";
 
-    String own() default "create_by";
+    String own() default "";
 
 }

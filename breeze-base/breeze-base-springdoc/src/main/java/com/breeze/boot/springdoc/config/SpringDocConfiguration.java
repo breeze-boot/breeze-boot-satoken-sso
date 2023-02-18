@@ -73,7 +73,7 @@ public class SpringDocConfiguration {
     public GroupedOpenApi loginApi() {
         return GroupedOpenApi.builder()
                 .group("Security Jwt登录")
-                .pathsToMatch("/jwt/**")
+                .pathsToMatch("/breeze/**")
                 .build();
     }
 

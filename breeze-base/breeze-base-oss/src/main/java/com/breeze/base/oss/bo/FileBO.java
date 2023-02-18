@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.base.oss.dto;
+package com.breeze.base.oss.bo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

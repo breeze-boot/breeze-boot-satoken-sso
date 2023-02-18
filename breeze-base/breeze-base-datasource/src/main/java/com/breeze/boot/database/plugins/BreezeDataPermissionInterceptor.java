@@ -138,12 +138,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             if (Objects.isNull(annotation) || !methodName.equals(method.getName())) {
                 continue;
             }
-            if (StrUtil.isAllBlank(annotation.scope()) && !originalSql.contains("dept_id")) {
-                throw new SystemServiceException(ResultCode.exception("sql中缺少字段 dept_id"));
-            }
-            if (StrUtil.isAllNotBlank(annotation.scope()) && !originalSql.contains(annotation.scope())) {
-                throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + annotation.scope()));
-            }
+
             LoginUserDTO loginUserDTO = SecurityUtils.getCurrentUser();
             if (loginUserDTO == null) {
                 throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
@@ -153,32 +148,46 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             if (CollUtil.isEmpty(dataPermissionList)) {
                 continue;
             }
-            String sql = this.getSql(dataPermissionList, annotation);
+            String sql = this.getSql(dataPermissionList, annotation, originalSql);
             originalSql = String.format("SELECT a.* FROM (%s) a %s", originalSql, sql);
         }
         mpBs.sql(originalSql);
     }
 
     @NotNull
-    private String getSql(List<DataPermissionDTO> dataPermissionDTOList, DataPermission dataPermission) {
+    private String getSql(List<DataPermissionDTO> dataPermissionDTOList, DataPermission dataPermission, String originalSql) {
         StringBuilder sb = new StringBuilder();
         String operator = dataPermissionDTOList.get(0).getOperator();
-        String sql = "";
+        String sql;
         sb.append(" WHERE ");
         for (DataPermissionDTO permission : dataPermissionDTOList) {
             if (Objects.equals(permission.getDataPermissionType(), OWN)) {
-                // 没有自定义SQL
+                if (StrUtil.isAllBlank(dataPermission.own())) {
+                    throw new SystemServiceException(ResultCode.exception("[OWN= ? ]注解未指定条件字段" + dataPermission.own()));
+                }
+                if (!originalSql.contains(dataPermission.own())) {
+                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + dataPermission.own()));
+                }
                 // create_by 字段
                 if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
                     continue;
                 }
-                sb.append(String.format("%s a.%s = '", permission.getOperator(), dataPermission.scope()));
+
+                sb.append(String.format("%s a.%s = '", permission.getOperator(), dataPermission.own()));
                 sb.append(SecurityUtils.getUserCode());
+                sb.append("' ");
             } else if (Objects.equals(permission.getDataPermissionType(), ALL)) {
                 // 没有自定义SQL
                 return sb.toString().replaceFirst("WHERE", "");
             } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
+                if (StrUtil.isAllBlank(dataPermission.scope())) {
+                    throw new SystemServiceException(ResultCode.exception("[SCOPE= ? ]注解未指定条件字段" + dataPermission.scope()));
+                }
+                if (!originalSql.contains(dataPermission.scope())) {
+                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + dataPermission.scope()));
+                }
                 String deptIds = permission.getDataPermissions();
+
                 // deptId 字段
                 if (StrUtil.isAllBlank(deptIds)) {
                     continue;

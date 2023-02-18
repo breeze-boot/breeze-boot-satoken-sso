@@ -72,21 +72,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
     }
 
     /**
-     * 检查短信代码
-     *
-     * @param authentication 身份验证
-     * @param loginUser      登录用户
-     */
-    private void checkSmsCode(CurrentLoginUser loginUser, SmsCodeAuthenticationToken authentication) {
-        if (Objects.isNull(authentication.getCredentials())) {
-            log.debug("Failed to authenticate since no credentials provided");
-            throw new BadCredentialsException(this.messages
-                    .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
-        }
-
-    }
-
-    /**
      * 进行身份验证
      *
      * @param authentication 身份验证

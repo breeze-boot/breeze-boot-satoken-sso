@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.base.oss.OssStoreService;
-import com.breeze.base.oss.dto.FileBO;
+import com.breeze.base.oss.bo.FileBO;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.ex.SystemServiceException;
 import com.breeze.boot.core.utils.Result;

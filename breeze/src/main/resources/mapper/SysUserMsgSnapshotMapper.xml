@@ -28,6 +28,7 @@
         SELECT
         a.id,
         a.user_id,
+        c.user_code,
         b.msg_id,
         b.msg_title,
         a.msg_code,

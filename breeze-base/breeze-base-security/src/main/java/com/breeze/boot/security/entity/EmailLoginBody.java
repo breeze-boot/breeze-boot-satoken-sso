@@ -41,8 +41,4 @@ public class EmailLoginBody extends LoginBody {
      */
     private String code;
 
-    /**
-     * 唯一标识
-     */
-    private String uuid = "";
 }

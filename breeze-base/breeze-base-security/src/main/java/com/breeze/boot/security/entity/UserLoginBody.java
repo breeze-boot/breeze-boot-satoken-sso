@@ -41,8 +41,4 @@ public class UserLoginBody extends LoginBody {
      */
     private String password;
 
-    /**
-     * 唯一标识
-     */
-    private String uuid = "";
 }
