@@ -26,10 +26,10 @@
         <result property="updateTime" column="update_time"/>
         <result property="isDelete" column="is_delete"/>
         <result property="deleteBy" column="delete_by"/>
-        <collection property="sysRoles" javaType="java.util.List"
-                    ofType="com.breeze.boot.system.domain.SysRole"
+        <collection property="roleIds" javaType="java.util.List"
+                    ofType="java.lang.Long"
                     column="{userId=id}"
-                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleByUserId">
+                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleIdsByUserId">
         </collection>
     </resultMap>
 

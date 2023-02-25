@@ -201,4 +201,14 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     @Schema(description = "用户角色ID")
     private List<Long> roleIds;
 
+    /**
+     * 用户角色名称
+     * <p>
+     * 查询用户详情返回使用
+     */
+    @ExcelIgnore
+    @TableField(exist = false)
+    @Schema(description = "用户角色名称")
+    private List<String> roleNames;
+
 }

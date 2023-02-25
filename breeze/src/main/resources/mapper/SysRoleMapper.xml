@@ -29,6 +29,16 @@
         ORDER BY role.create_time DESC
     </select>
 
+    <select id="listRoleIdsByUserId" resultType="java.lang.Long">
+        SELECT role.id
+        FROM sys_role AS role
+                 LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
+        WHERE role.is_delete = 0
+          AND ru.is_delete = 0
+          AND ru.user_id = #{userId}
+        ORDER BY role.create_time DESC
+    </select>
+
     <select id="listPage" resultType="com.breeze.boot.system.domain.SysRole">
         SELECT
         a.id,
@@ -61,6 +71,15 @@
         </where>
         ORDER BY
         a.create_time DESC
+    </select>
+
+    <select id="listUserRoles" resultType="java.lang.Long">
+        SELECT a.id
+        FROM sys_role AS a
+                 LEFT JOIN sys_user_role AS b ON a.id = b.role_id
+        WHERE b.user_id = #{userId}
+          AND a.is_delete = 0
+          AND b.is_delete = 0
     </select>
 
 </mapper>

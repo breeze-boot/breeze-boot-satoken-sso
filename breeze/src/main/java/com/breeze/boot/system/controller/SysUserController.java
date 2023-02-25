@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统用户控制器
@@ -72,16 +73,20 @@ public class SysUserController {
     }
 
     /**
-     * 详情
+     * 校验用户名是否重复
      *
-     * @param id id
-     * @return {@link Result}<{@link SysUser}>
+     * @param username 平台编码
+     * @param userId   用户ID
+     * @return {@link Result}<{@link Boolean}>
      */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:user:info')")
-    public Result<SysUser> info(@PathVariable("id") Long id) {
-        return sysUserService.getUserById(id);
+    @Operation(summary = "校验用户名是否重复")
+    @GetMapping("/checkUsername/{username}")
+    @PreAuthorize("hasAnyAuthority('sys:user:list')")
+    public Result<Boolean> checkUsername(@RequestParam("username") String username,
+                                         @RequestParam(value = "userId", required = false) Long userId) {
+        return Result.ok(Objects.isNull(this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
+                .ne(Objects.nonNull(userId), SysUser::getId, userId)
+                .eq(SysUser::getUsername, username))));
     }
 
     /**

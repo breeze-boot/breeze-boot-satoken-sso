@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统平台控制器
@@ -77,16 +78,20 @@ public class SysPlatformController {
     }
 
     /**
-     * 详情
+     * 校验平台编码是否重复
      *
-     * @param id id
+     * @param platformCode 平台编码
+     * @param platformId   平台ID
      * @return {@link Result}<{@link SysPlatform}>
      */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:platform:info')")
-    public Result<SysPlatform> info(@PathVariable("id") Long id) {
-        return Result.ok(this.sysPlatformService.getById(id));
+    @Operation(summary = "校验平台编码是否重复")
+    @GetMapping("/checkPlatformCode")
+    @PreAuthorize("hasAnyAuthority('sys:platform:list')")
+    public Result<Boolean> checkPlatformCode(@RequestParam("platformCode") String platformCode,
+                                             @RequestParam(value = "platformId", required = false) Long platformId) {
+        return Result.ok(Objects.isNull(this.sysPlatformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
+                .ne(Objects.nonNull(platformId), SysPlatform::getId, platformId)
+                .eq(SysPlatform::getPlatformCode, platformCode))));
     }
 
     /**

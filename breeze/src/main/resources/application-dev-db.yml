@@ -77,20 +77,6 @@ spring:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
         session-stat-enable: true
         session-stat-max-count: 1000
-
-  mail:
-    host: smtp.exmail.qq.com
-    port: 465
-    username: 123@qq.com
-    password: 123
-    default-encoding: UTF-8
-    properties:
-      mail:
-        smtp:
-          socketFactoryClass: javax.net.ssl.SSLSocketFactory
-        debug: true
-    from-address: 123@qq.com
-
 # mybatis-plus 配置
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
@@ -112,20 +98,3 @@ mybatis-plus:
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # 搜索指定包别名
   typeAliasesPackage: com.breeze.**.entity
-
-breeze:
-  wx:
-    app-id: wx269d15f14a5fc7e2
-    app-secret: 273950b557912864a8627ff5ff9db82b
-  oss:
-    local:
-      enable: true
-      path: /usr/local/breeze/files/
-      nginxHost: http://localhost:9000/img
-    minio:
-      enable: true
-      bucket-name: breeze
-      endpoint: http://localhost:9090
-      access-key: admin
-      secret-key: admin123
-      nginx-host: http://localhost:9090/img

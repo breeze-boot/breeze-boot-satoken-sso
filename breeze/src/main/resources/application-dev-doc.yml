@@ -1,0 +1,10 @@
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    # 修改api-docs路径
+    path: /v3/api-docs
+    # 配置需要生成接口文档的扫描包
+    # packages-to-scan: com.breeze.boot.*.controller
+    # 开启api-docs
+    enabled: true

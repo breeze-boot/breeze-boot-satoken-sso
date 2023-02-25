@@ -17,6 +17,7 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -67,19 +69,6 @@ public class SysTenantController {
     }
 
     /**
-     * 详情
-     *
-     * @param id id
-     * @return {@link Result}<{@link SysTenant}>
-     */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:tenant:info')")
-    public Result<SysTenant> info(@PathVariable("id") Long id) {
-        return Result.ok(this.sysTenantService.getById(id));
-    }
-
-    /**
      * 创建
      *
      * @param tenant 平台实体入参
@@ -91,6 +80,23 @@ public class SysTenantController {
     @BreezeSysLog(description = "租户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Validated @RequestBody SysTenant tenant) {
         return Result.ok(this.sysTenantService.save(tenant));
+    }
+
+    /**
+     * 校验租户编码是否重复
+     *
+     * @param tenantCode 租户编码
+     * @param tenantId   租户ID
+     * @return {@link Result}<{@link SysTenant}>
+     */
+    @Operation(summary = "校验租户编码是否重复")
+    @GetMapping("/checkTenantCode")
+    @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
+    public Result<Boolean> checkTenantCode(@RequestParam("tenantCode") String tenantCode,
+                                           @RequestParam(value = "tenantId", required = false) Long tenantId) {
+        return Result.ok(Objects.isNull(this.sysTenantService.getOne(Wrappers.<SysTenant>lambdaQuery()
+                .ne(Objects.nonNull(tenantId), SysTenant::getId, tenantId)
+                .eq(SysTenant::getTenantCode, tenantCode))));
     }
 
     /**

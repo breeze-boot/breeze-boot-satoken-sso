@@ -112,4 +112,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 
+    /**
+     * 获取用户角色列表
+     *
+     * @param userId 用户Id
+     * @return {@link Result}<{@link List}<{@link Long}>>
+     */
+    @Override
+    public List<Long> listUserRoles(Long userId) {
+        return this.baseMapper.listUserRoles(userId);
+    }
+
 }

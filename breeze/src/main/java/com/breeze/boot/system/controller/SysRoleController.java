@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
+import com.breeze.boot.system.domain.SysPost;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统角色控制器
@@ -77,6 +79,36 @@ public class SysRoleController {
     }
 
     /**
+     * 校验角色编码是否重复
+     *
+     * @param roleCode 角色编码
+     * @param roleId   角色ID
+     * @return {@link Result}<{@link SysPost}>
+     */
+    @Operation(summary = "校验角色编码是否重复")
+    @GetMapping("/checkRoleCode")
+    @PreAuthorize("hasAnyAuthority('sys:role:list')")
+    public Result<Boolean> checkRoleCode(@RequestParam("roleCode") String roleCode,
+                                         @RequestParam(value = "roleId", required = false) Long roleId) {
+        return Result.ok(Objects.isNull(this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery()
+                .ne(Objects.nonNull(roleId), SysRole::getId, roleId)
+                .eq(SysRole::getRoleCode, roleCode))));
+    }
+
+    /**
+     * 获取用户角色列表
+     *
+     * @param userId 用户Id
+     * @return {@link Result}<{@link List}<{@link Long}>>
+     */
+    @Operation(summary = "获取用户角色列表")
+    @GetMapping("/listUserRoles")
+    @PreAuthorize("hasAnyAuthority('sys:role:list')")
+    public Result<List<Long>> listUserRoles(@RequestParam("userId") Long userId) {
+        return Result.ok(this.sysRoleService.listUserRoles(userId));
+    }
+
+    /**
      * 获取树形权限列表
      * <p>
      * 选中数据
@@ -103,19 +135,6 @@ public class SysRoleController {
     @BreezeSysLog(description = "角色权限信息修改", type = LogType.EDIT)
     public Result<Boolean> modifyPermission(@Validated @RequestBody MenuPermissionDTO menuPermissionDTO) {
         return this.sysRoleMenuService.modifyPermission(menuPermissionDTO);
-    }
-
-    /**
-     * 详情
-     *
-     * @param id id
-     * @return {@link Result}<{@link SysRole}>
-     */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:role:info')")
-    public Result<SysRole> info(@PathVariable("id") Long id) {
-        return Result.ok(sysRoleService.getById(id));
     }
 
     /**

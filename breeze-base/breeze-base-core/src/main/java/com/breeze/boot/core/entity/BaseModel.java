@@ -93,6 +93,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改人
      */
+    @JsonIgnore
     @ExcelIgnore
     @TableField(fill = FieldFill.UPDATE)
     @Schema(description = "修改人编码", hidden = true)
@@ -101,6 +102,7 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
     /**
      * 修改人姓名
      */
+    @JsonIgnore
     @ExcelIgnore
     @TableField(fill = FieldFill.UPDATE)
     @Schema(description = "修改人姓名", hidden = true)

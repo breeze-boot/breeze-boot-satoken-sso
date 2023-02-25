@@ -17,6 +17,7 @@
 package com.breeze.boot.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统部门控制器
@@ -66,16 +68,19 @@ public class SysDeptController {
     }
 
     /**
-     * 信息
+     * 校验部门编码是否重复
      *
-     * @param id id
+     * @param deptCode 部门编码
+     * @param deptId   部门ID
      * @return {@link Result}<{@link SysDept}>
      */
-    @Operation(summary = "详情", description = "目前详情接口未使用")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dept:info')")
-    public Result<SysDept> info(@NotNull(message = "参数不能为空") @PathVariable("id") Long id) {
-        return Result.ok(sysDeptService.getById(id));
+    @Operation(summary = "校验部门编码是否重复")
+    @GetMapping("/checkDeptCode")
+    @PreAuthorize("hasAnyAuthority('sys:dept:list')")
+    public Result<Boolean> checkDeptCode(@RequestParam("deptCode") String deptCode, @RequestParam(value = "deptId", required = false) Long deptId) {
+        return Result.ok(Objects.isNull(this.sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery()
+                .ne(Objects.nonNull(deptId), SysDept::getId, deptId)
+                .eq(SysDept::getDeptCode, deptCode))));
     }
 
     /**

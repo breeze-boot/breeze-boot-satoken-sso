@@ -58,5 +58,13 @@ public interface SysRoleService extends IService<SysRole> {
      */
     Result<Boolean> deleteByIds(List<Long> ids);
 
+    /**
+     * 获取用户角色列表
+     *
+     * @param userId 用户Id
+     * @return {@link Result}<{@link List}<{@link Long}>>
+     */
+    List<Long> listUserRoles(Long userId);
+
 }
 

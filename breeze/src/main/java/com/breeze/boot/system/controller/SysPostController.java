@@ -17,6 +17,7 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.config.LogType;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统岗位控制器
@@ -66,16 +68,20 @@ public class SysPostController {
     }
 
     /**
-     * 详情
+     * 校验岗位编码是否重复
      *
-     * @param id id
+     * @param postCode 岗位编码
+     * @param postId   岗位ID
      * @return {@link Result}<{@link SysPost}>
      */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:post:info')")
-    public Result<SysPost> info(@PathVariable("id") Long id) {
-        return Result.ok(this.sysPostService.getById(id));
+    @Operation(summary = "校验岗位编码是否重复")
+    @GetMapping("/checkPostCode")
+    @PreAuthorize("hasAnyAuthority('sys:post:list')")
+    public Result<Boolean> checkPostCode(@RequestParam("postCode") String postCode,
+                                         @RequestParam(value = "postId", required = false) Long postId) {
+        return Result.ok(Objects.isNull(this.sysPostService.getOne(Wrappers.<SysPost>lambdaQuery()
+                .ne(Objects.nonNull(postId), SysPost::getId, postId)
+                .eq(SysPost::getPostCode, postCode))));
     }
 
     /**

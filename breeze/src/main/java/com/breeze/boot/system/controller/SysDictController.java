@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -37,6 +38,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 系统字典控制器
@@ -73,6 +75,23 @@ public class SysDictController {
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
     public Result<Page<SysDict>> list(@RequestBody DictSearchDTO dictSearchDTO) {
         return Result.ok(this.sysDictService.listPage(dictSearchDTO));
+    }
+
+    /**
+     * 校验字典编码是否重复
+     *
+     * @param dictCode 字典编码
+     * @param dictId   字典ID
+     * @return {@link Result}<{@link SysDict}>
+     */
+    @Operation(summary = "校验字典编码是否重复")
+    @GetMapping("/checkDictCode")
+    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    public Result<Boolean> checkDictCode(@RequestParam("dictCode") String dictCode,
+                                         @RequestParam(value = "dictId", required = false) Long dictId) {
+        return Result.ok(Objects.isNull(this.sysDictService.getOne(Wrappers.<SysDict>lambdaQuery()
+                .ne(Objects.nonNull(dictId), SysDict::getId, dictId)
+                .eq(SysDict::getDictCode, dictCode))));
     }
 
     /**

@@ -244,7 +244,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (Objects.isNull(sysUser)) {
             return Result.fail("用户不存在");
         }
-        sysUser.setSysRoles(this.sysUserRoleService.getSysRoleByUserId(sysUser.getId()));
+        List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
+        sysUser.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+        sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+        sysUser.setSysRoles(roleList);
         return Result.ok(sysUser);
     }
 

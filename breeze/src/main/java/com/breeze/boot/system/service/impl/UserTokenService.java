@@ -198,8 +198,8 @@ public class UserTokenService {
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJwt = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("user_info", loginUserDTO);
-        resultMap.put("access_token", jwtConfiguration.sign(signedJwt).serialize());
+        resultMap.put("userInfo", loginUserDTO);
+        resultMap.put("accessToken", jwtConfiguration.sign(signedJwt).serialize());
         return resultMap;
     }
 
