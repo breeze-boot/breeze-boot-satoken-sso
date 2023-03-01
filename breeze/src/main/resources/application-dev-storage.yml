@@ -2,12 +2,13 @@ breeze:
   oss:
     local:
       enable: true
-      path: /usr/local/breeze/files/
-      nginxHost: http://localhost:9000/img
+      path: /usr/local/breeze/
+      nginxHost: http://localhost:9000/img/
     minio:
       enable: true
       bucket-name: breeze
       endpoint: http://localhost:9090
       access-key: admin
       secret-key: admin123
-      nginx-host: http://localhost:9090/img
+      nginx-host: http://localhost:9090/img/breeze/
+      # http://localhost:9090/breeze/27/84d395d4e8cf433ebcdddc8f98dcad51.jpg

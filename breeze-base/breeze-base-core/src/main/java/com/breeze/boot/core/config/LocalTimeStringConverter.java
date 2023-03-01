@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * 时间字符串转换
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2022-12-09
  */
 public class LocalTimeStringConverter implements Converter<LocalTime> {

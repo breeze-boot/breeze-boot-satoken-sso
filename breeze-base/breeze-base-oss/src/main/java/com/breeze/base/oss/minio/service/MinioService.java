@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,7 @@ public class MinioService {
         } catch (IOException e) {
             log.error("", e);
         }
-        return this.uploadImg(path, fileName, (BufferedImage) image);
+        return this.uploadImg(path, file.getOriginalFilename(), fileName, (BufferedImage) image);
     }
 
     /**
@@ -140,38 +140,40 @@ public class MinioService {
         } catch (Exception e) {
             log.error("上传失败", e);
         }
-        return this.uploadImg(path, fileName, (BufferedImage) image);
+        return this.uploadImg(path, path, fileName, (BufferedImage) image);
     }
 
     /**
      * 上传img
      *
-     * @param path     路径
-     * @param fileName 文件名称
-     * @param image    图像
+     * @param path             路径
+     * @param fileName         文件名称
+     * @param image            图像
+     * @param originalFilename 原始文件名
      * @return {@link FileBO}
      */
-    public FileBO uploadImg(String path, String fileName, BufferedImage image) {
+    public FileBO uploadImg(String path, String originalFilename, String fileName, BufferedImage image) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             ImageIO.write(image, "jpeg", os);
         } catch (IOException e) {
             log.error("文件转换 bs IO 异常", e);
         }
-        return this.upload2Minio(new ByteArrayInputStream(os.toByteArray()), os.size(), path, fileName, "image/jpeg");
+        return this.upload2Minio(new ByteArrayInputStream(os.toByteArray()), originalFilename, os.size(), path, fileName, "image/jpeg");
     }
 
     /**
      * 上传minio
      *
-     * @param is          文件
-     * @param size        大小
-     * @param path        路径 ()
-     * @param fileName    文件名称
-     * @param contentType 内容类型
+     * @param is               文件
+     * @param size             大小
+     * @param path             路径 ()
+     * @param fileName         文件名称
+     * @param contentType      内容类型
+     * @param originalFilename 原始文件名
      * @return {@link FileBO}
      */
-    public FileBO upload2Minio(InputStream is, long size, String path, String fileName, String contentType) {
+    public FileBO upload2Minio(InputStream is, String originalFilename, long size, String path, String fileName, String contentType) {
         this.createBucket(this.minioProperties.getBucketName());
         ObjectWriteResponse response = null;
         try {
@@ -188,10 +190,10 @@ public class MinioService {
         if (Objects.isNull(response)) {
             return null;
         }
-        String savePath = this.minioProperties.getBucketName() + "/" + path + "/" + fileName;
-        String imageUrl = this.minioProperties.getNginxHost() + "/" + savePath;
+        String savePath = path + "/" + fileName;
+        String imageUrl = this.minioProperties.getNginxHost() + this.minioProperties.getBucketName() + '/' + savePath;
         log.info(" \n {} \n {}", savePath, imageUrl);
-        return FileBO.builder().newFileName(fileName).path(path).contentType(contentType).build();
+        return FileBO.builder().newFileName(fileName).path(savePath).originalFilename(originalFilename).contentType(contentType).build();
     }
 
     /**
@@ -204,7 +206,7 @@ public class MinioService {
      */
     @SneakyThrows
     public FileBO upload2Minio(MultipartFile file, String path, String fileName) {
-        return upload2Minio(file.getInputStream(), file.getSize(), path, fileName, file.getContentType());
+        return upload2Minio(file.getInputStream(), file.getOriginalFilename(), file.getSize(), path, fileName, file.getContentType());
     }
 
     /**
@@ -328,13 +330,13 @@ public class MinioService {
     /**
      * 删除
      *
-     * @param fileName 文件名称
+     * @param path 路径 + 名称
      * @return boolean
      */
-    public boolean remove(String path, String fileName) {
+    public boolean remove(String path) {
         try {
             this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(this.minioProperties.getBucketName())
-                    .object(path + "/" + fileName).build());
+                    .object(path).build());
         } catch (Exception e) {
             log.error("删除失败", e);
             return false;
@@ -367,15 +369,14 @@ public class MinioService {
     /**
      * 预览图片
      *
-     * @param path     路径
-     * @param fileName 文件名称
+     * @param path 路径 + 名称
      * @return {@link String}
      */
-    public String previewImg(String path, String fileName) {
+    public String previewImg(String path) {
         // 查看文件地址
         GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
                 .bucket(this.minioProperties.getBucketName())
-                .object(path + "/" + fileName)
+                .object(path)
                 .method(Method.GET)
                 .build();
         try {
@@ -395,7 +396,7 @@ public class MinioService {
      */
     public void download(String path, String fileName, HttpServletResponse response) {
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(this.minioProperties.getBucketName())
-                .object(path + "/" + fileName).build();
+                .object(path).build();
         try (GetObjectResponse objectResponse = this.minioClient.getObject(objectArgs)) {
             response.setCharacterEncoding("utf-8");
             response.setContentType("image/jpeg");

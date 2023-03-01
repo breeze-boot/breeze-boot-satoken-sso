@@ -11,8 +11,8 @@ spring:
   profiles:
     active: ${profiles.active}
     group:
-      "dev": "dev-db,dev-capture,dev-doc,dev-mail,dev-storage"
-      "pro": "pro-db,pro-capture,pro-doc,pro-mail,pro-storage"
+      "dev": "dev-db,dev-capture,dev-doc,dev-mail,dev-storage,dev-wx,dev-flowable"
+      "pro": "pro-db,pro-capture,pro-doc,pro-mail,pro-storage,pro-wx,pro-flowable"
 
   servlet:
     multipart:

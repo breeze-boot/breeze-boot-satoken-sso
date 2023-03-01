@@ -49,6 +49,7 @@
 
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <druid.version>1.2.8</druid.version>
+        <flowable.version>6.7.2</flowable.version>
 
         <docker.registry>127.0.0.1</docker.registry>
         <docker.host>http://127.0.0.1:2375</docker.host>
@@ -127,6 +128,13 @@
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-security</artifactId>
                 <version>1.0</version>
+            </dependency>
+
+            <!-- flowable工作流依赖 -->
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter</artifactId>
+                <version>${flowable.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,5 +52,10 @@ public class UserSearchDTO extends PageDTO {
     @Schema(description = "电话")
     private String phone;
 
+    /**
+     * 图片预览地址前缀
+     */
+    @Schema(description = "图片预览地址前缀")
+    private String nginxHost;
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 
 /**
- * 邮箱代码身份验证令牌
+ * 微信Code身份验证令牌
  * <p>
  * 参考：
  * {@link org.springframework.security.authentication.UsernamePasswordAuthenticationToken}

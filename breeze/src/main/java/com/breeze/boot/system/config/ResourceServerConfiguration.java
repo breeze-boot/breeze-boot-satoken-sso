@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,9 @@ public class ResourceServerConfiguration {
         return new LocalUserDetailsService(
                 userTokenService::loadUserByUsername
                 , userTokenService::loadUserByPhone
-                , userTokenService::createOrLoadUserByOpenId
-                , userTokenService::loadUserByEmail);
+                , userTokenService::createOrLoadUser
+                , userTokenService::loadUserByEmail
+                , userTokenService::createOrLoadUserByWxPhone);
     }
 
 }

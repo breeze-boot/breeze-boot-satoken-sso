@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,19 +25,13 @@ import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.ex.AccessException;
 import com.breeze.boot.security.utils.SecurityUtils;
-import com.breeze.boot.system.domain.SysDept;
-import com.breeze.boot.system.domain.SysRole;
-import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.domain.SysUserRole;
+import com.breeze.boot.system.domain.*;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.dto.UserSearchDTO;
 import com.breeze.boot.system.mapper.SysUserMapper;
-import com.breeze.boot.system.service.SysDeptService;
-import com.breeze.boot.system.service.SysRoleService;
-import com.breeze.boot.system.service.SysUserRoleService;
-import com.breeze.boot.system.service.SysUserService;
+import com.breeze.boot.system.service.*;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -80,10 +74,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserRoleService sysUserRoleService;
 
     /**
+     * 系统文件服务
+     */
+    @Autowired
+    private SysFileService sysFileService;
+
+    /**
      * 系统部门服务
      */
     @Autowired
     private SysDeptService sysDeptService;
+
+    /**
+     * 系统岗位服务
+     */
+    @Autowired
+    private SysPostService sysPostService;
 
     /**
      * 用户令牌服务
@@ -247,6 +253,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
         sysUser.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
         sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+        sysUser.setDeptName(Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).orElseGet(SysDept::new).getDeptName());
+        sysUser.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
+        sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
         sysUser.setSysRoles(roleList);
         return Result.ok(sysUser);
     }
@@ -260,12 +269,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser registerUser(SysUser registerUser) {
         SysUser user = SysUser.builder()
-                .username(registerUser.getOpenId())
-                .amountName("微信匿名用户")
+                .username(registerUser.getUsername())
+                .amountName("微信用户" + registerUser.getUsername())
                 .password(this.passwordEncoder.encode("123456"))
                 .openId(registerUser.getOpenId())
+                .phone(registerUser.getPhone())
                 .build();
-        this.save(registerUser);
+        this.save(user);
         // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
         if (Objects.isNull(sysRole)) {

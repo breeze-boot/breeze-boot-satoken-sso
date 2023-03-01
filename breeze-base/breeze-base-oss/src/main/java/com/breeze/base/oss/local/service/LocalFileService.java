@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ public class LocalFileService {
             return null;
         }
         return FileBO.builder()
-                .path(path)
+                .path(path + "/" + newFileName)
                 .originalFilename(originalFilename)
                 .newFileName(newFileName)
                 .contentType(contentType)
@@ -117,7 +117,7 @@ public class LocalFileService {
      * @param response 响应
      */
     public void download(String path, String fileName, HttpServletResponse response) {
-        File file = getFile(path, fileName);
+        File file = getFile(path);
         if (!file.exists()) {
             throw new SystemServiceException(ResultCode.exception("下载文件失败"));
         }
@@ -132,30 +132,33 @@ public class LocalFileService {
         }
     }
 
+    /**
+     * @param path 路径 + 名称
+     * @return {@link File}
+     */
     @NotNull
-    private File getFile(String path, String fileName) {
-        return new File(new File(this.localProperties.getPath(), path), fileName);
+    private File getFile(String path) {
+        return new File(this.localProperties.getPath(), path);
     }
 
     /**
      * 预览
      *
-     * @param path     路径
-     * @param fileName 文件名称
+     * @param path 路径 + 名称
      * @return {@link String}
      */
-    public String previewImg(String path, String fileName) {
-        return this.localProperties.getNginxHost() + "/" + path + "/" + fileName;
+    public String previewImg(String path) {
+        return this.localProperties.getNginxHost() + path;
     }
 
     /**
      * 删除
      *
-     * @param fileName 文件名称
+     * @param path 路径 + 名称
      * @return boolean
      */
-    public boolean remove(String path, String fileName) {
-        File file = getFile(path, fileName);
+    public boolean remove(String path) {
+        File file = getFile(path);
         if (!file.exists()) {
             log.error("文件不存在");
             return false;

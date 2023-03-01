@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,9 +93,17 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
     private String avatar;
 
     /**
+     * 头像文件ID
+     */
+    @ExcelIgnore
+    @Schema(description = "头像文件ID")
+    private Long avatarFileId;
+
+    /**
      * 用户密码
      */
     @ExcelIgnore
+    @JsonIgnore
     @Schema(description = "用户密码")
     private String password;
 

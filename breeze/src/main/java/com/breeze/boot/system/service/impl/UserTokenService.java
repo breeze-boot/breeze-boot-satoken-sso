@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 package com.breeze.boot.system.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.config.JwtConfiguration;
 import com.breeze.boot.security.entity.CurrentLoginUser;
 import com.breeze.boot.security.entity.LoginUserDTO;
+import com.breeze.boot.security.entity.WxLoginBody;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Lists;
@@ -115,16 +117,40 @@ public class UserTokenService {
     }
 
     /**
-     * 创建或者加载用户通过微信OpenId
+     * 创建或者加载用户
      *
-     * @param openId openId
+     * @param wxLoginBody wx登录消息体
      * @return {@link CurrentLoginUser}
      */
-    public CurrentLoginUser createOrLoadUserByOpenId(@NotNull String openId) {
-        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
+    public CurrentLoginUser createOrLoadUser(WxLoginBody wxLoginBody) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, wxLoginBody.getOpenId()));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
-            sysUser = this.sysUserService.registerUser(SysUser.builder().openId(openId).build());
+            sysUser = this.sysUserService.registerUser(SysUser.builder()
+                    .openId(wxLoginBody.getOpenId())
+                    .phone(wxLoginBody.getPhone())
+                    .amountName(wxLoginBody.getNickName())
+                    .sex(wxLoginBody.getSex())
+                    .phone(wxLoginBody.getEmail())
+                    .username(wxLoginBody.getOpenId().substring(0, 5) + RandomUtil.randomString(6))
+                    .build());
+        }
+        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
+        return this.getLoginUser(loginUserDTO);
+    }
+
+    /**
+     * 创建或者加载用户通过微信获取的手机号
+     *
+     * @param phone phone
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser createOrLoadUserByWxPhone(@NotNull String phone) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+        if (Objects.isNull(sysUser)) {
+            // 不存在就去创建
+            sysUser = this.sysUserService.registerUser(SysUser.builder().phone(phone)
+                    .username(phone + RandomUtil.randomString(6)).build());
         }
         LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
         return this.getLoginUser(loginUserDTO);

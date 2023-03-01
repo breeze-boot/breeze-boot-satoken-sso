@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,12 +43,36 @@ public class WxLoginBody {
      * 头像 url
      */
     @Schema(description = "头像地址")
-    private String avatarUrl;
+    private String avatar;
 
     /**
-     * code
+     * 一键授权获取的code/获取手机号的code
      */
     @Schema(description = "code")
     private String code;
+
+    /**
+     * 手机号
+     */
+    @Schema(description = "手机号")
+    private String phone;
+
+    /**
+     * 邮件
+     */
+    @Schema(description = "邮件")
+    private String email;
+
+    /**
+     * 性别
+     */
+    @Schema(description = "性别")
+    private Integer sex;
+
+    /**
+     * openId
+     */
+    @Schema(description = "openId")
+    private String openId;
 
 }

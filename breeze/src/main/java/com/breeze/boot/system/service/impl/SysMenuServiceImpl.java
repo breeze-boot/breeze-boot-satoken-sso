@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,6 +122,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             List<SysMenu> entityList = this.baseMapper.listMenu(menuSearchDTO);
             return Result.ok(entityList);
         }
+        menuSearchDTO.setRoleIdSet(SecurityUtils.getCurrentUser().getUserRoleIds());
         List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuSearchDTO);
         List<Tree<Long>> build = this.buildTrees(menuEntityList, ROOT);
         return Result.ok(build);

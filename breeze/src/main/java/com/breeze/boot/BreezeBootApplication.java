@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system;
+package com.breeze.boot;
 
 import com.breeze.boot.springdoc.annotation.EnableSpringDoc;
 import com.breeze.boot.validater.annotation.EnableFastValidator;

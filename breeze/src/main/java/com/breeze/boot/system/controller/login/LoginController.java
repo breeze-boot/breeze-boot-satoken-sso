@@ -18,18 +18,23 @@ package com.breeze.boot.system.controller.login;
 
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.annotation.NoAuthentication;
+import com.breeze.boot.security.config.WxLoginProperties;
 import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
 import com.breeze.boot.security.entity.EmailLoginBody;
 import com.breeze.boot.security.entity.SmsLoginBody;
 import com.breeze.boot.security.entity.UserLoginBody;
 import com.breeze.boot.security.entity.WxLoginBody;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationToken;
+import com.breeze.boot.security.utils.WxHttpInterfaces;
 import com.breeze.boot.security.wx.WxCodeAuthenticationToken;
+import com.breeze.boot.security.wxphone.WxPhoneAuthenticationToken;
 import com.breeze.boot.system.service.impl.UserTokenService;
+import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +42,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -64,6 +70,9 @@ public class LoginController {
      */
     @Autowired
     private UserTokenService userTokenService;
+
+    @Autowired
+    private WxLoginProperties wxLoginProperties;
 
     /**
      * 用户名登录
@@ -104,15 +113,45 @@ public class LoginController {
     }
 
     /**
-     * 微信登录
+     * 微信授权登录
      *
      * @param wxLoginBody 微信登录参数
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
+    @Operation(summary = "微信授权登录")
     @PostMapping("/wxLogin")
     public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginBody wxLoginBody) {
-        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginBody.getCode(), "");
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginBody, "");
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(wxCodeAuthenticationToken)));
+    }
+
+    /**
+     * wx手机登录
+     *
+     * @param wxLoginBody wx登录dto
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    @Operation(summary = "微信授权手机号登录")
+    @PostMapping("/wxPhoneLogin")
+    public Result<Map<String, Object>> wxPhoneLogin(@RequestBody WxLoginBody wxLoginBody) {
+        WxPhoneAuthenticationToken wxPhoneAuthenticationToken = WxPhoneAuthenticationToken.unauthenticated(wxLoginBody.getCode(), "");
+        return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(wxPhoneAuthenticationToken)));
+    }
+
+    /**
+     * wx授权手机号
+     *
+     * @param wxLoginBody wx登录dto
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
+     */
+    @Operation(summary = "微信授权手机号")
+    @PostMapping("/wxGetPhone")
+    public Result<Map<String, Object>> wxGetPhone(@RequestBody WxLoginBody wxLoginBody) {
+        String accessToken = WxHttpInterfaces.getAccessToken(this.wxLoginProperties.getAppId(), this.wxLoginProperties.getAppSecret());
+        String phoneNumber = WxHttpInterfaces.getPhoneNumber(wxLoginBody.getCode(), accessToken);
+        HashMap<@Nullable String, @Nullable Object> resultMap = Maps.newHashMap();
+        resultMap.put("phone", phoneNumber);
+        return Result.ok(resultMap);
     }
 
     /**
@@ -125,5 +164,4 @@ public class LoginController {
     public Result<Boolean> logout(@RequestParam("username") String username, HttpServletRequest request) {
         return this.userTokenService.logout(username, request);
     }
-
 }

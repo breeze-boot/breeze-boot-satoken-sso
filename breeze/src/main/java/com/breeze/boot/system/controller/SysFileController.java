@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 系统文件控制器
@@ -77,7 +78,7 @@ public class SysFileController {
     @GetMapping("/preview")
     @PreAuthorize("hasAnyAuthority('sys:file:preview')")
     public Result<String> preview(Long fileId) {
-        return this.sysFileService.preview(fileId);
+        return Result.ok(this.sysFileService.preview(fileId));
     }
 
     /**
@@ -94,17 +95,17 @@ public class SysFileController {
     }
 
     /**
-     * 文件上传
+     * 上传
      *
      * @param fileDTO  文件dto
      * @param request  请求
      * @param response 响应
-     * @return {@link Result}<{@link ?}>
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "文件上传")
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('sys:file:upload')")
-    public Result<?> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Map<String, Object>> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         return this.sysFileService.upload(fileDTO, request, response);
     }
 

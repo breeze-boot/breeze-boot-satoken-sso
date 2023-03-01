@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,19 @@ public class SysUserController {
     }
 
     /**
+     * 详情
+     *
+     * @param userId 用户id
+     * @return {@link Result}<{@link SysUser}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{userId}")
+    @PreAuthorize("hasAnyAuthority('sys:user:info')")
+    public Result<SysUser> info(@PathVariable("userId") Long userId) {
+        return this.sysUserService.getUserById(userId);
+    }
+
+    /**
      * 校验用户名是否重复
      *
      * @param username 平台编码
@@ -80,7 +93,7 @@ public class SysUserController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "校验用户名是否重复")
-    @GetMapping("/checkUsername/{username}")
+    @GetMapping("/checkUsername")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
     public Result<Boolean> checkUsername(@RequestParam("username") String username,
                                          @RequestParam(value = "userId", required = false) Long userId) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.breeze.boot.system.dto.FileSearchDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统文件服务
@@ -49,9 +50,9 @@ public interface SysFileService extends IService<SysFile> {
      * @param fileDTO  文件DTO
      * @param request  请求
      * @param response 响应
-     * @return {@link Result}<{@link Boolean}>
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
-    Result<String> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
+    Result<Map<String, Object>> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 预览
@@ -59,7 +60,7 @@ public interface SysFileService extends IService<SysFile> {
      * @param fileId 文件ID
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<String> preview(Long fileId);
+    String preview(Long fileId);
 
     /**
      * 下载

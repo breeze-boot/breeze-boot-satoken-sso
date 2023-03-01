@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
 import com.breeze.boot.system.mapper.SysFileMapper;
 import com.breeze.boot.system.service.SysFileService;
+import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -82,17 +84,17 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @param fileDTO  文件DTO
      * @param request  请求
      * @param response 响应
-     * @return {@link Result}<{@link Boolean}>
+     * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @SneakyThrows
     @Override
-    public Result<String> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Map<String, Object>> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
         MultipartFile file = fileDTO.getFile();
+        String newFileName = UUID.randomUUID().toString().replace("-", "");
         FileBO fileBO = null;
         try {
             fileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file,
-                    String.valueOf(LocalDate.now().getDayOfMonth()),
-                    UUID.randomUUID().toString().replace("-", ""));
+                    String.valueOf(LocalDate.now().getDayOfMonth()), newFileName);
         } catch (Exception ex) {
             log.error("", ex);
         }
@@ -107,7 +109,11 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                 .ossStyle(fileDTO.getOssStyle())
                 .build();
         this.save(sysFile);
-        return Result.ok(this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName()));
+        Map<String, Object> resultMap = Maps.newHashMap();
+        resultMap.put("url", this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath()));
+        resultMap.put("path", fileBO.getPath());
+        resultMap.put("fileId", sysFile.getId());
+        return Result.ok(resultMap);
     }
 
     /**
@@ -116,14 +122,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @param fileId 文件ID
      * @return {@link Result}<{@link Boolean}>
      */
+    @SneakyThrows
     @Override
-    public Result<String> preview(Long fileId) {
+    public String preview(Long fileId) {
         SysFile sysFile = this.getById(fileId);
         if (Objects.isNull(sysFile)) {
-            return Result.fail("文件不存在");
+            // TODO 缺省图
+            return "";
         }
-        String preview = this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName());
-        return Result.ok(preview);
+        return this.ossStoreService.preview(sysFile.getOssStyle(), sysFile.getPath());
     }
 
     /**
@@ -156,7 +163,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             return Result.fail(Boolean.FALSE, "文件不存在");
         }
         for (SysFile sysFile : sysFileList) {
-            Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getPath(), sysFile.getNewFileName());
+            Boolean remove = this.ossStoreService.remove(sysFile.getOssStyle(), sysFile.getPath());
             if (!remove) {
                 // TODO
                 return Result.fail(Boolean.FALSE, "删除失败");

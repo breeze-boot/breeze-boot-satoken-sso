@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,11 @@
 
 package com.breeze.boot.security.wx;
 
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.breeze.boot.security.config.WxLoginProperties;
+import com.breeze.boot.security.entity.WxLoginBody;
 import com.breeze.boot.security.service.LocalUserDetailsService;
+import com.breeze.boot.security.utils.WxHttpInterfaces;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -33,7 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Objects;
 
 /**
- * 短信密码身份验证提供者
+ * 微信Code身份验证提供者
  * <p>
  * 参考：
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
@@ -75,22 +72,10 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
-        String code = String.valueOf(authenticationToken.getPrincipal());
-        String url = "https://api.weixin.qq.com/sns/jscode2session";
-        HttpResponse response = HttpUtil.createGet(url)
-                .form("secret", this.wxLoginProperties.getAppSecret())
-                .form("appid", this.wxLoginProperties.getAppId())
-                .form("js_code", code)
-                .form("grant_type", "authorization_code")
-                .execute();
-        String formatJsonStr = JSONUtil.formatJsonStr(response.body());
-        log.info("\n{}", formatJsonStr);
-        JSONObject jsonObj = JSONUtil.parseObj(response.body());
-        if (Objects.equals(jsonObj.get("errcode"), 40164) || Objects.equals(41008, jsonObj.get("errcode"))) {
-            throw new AccessDeniedException("微信认证失败");
-        }
-
-        UserDetails userDetails = this.userDetailsService.createOrLoadUserByOpenId(jsonObj.getObj("openid").toString());
+        WxLoginBody wxLoginBody = (WxLoginBody) authenticationToken.getPrincipal();
+        String openId = WxHttpInterfaces.getOpenId(this.wxLoginProperties.getAppId(), this.wxLoginProperties.getAppSecret(), wxLoginBody.getCode());
+        wxLoginBody.setOpenId(openId);
+        UserDetails userDetails = this.userDetailsService.createOrLoadUser(wxLoginBody);
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(CREATE_FAIL);
         }

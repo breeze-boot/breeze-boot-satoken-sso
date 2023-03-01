@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package com.breeze.boot.system.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.util.Set;
 
 /**
  * 菜单参数DTO
@@ -50,5 +53,12 @@ public class MenuSearchDTO {
      */
     @Schema(description = "菜单标题名称")
     private String title;
+
+    /**
+     * 菜单标题名称
+     */
+    @JsonIgnore
+    @Schema(description = "角色ID", hidden = true)
+    private Set<Long> roleIdSet;
 
 }

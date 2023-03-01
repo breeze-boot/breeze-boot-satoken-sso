@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.breeze.boot.security.service;
 
+import com.breeze.boot.security.entity.WxLoginBody;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,18 +35,21 @@ public class LocalUserDetailsService implements UserDetailsService {
 
     protected Function<String, UserDetails> phoneFunction;
 
-    protected Function<String, UserDetails> wxFunction;
+    protected Function<WxLoginBody, UserDetails> wxFunction;
 
     protected Function<String, UserDetails> emailFunction;
+    protected Function<String, UserDetails> wxPhoneFunction;
 
     public LocalUserDetailsService(Function<String, UserDetails> usernameFunction,
                                    Function<String, UserDetails> phoneFunction,
-                                   Function<String, UserDetails> wxFunction,
-                                   Function<String, UserDetails> emailFunction) {
+                                   Function<WxLoginBody, UserDetails> wxFunction,
+                                   Function<String, UserDetails> emailFunction,
+                                   Function<String, UserDetails> wxPhoneFunction) {
         this.usernameFunction = usernameFunction;
         this.phoneFunction = phoneFunction;
         this.wxFunction = wxFunction;
         this.emailFunction = emailFunction;
+        this.wxPhoneFunction = wxPhoneFunction;
     }
 
     public UserDetails loadUserByEmail(String email) {
@@ -56,8 +60,12 @@ public class LocalUserDetailsService implements UserDetailsService {
         return this.phoneFunction.apply(phone);
     }
 
-    public UserDetails createOrLoadUserByOpenId(String openId) {
-        return this.wxFunction.apply(openId);
+    public UserDetails createOrLoadUser(WxLoginBody wxLoginBody) {
+        return this.wxFunction.apply(wxLoginBody);
+    }
+
+    public UserDetails createOrLoadUserByPhone(String phone) {
+        return this.wxPhoneFunction.apply(phone);
     }
 
     @Override

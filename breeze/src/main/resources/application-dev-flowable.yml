@@ -1,0 +1,3 @@
+flowable:
+  async-executor-activate: false
+  database-schema-update: true

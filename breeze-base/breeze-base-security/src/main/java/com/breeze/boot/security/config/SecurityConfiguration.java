@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, gaoweixuan (breeze-cloud@foxmail.com).
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.breeze.boot.security.service.LocalUserDetailsService;
 import com.breeze.boot.security.sms.SmsCodeAuthenticationProvider;
 import com.breeze.boot.security.utils.LoginCheck;
 import com.breeze.boot.security.wx.WxCodeAuthenticationProvider;
+import com.breeze.boot.security.wxphone.WxPhoneAuthenticationProvider;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -180,13 +181,26 @@ public class SecurityConfiguration {
     /**
      * 微信令牌身份验证提供者 Bean
      *
-     * @return {@link EmailCodeAuthenticationProvider}
+     * @return {@link WxCodeAuthenticationProvider}
      */
     @Bean
     public WxCodeAuthenticationProvider wxCodeAuthenticationProvider() {
         WxCodeAuthenticationProvider wxCodeAuthenticationProvider = new WxCodeAuthenticationProvider(userDetailsService, wxLoginProperties);
         this.authenticationManagerBuilder.authenticationProvider(wxCodeAuthenticationProvider);
         return wxCodeAuthenticationProvider;
+    }
+
+
+    /**
+     * 微信令牌身份验证提供者 Bean
+     *
+     * @return {@link WxPhoneAuthenticationProvider}
+     */
+    @Bean
+    public WxPhoneAuthenticationProvider wxPhoneAuthenticationProvider() {
+        WxPhoneAuthenticationProvider wxPhoneAuthenticationProvider = new WxPhoneAuthenticationProvider(userDetailsService, wxLoginProperties);
+        this.authenticationManagerBuilder.authenticationProvider(wxPhoneAuthenticationProvider);
+        return wxPhoneAuthenticationProvider;
     }
 
 }
