@@ -16,8 +16,8 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.database.mapper.BreezeBaseMapper;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,7 +32,7 @@ import java.util.Set;
  * @date 2022-10-30
  */
 @Mapper
-public interface SysRoleDataPermissionMapper extends BaseMapper<SysRoleDataPermission> {
+public interface SysRoleDataPermissionMapper extends BreezeBaseMapper<SysRoleDataPermission> {
 
     /**
      * 角色数据权限列表

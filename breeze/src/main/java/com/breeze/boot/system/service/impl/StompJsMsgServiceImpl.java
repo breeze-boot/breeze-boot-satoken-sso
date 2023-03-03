@@ -18,7 +18,7 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserMsg;

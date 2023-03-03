@@ -2,7 +2,7 @@ package com.breeze.boot.system;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.breeze.base.mail.MailSender;
+import com.breeze.mail.MailSender;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.mapper.SysPlatformMapper;
 import com.google.common.collect.Lists;

@@ -17,9 +17,9 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.log.annotation.BreezeSysLog;
-import com.breeze.boot.log.config.LogType;
+import com.breeze.core.utils.Result;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;

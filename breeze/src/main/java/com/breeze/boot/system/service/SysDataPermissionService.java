@@ -18,8 +18,8 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
 import com.breeze.boot.system.dto.SysDataPermissionDTO;
 

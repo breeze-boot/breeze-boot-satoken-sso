@@ -16,10 +16,10 @@
 
 package com.breeze.boot.system.exception;
 
-import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.ex.SystemServiceException;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.ex.AccessException;
+import com.breeze.core.enums.ResultCode;
+import com.breeze.core.ex.SystemServiceException;
+import com.breeze.core.utils.Result;
+import com.breeze.security.ex.AccessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.breeze.boot.core.enums.ResultCode.HTTP_MESSAGE_CONVERSION_EXCEPTION;
-import static com.breeze.boot.core.enums.ResultCode.INTERNAL_SERVER_ERROR;
+import static com.breeze.core.enums.ResultCode.HTTP_MESSAGE_CONVERSION_EXCEPTION;
+import static com.breeze.core.enums.ResultCode.INTERNAL_SERVER_ERROR;
 
 /**
  * 全局异常处理程序

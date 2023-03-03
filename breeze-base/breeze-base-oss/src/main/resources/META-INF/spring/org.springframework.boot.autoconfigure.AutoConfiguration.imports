@@ -1,4 +1,4 @@
-com.breeze.base.oss.config.StorageProperties
-com.breeze.base.oss.minio.config.MinioConfiguration
-com.breeze.base.oss.local.config.WebMvcConfiguration
-com.breeze.base.oss.OssStoreService
+com.breeze.oss.config.StorageProperties
+com.breeze.oss.minio.config.MinioConfiguration
+com.breeze.oss.local.config.WebMvcConfiguration
+com.breeze.oss.OssStoreService

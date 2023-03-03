@@ -16,18 +16,18 @@
 
 package com.breeze.boot.system.controller.login;
 
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.annotation.NoAuthentication;
-import com.breeze.boot.security.config.WxLoginProperties;
-import com.breeze.boot.security.email.EmailCodeAuthenticationToken;
-import com.breeze.boot.security.entity.EmailLoginBody;
-import com.breeze.boot.security.entity.SmsLoginBody;
-import com.breeze.boot.security.entity.UserLoginBody;
-import com.breeze.boot.security.entity.WxLoginBody;
-import com.breeze.boot.security.sms.SmsCodeAuthenticationToken;
-import com.breeze.boot.security.utils.WxHttpInterfaces;
-import com.breeze.boot.security.wx.WxCodeAuthenticationToken;
-import com.breeze.boot.security.wxphone.WxPhoneAuthenticationToken;
+import com.breeze.core.utils.Result;
+import com.breeze.security.annotation.NoAuthentication;
+import com.breeze.security.config.WxLoginProperties;
+import com.breeze.security.email.EmailCodeAuthenticationToken;
+import com.breeze.security.entity.EmailLoginBody;
+import com.breeze.security.entity.SmsLoginBody;
+import com.breeze.security.entity.UserLoginBody;
+import com.breeze.security.entity.WxLoginBody;
+import com.breeze.security.sms.SmsCodeAuthenticationToken;
+import com.breeze.security.utils.WxHttpInterfaces;
+import com.breeze.security.wx.WxCodeAuthenticationToken;
+import com.breeze.security.wxphone.WxPhoneAuthenticationToken;
 import com.breeze.boot.system.service.impl.UserTokenService;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;

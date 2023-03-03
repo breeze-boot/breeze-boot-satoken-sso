@@ -16,10 +16,10 @@
 
 package com.breeze.boot.system.controller.login;
 
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.annotation.NoAuthentication;
-import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.core.utils.Result;
+import com.breeze.security.annotation.NoAuthentication;
+import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

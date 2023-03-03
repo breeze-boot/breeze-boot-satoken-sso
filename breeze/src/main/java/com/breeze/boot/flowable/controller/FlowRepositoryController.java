@@ -17,7 +17,7 @@
 package com.breeze.boot.flowable.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import com.breeze.boot.flowable.dto.FlowRepositoryDTO;
 import com.breeze.boot.flowable.service.IFlowRepositoryService;
 import io.swagger.v3.oas.annotations.Operation;

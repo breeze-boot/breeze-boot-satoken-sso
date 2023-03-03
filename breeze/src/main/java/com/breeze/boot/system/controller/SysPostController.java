@@ -18,9 +18,9 @@ package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.log.annotation.BreezeSysLog;
-import com.breeze.boot.log.config.LogType;
+import com.breeze.core.utils.Result;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
 import com.breeze.boot.system.domain.SysPost;
 import com.breeze.boot.system.dto.PostSearchDTO;
 import com.breeze.boot.system.service.SysPostService;

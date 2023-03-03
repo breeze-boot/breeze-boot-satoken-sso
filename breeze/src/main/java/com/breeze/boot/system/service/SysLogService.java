@@ -18,7 +18,7 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.log.dto.SysLogDTO;
+import com.breeze.log.dto.SysLogDTO;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogSearchDTO;
 

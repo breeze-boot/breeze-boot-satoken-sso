@@ -17,7 +17,7 @@
 
 package com.breeze.boot.system.dto;
 
-import com.breeze.boot.core.entity.PageDTO;
+import com.breeze.core.entity.PageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

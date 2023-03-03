@@ -18,8 +18,8 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.UserRoleDTO;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.RoleSearchDTO;
 

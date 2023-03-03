@@ -21,7 +21,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.log.dto.SysLogDTO;
+import com.breeze.log.dto.SysLogDTO;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogSearchDTO;
 import com.breeze.boot.system.mapper.SysLogMapper;

@@ -1,4 +1,3 @@
-com.breeze.boot.system.config.ResourceServerConfiguration
-com.breeze.boot.security.config.JwtConfiguration
-com.breeze.boot.security.config.PwdConfiguration
-com.breeze.boot.security.config.RedisConfiguration
+com.breeze.security.config.JwtConfiguration
+com.breeze.security.config.PwdConfiguration
+com.breeze.security.config.RedisConfiguration

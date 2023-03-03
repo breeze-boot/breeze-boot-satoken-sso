@@ -16,7 +16,7 @@
 
 package com.breeze.websocket.controller;
 
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import com.breeze.websocket.dto.MsgDTO;
 import com.breeze.websocket.service.MsgService;
 import com.breeze.websocket.vo.MsgVO;

@@ -23,10 +23,10 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.entity.UserRoleDTO;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.entity.UserRoleDTO;
+import com.breeze.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuSearchDTO;
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.CoreConstants.ROOT;
+import static com.breeze.core.constants.CoreConstants.ROOT;
 
 /**
  * 系统菜单服务impl

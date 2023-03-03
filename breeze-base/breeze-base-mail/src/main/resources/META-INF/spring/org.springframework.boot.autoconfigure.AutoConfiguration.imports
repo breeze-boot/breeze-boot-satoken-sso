@@ -1,2 +1,2 @@
-com.breeze.base.mail.MailSender
-com.breeze.base.mail.MailProperties
+com.breeze.mail.MailSender
+com.breeze.mail.MailProperties

@@ -20,8 +20,8 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.annotation.NoAuthentication;
+import com.breeze.core.utils.Result;
+import com.breeze.security.annotation.NoAuthentication;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.domain.SysUser;
@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.CoreConstants.ROOT;
+import static com.breeze.core.constants.CoreConstants.ROOT;
 
 /**
  * 公用的接口

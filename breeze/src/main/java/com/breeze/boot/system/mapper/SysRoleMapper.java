@@ -17,8 +17,8 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.core.utils.Result;
+import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.dto.RoleSearchDTO;
 import org.apache.ibatis.annotations.Mapper;

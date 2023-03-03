@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysDictItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -16,7 +16,7 @@
 
 package com.breeze.boot.flowable.dto;
 
-import com.breeze.boot.core.entity.PageDTO;
+import com.breeze.core.entity.PageDTO;
 import lombok.Data;
 
 /**

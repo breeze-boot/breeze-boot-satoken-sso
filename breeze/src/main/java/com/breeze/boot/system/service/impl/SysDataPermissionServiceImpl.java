@@ -24,8 +24,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
 import com.breeze.boot.system.domain.SysDataPermissionCustom;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.DataPermissionType.DEPT_AND_LOWER_LEVEL;
+import static com.breeze.core.constants.DataPermissionType.DEPT_AND_LOWER_LEVEL;
 
 /**
  * 系统数据权限服务 impl

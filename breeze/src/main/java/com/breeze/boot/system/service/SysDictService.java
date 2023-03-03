@@ -18,7 +18,7 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysDict;
 import com.breeze.boot.system.dto.DictOpenDTO;
 import com.breeze.boot.system.dto.DictSearchDTO;

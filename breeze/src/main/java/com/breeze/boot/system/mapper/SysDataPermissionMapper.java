@@ -17,8 +17,8 @@
 package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.database.mapper.BreezeBaseMapper;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

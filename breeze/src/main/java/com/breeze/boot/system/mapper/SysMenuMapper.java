@@ -16,8 +16,8 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
-import com.breeze.boot.security.entity.UserRoleDTO;
+import com.breeze.database.mapper.BreezeBaseMapper;
+import com.breeze.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.dto.MenuSearchDTO;
 import org.apache.ibatis.annotations.Mapper;

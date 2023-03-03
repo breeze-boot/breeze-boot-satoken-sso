@@ -18,8 +18,8 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import com.breeze.boot.security.entity.LoginUserDTO;
-import com.breeze.boot.security.entity.UserRoleDTO;
+import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
+import static com.breeze.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 用户令牌服务impl

@@ -1,2 +1,3 @@
-com.breeze.boot.database.config.MybatisMetaObjectHandler
-com.breeze.boot.database.config.MybatisPlusConfiguration
+com.breeze.database.config.MybatisMetaObjectHandler
+com.breeze.database.config.MybatisPlusConfiguration
+com.breeze.database.config.DsAspect

@@ -18,8 +18,8 @@ package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.mapper.SysRoleDataPermissionMapper;
 import com.breeze.boot.system.service.SysRoleDataPermissionService;

@@ -18,8 +18,8 @@ package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.database.annotation.DataPermission;
-import com.breeze.boot.database.mapper.BreezeBaseMapper;
+import com.breeze.database.annotation.DataPermission;
+import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysUserMsg;
 import com.breeze.boot.system.domain.SysUserMsgSnapshot;
 import com.breeze.boot.system.dto.UserMsgSearchDTO;

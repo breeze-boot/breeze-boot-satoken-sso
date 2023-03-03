@@ -16,7 +16,7 @@
 
 package com.breeze.boot.system.exception;
 
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;

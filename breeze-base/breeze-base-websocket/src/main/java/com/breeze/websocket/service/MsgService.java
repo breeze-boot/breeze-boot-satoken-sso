@@ -16,7 +16,7 @@
 
 package com.breeze.websocket.service;
 
-import com.breeze.boot.core.utils.Result;
+import com.breeze.core.utils.Result;
 import com.breeze.websocket.dto.MsgDTO;
 import com.breeze.websocket.vo.MsgVO;
 import lombok.extern.slf4j.Slf4j;

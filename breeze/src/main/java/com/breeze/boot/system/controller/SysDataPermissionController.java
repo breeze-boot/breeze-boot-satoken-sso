@@ -17,10 +17,10 @@
 package com.breeze.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.log.annotation.BreezeSysLog;
-import com.breeze.boot.log.config.LogType;
-import com.breeze.boot.security.entity.DataPermissionDTO;
+import com.breeze.core.utils.Result;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
+import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysDataPermission;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.dto.SysDataPermissionDTO;

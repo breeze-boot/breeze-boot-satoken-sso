@@ -20,11 +20,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.utils.EasyExcelExport;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.ex.AccessException;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.core.enums.ResultCode;
+import com.breeze.core.utils.EasyExcelExport;
+import com.breeze.core.utils.Result;
+import com.breeze.security.ex.AccessException;
+import com.breeze.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.*;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
@@ -44,7 +44,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
+import static com.breeze.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 系统用户服务impl
