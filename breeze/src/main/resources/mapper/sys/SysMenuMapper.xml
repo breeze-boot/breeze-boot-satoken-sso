@@ -55,23 +55,9 @@
         a.type
         FROM sys_menu a
         LEFT JOIN sys_platform b ON a.platform_id = b.id
-        LEFT JOIN sys_role_menu c ON a.id = c.menu_id
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
-            AND c.is_delete = 0
-            <choose>
-                <when test="menuSearchDTO.roleIdSet != null and menuSearchDTO.roleIdSet.size > 0">
-                    AND c.role_id IN
-                    <foreach collection="menuSearchDTO.roleIdSet" item="roleId" open="(" separator="," close=")"
-                             index="index">
-                        #{roleId}
-                    </foreach>
-                </when>
-                <otherwise>
-                    AND c.role_id IN ( 0 )
-                </otherwise>
-            </choose>
             AND a.platform_id = #{menuSearchDTO.platformId}
             <if test="menuSearchDTO.title != null and menuSearchDTO.title != ''">
                 AND a.title like CONCAT( '%', #{menuSearchDTO.title}, '%')

@@ -18,9 +18,9 @@ package com.breeze.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserSearchDTO;
+import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

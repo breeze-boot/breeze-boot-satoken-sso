@@ -18,13 +18,13 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.system.domain.SysUser;
+import com.breeze.boot.system.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.security.config.JwtConfiguration;
 import com.breeze.security.entity.CurrentLoginUser;
 import com.breeze.security.entity.LoginUserDTO;
 import com.breeze.security.entity.WxLoginBody;
-import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.nimbusds.jose.JWSAlgorithm;

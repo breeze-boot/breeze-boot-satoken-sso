@@ -16,9 +16,9 @@
 
 package com.breeze.boot.system.mapper;
 
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.security.entity.DataPermissionDTO;
-import com.breeze.boot.system.domain.SysRoleDataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

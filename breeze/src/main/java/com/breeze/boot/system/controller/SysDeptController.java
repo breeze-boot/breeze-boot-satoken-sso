@@ -18,12 +18,12 @@ package com.breeze.boot.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.core.utils.Result;
-import com.breeze.log.annotation.BreezeSysLog;
-import com.breeze.log.config.LogType;
 import com.breeze.boot.system.domain.SysDept;
 import com.breeze.boot.system.dto.DeptSearchDTO;
 import com.breeze.boot.system.service.SysDeptService;
+import com.breeze.core.utils.Result;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

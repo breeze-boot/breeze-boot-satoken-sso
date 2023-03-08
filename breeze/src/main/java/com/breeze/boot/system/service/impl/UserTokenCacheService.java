@@ -18,13 +18,13 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import com.breeze.security.entity.LoginUserDTO;
-import com.breeze.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.service.SysDeptService;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysRoleDataPermissionService;
 import com.breeze.boot.system.service.SysRoleService;
+import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.entity.UserRoleDTO;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

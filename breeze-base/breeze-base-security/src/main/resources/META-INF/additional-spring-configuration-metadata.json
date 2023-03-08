@@ -3,27 +3,32 @@
     {
       "name": "breeze.jwt.rsa-public-key",
       "type": "java.lang.String",
-      "description": "Description for jwt.public-key."
+      "description": "公钥"
     },
     {
       "name": "breeze.jwt.rsa-private-key",
       "type": "java.lang.String",
-      "description": "Description for jwt.private-key."
+      "description": "私钥"
     },
     {
       "name": "breeze.wx.app-id",
       "type": "java.lang.String",
-      "description": "Description for breeze.wx.app-id."
+      "description": "小程序的AppId"
     },
     {
       "name": "breeze.wx.app-secret",
       "type": "java.lang.String",
-      "description": "Description for breeze.wx.app-secret."
+      "description": "小程序的密钥"
     },
     {
       "name": "breeze.security.ignore-urls",
       "type": "java.lang.String",
-      "description": "Description for breeze.security.ignore.excludeUrls."
+      "description": "不需要权限校验的url"
+    },
+    {
+      "name": "breeze.tenant.ignore-urls",
+      "type": "java.lang.String",
+      "description": "不需要多租户url"
     }
   ]
 }

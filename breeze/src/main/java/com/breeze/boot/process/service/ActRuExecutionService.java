@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.flowable.service;
+package com.breeze.boot.process.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.breeze.boot.flowable.dto.FlowRepositoryDTO;
-import org.flowable.engine.repository.ProcessDefinition;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.process.domain.ActRuExecution;
+import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
+import com.breeze.boot.process.vo.ProcessInstanceVO;
 
 /**
- * 工作流资源管理服务服务接口
+ * 流程执行实例服务
  *
- * @author gaoweixuan
- * @date 2023-03-01
+ * @author breeze
+ * @date 2023-03-08
  */
-public interface IFlowRepositoryService {
+public interface ActRuExecutionService extends IService<ActRuExecution> {
 
     /**
      * 列表页面
      *
-     * @param flowRepositoryDTO 流程资源库dto
-     * @return {@link IPage}<{@link ProcessDefinition}>
+     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @return {@link Page}<{@link ProcessInstanceVO}>
      */
-    IPage<ProcessDefinition> listPage(FlowRepositoryDTO flowRepositoryDTO);
+    Page<ProcessInstanceVO> listPage(ProcessInstanceSearchDTO processInstanceSearchDTO);
 
 }

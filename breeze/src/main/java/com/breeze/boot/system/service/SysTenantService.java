@@ -18,9 +18,9 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysTenant;
 import com.breeze.boot.system.dto.TenantSearchDTO;
+import com.breeze.core.utils.Result;
 
 import java.util.List;
 

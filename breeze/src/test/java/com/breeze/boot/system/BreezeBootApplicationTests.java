@@ -2,9 +2,9 @@ package com.breeze.boot.system;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.breeze.mail.MailSender;
 import com.breeze.boot.system.domain.SysPlatform;
 import com.breeze.boot.system.mapper.SysPlatformMapper;
+import com.breeze.mail.MailSender;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,12 +18,12 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.UserOpenDTO;
 import com.breeze.boot.system.dto.UserResetPasswordDTO;
 import com.breeze.boot.system.dto.UserRolesDTO;
 import com.breeze.boot.system.dto.UserSearchDTO;
+import com.breeze.core.utils.Result;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;

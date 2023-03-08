@@ -16,12 +16,12 @@
 
 package com.breeze.boot.system.controller;
 
-import com.breeze.core.utils.Result;
-import com.breeze.log.annotation.BreezeSysLog;
-import com.breeze.log.config.LogType;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.service.SysDictItemService;
+import com.breeze.core.utils.Result;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

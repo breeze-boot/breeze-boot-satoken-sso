@@ -17,9 +17,9 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
+import com.breeze.core.utils.Result;
 
 import java.util.List;
 import java.util.Map;

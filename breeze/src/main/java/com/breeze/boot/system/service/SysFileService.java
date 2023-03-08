@@ -18,10 +18,10 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysFile;
 import com.breeze.boot.system.dto.FileDTO;
 import com.breeze.boot.system.dto.FileSearchDTO;
+import com.breeze.core.utils.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -16,6 +16,8 @@
 
 package com.breeze.xss.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +32,14 @@ import javax.servlet.Filter;
  * @date 2022-10-21
  */
 @Configuration
+@EnableConfigurationProperties(XssProperties.class)
 public class XssFilterRegisterConfiguration {
+
+    /**
+     * xss属性
+     */
+    @Autowired
+    private XssProperties xssProperties;
 
     /**
      * xss过滤器登记
@@ -43,7 +52,7 @@ public class XssFilterRegisterConfiguration {
         // 过滤器要设置最先执行
         registration.setOrder(Integer.MAX_VALUE);
         registration.setDispatcherTypes(DispatcherType.REQUEST);
-        registration.setFilter(new XssFilter());
+        registration.setFilter(new XssFilter(this.xssProperties));
         registration.addUrlPatterns("/*");
         registration.setName("xssFilter");
         return registration;

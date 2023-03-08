@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.flowable.controller;
+package com.breeze.boot.process.dto;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.breeze.core.entity.PageDTO;
+import lombok.Data;
 
 /**
- * 流程资源管理控制器
+ * 流程资源dto
  *
  * @author gaoweixuan
  * @date 2023-03-01
  */
-@RestController
-@RequestMapping("/flow/deploy")
-@Tag(name = "流程部署管理模块", description = "FlowDeployController")
-public class FlowDeployController {
+@Data
+public class ProcessInstanceSearchDTO extends PageDTO {
+
+    /**
+     * 租户ID
+     */
+    private String tenantId;
 
 }

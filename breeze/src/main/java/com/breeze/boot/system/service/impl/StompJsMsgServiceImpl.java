@@ -18,7 +18,6 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.domain.SysUserMsg;
@@ -27,6 +26,7 @@ import com.breeze.boot.system.service.SysMsgService;
 import com.breeze.boot.system.service.SysUserMsgService;
 import com.breeze.boot.system.service.SysUserMsgSnapshotService;
 import com.breeze.boot.system.service.SysUserService;
+import com.breeze.core.utils.Result;
 import com.breeze.websocket.bo.UserMsgBO;
 import com.breeze.websocket.dto.MsgDTO;
 import com.breeze.websocket.service.MsgSaveEvent;

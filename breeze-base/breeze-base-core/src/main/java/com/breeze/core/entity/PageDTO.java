@@ -16,6 +16,7 @@
 
 package com.breeze.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 
@@ -67,6 +68,16 @@ public class PageDTO {
     }
 
     /**
+     * 获取当前页码
+     *
+     * @return {@link Integer}
+     */
+    @JsonIgnore
+    public Integer getOffset() {
+        return (getCurrent() - 1) * this.getSize();
+    }
+
+    /**
      * 获取分页大小
      *
      * @return {@link Integer}
@@ -85,5 +96,15 @@ public class PageDTO {
      */
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    /**
+     * 获取分页大小
+     *
+     * @return {@link Integer}
+     */
+    @JsonIgnore
+    public Integer getLimit() {
+        return getSize();
     }
 }

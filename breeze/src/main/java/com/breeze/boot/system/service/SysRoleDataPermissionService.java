@@ -17,9 +17,9 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.core.utils.Result;
 import com.breeze.security.entity.DataPermissionDTO;
-import com.breeze.boot.system.domain.SysRoleDataPermission;
 
 import java.util.List;
 import java.util.Set;

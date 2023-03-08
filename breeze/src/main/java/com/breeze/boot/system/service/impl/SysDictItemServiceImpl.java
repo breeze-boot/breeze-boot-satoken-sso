@@ -17,11 +17,11 @@
 package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysDictItem;
 import com.breeze.boot.system.dto.DictSearchDTO;
 import com.breeze.boot.system.mapper.SysDictItemMapper;
 import com.breeze.boot.system.service.SysDictItemService;
+import com.breeze.core.utils.Result;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 

@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.flowable.vo;
+package com.breeze.boot.process.dto;
 
+import com.breeze.core.entity.PageDTO;
 import lombok.Data;
 
 /**
- * 流程资源dto
+ * 流程分类
  *
- * @author gaoweixuan
- * @date 2023-03-01
+ * @author breeze
+ * @date 2023-03-06
  */
 @Data
-public class FlowRepositoryVO {
+public class ProcessCategoryDTO extends PageDTO {
+
+    /**
+     * 流程分类编码
+     */
+    private String categoryCode;
+
+    /**
+     * 流程分类名称
+     */
+    private String categoryName;
 
 }

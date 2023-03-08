@@ -18,11 +18,11 @@ package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.core.utils.Result;
-import com.breeze.security.entity.DataPermissionDTO;
 import com.breeze.boot.system.domain.SysRoleDataPermission;
 import com.breeze.boot.system.mapper.SysRoleDataPermissionMapper;
 import com.breeze.boot.system.service.SysRoleDataPermissionService;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.DataPermissionDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

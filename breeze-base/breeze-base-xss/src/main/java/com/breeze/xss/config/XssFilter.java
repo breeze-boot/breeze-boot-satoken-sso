@@ -16,9 +16,12 @@
 
 package com.breeze.xss.config;
 
+import cn.hutool.core.text.AntPathMatcher;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * xss过滤器
@@ -27,6 +30,16 @@ import java.io.IOException;
  * @date 2022-10-21
  */
 public class XssFilter implements Filter {
+
+    AntPathMatcher matcher = new AntPathMatcher("/");
+    /**
+     * xss属性
+     */
+    private XssProperties xssProperties;
+
+    public XssFilter(XssProperties xssProperties) {
+        this.xssProperties = xssProperties;
+    }
 
     /**
      * 初始化
@@ -43,13 +56,27 @@ public class XssFilter implements Filter {
      * @param request  请求
      * @param response 响应
      * @param chain    链
-     * @throws IOException      ioexception
+     * @throws IOException      IO异常
      * @throws ServletException servlet异常
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        if (this.match((HttpServletRequest) request)) {
+            chain.doFilter(request, response);
+            return;
+        }
         chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
+    }
+
+    private boolean match(HttpServletRequest request) {
+        List<String> ignoreUrls = this.xssProperties.getIgnoreUrls();
+        for (String ignoreUrl : ignoreUrls) {
+            if (matcher.match(ignoreUrl, request.getRequestURI())) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
     /**

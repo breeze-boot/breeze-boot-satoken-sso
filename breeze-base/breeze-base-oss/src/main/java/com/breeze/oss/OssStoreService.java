@@ -16,11 +16,11 @@
 
 package com.breeze.oss;
 
+import com.breeze.core.enums.ResultCode;
+import com.breeze.core.ex.SystemServiceException;
 import com.breeze.oss.bo.FileBO;
 import com.breeze.oss.local.service.LocalFileService;
 import com.breeze.oss.minio.service.MinioService;
-import com.breeze.core.enums.ResultCode;
-import com.breeze.core.ex.SystemServiceException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

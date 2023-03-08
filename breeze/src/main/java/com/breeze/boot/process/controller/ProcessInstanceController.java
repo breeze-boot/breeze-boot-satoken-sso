@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.flowable.controller;
+package com.breeze.boot.process.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
+import com.breeze.boot.process.dto.ProcessStartDTO;
+import com.breeze.boot.process.service.IProcessInstanceService;
+import com.breeze.boot.process.vo.ProcessInstanceVO;
 import com.breeze.core.utils.Result;
-import com.breeze.boot.flowable.dto.FlowRepositoryDTO;
-import com.breeze.boot.flowable.service.IFlowRepositoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,31 +32,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 流程资源管理控制器
+ * 流程实例控制器
  *
  * @author gaoweixuan
  * @date 2023-03-01
  */
 @RestController
-@RequestMapping("/flow/repository")
-@Tag(name = "流程资源管理模块", description = "FlowRepositoryController")
-public class FlowRepositoryController {
+@RequestMapping("/process/instance")
+@Tag(name = "流程实例管理模块", description = "ProcessInstanceController")
+public class ProcessInstanceController {
 
-
+    /**
+     * 流程资源服务
+     */
     @Autowired
-    private IFlowRepositoryService flowRepositoryService;
+    private IProcessInstanceService processInstanceService;
+
+    /**
+     * 发起流程
+     *
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "发起")
+    @PostMapping("/startProcess")
+    @PreAuthorize("hasAnyAuthority('process:instance:start')")
+    public Result<Boolean> startProcess(@RequestBody ProcessStartDTO startDTO) {
+        return Result.ok(this.processInstanceService.startProcess(startDTO));
+    }
 
     /**
      * 列表
      *
-     * @param flowRepositoryDTO 流程资源查询DTO
-     * @return {@link Result}<{@link IPage}<{@link ProcessDefinition}>>
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('sys:repository:list')")
-    public Result<IPage<ProcessDefinition>> list(@RequestBody FlowRepositoryDTO flowRepositoryDTO) {
-        return Result.ok(this.flowRepositoryService.listPage(flowRepositoryDTO));
+    @PreAuthorize("hasAnyAuthority('process:instance:list')")
+    public Result<Page<ProcessInstanceVO>> list(@RequestBody ProcessInstanceSearchDTO processInstanceSearchDTO) {
+        return Result.ok(this.processInstanceService.listPage(processInstanceSearchDTO));
     }
 
 }

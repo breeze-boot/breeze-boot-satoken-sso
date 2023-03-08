@@ -1,4 +1,4 @@
-package com.breeze.boot.flowable.config;
+package com.breeze.boot.process.config;
 
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class ChangeDbEngineConfigurator implements EngineConfigurator {
                 DataSource master = ((DynamicRoutingDataSource) dataSource).getDataSource("flowable");
                 abstractEngineConfiguration.setDataSource(master);
             }
-            log.info("切换");
+            log.info("切换数据源");
         }
     }
 

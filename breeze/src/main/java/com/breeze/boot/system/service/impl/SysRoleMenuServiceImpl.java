@@ -18,12 +18,12 @@ package com.breeze.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.core.utils.Result;
-import com.breeze.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
 import com.breeze.boot.system.mapper.SysRoleMenuMapper;
 import com.breeze.boot.system.service.SysRoleMenuService;
+import com.breeze.core.utils.Result;
+import com.breeze.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

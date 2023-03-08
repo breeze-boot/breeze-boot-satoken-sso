@@ -20,7 +20,6 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.breeze.core.utils.BreezeDsThreadLocal;
 import com.breeze.core.utils.BreezeThreadLocal;
 import com.breeze.database.plugins.BreezeDataPermissionInterceptor;
 import com.breeze.database.plugins.BreezeSqlLogInnerInterceptor;
@@ -28,6 +27,7 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -75,8 +75,7 @@ public class MybatisPlusConfiguration {
              */
             @Override
             public boolean ignoreTable(String tableName) {
-                String currentDatasource = BreezeDsThreadLocal.get();
-                return Objects.equals("sys_tenant", tableName) || Objects.equals("flowable", currentDatasource);
+                return Objects.equals("sys_tenant", tableName) || tableName.toLowerCase(Locale.ROOT).startsWith("act") || tableName.startsWith("process");
             }
         }));
         interceptor.addInnerInterceptor(new BreezeDataPermissionInterceptor());

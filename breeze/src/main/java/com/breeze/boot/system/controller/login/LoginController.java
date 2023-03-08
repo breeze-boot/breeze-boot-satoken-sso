@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.controller.login;
 
+import com.breeze.boot.system.service.impl.UserTokenService;
 import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
 import com.breeze.security.config.WxLoginProperties;
@@ -28,7 +29,6 @@ import com.breeze.security.sms.SmsCodeAuthenticationToken;
 import com.breeze.security.utils.WxHttpInterfaces;
 import com.breeze.security.wx.WxCodeAuthenticationToken;
 import com.breeze.security.wxphone.WxPhoneAuthenticationToken;
-import com.breeze.boot.system.service.impl.UserTokenService;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

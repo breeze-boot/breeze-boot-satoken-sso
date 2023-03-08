@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.flowable.dto;
+package com.breeze.boot.process.service;
 
-import com.breeze.core.entity.PageDTO;
-import lombok.Data;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.process.domain.ActReProcdef;
 
 /**
- * 流程资源dto
+ * 流程文件资源服务
  *
- * @author gaoweixuan
- * @date 2023-03-01
+ * @author breeze
+ * @date 2023-03-08
  */
-@Data
-public class FlowRepositoryDTO extends PageDTO {
+public interface ActReProcdefService extends IService<ActReProcdef> {
 
 }

@@ -42,7 +42,7 @@ public class CaptchaCacheServiceRedisImpl implements CaptchaCacheService {
     /**
      * 设置
      *
-     * @param key              关键
+     * @param key              KEY
      * @param value            价值
      * @param expiresInSeconds 在几秒钟内到期
      */
@@ -54,7 +54,7 @@ public class CaptchaCacheServiceRedisImpl implements CaptchaCacheService {
     /**
      * 是否存在
      *
-     * @param key 关键
+     * @param key KEY
      * @return boolean
      */
     @Override
@@ -65,7 +65,7 @@ public class CaptchaCacheServiceRedisImpl implements CaptchaCacheService {
     /**
      * 删除
      *
-     * @param key 关键
+     * @param key KEY
      */
     @Override
     public void delete(String key) {
@@ -75,7 +75,7 @@ public class CaptchaCacheServiceRedisImpl implements CaptchaCacheService {
     /**
      * get
      *
-     * @param key 关键
+     * @param key KEY
      * @return {@link String}
      */
     @Override
@@ -86,7 +86,7 @@ public class CaptchaCacheServiceRedisImpl implements CaptchaCacheService {
     /**
      * 增加
      *
-     * @param key 关键
+     * @param key KEY
      * @param val 瓦尔
      * @return {@link Long}
      */

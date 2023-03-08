@@ -23,13 +23,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysPost;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.dto.PostSearchDTO;
 import com.breeze.boot.system.mapper.SysPostMapper;
 import com.breeze.boot.system.service.SysPostService;
 import com.breeze.boot.system.service.SysUserService;
+import com.breeze.core.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -48,7 +48,7 @@ management:
     metrics:
       enabled: true
 
-breeze:
+breeze: # 权限过滤路径
   security:
     ignore-urls:
       - "/ws/**"
@@ -67,6 +67,15 @@ breeze:
       - "/v3/api-docs/**"
       - "/webjars/**"
       - "/doc.html"
+  tenant: # 多租户过滤路径
+    ignore-urls:
+      - "/captcha/**"
+      - "/sys/common/selectTenant"
+      - "/breeze/**"
+      - "/process/**"
+  xss: # xss过滤路径
+    ignore-urls:
+      - "/process/definition/**"
   jwt:
     rsa-private-key: classpath:app.key
     rsa-public-key: classpath:app.pub
@@ -77,3 +86,25 @@ logging:
   file:
     name: ./logs/${spring.application.name}/${spring.application.name}.log
   config: classpath:logback-spring.xml
+
+# mybatis-plus 配置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  global-config:
+    banner: true
+    db-config:
+      id-type: auto
+      select-strategy: not_empty
+      insert-strategy: not_empty
+      update-strategy: not_empty
+  configuration:
+    jdbc-type-for-null: null
+    # 逻辑删除
+    db-config:
+      logic-delete-field: flag  # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+    # mybatis-plus配置控制台打印完整带参数SQL语句
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 搜索指定包别名
+  typeAliasesPackage: com.breeze.**.entity

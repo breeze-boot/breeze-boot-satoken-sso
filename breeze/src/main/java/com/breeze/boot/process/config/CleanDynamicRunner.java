@@ -1,4 +1,4 @@
-package com.breeze.boot.flowable.config;
+package com.breeze.boot.process.config;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class CleanDynamicRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        log.info("清除");
+        log.info("清除数据源");
         DynamicDataSourceContextHolder.clear();
     }
 

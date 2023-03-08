@@ -16,10 +16,10 @@
 
 package com.breeze.boot.system.mapper;
 
-import com.breeze.database.mapper.BreezeBaseMapper;
-import com.breeze.security.entity.UserRoleDTO;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.dto.MenuSearchDTO;
+import com.breeze.database.mapper.BreezeBaseMapper;
+import com.breeze.security.entity.UserRoleDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

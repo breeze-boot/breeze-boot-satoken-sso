@@ -23,16 +23,16 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.core.utils.Result;
-import com.breeze.security.entity.LoginUserDTO;
-import com.breeze.security.entity.UserRoleDTO;
-import com.breeze.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuSearchDTO;
 import com.breeze.boot.system.mapper.SysMenuMapper;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysRoleMenuService;
+import com.breeze.core.utils.Result;
+import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.entity.UserRoleDTO;
+import com.breeze.security.utils.SecurityUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +122,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             List<SysMenu> entityList = this.baseMapper.listMenu(menuSearchDTO);
             return Result.ok(entityList);
         }
-        menuSearchDTO.setRoleIdSet(SecurityUtils.getCurrentUser().getUserRoleIds());
         List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuSearchDTO);
         List<Tree<Long>> build = this.buildTrees(menuEntityList, ROOT);
         return Result.ok(build);

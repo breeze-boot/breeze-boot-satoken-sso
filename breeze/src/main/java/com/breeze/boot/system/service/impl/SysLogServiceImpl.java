@@ -18,14 +18,15 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.log.dto.SysLogDTO;
 import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.dto.LogSearchDTO;
 import com.breeze.boot.system.mapper.SysLogMapper;
 import com.breeze.boot.system.service.SysLogService;
+import com.breeze.log.dto.SysLogDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -65,6 +66,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
      *
      * @param sysLogDTO 系统日志DTO
      */
+    @DS("master")
     @Override
     public void saveSysLog(SysLogDTO sysLogDTO) {
         SysLog sysLog = new SysLog();

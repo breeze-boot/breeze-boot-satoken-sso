@@ -17,9 +17,9 @@
 package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.core.utils.Result;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.dto.MenuPermissionDTO;
+import com.breeze.core.utils.Result;
 
 /**
  * 系统菜单角色服务
