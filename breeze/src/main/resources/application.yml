@@ -11,8 +11,8 @@ spring:
   profiles:
     active: ${profiles.active}
     group:
-      "dev": "dev-db,dev-capture,dev-doc,dev-mail,dev-storage,dev-wx,dev-flowable"
-      "pro": "pro-db,pro-capture,pro-doc,pro-mail,pro-storage,pro-wx,pro-flowable"
+      "dev": "dev-db,dev-capture,dev-doc,dev-mail,dev-storage,dev-wx,dev-flowable,dev-quartz"
+      "pro": "pro-db,pro-capture,pro-doc,pro-mail,pro-storage,pro-wx,pro-flowable,pro-quartz"
 
   servlet:
     multipart:
@@ -65,14 +65,24 @@ breeze: # 权限过滤路径
       - "/swagger-ui/**"
       - "/swagger-resources/**"
       - "/v3/api-docs/**"
-      - "/webjars/**"
-      - "/doc.html"
   tenant: # 多租户过滤路径
     ignore-urls:
       - "/captcha/**"
       - "/sys/common/selectTenant"
       - "/breeze/**"
       - "/process/**"
+      - "/quartz/**"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/*.html"
+      - "/**/*.html"
+      - "/**/*.ico"
+      - "/druid/**"
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      - "/swagger-resources/**"
+      - "/actuator/**"
   xss: # xss过滤路径
     ignore-urls:
       - "/process/definition/**"
@@ -89,7 +99,7 @@ logging:
 
 # mybatis-plus 配置
 mybatis-plus:
-  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
   global-config:
     banner: true
     db-config:

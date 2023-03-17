@@ -16,12 +16,16 @@
 
 package com.breeze.boot.system.domain;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.core.entity.BaseModel;
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.converters.localdatetime.LocalDateTimeStringConverter;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 系统日志
@@ -37,9 +41,17 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_log")
 @Schema(description = "系统日志实体")
-public class SysLog extends BaseModel<SysLog> implements Serializable {
+public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
+    @ExcelIgnore
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Schema(description = "主键")
+    private Long id;
 
     /**
      * 系统模块
@@ -112,5 +124,30 @@ public class SysLog extends BaseModel<SysLog> implements Serializable {
      */
     @Schema(description = "方法执行时间")
     private String time;
+
+    /**
+     * 创建人
+     */
+    @ExcelIgnore
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建人编码", hidden = true)
+    private String createBy;
+
+    /**
+     * 创建人姓名
+     */
+    @ExcelIgnore
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建人姓名", hidden = true)
+    private String createName;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(hidden = true, description = "创建时间")
+    @ExcelProperty(value = "创建时间", converter = LocalDateTimeStringConverter.class)
+    private LocalDateTime createTime;
 
 }

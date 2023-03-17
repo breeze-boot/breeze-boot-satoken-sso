@@ -41,7 +41,7 @@ import java.time.LocalDateTime;
 public class BaseModel<T> extends Model<BaseModel<T>> {
 
     /**
-     * ID
+     * 主键ID
      */
     @ExcelIgnore
     @TableId(value = "id", type = IdType.ASSIGN_ID)

@@ -20,7 +20,6 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
-        <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
         <collection property="dataPermissionTableSqlDiyData" javaType="java.util.List"
                     ofType="com.breeze.boot.system.domain.SysDictItem"
                     column="{dataPermissionId=id}"

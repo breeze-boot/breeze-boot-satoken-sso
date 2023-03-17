@@ -27,7 +27,6 @@
         SELECT DISTINCT menu.permission
         FROM sys_menu AS menu
         LEFT JOIN sys_role_menu AS mr ON menu.id = mr.menu_id
-        AND mr.is_delete = 0
         WHERE menu.is_delete = 0
         AND menu.permission != ''
         AND mr.role_id IN
@@ -99,7 +98,6 @@
             <foreach collection="roleIds" item="roleId" open="(" separator="," close=")" index="index">
                 #{roleId}
             </foreach>
-            AND a.is_delete = 0
             AND b.is_delete = 0
             AND c.is_delete = 0
         </where>

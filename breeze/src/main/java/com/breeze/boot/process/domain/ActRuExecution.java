@@ -144,23 +144,23 @@ public class ActRuExecution implements Serializable {
      */
     private Integer taskCount;
     /**
-     * 工作数
+     * 任务数
      */
     private Integer jobCount;
     /**
-     * 定时器工作数
+     * 定时器任务数
      */
     private Integer timerJobCount;
     /**
-     * susp工作数
+     * susp任务数
      */
     private Integer suspJobCount;
     /**
-     * deadletter工作数
+     * deadletter任务数
      */
     private Integer deadletterJobCount;
     /**
-     * 外部工人工作数
+     * 外部工人任务数
      */
     private Integer externalWorkerJobCount;
     /**

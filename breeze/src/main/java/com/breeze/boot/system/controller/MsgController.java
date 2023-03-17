@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.websocket.controller;
+package com.breeze.boot.system.controller;
 
 import com.breeze.core.utils.Result;
 import com.breeze.websocket.dto.MsgDTO;

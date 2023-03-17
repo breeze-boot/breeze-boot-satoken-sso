@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysMsg">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="msgTitle" column="msg_title" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>
@@ -16,7 +16,6 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
-        <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
 </mapper>
