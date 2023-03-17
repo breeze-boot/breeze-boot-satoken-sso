@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breeze.boot.quartz.mapper.SysQuartzJobLogMapper">
+
+    <resultMap id="baseResultMap" type="com.breeze.boot.quartz.domain.SysQuartzJobLog">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="jobName" column="job_name" jdbcType="VARCHAR"/>
+        <result property="jobGroupName" column="job_group_name" jdbcType="VARCHAR"/>
+        <result property="clazzName" column="clazz_name" jdbcType="VARCHAR"/>
+        <result property="jobMessage" column="job_message" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="exceptionInfo" column="exception_info" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <update id="clean">
+        TRUNCATE sys_quartz_job_log;
+    </update>
+
+    <select id="listPage" resultType="com.breeze.boot.quartz.domain.SysQuartzJob">
+        SELECT
+        id,
+        job_name,
+        job_group_name,
+        cron_expression,
+        clazz_name,
+        job_message,
+        msg,
+        `status`,
+        exception_info,
+        create_time
+        FROM sys_quartz_job_log
+        <where>
+            <if test="jobDTO.jobGroupName != null and jobDTO.jobGroupName != ''">
+                AND job_group_name LIKE CONCAT('%', #{jobDTO.jobGroupName}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

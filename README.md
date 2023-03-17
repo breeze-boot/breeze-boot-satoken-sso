@@ -9,8 +9,8 @@
 - 权限认证使用Jwt、支持按钮级别的权限控制
 - 支持加载动态权限菜单，多方式轻松权限控制。
 - 前端代码，请移步
-  - [github https://github.com/memory1998/breeze-web](https://github.com/memory1998/breeze-web)
-  - [gitee https://gitee.com/memoryGiter/breeze-web](https://gitee.com/memoryGiter/breeze-web)
+    - [github https://github.com/memory1998/breeze-web](https://github.com/memory1998/breeze-web)
+    - [gitee https://gitee.com/memoryGiter/breeze-web](https://gitee.com/memoryGiter/breeze-web)
 
 ### 特别鸣谢：
 
@@ -48,8 +48,8 @@
 - breeze-boot \
   ├─ breeze \
   │ ├─ src \
-  │ │ ├─ src\java\com\breeze\boot\..\flowable 工作流相关的包 \
-  │ │ ├─ src\java\com\breeze\boot\..\system 系统相关的包 \
+  │ │ ├─ src\java\com\breeze\boot\..\flowable 【任务流相关的包】 \
+  │ │ ├─ src\java\com\breeze\boot\..\system 【系统相关的包】 \
   ├─ breeze-base \
   │ ├─ breeze-base-core \
   │ ├─ breeze-base-datasource\
@@ -60,8 +60,8 @@
   │ ├─ breeze-base-validator \
   │ ├─ breeze-base-websocket\
   │ ├─ breeze-base-xss  \
-  ├─ breeze-boot-admin-server \
-  ├─ src
+  ├─ breeze-boot-admin-server 【监控服务（SpringBoot项目）】 \
+  ├─ flowable-ui-app-server 【Flowable-UI官方项目 可启动】
 
 ### 前端界面相关
 

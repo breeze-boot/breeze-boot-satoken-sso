@@ -6,6 +6,7 @@
     <groupId>com.breeze</groupId>
     <artifactId>breeze-boot</artifactId>
     <version>1.0</version>
+
     <name>${project.artifactId}</name>
     <description>咸蛋 Boot 小项目</description>
     <packaging>pom</packaging>
@@ -30,25 +31,34 @@
     <modules>
         <module>breeze</module>
         <module>breeze-base</module>
+        <module>breeze-quartz</module>
         <module>breeze-boot-admin-server</module>
+        <module>flowable-ui-app-server</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <breeze-boot.version>1.0</breeze-boot.version>
         <spring-boot.version>2.7.2</spring-boot.version>
-        <spring-boot-admin.version>2.7.3</spring-boot-admin.version>
 
         <!--Swagger Resources-->
-        <knife4j.version>2.0.9</knife4j.version>
+        <knife4j.version>3.0.3</knife4j.version>
         <swagger.version>1.6.2</swagger.version>
+        <openapi.version>1.6.12</openapi.version>
 
         <lombok.version>1.18.18</lombok.version>
         <hutool.version>5.8.9</hutool.version>
         <guava.version>31.1-jre</guava.version>
+        <spring-boot-admin.version>2.7.3</spring-boot-admin.version>
+        <captcha.version>1.3.0</captcha.version>
+        <velocity.version>2.0</velocity.version>
+        <easyexcel.version>3.1.1</easyexcel.version>
+        <minio.version>8.3.9</minio.version>
 
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <druid.version>1.2.8</druid.version>
+        <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
+
         <flowable.version>6.7.2</flowable.version>
 
         <docker.registry>127.0.0.1</docker.registry>
@@ -87,7 +97,6 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
@@ -103,19 +112,67 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                <version>3.4.1</version>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-security</artifactId>
+                <version>${openapi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>2.2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${openapi.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+                <artifactId>knife4j-springdoc-ui</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.anji-plus</groupId>
+                <artifactId>spring-boot-starter-captcha</artifactId>
+                <version>${captcha.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
 
             <dependency>
@@ -126,16 +183,182 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-security</artifactId>
-                <version>1.0</version>
+                <artifactId>breeze-base-validator</artifactId>
+                <version>${breeze-boot.version}</version>
             </dependency>
 
-            <!-- flowable工作流依赖 -->
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-security</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-datasource</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-quartz</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-log</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-springdoc</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-xss</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-mail</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-oss</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-websocket</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <!-- flowable任务流依赖 -->
             <dependency>
                 <groupId>org.flowable</groupId>
                 <artifactId>flowable-spring-boot-starter</artifactId>
                 <version>${flowable.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-common</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-admin-logic</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-admin-rest</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-admin-conf</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-admin-frontend</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-idm-logic</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-idm-rest</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-idm-conf</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-idm-frontend</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-modeler-logic</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-modeler-rest</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-modeler-conf</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-modeler-frontend</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-task-logic</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-task-rest</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-task-conf</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-ui-task-frontend</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter-ui-admin</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter-ui-idm</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter-ui-modeler</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter-ui-task</artifactId>
+                <version>${flowable.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -161,7 +384,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
