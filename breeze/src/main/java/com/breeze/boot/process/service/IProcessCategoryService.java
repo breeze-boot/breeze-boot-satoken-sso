@@ -24,7 +24,7 @@ import com.breeze.boot.process.dto.ProcessCategoryDTO;
 /**
  * 流程分类服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-06
  */
 public interface IProcessCategoryService extends IService<ProcessCategory> {

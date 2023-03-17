@@ -22,7 +22,7 @@ import com.breeze.boot.process.domain.ActReProcdef;
 /**
  * 流程文件资源服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-08
  */
 public interface ActReProcdefService extends IService<ActReProcdef> {

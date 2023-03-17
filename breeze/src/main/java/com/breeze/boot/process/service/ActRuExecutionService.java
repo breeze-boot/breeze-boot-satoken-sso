@@ -25,7 +25,7 @@ import com.breeze.boot.process.vo.ProcessInstanceVO;
 /**
  * 流程执行实例服务
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-08
  */
 public interface ActRuExecutionService extends IService<ActRuExecution> {

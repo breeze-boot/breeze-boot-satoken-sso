@@ -27,7 +27,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 流程分类映射器
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-06
  */
 @Mapper

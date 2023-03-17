@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * flowable配置
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-07
  */
 @Configuration
