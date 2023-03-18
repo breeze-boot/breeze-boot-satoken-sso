@@ -34,8 +34,7 @@ public class JobInvokeUtils {
      * @return {@link String}
      */
     public static String getParams(String clazzName) {
-        String params = StrUtil.sub(clazzName, clazzName.lastIndexOf("(") + 1, clazzName.lastIndexOf(")"));
-        return params;
+        return StrUtil.sub(clazzName, clazzName.lastIndexOf("(") + 1, clazzName.lastIndexOf(")"));
     }
 
     /**

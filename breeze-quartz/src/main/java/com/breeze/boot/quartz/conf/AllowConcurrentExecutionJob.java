@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
  * @date 2023-03-16
  */
 @Slf4j
-public class QuartzJob extends QuartzJobBean {
+public class AllowConcurrentExecutionJob extends QuartzJobBean {
 
     @SneakyThrows
     @Override

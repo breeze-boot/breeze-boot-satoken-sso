@@ -16,9 +16,9 @@
 
 package com.breeze.boot.quartz.manager;
 
+import com.breeze.boot.quartz.conf.AllowConcurrentExecutionJob;
 import com.breeze.boot.quartz.conf.BreezeQuartzJobListener;
 import com.breeze.boot.quartz.conf.DisallowConcurrentExecutionJob;
-import com.breeze.boot.quartz.conf.QuartzJob;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import com.breeze.core.constants.QuartzConstants;
@@ -56,7 +56,7 @@ public class QuartzManager {
 
     @SuppressWarnings("unchecked")
     private static Class<? extends QuartzJobBean> getClass(Integer concurrent) {
-        return concurrent == 1 ? QuartzJob.class : DisallowConcurrentExecutionJob.class;
+        return concurrent == 1 ? AllowConcurrentExecutionJob.class : DisallowConcurrentExecutionJob.class;
     }
 
     /**
