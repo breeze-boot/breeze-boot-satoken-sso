@@ -16,10 +16,18 @@
 
 package com.breeze.boot.quartz.conf;
 
+import cn.hutool.extra.spring.SpringUtil;
+import com.breeze.boot.quartz.domain.SysQuartzJob;
+import com.breeze.boot.quartz.utils.JobInvokeUtils;
+import com.breeze.core.constants.QuartzConstants;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import java.lang.reflect.Method;
 
 /**
  * 不允许并发任务Job
@@ -31,8 +39,27 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 @DisallowConcurrentExecution
 public class DisallowConcurrentExecutionJob extends QuartzJobBean {
 
+    @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        // TODO
+        JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
+        SysQuartzJob quartzJob = (SysQuartzJob) jobDataMap.get(QuartzConstants.JOB_DATA_KEY);
+        String clazzName = quartzJob.getClazzName();
+        String beanName = JobInvokeUtils.getBeanName(clazzName);
+        String methodName = JobInvokeUtils.getMethodName(clazzName, ".", "(");
+        String params = JobInvokeUtils.getParams(clazzName);
+        String[] paramArray = params.split(",");
+        Class<?>[] parameterTypes = new Class[paramArray.length];
+        Object[] parameters = new Object[paramArray.length];
+        JobInvokeUtils.getParams(paramArray, parameterTypes, parameters);
+        if (clazzName.startsWith("com.")) {
+            Object bean = Class.forName(beanName).newInstance();
+            Method method = bean.getClass().getMethod(methodName, parameterTypes);
+            method.invoke(bean, parameters);
+        } else {
+            Object bean = SpringUtil.getBean(beanName);
+            Method method = bean.getClass().getMethod(methodName, parameterTypes);
+            method.invoke(bean, parameters);
+        }
     }
 }

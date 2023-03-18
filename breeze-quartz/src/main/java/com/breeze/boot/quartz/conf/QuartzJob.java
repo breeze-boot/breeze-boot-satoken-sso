@@ -16,13 +16,12 @@
 
 package com.breeze.boot.quartz.conf;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
+import com.breeze.boot.quartz.utils.JobInvokeUtils;
 import com.breeze.core.constants.QuartzConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -44,38 +43,13 @@ public class QuartzJob extends QuartzJobBean {
         JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
         SysQuartzJob quartzJob = (SysQuartzJob) jobDataMap.get(QuartzConstants.JOB_DATA_KEY);
         String clazzName = quartzJob.getClazzName();
-        String beanName = StrUtil.sub(clazzName, 0, clazzName.lastIndexOf("."));
-        String methodName = StrUtil.sub(clazzName, clazzName.lastIndexOf(".") + 1, clazzName.lastIndexOf("("));
-        String params = StrUtil.sub(clazzName, clazzName.lastIndexOf("(") + 1, clazzName.lastIndexOf(")"));
+        String beanName = JobInvokeUtils.getBeanName(clazzName);
+        String methodName = JobInvokeUtils.getMethodName(clazzName, ".", "(");
+        String params = JobInvokeUtils.getParams(clazzName);
         String[] paramArray = params.split(",");
         Class<?>[] parameterTypes = new Class[paramArray.length];
         Object[] parameters = new Object[paramArray.length];
-        for (int i = 0; i < paramArray.length; i++) {
-            String param = paramArray[i].trim();
-            if (param.endsWith("L")) {
-                String trim = getTrim(param);
-                parameters[i] = Long.parseLong(trim);
-                parameterTypes[i] = Long.class;
-            } else if (param.endsWith("D")) {
-                String trim = getTrim(param);
-                parameters[i] = Double.parseDouble(trim);
-                parameterTypes[i] = Double.class;
-            } else if ("false".equals(param)) {
-                parameters[i] = Boolean.FALSE;
-                parameterTypes[i] = Boolean.class;
-            } else if ("true".equals(param)) {
-                parameters[i] = Boolean.TRUE;
-                parameterTypes[i] = Boolean.class;
-            } else if (param.endsWith("'") || param.endsWith("\"")) {
-                parameters[i] = param
-                        .substring(0, param.length() - 1)
-                        .substring(1, param.length() - 1);
-                parameterTypes[i] = String.class;
-            } else {
-                parameters[i] = Integer.parseInt(param);
-                parameterTypes[i] = Integer.class;
-            }
-        }
+        JobInvokeUtils.getParams(paramArray, parameterTypes, parameters);
         if (clazzName.startsWith("com.")) {
             Object bean = Class.forName(beanName).newInstance();
             Method method = bean.getClass().getMethod(methodName, parameterTypes);
@@ -87,8 +61,4 @@ public class QuartzJob extends QuartzJobBean {
         }
     }
 
-    @NotNull
-    private String getTrim(String param) {
-        return param.substring(0, param.length() - 1).trim();
-    }
 }
