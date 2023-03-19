@@ -20,7 +20,6 @@
         FROM sys_role AS a
                  LEFT JOIN sys_user_role AS b ON a.id = b.role_id
         WHERE a.is_delete = 0
-          AND b.is_delete = 0
           AND b.user_id = #{userId}
         ORDER BY a.create_time DESC
     </select>
