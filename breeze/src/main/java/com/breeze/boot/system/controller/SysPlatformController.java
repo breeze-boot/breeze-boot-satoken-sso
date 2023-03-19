@@ -48,7 +48,7 @@ import java.util.Objects;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/platform")
+@RequestMapping("/platform")
 @Tag(name = "系统平台管理模块", description = "SysPlatformController")
 public class SysPlatformController {
 

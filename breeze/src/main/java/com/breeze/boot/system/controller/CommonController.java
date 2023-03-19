@@ -54,7 +54,7 @@ import static com.breeze.core.constants.CoreConstants.ROOT;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/common")
+@RequestMapping("/common")
 @Tag(name = "通用接口管理模块", description = "CommonController")
 public class CommonController {
 

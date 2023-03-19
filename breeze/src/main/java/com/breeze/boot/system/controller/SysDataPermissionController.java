@@ -46,7 +46,7 @@ import java.util.List;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/dataPermission")
+@RequestMapping("/dataPermission")
 @Tag(name = "系统数据权限管理模块", description = "SysDataPermissionController")
 public class SysDataPermissionController {
 

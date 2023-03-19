@@ -43,7 +43,7 @@ import java.util.Arrays;
 @RestController
 @AllArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/msg")
+@RequestMapping("/msg")
 @Tag(name = "系统消息管理模块", description = "SysMsgController")
 public class SysMsgController {
 

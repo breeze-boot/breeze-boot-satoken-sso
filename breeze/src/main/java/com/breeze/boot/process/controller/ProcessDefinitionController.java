@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2023-03-01
  */
 @RestController
-@RequestMapping("/process/definition")
+@RequestMapping("/definition")
 @Tag(name = "流程定义管理模块", description = "ProcessDefinitionController")
 public class ProcessDefinitionController {
 

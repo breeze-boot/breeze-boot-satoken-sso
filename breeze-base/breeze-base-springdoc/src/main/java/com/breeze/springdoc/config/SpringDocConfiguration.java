@@ -46,8 +46,8 @@ public class SpringDocConfiguration {
     @Bean
     public GroupedOpenApi sysApi() {
         return GroupedOpenApi.builder()
-                .group("用户")
-                .pathsToMatch("/sys/**")
+                .group("系统权限")
+                .pathsToMatch("/**")
                 .build();
     }
 

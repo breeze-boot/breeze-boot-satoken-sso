@@ -48,7 +48,8 @@ management:
     metrics:
       enabled: true
 
-breeze: # 权限过滤路径
+breeze:
+  # 权限过滤路径
   security:
     ignore-urls:
       - "/ws/**"
@@ -65,10 +66,12 @@ breeze: # 权限过滤路径
       - "/swagger-ui/**"
       - "/swagger-resources/**"
       - "/v3/api-docs/**"
-  tenant: # 多租户过滤路径
+
+  # 多租户过滤路径
+  tenant:
     ignore-urls:
       - "/captcha/**"
-      - "/sys/common/selectTenant"
+      - "/common/selectTenant"
       - "/breeze/**"
       - "/process/**"
       - "/quartz/**"
@@ -83,7 +86,9 @@ breeze: # 权限过滤路径
       - "/swagger-ui/**"
       - "/swagger-resources/**"
       - "/actuator/**"
-  xss: # xss过滤路径
+
+  # xss过滤路径
+  xss:
     ignore-urls:
       - "/process/definition/**"
   jwt:

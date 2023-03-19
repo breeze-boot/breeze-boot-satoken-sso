@@ -43,7 +43,7 @@ import java.util.Objects;
  * @date 2023-03-01
  */
 @RestController
-@RequestMapping("/process/category")
+@RequestMapping("/category")
 @Tag(name = "流程分类管理模块", description = "ProcessCategoryController")
 public class ProcessCategoryController {
 

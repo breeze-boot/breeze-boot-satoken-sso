@@ -44,7 +44,7 @@ import java.util.Objects;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/dept")
+@RequestMapping("/dept")
 @Tag(name = "系统部门管理模块", description = "SysDeptController")
 public class SysDeptController {
 

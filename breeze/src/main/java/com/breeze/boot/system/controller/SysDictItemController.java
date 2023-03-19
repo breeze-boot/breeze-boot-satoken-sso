@@ -42,7 +42,7 @@ import java.util.List;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/dictItem")
+@RequestMapping("/dictItem")
 @Tag(name = "系统字典项管理模块", description = "SysDictItemController")
 public class SysDictItemController {
 

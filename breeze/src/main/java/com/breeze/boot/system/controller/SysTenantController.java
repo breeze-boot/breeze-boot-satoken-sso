@@ -45,7 +45,7 @@ import java.util.Objects;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/tenant")
+@RequestMapping("/tenant")
 @Tag(name = "系统租户管理模块", description = "SysTenantController")
 public class SysTenantController {
 

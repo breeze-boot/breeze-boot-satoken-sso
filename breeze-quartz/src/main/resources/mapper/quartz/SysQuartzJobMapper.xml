@@ -27,7 +27,7 @@
     <select id="listPage" resultType="com.breeze.boot.quartz.domain.SysQuartzJob">
         SELECT a.id,
                a.job_name,
-               a.job_group,
+               a.job_group_name,
                a.cron_expression,
                a.clazz_name,
                a.misfire_policy,

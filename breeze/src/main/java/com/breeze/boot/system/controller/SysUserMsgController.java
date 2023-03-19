@@ -43,7 +43,7 @@ import java.util.List;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/userMsg")
+@RequestMapping("/userMsg")
 @Tag(name = "系统用户消息管理模块", description = "SysUserMsgController")
 public class SysUserMsgController {
 

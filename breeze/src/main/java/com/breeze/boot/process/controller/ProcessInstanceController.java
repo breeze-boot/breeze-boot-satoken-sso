@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023-03-01
  */
 @RestController
-@RequestMapping("/process/instance")
+@RequestMapping("/instance")
 @Tag(name = "流程实例管理模块", description = "ProcessInstanceController")
 public class ProcessInstanceController {
 

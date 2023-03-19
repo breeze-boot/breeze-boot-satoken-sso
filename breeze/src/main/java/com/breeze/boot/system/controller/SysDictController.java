@@ -48,7 +48,7 @@ import java.util.Objects;
  */
 @RestController
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/sys/dict")
+@RequestMapping("/dict")
 @Tag(name = "系统字典管理模块", description = "SysDictController")
 public class SysDictController {
 
