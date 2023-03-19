@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysUserRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.domain.SysUserRole" id="sysRoleUserMap">
+    <resultMap type="com.breeze.boot.sys.domain.SysUserRole" id="sysRoleUserMap">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="roleId" column="role_id"/>
@@ -13,7 +13,7 @@
         <result property="createName" column="create_name"/>
     </resultMap>
 
-    <select id="getSysRoleByUserId" resultType="com.breeze.boot.system.domain.SysRole">
+    <select id="getSysRoleByUserId" resultType="com.breeze.boot.sys.domain.SysRole">
         SELECT a.id,
                a.role_code,
                a.role_name

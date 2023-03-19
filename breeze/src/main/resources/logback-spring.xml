@@ -81,7 +81,7 @@
     <!-- 生产环境 -->
     <springProfile name="pro">
         <logger name="org.springframework.web" level="INFO"/>
-        <logger name="com.breeze.boot.system" level="INFO"/>
+        <logger name="com.breeze.boot.sys" level="INFO"/>
         <!-- 日志输出级别 -->
         <root level="info">
             <appender-ref ref="file_log_all"/>
@@ -92,7 +92,7 @@
     <!-- 开发 和 测试 -->
     <springProfile name="dev,test,dynamic">
         <logger name="org.springframework.web" level="INFO"/>
-        <logger name="com.breeze.boot.system" level="INFO"/>
+        <logger name="com.breeze.boot.sys" level="INFO"/>
         <!-- 日志输出级别 -->
         <root level="info">
             <appender-ref ref="console_log"/>

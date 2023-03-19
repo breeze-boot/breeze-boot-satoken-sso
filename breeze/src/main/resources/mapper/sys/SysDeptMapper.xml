@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.system.mapper.SysDeptMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.domain.SysDept" id="sysDeptMap">
+    <resultMap type="com.breeze.boot.sys.domain.SysDept" id="sysDeptMap">
         <id property="id" column="id"/>
         <result property="deptName" column="dept_name"/>
         <result property="parentId" column="parent_id"/>
@@ -16,9 +16,9 @@
         <result property="isDelete" column="is_delete"/>
         <result property="deleteBy" column="delete_by"/>
         <collection property="sysDeptList" javaType="java.util.List"
-                    ofType="com.breeze.boot.system.domain.SysDept"
+                    ofType="com.breeze.boot.sys.domain.SysDept"
                     column="{parentId=id}"
-                    select="com.breeze.boot.system.mapper.SysDeptMapper.selectDeptByParentId">
+                    select="com.breeze.boot.sys.mapper.SysDeptMapper.selectDeptByParentId">
         </collection>
     </resultMap>
 

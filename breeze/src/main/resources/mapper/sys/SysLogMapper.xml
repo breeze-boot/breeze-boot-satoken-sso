@@ -3,7 +3,7 @@
 
 <mapper namespace="com.breeze.boot.system.mapper.SysLogMapper">
 
-    <resultMap id="sysLogResultMap" type="com.breeze.boot.system.domain.SysLog">
+    <resultMap id="sysLogResultMap" type="com.breeze.boot.sys.domain.SysLog">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="systemModule" column="system_module" jdbcType="VARCHAR"/>
         <result property="logTitle" column="log_title" jdbcType="VARCHAR"/>
