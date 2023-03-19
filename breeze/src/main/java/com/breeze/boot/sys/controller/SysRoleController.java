@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.system.domain.SysPost;
-import com.breeze.boot.system.domain.SysRole;
-import com.breeze.boot.system.domain.SysRoleMenu;
-import com.breeze.boot.system.dto.MenuPermissionDTO;
-import com.breeze.boot.system.dto.RoleSearchDTO;
-import com.breeze.boot.system.service.SysRoleMenuService;
-import com.breeze.boot.system.service.SysRoleService;
+import com.breeze.boot.sys.domain.SysPost;
+import com.breeze.boot.sys.domain.SysRole;
+import com.breeze.boot.sys.domain.SysRoleMenu;
+import com.breeze.boot.sys.dto.MenuPermissionDTO;
+import com.breeze.boot.sys.dto.RoleSearchDTO;
+import com.breeze.boot.sys.service.SysRoleMenuService;
+import com.breeze.boot.sys.service.SysRoleService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;

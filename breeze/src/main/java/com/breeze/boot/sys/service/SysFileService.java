@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.sys.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.system.domain.SysFile;
-import com.breeze.boot.system.dto.FileDTO;
-import com.breeze.boot.system.dto.FileSearchDTO;
+import com.breeze.boot.sys.domain.SysFile;
+import com.breeze.boot.sys.dto.FileDTO;
+import com.breeze.boot.sys.dto.FileSearchDTO;
 import com.breeze.core.utils.Result;
 
 import javax.servlet.http.HttpServletRequest;

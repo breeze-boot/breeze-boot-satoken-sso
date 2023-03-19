@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
-import com.breeze.boot.system.domain.SysDictItem;
-import com.breeze.boot.system.dto.DictSearchDTO;
-import com.breeze.boot.system.service.SysDictItemService;
+import com.breeze.boot.sys.domain.SysDictItem;
+import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.service.SysDictItemService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;

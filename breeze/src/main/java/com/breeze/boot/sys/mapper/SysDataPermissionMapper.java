@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.mapper;
+package com.breeze.boot.sys.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.system.domain.SysDataPermission;
+import com.breeze.boot.sys.domain.SysDataPermission;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import com.breeze.security.entity.DataPermissionDTO;
 import org.apache.ibatis.annotations.Mapper;

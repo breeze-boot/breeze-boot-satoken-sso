@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.domain.SysPlatform;
-import com.breeze.boot.system.dto.PlatformSearchDTO;
-import com.breeze.boot.system.service.SysMenuService;
-import com.breeze.boot.system.service.SysPlatformService;
+import com.breeze.boot.sys.domain.SysMenu;
+import com.breeze.boot.sys.domain.SysPlatform;
+import com.breeze.boot.sys.dto.PlatformSearchDTO;
+import com.breeze.boot.sys.service.SysMenuService;
+import com.breeze.boot.sys.service.SysPlatformService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;

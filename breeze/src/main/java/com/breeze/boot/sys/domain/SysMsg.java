@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.sys.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.core.entity.BaseModel;

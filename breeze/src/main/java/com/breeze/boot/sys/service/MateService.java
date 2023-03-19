@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.sys.service;
 
 import java.util.List;
 import java.util.Map;

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.boot.system.domain.SysMenu;
-import com.breeze.boot.system.domain.SysPlatform;
-import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.DeptSearchDTO;
-import com.breeze.boot.system.service.*;
+import com.breeze.boot.sys.domain.SysMenu;
+import com.breeze.boot.sys.domain.SysPlatform;
+import com.breeze.boot.sys.domain.SysUser;
+import com.breeze.boot.sys.dto.DeptSearchDTO;
+import com.breeze.boot.sys.service.*;
 import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
 import com.google.common.collect.Maps;

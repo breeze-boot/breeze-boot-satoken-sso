@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.config;
+package com.breeze.boot.sys.config;
 
-import com.breeze.boot.system.service.impl.UserTokenService;
+import com.breeze.boot.sys.service.impl.UserTokenService;
 import com.breeze.security.annotation.EnableSecurityServer;
 import com.breeze.security.service.LocalUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;

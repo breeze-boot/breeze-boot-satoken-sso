@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.domain;
+package com.breeze.boot.sys.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;

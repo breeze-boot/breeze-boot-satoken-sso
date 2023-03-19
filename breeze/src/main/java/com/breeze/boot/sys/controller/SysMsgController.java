@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.breeze.boot.system.domain.SysMsg;
-import com.breeze.boot.system.dto.MsgSearchDTO;
-import com.breeze.boot.system.service.SysMsgService;
+import com.breeze.boot.sys.domain.SysMsg;
+import com.breeze.boot.sys.dto.MsgSearchDTO;
+import com.breeze.boot.sys.service.SysMsgService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;

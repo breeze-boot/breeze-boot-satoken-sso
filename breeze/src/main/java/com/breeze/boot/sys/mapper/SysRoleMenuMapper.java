@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.mapper;
+package com.breeze.boot.sys.mapper;
 
-import com.breeze.boot.system.domain.SysRoleMenu;
+import com.breeze.boot.sys.domain.SysRoleMenu;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

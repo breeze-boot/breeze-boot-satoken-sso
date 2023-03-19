@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.service;
+package com.breeze.boot.sys.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.system.domain.SysPost;
-import com.breeze.boot.system.dto.PostSearchDTO;
+import com.breeze.boot.sys.domain.SysPost;
+import com.breeze.boot.sys.dto.PostSearchDTO;
 import com.breeze.core.utils.Result;
 
 import java.util.List;

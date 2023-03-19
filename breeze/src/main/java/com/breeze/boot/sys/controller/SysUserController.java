@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.controller;
+package com.breeze.boot.sys.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.dto.UserOpenDTO;
-import com.breeze.boot.system.dto.UserResetPasswordDTO;
-import com.breeze.boot.system.dto.UserRolesDTO;
-import com.breeze.boot.system.dto.UserSearchDTO;
-import com.breeze.boot.system.service.SysUserService;
+import com.breeze.boot.sys.domain.SysUser;
+import com.breeze.boot.sys.dto.UserOpenDTO;
+import com.breeze.boot.sys.dto.UserResetPasswordDTO;
+import com.breeze.boot.sys.dto.UserRolesDTO;
+import com.breeze.boot.sys.dto.UserSearchDTO;
+import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;
