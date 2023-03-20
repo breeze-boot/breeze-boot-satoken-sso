@@ -37,17 +37,53 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class ProcessDefinitionVO {
 
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 关键
+     */
     private String key;
+    /**
+     * 名字
+     */
     private String name;
+    /**
+     * 资源名称
+     */
     private String resourceName;
+    /**
+     * 部署id
+     */
     private String deploymentId;
+    /**
+     * 类别
+     */
     private String category;
+    /**
+     * 开始形成关键
+     */
     private Boolean hasStartFormKey;
+    /**
+     * 图资源名称
+     */
     private String diagramResourceName;
+    /**
+     * 派生版本
+     */
     private Integer derivedVersion;
+    /**
+     * 暂停
+     */
     private Boolean suspended;
+    /**
+     * 承租者id
+     */
     private String tenantId;
+    /**
+     * 版本
+     */
     private Integer version;
 
     public List<ProcessDefinitionVO> convertProcessDefinitionVO(List<ProcessDefinition> processDefinitionList) {

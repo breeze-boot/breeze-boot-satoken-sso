@@ -23,6 +23,8 @@ import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.dto.JobDTO;
 import com.breeze.core.utils.Result;
 
+import java.util.List;
+
 /**
  * quartz定时任务日志服务
  *
@@ -74,10 +76,10 @@ public interface SysQuartzJobService extends IService<SysQuartzJob> {
     /**
      * 删除任务
      *
-     * @param jobId 任务id
+     * @param jobIds 任务ids
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> deleteJob(Long jobId);
+    Result<Boolean> deleteJob(List<Long> jobIds);
 
     /**
      * 立刻运行

@@ -28,6 +28,14 @@ import lombok.Data;
 @Data
 public class JobDTO extends PageDTO {
 
+    /**
+     * 作业名
+     */
     private String jobName;
+
+    /**
+     * 工作组名
+     */
+    private String jobGroupName;
 
 }

@@ -19,7 +19,8 @@ package com.breeze.boot.process.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,7 +32,12 @@ import java.util.Date;
  * @date 2023-03-08
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "act_re_deployment")
+@Schema(description = "流程部署实体")
 public class ActReDeployment implements Serializable {
 
     @TableField(exist = false)

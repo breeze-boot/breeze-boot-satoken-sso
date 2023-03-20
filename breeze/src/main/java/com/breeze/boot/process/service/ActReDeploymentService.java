@@ -19,7 +19,7 @@ package com.breeze.boot.process.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.process.domain.ActReDeployment;
-import com.breeze.boot.process.dto.ProcessSearchDeploymentDTO;
+import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
 import com.breeze.boot.process.vo.DeploymentVO;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +35,9 @@ public interface ActReDeploymentService extends IService<ActReDeployment> {
     /**
      * 列表页面
      *
-     * @param processSearchDeploymentDTO 搜索过程部署dto
+     * @param processDeploymentSearchDTO 搜索过程部署dto
      * @return {@link Page}<{@link DeploymentVO}>
      */
-    Page<DeploymentVO> listPage(ProcessSearchDeploymentDTO processSearchDeploymentDTO);
+    Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO);
 
 }

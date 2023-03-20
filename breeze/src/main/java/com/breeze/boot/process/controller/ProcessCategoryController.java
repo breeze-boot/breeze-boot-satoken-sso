@@ -63,7 +63,7 @@ public class ProcessCategoryController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('process:category:list')")
-    public Result<IPage<ProcessCategory>> list(@RequestBody ProcessCategoryDTO processCategory) {
+    public Result<IPage<ProcessCategory>> list(@Validated @RequestBody ProcessCategoryDTO processCategory) {
         return Result.ok(this.processCategoryService.listPage(processCategory));
     }
 
@@ -78,8 +78,8 @@ public class ProcessCategoryController {
     @Operation(summary = "校验流程分类编码是否重复")
     @GetMapping("/checkCategoryCode")
     @PreAuthorize("hasAnyAuthority('process:category:list')")
-    public Result<Boolean> checkFlowCategoryCode(@RequestParam("categoryCode") String categoryCode,
-                                                 @RequestParam(value = "categoryId", required = false) Long categoryId) {
+    public Result<Boolean> checkFlowCategoryCode(@NotNull(message = "编码不能为空") @RequestParam("categoryCode") String categoryCode,
+                                                 @NotNull(message = "ID不能为空") @RequestParam(value = "categoryId", required = false) Long categoryId) {
         return Result.ok(Objects.isNull(this.processCategoryService.getOne(Wrappers.<ProcessCategory>lambdaQuery()
                 .ne(Objects.nonNull(categoryId), ProcessCategory::getId, categoryId)
                 .eq(ProcessCategory::getCategoryCode, categoryCode))));

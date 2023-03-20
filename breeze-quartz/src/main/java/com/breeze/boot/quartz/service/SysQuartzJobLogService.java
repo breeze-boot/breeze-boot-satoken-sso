@@ -37,21 +37,21 @@ public interface SysQuartzJobLogService extends IService<SysQuartzJobLog> {
      * 列表页面
      *
      * @param jobDTO 任务DTO
-     * @return {@link Page}<{@link SysQuartzJob}>
+     * @return {@link Page}<{@link SysQuartzJobLog}>
      */
-    Page<SysQuartzJob> listPage(JobDTO jobDTO);
+    Page<SysQuartzJobLog> listPage(JobDTO jobDTO);
 
     /**
      * 删除日志
      *
      * @param logIds 日志Ids
-     * @return {@link Result}<{@link Boolean}>
+     * @return boolean
      */
     boolean deleteLogs(List<Long> logIds);
 
     /**
-     * 清洁
+     * 清空
      */
-    void clean();
+    void truncate();
 
 }

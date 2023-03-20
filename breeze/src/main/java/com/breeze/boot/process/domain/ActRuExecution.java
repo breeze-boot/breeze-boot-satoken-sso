@@ -20,7 +20,8 @@ package com.breeze.boot.process.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -32,7 +33,12 @@ import java.util.Date;
  * @date 2023-03-08
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "act_ru_execution")
+@Schema(description = "流程运行实例实体")
 public class ActRuExecution implements Serializable {
 
     @TableField(exist = false)
@@ -44,7 +50,7 @@ public class ActRuExecution implements Serializable {
     @TableId
     private String id;
     /**
-     * 牧师
+     * 版本
      */
     private Integer rev;
     /**
@@ -76,15 +82,15 @@ public class ActRuExecution implements Serializable {
      */
     private String actId;
     /**
-     * 是活跃
+     * 是否活跃
      */
     private Integer isActive;
     /**
-     * 是并发
+     * 是否并发
      */
     private Integer isConcurrent;
     /**
-     * 是范围
+     * 是否范围
      */
     private Integer isScope;
     /**

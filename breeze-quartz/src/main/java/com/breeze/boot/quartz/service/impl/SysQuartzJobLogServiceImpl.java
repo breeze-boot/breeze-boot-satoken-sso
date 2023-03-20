@@ -18,12 +18,10 @@ package com.breeze.boot.quartz.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.dto.JobDTO;
 import com.breeze.boot.quartz.mapper.SysQuartzJobLogMapper;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
-import com.breeze.core.utils.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,10 +39,10 @@ public class SysQuartzJobLogServiceImpl extends ServiceImpl<SysQuartzJobLogMappe
      * 列表页面
      *
      * @param jobDTO 任务DTO
-     * @return {@link Page}<{@link SysQuartzJob}>
+     * @return {@link Page}<{@link SysQuartzJobLog}>
      */
     @Override
-    public Page<SysQuartzJob> listPage(JobDTO jobDTO) {
+    public Page<SysQuartzJobLog> listPage(JobDTO jobDTO) {
         return this.baseMapper.listPage(new Page<>(jobDTO.getCurrent(), jobDTO.getSize()), jobDTO);
     }
 
@@ -52,7 +50,7 @@ public class SysQuartzJobLogServiceImpl extends ServiceImpl<SysQuartzJobLogMappe
      * 删除日志
      *
      * @param jobIds 日志Ids
-     * @return {@link Result}<{@link Boolean}>
+     * @return boolean
      */
     @Override
     public boolean deleteLogs(List<Long> jobIds) {
@@ -60,11 +58,11 @@ public class SysQuartzJobLogServiceImpl extends ServiceImpl<SysQuartzJobLogMappe
     }
 
     /**
-     * 清洁
+     * 清空
      */
     @Override
-    public void clean() {
-        this.baseMapper.clean();
+    public void truncate() {
+        this.baseMapper.truncate();
     }
 }
 

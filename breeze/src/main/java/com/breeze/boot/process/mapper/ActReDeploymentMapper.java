@@ -19,7 +19,7 @@ package com.breeze.boot.process.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.process.domain.ActReDeployment;
-import com.breeze.boot.process.dto.ProcessSearchDeploymentDTO;
+import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
 import com.breeze.boot.process.vo.DeploymentVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,9 +37,9 @@ public interface ActReDeploymentMapper extends BaseMapper<ActReDeployment> {
      * 列表页面
      *
      * @param page                       页面
-     * @param processSearchDeploymentDTO 搜索过程部署dto
+     * @param processDeploymentSearchDTO 搜索过程部署dto
      * @return {@link Page}<{@link DeploymentVO}>
      */
-    Page<DeploymentVO> listPage(@Param("page") Page<DeploymentVO> page, @Param("processSearchDeploymentDTO") ProcessSearchDeploymentDTO processSearchDeploymentDTO);
+    Page<DeploymentVO> listPage(@Param("page") Page<DeploymentVO> page, @Param("processSearchDeploymentDTO") ProcessDeploymentSearchDTO processDeploymentSearchDTO);
 
 }

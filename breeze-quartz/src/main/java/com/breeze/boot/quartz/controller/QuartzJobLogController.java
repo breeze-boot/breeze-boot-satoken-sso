@@ -17,17 +17,19 @@
 package com.breeze.boot.quartz.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.quartz.domain.SysQuartzJob;
+import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.dto.JobDTO;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import com.breeze.core.utils.Result;
-import com.breeze.security.annotation.NoAuthentication;
+import com.breeze.log.annotation.BreezeSysLog;
+import com.breeze.log.config.LogType;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -37,8 +39,7 @@ import java.util.List;
  * @date 2023-03-16
  */
 @RestController
-@NoAuthentication
-@RequestMapping(value = "/quartz/log")
+@RequestMapping(value = "/jobLog")
 public class QuartzJobLogController {
 
     /**
@@ -51,10 +52,12 @@ public class QuartzJobLogController {
      * 列表页面
      *
      * @param jobDTO 任务DTO
-     * @return {@link Result}<{@link Page}<{@link SysQuartzJob}>>
+     * @return {@link Result}<{@link Page}<{@link SysQuartzJobLog}>>
      */
-    @PostMapping(value = "/listPage")
-    public Result<Page<SysQuartzJob>> listPage(@RequestBody JobDTO jobDTO) {
+    @Operation(summary = "列表")
+    @PostMapping("/list")
+    @PreAuthorize("hasAnyAuthority('sys:jobLog:list')")
+    public Result<Page<SysQuartzJobLog>> listPage(@Validated @RequestBody JobDTO jobDTO) {
         return Result.ok(this.quartzJobLogService.listPage(jobDTO));
     }
 
@@ -64,17 +67,23 @@ public class QuartzJobLogController {
      * @param logIds 日志Ids
      * @return {@link Result}<{@link Boolean}>
      */
-    @PostMapping(value = "/delete")
-    public Result<Boolean> delete(@RequestBody List<Long> logIds) {
+    @Operation(summary = "删除")
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyAuthority('sys:jobLog:delete')")
+    @BreezeSysLog(description = "删除任务日志", type = LogType.DELETE)
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> logIds) {
         return Result.ok(this.quartzJobLogService.deleteLogs(logIds));
     }
 
     /**
      * 清空
      */
-    @PostMapping(value = "/clean")
-    public void clean() {
-        this.quartzJobLogService.clean();
+    @Operation(summary = "清空")
+    @PutMapping("/truncate")
+    @PreAuthorize("hasAnyAuthority('sys:jobLog:truncate')")
+    @BreezeSysLog(description = "清空任务日志", type = LogType.DELETE)
+    public void truncate() {
+        this.quartzJobLogService.truncate();
     }
 
 }

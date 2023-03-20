@@ -16,8 +16,10 @@
 
 package com.breeze.boot.process.dto;
 
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 /**
@@ -27,16 +29,23 @@ import java.util.Map;
  * @date 2023-03-01
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "流程发布启动使用DTO")
 public class ProcessStartDTO {
 
     /**
      * 流程KEY
      */
+    @NotBlank(message = "流程定义KEY不能为空")
     private String processKey;
 
     /**
      * 租户ID
      */
+    @NotBlank(message = "租户ID不能为空")
     private String tenantId;
 
     /**

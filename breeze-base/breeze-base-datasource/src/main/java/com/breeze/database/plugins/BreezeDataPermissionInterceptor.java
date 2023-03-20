@@ -159,6 +159,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         StringBuilder sb = new StringBuilder();
         String operator = dataPermissionDTOList.get(0).getOperator();
         String sql;
+        int index = 0;
         sb.append(" WHERE ");
         for (DataPermissionDTO permission : dataPermissionDTOList) {
             if (Objects.equals(permission.getDataPermissionType(), OWN)) {
@@ -176,7 +177,8 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(String.format("%s a.%s = '", permission.getOperator(), dataPermission.own()));
                 sb.append(SecurityUtils.getUserCode());
                 sb.append("' ");
-            } else if (Objects.equals(permission.getDataPermissionType(), ALL)) {
+                index++;
+            } else if (Objects.equals(permission.getDataPermissionType(), ALL) && index == 0) {
                 // 没有自定义SQL
                 return sb.toString().replaceFirst("WHERE", "");
             } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
@@ -195,6 +197,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(String.format("%s a.%s IN ( ", permission.getOperator(), dataPermission.scope()));
                 sb.append(deptIds);
                 sb.append(" ) ");
+                index++;
             }
             // 自定义sql
             sql = permission.getStrSql();
@@ -203,6 +206,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 sb.append(" ( ");
                 sb.append(sql);
                 sb.append(" ) ");
+                index++;
             }
         }
         if (StrUtil.isAllNotBlank(sb.toString())) {

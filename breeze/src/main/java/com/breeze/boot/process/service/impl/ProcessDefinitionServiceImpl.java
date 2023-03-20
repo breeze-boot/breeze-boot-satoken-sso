@@ -19,7 +19,7 @@ package com.breeze.boot.process.service.impl;
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.process.dto.ProcessDeploymentDTO;
-import com.breeze.boot.process.dto.ProcessSearchDeploymentDTO;
+import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
 import com.breeze.boot.process.service.ActReDeploymentService;
 import com.breeze.boot.process.service.IProcessDefinitionService;
 import com.breeze.boot.process.vo.DeploymentVO;
@@ -89,7 +89,7 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
      * @return {@link Page}<{@link DeploymentVO}>
      */
     @Override
-    public Page<DeploymentVO> listPage(ProcessSearchDeploymentDTO processSearchDeploymentDTO) {
+    public Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processSearchDeploymentDTO) {
         return this.actReDeploymentService.listPage(processSearchDeploymentDTO);
     }
 
@@ -154,13 +154,13 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
     /**
      * 版本列表页面
      *
-     * @param processSearchDeploymentDTO 流程定义搜索DTO
+     * @param processDeploymentSearchDTO 流程定义搜索DTO
      * @return {@link Page}<{@link ProcessDefinitionVO}>
      */
     @Override
-    public Page<ProcessDefinitionVO> listVersionPage(ProcessSearchDeploymentDTO processSearchDeploymentDTO) {
+    public Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO) {
         List<ProcessDefinition> processDefinitionList = this.repositoryService.createProcessDefinitionQuery()
-                .listPage(processSearchDeploymentDTO.getOffset(), processSearchDeploymentDTO.getLimit());
+                .listPage(processDeploymentSearchDTO.getOffset(), processDeploymentSearchDTO.getLimit());
         ProcessDefinitionVO processDefinitionVO = new ProcessDefinitionVO();
         Page<ProcessDefinitionVO> page = new Page<>();
         page.setRecords(processDefinitionVO.convertProcessDefinitionVO(processDefinitionList));

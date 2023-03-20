@@ -17,7 +17,10 @@
 package com.breeze.boot.process.dto;
 
 import com.breeze.core.entity.PageDTO;
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * 流程定义查询DTO
@@ -26,11 +29,17 @@ import lombok.Data;
  * @date 2023-03-01
  */
 @Data
-public class ProcessSearchDeploymentDTO extends PageDTO {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "流程部署查询使用DTO")
+public class ProcessDeploymentSearchDTO extends PageDTO {
 
     /**
      * 名字
      */
+    @NotBlank(message = "租户ID不能为空")
     private String name;
 
     /**

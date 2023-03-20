@@ -60,6 +60,7 @@ public class SysTenantLoadFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        logger.info(request.getRequestURI());
         if (this.match(request)) {
             filterChain.doFilter(request, response);
             return;

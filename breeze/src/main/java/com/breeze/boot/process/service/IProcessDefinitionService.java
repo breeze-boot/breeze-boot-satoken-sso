@@ -18,7 +18,7 @@ package com.breeze.boot.process.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.process.dto.ProcessDeploymentDTO;
-import com.breeze.boot.process.dto.ProcessSearchDeploymentDTO;
+import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
 import com.breeze.boot.process.vo.DeploymentVO;
 import com.breeze.boot.process.vo.ProcessDefinitionVO;
 import com.breeze.core.utils.Result;
@@ -42,10 +42,10 @@ public interface IProcessDefinitionService {
     /**
      * 列表页面
      *
-     * @param processSearchDeploymentDTO 流程部署查询dto
+     * @param processDeploymentSearchDTO 流程部署查询dto
      * @return {@link Page}<{@link DeploymentVO}>
      */
-    Page<DeploymentVO> listPage(ProcessSearchDeploymentDTO processSearchDeploymentDTO);
+    Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO);
 
     /**
      * 挂起/激活
@@ -78,10 +78,10 @@ public interface IProcessDefinitionService {
     /**
      * 版本列表页面
      *
-     * @param processSearchDeploymentDTO 流程定义搜索DTO
+     * @param processDeploymentSearchDTO 流程定义搜索DTO
      * @return {@link Page}<{@link ProcessDefinitionVO}>
      */
-    Page<ProcessDefinitionVO> listVersionPage(ProcessSearchDeploymentDTO processSearchDeploymentDTO);
+    Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO);
 
     /**
      * 获得版本流程定义png

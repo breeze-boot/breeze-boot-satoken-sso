@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,7 @@ public class ProcessInstanceController {
     @Operation(summary = "发起")
     @PostMapping("/startProcess")
     @PreAuthorize("hasAnyAuthority('process:instance:start')")
-    public Result<Boolean> startProcess(@RequestBody ProcessStartDTO startDTO) {
+    public Result<Boolean> startProcess(@Validated @RequestBody ProcessStartDTO startDTO) {
         return Result.ok(this.processInstanceService.startProcess(startDTO));
     }
 
@@ -68,7 +69,7 @@ public class ProcessInstanceController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('process:instance:list')")
-    public Result<Page<ProcessInstanceVO>> list(@RequestBody ProcessInstanceSearchDTO processInstanceSearchDTO) {
+    public Result<Page<ProcessInstanceVO>> list(@Validated @RequestBody ProcessInstanceSearchDTO processInstanceSearchDTO) {
         return Result.ok(this.processInstanceService.listPage(processInstanceSearchDTO));
     }
 

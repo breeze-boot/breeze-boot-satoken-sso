@@ -38,14 +38,14 @@ public interface SysQuartzJobLogMapper extends BaseMapper<SysQuartzJobLog> {
      *
      * @param page   页面
      * @param jobDTO 任务DTO
-     * @return {@link Page}<{@link SysQuartzJob}>
+     * @return {@link Page}<{@link SysQuartzJobLog}>
      */
-    Page<SysQuartzJob> listPage(@Param("page") Page<SysQuartzJobLog> page, @Param("jobDTO") JobDTO jobDTO);
+    Page<SysQuartzJobLog> listPage(@Param("page") Page<SysQuartzJobLog> page, @Param("jobDTO") JobDTO jobDTO);
 
     /**
-     * 清洁
+     * 清空
      */
-    void clean();
+    void truncate();
 
 }
 

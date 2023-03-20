@@ -67,11 +67,11 @@ public class SysLogController {
      * 清空日志表
      */
     @Operation(summary = "清空")
-    @DeleteMapping("/clear")
-    @PreAuthorize("hasAnyAuthority('sys:log:clear')")
+    @DeleteMapping("/truncate")
+    @PreAuthorize("hasAnyAuthority('sys:log:truncate')")
     @BreezeSysLog(description = "日志信息清空", type = LogType.DELETE)
-    public void clear() {
-        this.sysLogService.clear();
+    public void truncate() {
+        this.sysLogService.truncate();
     }
 
     /**

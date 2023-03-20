@@ -16,7 +16,8 @@
 
 package com.breeze.boot.process.dto;
 
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
  * 流程资源dto
@@ -25,6 +26,11 @@ import lombok.Data;
  * @date 2023-03-01
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "流程部署DTO")
 public class ProcessDeploymentDTO {
 
     private String id;

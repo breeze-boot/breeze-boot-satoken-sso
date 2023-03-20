@@ -35,14 +35,41 @@ import java.util.Date;
 @NoArgsConstructor
 public class DeploymentVO {
 
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 关键
+     */
     private String key;
+    /**
+     * 名字
+     */
     private String name;
+    /**
+     * 类别名称
+     */
     private String categoryName;
+    /**
+     * 承租者id
+     */
     private String tenantId;
+    /**
+     * 部署时
+     */
     private Date deploymentTime;
+    /**
+     * 版本
+     */
     private String version;
+    /**
+     * 暂停
+     */
     private Integer suspended;
+    /**
+     * 父部署id
+     */
     private String parentDeploymentId;
 
     public boolean getSuspended() {

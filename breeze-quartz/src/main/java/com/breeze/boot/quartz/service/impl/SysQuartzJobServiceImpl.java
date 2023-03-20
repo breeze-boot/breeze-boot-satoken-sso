@@ -59,9 +59,6 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
      */
     @Override
     public Result<Boolean> saveJob(SysQuartzJob sysQuartzJob) {
-        if (this.checkExists(sysQuartzJob)) {
-            return Result.fail(Boolean.FALSE, "添加失败");
-        }
         sysQuartzJob.insert();
         this.quartzManager.addOrUpdateJob(sysQuartzJob);
         return Result.ok(Boolean.TRUE);
@@ -122,14 +119,19 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
     /**
      * 删除任务
      *
-     * @param jobId 任务id
+     * @param jobIds 任务ids
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> deleteJob(Long jobId) {
-        SysQuartzJob quartzJob = this.getById(jobId);
-        quartzJob.deleteById();
-        this.quartzManager.deleteJob(quartzJob.getJobName(), quartzJob.getJobGroupName());
+    public Result<Boolean> deleteJob(List<Long> jobIds) {
+        for (Long jobId : jobIds) {
+            SysQuartzJob quartzJob = this.getById(jobId);
+            if (Objects.isNull(quartzJob)){
+                continue;
+            }
+            quartzJob.deleteById();
+            this.quartzManager.deleteJob(quartzJob.getJobName(), quartzJob.getJobGroupName());
+        }
         return Result.ok(Boolean.TRUE);
     }
 

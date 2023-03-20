@@ -19,7 +19,7 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <update id="clear">
+    <update id="truncate">
         TRUNCATE TABLE sys_log;
     </update>
 

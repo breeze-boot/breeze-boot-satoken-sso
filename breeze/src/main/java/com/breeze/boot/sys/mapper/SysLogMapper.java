@@ -32,6 +32,6 @@ public interface SysLogMapper extends BreezeBaseMapper<SysLog> {
     /**
      * 清空
      */
-    void clear();
+    void truncate();
 
 }

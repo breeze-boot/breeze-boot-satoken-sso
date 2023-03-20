@@ -37,6 +37,7 @@
                a.create_name,
                a.create_time
         FROM sys_quartz_job AS a
+        where a.is_delete = 0
     </select>
 
 </mapper>

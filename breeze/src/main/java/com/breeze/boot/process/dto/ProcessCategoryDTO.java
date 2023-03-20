@@ -17,7 +17,8 @@
 package com.breeze.boot.process.dto;
 
 import com.breeze.core.entity.PageDTO;
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 /**
  * 流程分类
@@ -26,6 +27,11 @@ import lombok.Data;
  * @date 2023-03-06
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "流程分类DTO")
 public class ProcessCategoryDTO extends PageDTO {
 
     /**

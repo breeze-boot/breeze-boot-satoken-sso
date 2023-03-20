@@ -48,7 +48,7 @@ public interface SysLogService extends IService<SysLog> {
     /**
      * 清空
      */
-    void clear();
+    void truncate();
 
 }
 

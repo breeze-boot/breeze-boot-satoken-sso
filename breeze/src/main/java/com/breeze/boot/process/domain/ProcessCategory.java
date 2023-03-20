@@ -19,11 +19,12 @@ package com.breeze.boot.process.domain;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.core.entity.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 
 /**
  * 流程分类
@@ -33,7 +34,12 @@ import javax.validation.constraints.Size;
  */
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @TableName("process_category")
+@Schema(description = "流程分类实体")
 public class ProcessCategory extends BaseModel<ProcessCategory> {
 
     /**

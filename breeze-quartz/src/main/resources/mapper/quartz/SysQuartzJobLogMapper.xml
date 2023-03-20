@@ -15,11 +15,11 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <update id="clean">
-        TRUNCATE sys_quartz_job_log;
+    <update id="truncate">
+        TRUNCATE TABLE sys_quartz_job_log;
     </update>
 
-    <select id="listPage" resultType="com.breeze.boot.quartz.domain.SysQuartzJob">
+    <select id="listPage" resultType="com.breeze.boot.quartz.domain.SysQuartzJobLog">
         SELECT
         id,
         job_name,
@@ -27,14 +27,16 @@
         cron_expression,
         clazz_name,
         job_message,
-        msg,
         `status`,
         exception_info,
         create_time
         FROM sys_quartz_job_log
         <where>
+            <if test="jobDTO.jobName != null and jobDTO.jobName != ''">
+                AND job_name = #{jobDTO.jobName}
+            </if>
             <if test="jobDTO.jobGroupName != null and jobDTO.jobGroupName != ''">
-                AND job_group_name LIKE CONCAT('%', #{jobDTO.jobGroupName}, '%')
+                AND job_group_name = #{jobDTO.jobGroupName}
             </if>
         </where>
     </select>
