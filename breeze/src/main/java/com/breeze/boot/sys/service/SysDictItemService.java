@@ -18,7 +18,7 @@ package com.breeze.boot.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysDictItem;
-import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public interface SysDictItemService extends IService<SysDictItem> {
     /**
      * 字典列表项
      *
-     * @param dictSearchDTO 字典搜索DTO
+     * @param dictQuery 字典查询
      * @return {@link List}<{@link SysDictItem}>
      */
-    List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO);
+    List<SysDictItem> listDictItem(DictQuery dictQuery);
 
     /**
      * 查询字典通过类型代码

@@ -22,9 +22,9 @@ import com.breeze.boot.sys.domain.SysUser;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.security.config.JwtConfiguration;
-import com.breeze.security.entity.CurrentLoginUser;
-import com.breeze.security.entity.LoginUserDTO;
-import com.breeze.security.entity.WxLoginBody;
+import com.breeze.security.params.WxLoginParam;
+import com.breeze.security.userextension.CurrentLoginUser;
+import com.breeze.security.userextension.LoginUser;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -82,8 +82,8 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("用户名不存在");
         }
-        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
-        return this.getLoginUser(loginUserDTO);
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.getLoginUser(loginUser);
     }
 
     /**
@@ -97,8 +97,8 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("邮箱不存在");
         }
-        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
-        return this.getLoginUser(loginUserDTO);
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.getLoginUser(loginUser);
     }
 
     /**
@@ -112,31 +112,31 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("电话不存在");
         }
-        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
-        return this.getLoginUser(loginUserDTO);
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.getLoginUser(loginUser);
     }
 
     /**
      * 创建或者加载用户
      *
-     * @param wxLoginBody wx登录消息体
+     * @param wxLoginParam wx登录消息体
      * @return {@link CurrentLoginUser}
      */
-    public CurrentLoginUser createOrLoadUser(WxLoginBody wxLoginBody) {
-        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, wxLoginBody.getOpenId()));
+    public CurrentLoginUser createOrLoadUser(WxLoginParam wxLoginParam) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, wxLoginParam.getOpenId()));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
             sysUser = this.sysUserService.registerUser(SysUser.builder()
-                    .openId(wxLoginBody.getOpenId())
-                    .phone(wxLoginBody.getPhone())
-                    .amountName(wxLoginBody.getNickName())
-                    .sex(wxLoginBody.getSex())
-                    .phone(wxLoginBody.getEmail())
-                    .username(wxLoginBody.getOpenId().substring(0, 5) + RandomUtil.randomString(6))
+                    .openId(wxLoginParam.getOpenId())
+                    .phone(wxLoginParam.getPhone())
+                    .amountName(wxLoginParam.getNickName())
+                    .sex(wxLoginParam.getSex())
+                    .phone(wxLoginParam.getEmail())
+                    .username(wxLoginParam.getOpenId().substring(0, 5) + RandomUtil.randomString(6))
                     .build());
         }
-        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
-        return this.getLoginUser(loginUserDTO);
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.getLoginUser(loginUser);
     }
 
     /**
@@ -152,39 +152,39 @@ public class UserTokenService {
             sysUser = this.sysUserService.registerUser(SysUser.builder().phone(phone)
                     .username(phone + RandomUtil.randomString(6)).build());
         }
-        LoginUserDTO loginUserDTO = this.userTokenCacheService.getLoginUserDTO(sysUser);
-        return this.getLoginUser(loginUserDTO);
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.getLoginUser(loginUser);
     }
 
     /**
      * 刷新用户
      *
      * @param username 用户名
-     * @return {@link LoginUserDTO}
+     * @return {@link LoginUser}
      */
-    public LoginUserDTO refreshUser(String username) {
+    public LoginUser refreshUser(String username) {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("用户名错误或不存在");
         }
-        return this.userTokenCacheService.getLoginUserDTO(sysUser);
+        return this.userTokenCacheService.getLoginUser(sysUser);
     }
 
     /**
      * 获取登录用户
      *
-     * @param loginUserDTO 登录用户dto
+     * @param loginUser 登录用户
      * @return {@link CurrentLoginUser}
      */
-    public CurrentLoginUser getLoginUser(LoginUserDTO loginUserDTO) {
+    public CurrentLoginUser getLoginUser(LoginUser loginUser) {
         List<GrantedAuthority> authorities = Lists.newArrayList();
-        Optional.ofNullable(loginUserDTO.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
-        Optional.ofNullable(loginUserDTO.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));
-        return new CurrentLoginUser(loginUserDTO,
-                Objects.equals(loginUserDTO.getIsLock(), 0),
+        Optional.ofNullable(loginUser.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
+        Optional.ofNullable(loginUser.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));
+        return new CurrentLoginUser(loginUser,
+                Objects.equals(loginUser.getIsLock(), 0),
                 true,
                 true,
-                Objects.equals(loginUserDTO.getIsLock(), 0),
+                Objects.equals(loginUser.getIsLock(), 0),
                 authorities);
     }
 
@@ -209,22 +209,22 @@ public class UserTokenService {
         Instant now = Instant.now();
         CurrentLoginUser currentLoginUser = (CurrentLoginUser) authentication.getPrincipal();
         String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
-        LoginUserDTO loginUserDTO = currentLoginUser.getLoginUserDTO();
+        LoginUser loginUser = currentLoginUser.getLoginUser();
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .issuer("self")
                 .issueTime(new Date(now.toEpochMilli()))
                 .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
                 .subject(authentication.getName())
-                .claim("userId", loginUserDTO.getId())
-                .claim("tenantId", loginUserDTO.getTenantId())
-                .claim("username", loginUserDTO.getUsername())
-                .claim("userCode", loginUserDTO.getUserCode())
+                .claim("userId", loginUser.getId())
+                .claim("tenantId", loginUser.getTenantId())
+                .claim("username", loginUser.getUsername())
+                .claim("userCode", loginUser.getUserCode())
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();
         SignedJWT signedJwt = new SignedJWT(header, claims);
         Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("userInfo", loginUserDTO);
+        resultMap.put("userInfo", loginUser);
         resultMap.put("accessToken", jwtConfiguration.sign(signedJwt).serialize());
         return resultMap;
     }

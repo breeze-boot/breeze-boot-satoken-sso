@@ -18,7 +18,7 @@ package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysLog;
-import com.breeze.boot.sys.dto.LogSearchDTO;
+import com.breeze.boot.sys.query.LogQuery;
 import com.breeze.boot.sys.service.SysLogService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -54,13 +54,13 @@ public class SysLogController {
     /**
      * 列表
      *
-     * @param logSearchDTO 日志搜索DTO
+     * @param logQuery 日志查询
      * @return {@link Result}<{@link Page}<{@link SysLog}>>
      */
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(@RequestBody LogSearchDTO logSearchDTO) {
-        return Result.ok(this.sysLogService.listLog(logSearchDTO));
+    public Result<Page<SysLog>> list(@RequestBody LogQuery logQuery) {
+        return Result.ok(this.sysLogService.listPage(logQuery));
     }
 
     /**

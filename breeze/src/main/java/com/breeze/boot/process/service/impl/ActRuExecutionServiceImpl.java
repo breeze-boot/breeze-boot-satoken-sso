@@ -20,8 +20,8 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.process.domain.ActRuExecution;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
 import com.breeze.boot.process.mapper.ActRuExecutionMapper;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.service.ActRuExecutionService;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
 import org.springframework.stereotype.Service;
@@ -38,13 +38,13 @@ public class ActRuExecutionServiceImpl extends ServiceImpl<ActRuExecutionMapper,
     /**
      * 列表页面
      *
-     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @param processInstanceQuery 流程实例查询
      * @return {@link Page}<{@link ProcessInstanceVO}>
      */
     @DS("flowable")
     @Override
-    public Page<ProcessInstanceVO> listPage(ProcessInstanceSearchDTO processInstanceSearchDTO) {
-        return this.baseMapper.listPage(new Page<>(processInstanceSearchDTO.getCurrent(), processInstanceSearchDTO.getSize()), processInstanceSearchDTO);
+    public Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery) {
+        return this.baseMapper.listPage(new Page<>(processInstanceQuery.getCurrent(), processInstanceQuery.getSize()), processInstanceQuery);
     }
 
 }

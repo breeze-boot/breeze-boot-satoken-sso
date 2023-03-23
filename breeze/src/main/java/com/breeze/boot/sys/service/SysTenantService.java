@@ -19,7 +19,7 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysTenant;
-import com.breeze.boot.sys.dto.TenantSearchDTO;
+import com.breeze.boot.sys.query.TenantQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public interface SysTenantService extends IService<SysTenant> {
     /**
      * 列表页面
      *
-     * @param tenantSearchDTO 租户搜索dto
+     * @param tenantQuery 租户查询
      * @return {@link IPage}<{@link SysTenant}>
      */
-    IPage<SysTenant> listPage(TenantSearchDTO tenantSearchDTO);
+    IPage<SysTenant> listPage(TenantQuery tenantQuery);
 
     /**
      * 通过IDS删除租户

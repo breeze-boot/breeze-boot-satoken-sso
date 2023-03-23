@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysMenu;
 import com.breeze.boot.sys.domain.SysPlatform;
-import com.breeze.boot.sys.dto.PlatformSearchDTO;
+import com.breeze.boot.sys.query.PlatformQuery;
 import com.breeze.boot.sys.service.SysMenuService;
 import com.breeze.boot.sys.service.SysPlatformService;
 import com.breeze.core.utils.Result;
@@ -32,9 +32,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -67,14 +68,14 @@ public class SysPlatformController {
     /**
      * 列表
      *
-     * @param platformSearchDTO 平台搜索DTO
+     * @param platformQuery 平台查询
      * @return {@link Result}<{@link Page}<{@link SysPlatform}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result<Page<SysPlatform>> list(@RequestBody PlatformSearchDTO platformSearchDTO) {
-        return Result.ok(this.sysPlatformService.listPage(platformSearchDTO));
+    public Result<Page<SysPlatform>> list(@RequestBody PlatformQuery platformQuery) {
+        return Result.ok(this.sysPlatformService.listPage(platformQuery));
     }
 
     /**
@@ -87,7 +88,7 @@ public class SysPlatformController {
     @Operation(summary = "校验平台编码是否重复")
     @GetMapping("/checkPlatformCode")
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result<Boolean> checkPlatformCode(@RequestParam("platformCode") String platformCode,
+    public Result<Boolean> checkPlatformCode(@NotBlank(message = "平台编码不能为空") @RequestParam("platformCode") String platformCode,
                                              @RequestParam(value = "platformId", required = false) Long platformId) {
         return Result.ok(Objects.isNull(this.sysPlatformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
                 .ne(Objects.nonNull(platformId), SysPlatform::getId, platformId)
@@ -104,7 +105,7 @@ public class SysPlatformController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:platform:create')")
     @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysPlatform platform) {
+    public Result<Boolean> save(@Valid @RequestBody SysPlatform platform) {
         return Result.ok(this.sysPlatformService.save(platform));
     }
 
@@ -118,7 +119,7 @@ public class SysPlatformController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:platform:modify')")
     @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysPlatform sysPlatform) {
+    public Result<Boolean> modify(@Valid @RequestBody SysPlatform sysPlatform) {
         return Result.ok(this.sysPlatformService.updateById(sysPlatform));
     }
 

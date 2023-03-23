@@ -40,11 +40,11 @@
         sys_data_permission AS a
         <where>
             a.is_delete = 0
-            <if test="dataPermissionDTO.dataPermissionName != null and dataPermissionDTO.dataPermissionName != ''">
-                AND a.data_permission_name LIKE CONCAT('%' , #{dataPermissionDTO.dataPermissionName}, '%')
+            <if test="dataPermissionQuery.dataPermissionName != null and dataPermissionQuery.dataPermissionName != ''">
+                AND a.data_permission_name LIKE CONCAT('%' , #{dataPermissionQuery.dataPermissionName}, '%')
             </if>
-            <if test="dataPermissionDTO.dataPermissionCode != null and dataPermissionDTO.dataPermissionCode != ''">
-                AND a.data_permission_code LIKE CONCAT('%' , #{dataPermissionDTO.dataPermissionCode}, '%')
+            <if test="dataPermissionQuery.dataPermissionCode != null and dataPermissionQuery.dataPermissionCode != ''">
+                AND a.data_permission_code LIKE CONCAT('%' , #{dataPermissionQuery.dataPermissionCode}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

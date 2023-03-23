@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.process.domain.ProcessCategory;
-import com.breeze.boot.process.dto.ProcessCategoryDTO;
 import com.breeze.boot.process.mapper.ProcessCategoryMapper;
+import com.breeze.boot.process.query.ProcessCategoryQuery;
 import com.breeze.boot.process.service.IProcessCategoryService;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class ProcessCategoryServiceImpl extends ServiceImpl<ProcessCategoryMappe
      * @return {@link IPage}<{@link ProcessCategory}>
      */
     @Override
-    public IPage<ProcessCategory> listPage(ProcessCategoryDTO processCategory) {
+    public IPage<ProcessCategory> listPage(ProcessCategoryQuery processCategory) {
         return this.baseMapper.listPage(new Page<>(processCategory.getCurrent(), processCategory.getSize()), processCategory);
     }
 }

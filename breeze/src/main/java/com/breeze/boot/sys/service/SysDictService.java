@@ -19,8 +19,8 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysDict;
-import com.breeze.boot.sys.dto.DictOpenDTO;
-import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.params.DictOpenParam;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -34,20 +34,20 @@ import java.util.List;
 public interface SysDictService extends IService<SysDict> {
 
     /**
-     * 字典分页
+     * 列表页面
      *
-     * @param dictSearchDto 字典搜索DTO
+     * @param dictQuery 字典查询
      * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDict> listPage(DictSearchDTO dictSearchDto);
+    Page<SysDict> listPage(DictQuery dictQuery);
 
     /**
      * 开关
      *
-     * @param dictOpenDTO 字典开关DTO
+     * @param dictOpenParam 字典开关参数
      * @return {@link Boolean}
      */
-    Boolean open(DictOpenDTO dictOpenDTO);
+    Boolean open(DictOpenParam dictOpenParam);
 
     /**
      * 删除字典通过IDS

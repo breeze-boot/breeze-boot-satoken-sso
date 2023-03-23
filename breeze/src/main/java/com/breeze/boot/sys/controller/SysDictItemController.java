@@ -17,7 +17,7 @@
 package com.breeze.boot.sys.controller;
 
 import com.breeze.boot.sys.domain.SysDictItem;
-import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.boot.sys.service.SysDictItemService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -27,9 +27,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -55,27 +55,27 @@ public class SysDictItemController {
     /**
      * 列表
      *
-     * @param dictSearchDTO 字典搜索DTO
+     * @param dictQuery 字典查询
      * @return {@link Result}<{@link List}<{@link SysDictItem}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> list(@RequestBody DictSearchDTO dictSearchDTO) {
-        return Result.ok(this.sysDictItemService.listDictItem(dictSearchDTO));
+    public Result<List<SysDictItem>> list(@RequestBody DictQuery dictQuery) {
+        return Result.ok(this.sysDictItemService.listDictItem(dictQuery));
     }
 
     /**
      * 创建
      *
-     * @param sysDictItem 字典项保存DTO
+     * @param sysDictItem 字典项保存参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典项信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysDictItem sysDictItem) {
+    public Result<Boolean> save(@Valid @RequestBody SysDictItem sysDictItem) {
         return Result.ok(sysDictItemService.save(sysDictItem));
     }
 
@@ -89,7 +89,7 @@ public class SysDictItemController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典项信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysDictItem sysDictItem) {
+    public Result<Boolean> modify(@Valid @RequestBody SysDictItem sysDictItem) {
         return Result.ok(this.sysDictItemService.updateById(sysDictItem));
     }
 

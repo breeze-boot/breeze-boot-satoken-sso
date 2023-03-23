@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.sys.domain.SysMenu;
 import com.breeze.boot.sys.domain.SysPlatform;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.DeptSearchDTO;
+import com.breeze.boot.sys.query.DeptQuery;
 import com.breeze.boot.sys.service.*;
 import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
@@ -168,7 +168,7 @@ public class CommonController {
     @Operation(summary = "部门下拉框", description = "下拉框接口")
     @GetMapping("/selectDept")
     public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
-        return Result.ok(this.deptService.listDept(DeptSearchDTO.builder().id(id).build()));
+        return Result.ok(this.deptService.listDept(DeptQuery.builder().id(id).build()));
     }
 
     /**

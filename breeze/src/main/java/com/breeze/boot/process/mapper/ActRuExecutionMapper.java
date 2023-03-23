@@ -19,7 +19,7 @@ package com.breeze.boot.process.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.process.domain.ActRuExecution;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,10 +36,10 @@ public interface ActRuExecutionMapper extends BaseMapper<ActRuExecution> {
     /**
      * 列表页面
      *
-     * @param page                     页面
-     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @param page                 页面
+     * @param processInstanceQuery 流程实例查询
      * @return {@link Page}<{@link ProcessInstanceVO}>
      */
-    Page<ProcessInstanceVO> listPage(@Param("page") Page<ProcessInstanceVO> page, @Param("processInstanceSearchDTO") ProcessInstanceSearchDTO processInstanceSearchDTO);
+    Page<ProcessInstanceVO> listPage(Page<ProcessInstanceVO> page, @Param("processInstanceQuery") ProcessInstanceQuery processInstanceQuery);
 
 }

@@ -19,7 +19,7 @@ package com.breeze.boot.sys.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.sys.domain.SysTenant;
-import com.breeze.boot.sys.dto.TenantSearchDTO;
+import com.breeze.boot.sys.query.TenantQuery;
 import com.breeze.boot.sys.service.SysTenantService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -29,9 +29,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -58,14 +59,14 @@ public class SysTenantController {
     /**
      * 列表
      *
-     * @param tenantSearchDTO 租户搜索dto
+     * @param tenantQuery 租户查询
      * @return {@link Result}<{@link IPage}<{@link SysTenant}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
-    public Result<IPage<SysTenant>> list(@RequestBody TenantSearchDTO tenantSearchDTO) {
-        return Result.ok(this.sysTenantService.listPage(tenantSearchDTO));
+    public Result<IPage<SysTenant>> list(@RequestBody TenantQuery tenantQuery) {
+        return Result.ok(this.sysTenantService.listPage(tenantQuery));
     }
 
     /**
@@ -78,7 +79,7 @@ public class SysTenantController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:tenant:create')")
     @BreezeSysLog(description = "租户信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysTenant tenant) {
+    public Result<Boolean> save(@Valid @RequestBody SysTenant tenant) {
         return Result.ok(this.sysTenantService.save(tenant));
     }
 
@@ -92,7 +93,7 @@ public class SysTenantController {
     @Operation(summary = "校验租户编码是否重复")
     @GetMapping("/checkTenantCode")
     @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
-    public Result<Boolean> checkTenantCode(@RequestParam("tenantCode") String tenantCode,
+    public Result<Boolean> checkTenantCode(@NotBlank(message = "租户编码不能为空") @RequestParam("tenantCode") String tenantCode,
                                            @RequestParam(value = "tenantId", required = false) Long tenantId) {
         return Result.ok(Objects.isNull(this.sysTenantService.getOne(Wrappers.<SysTenant>lambdaQuery()
                 .ne(Objects.nonNull(tenantId), SysTenant::getId, tenantId)
@@ -109,7 +110,7 @@ public class SysTenantController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysTenant sysPost) {
+    public Result<Boolean> modify(@Valid @RequestBody SysTenant sysPost) {
         return Result.ok(this.sysTenantService.updateById(sysPost));
     }
 

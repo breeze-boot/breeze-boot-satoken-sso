@@ -18,8 +18,8 @@ package com.breeze.boot.process.service.impl;
 
 import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessDeploymentDTO;
-import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
+import com.breeze.boot.process.params.ProcessDeploymentParam;
+import com.breeze.boot.process.query.ProcessDeploymentQuery;
 import com.breeze.boot.process.service.ActReDeploymentService;
 import com.breeze.boot.process.service.IProcessDefinitionService;
 import com.breeze.boot.process.vo.DeploymentVO;
@@ -31,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.RepositoryService;
-import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * 流程资源服务impl
+ * 流程资源管理服务impl
  *
  * @author gaoweixuan
  * @date 2023-03-01
@@ -65,32 +64,32 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
     /**
      * 部署
      *
-     * @param processDeploymentDTO 流程部署dto
+     * @param processDeploymentParam 流程部署参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> deploy(ProcessDeploymentDTO processDeploymentDTO) {
+    public Result<Boolean> deploy(ProcessDeploymentParam processDeploymentParam) {
         Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getId()));
-        Deployment deploy = this.repositoryService.createDeployment()
-                .addString(processDeploymentDTO.getName() + "-" + processDeploymentDTO.getCategory() + "-" + processDeploymentDTO.getId() + ".bpmn20.xml", processDeploymentDTO.getXml())
-                .name((processDeploymentDTO.getName()))
-                .key(processDeploymentDTO.getId())
-                .tenantId(processDeploymentDTO.getTenantId())
-                .category(processDeploymentDTO.getCategory())
+        String xmlName = processDeploymentParam.getName() + "-" + processDeploymentParam.getCategory() + "-" + processDeploymentParam.getId() + ".bpmn20.xml";
+        this.repositoryService.createDeployment()
+                .addString(xmlName, processDeploymentParam.getXml())
+                .name((processDeploymentParam.getName()))
+                .key(processDeploymentParam.getId())
+                .tenantId(processDeploymentParam.getTenantId())
+                .category(processDeploymentParam.getCategory())
                 .deploy();
-        List<ProcessDefinition> processDefinitionList = this.repositoryService.createProcessDefinitionQuery().deploymentId(deploy.getId()).list();
-        return Result.ok();
+        return Result.ok(Boolean.TRUE, "发布成功");
     }
 
     /**
      * 列表页面
      *
-     * @param processSearchDeploymentDTO 流程部署查询dto
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Page}<{@link DeploymentVO}>
      */
     @Override
-    public Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processSearchDeploymentDTO) {
-        return this.actReDeploymentService.listPage(processSearchDeploymentDTO);
+    public Page<DeploymentVO> listPage(ProcessDeploymentQuery processDeploymentQuery) {
+        return this.actReDeploymentService.listPage(processDeploymentQuery);
     }
 
     /**
@@ -120,7 +119,8 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
     /**
      * 获取流程定义xml
      *
-     * @param processKey 流程KEY     * @param tenantId   租户ID
+     * @param processKey 流程KEY
+     * @param tenantId   租户ID
      * @return {@link String}
      */
     @SneakyThrows
@@ -154,13 +154,13 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
     /**
      * 版本列表页面
      *
-     * @param processDeploymentSearchDTO 流程定义搜索DTO
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Page}<{@link ProcessDefinitionVO}>
      */
     @Override
-    public Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO) {
+    public Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentQuery processDeploymentQuery) {
         List<ProcessDefinition> processDefinitionList = this.repositoryService.createProcessDefinitionQuery()
-                .listPage(processDeploymentSearchDTO.getOffset(), processDeploymentSearchDTO.getLimit());
+                .listPage(processDeploymentQuery.getOffset(), processDeploymentQuery.getLimit());
         ProcessDefinitionVO processDefinitionVO = new ProcessDefinitionVO();
         Page<ProcessDefinitionVO> page = new Page<>();
         page.setRecords(processDefinitionVO.convertProcessDefinitionVO(processDefinitionList));
@@ -214,6 +214,13 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
         return Boolean.TRUE;
     }
 
+    /**
+     * 获取流程定义
+     *
+     * @param processDefinitionId 流程定义id
+     * @param tenantId            租户ID
+     * @return {@link ProcessDefinition}
+     */
     private ProcessDefinition getDefinition(String processDefinitionId, String tenantId) {
         return this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionId(processDefinitionId)
@@ -221,6 +228,13 @@ public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
                 .singleResult();
     }
 
+    /**
+     * 获取流程定义
+     *
+     * @param processKey 过程关键
+     * @param tenantId   租户ID
+     * @return {@link ProcessDefinition}
+     */
     private ProcessDefinition getProcessDefinition(String processKey, String tenantId) {
         return this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(processKey)

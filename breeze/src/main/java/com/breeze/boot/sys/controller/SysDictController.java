@@ -19,8 +19,8 @@ package com.breeze.boot.sys.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysDict;
-import com.breeze.boot.sys.dto.DictOpenDTO;
-import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.params.DictOpenParam;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.boot.sys.service.SysDictItemService;
 import com.breeze.boot.sys.service.SysDictService;
 import com.breeze.core.utils.Result;
@@ -31,9 +31,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -67,14 +67,14 @@ public class SysDictController {
     /**
      * 列表
      *
-     * @param dictSearchDTO 字典搜索DTO
+     * @param dictQuery 字典查询
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @Operation(summary = "列表", description = "分页")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDict>> list(@RequestBody DictSearchDTO dictSearchDTO) {
-        return Result.ok(this.sysDictService.listPage(dictSearchDTO));
+    public Result<Page<SysDict>> list(@RequestBody DictQuery dictQuery) {
+        return Result.ok(this.sysDictService.listPage(dictQuery));
     }
 
     /**
@@ -110,14 +110,14 @@ public class SysDictController {
     /**
      * 创建
      *
-     * @param sysDict 字典保存DTO
+     * @param sysDict 字典保存参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysDict sysDict) {
+    public Result<Boolean> save(@Valid @RequestBody SysDict sysDict) {
         return Result.ok(sysDictService.save(sysDict));
     }
 
@@ -131,22 +131,22 @@ public class SysDictController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息修改", type = LogType.EDIT)
-    public Result<Boolean> update(@Validated @RequestBody SysDict sysDict) {
+    public Result<Boolean> update(@Valid @RequestBody SysDict sysDict) {
         return Result.ok(this.sysDictService.updateById(sysDict));
     }
 
     /**
      * 开关
      *
-     * @param dictOpenDTO 字典开关 DTO
+     * @param dictOpenParam 字典开关参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息开关", type = LogType.EDIT)
-    public Result<Boolean> open(@Validated @RequestBody DictOpenDTO dictOpenDTO) {
-        return Result.ok(this.sysDictService.open(dictOpenDTO));
+    public Result<Boolean> open(@Valid @RequestBody DictOpenParam dictOpenParam) {
+        return Result.ok(this.sysDictService.open(dictOpenParam));
     }
 
     /**

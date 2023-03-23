@@ -19,7 +19,7 @@ package com.breeze.boot.sys.controller;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.sys.domain.SysDept;
-import com.breeze.boot.sys.dto.DeptSearchDTO;
+import com.breeze.boot.sys.query.DeptQuery;
 import com.breeze.boot.sys.service.SysDeptService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -29,9 +29,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -57,14 +58,14 @@ public class SysDeptController {
     /**
      * 列表
      *
-     * @param deptSearchDTO 部门dto
+     * @param deptQuery 部门查询
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    public Result<List<Tree<Long>>> list(@RequestBody DeptSearchDTO deptSearchDTO) {
-        return Result.ok(this.sysDeptService.listDept(deptSearchDTO));
+    public Result<List<Tree<Long>>> list(@RequestBody DeptQuery deptQuery) {
+        return Result.ok(this.sysDeptService.listDept(deptQuery));
     }
 
     /**
@@ -77,7 +78,8 @@ public class SysDeptController {
     @Operation(summary = "校验部门编码是否重复")
     @GetMapping("/checkDeptCode")
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    public Result<Boolean> checkDeptCode(@RequestParam("deptCode") String deptCode, @RequestParam(value = "deptId", required = false) Long deptId) {
+    public Result<Boolean> checkDeptCode(@NotBlank(message = "部门编码不能为空") @RequestParam("deptCode") String deptCode,
+                                         @RequestParam(value = "deptId", required = false) Long deptId) {
         return Result.ok(Objects.isNull(this.sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery()
                 .ne(Objects.nonNull(deptId), SysDept::getId, deptId)
                 .eq(SysDept::getDeptCode, deptCode))));
@@ -93,7 +95,7 @@ public class SysDeptController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:dept:create')")
     @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysDept sysDept) {
+    public Result<Boolean> save(@Valid @RequestBody SysDept sysDept) {
         return Result.ok(sysDeptService.save(sysDept));
     }
 
@@ -107,7 +109,7 @@ public class SysDeptController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:dept:modify')")
     @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysDept sysDept) {
+    public Result<Boolean> modify(@Valid @RequestBody SysDept sysDept) {
         return Result.ok(this.sysDeptService.updateById(sysDept));
     }
 
@@ -121,7 +123,7 @@ public class SysDeptController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
     @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能未空") @RequestBody Long id) {
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysDeptService.deleteById(id);
     }
 

@@ -18,8 +18,8 @@ package com.breeze.boot.sys.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysDataPermission;
+import com.breeze.boot.sys.query.DataPermissionQuery;
 import com.breeze.database.mapper.BreezeBaseMapper;
-import com.breeze.security.entity.DataPermissionDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,10 +35,10 @@ public interface SysDataPermissionMapper extends BreezeBaseMapper<SysDataPermiss
     /**
      * 列表分页
      *
-     * @param dataPermissionDTO 数据权限DTO
-     * @param page              页面
+     * @param dataPermissionQuery 数据权限查询
+     * @param page                页面
      * @return {@link Page}<{@link SysDataPermission}>
      */
-    Page<SysDataPermission> listPage(Page<SysDataPermission> page, @Param("dataPermissionDTO") DataPermissionDTO dataPermissionDTO);
+    Page<SysDataPermission> listPage(Page<SysDataPermission> page, @Param("dataPermissionQuery") DataPermissionQuery dataPermissionQuery);
 
 }

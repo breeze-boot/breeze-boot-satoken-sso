@@ -16,18 +16,26 @@
 
 package com.breeze.boot.quartz.domain;
 
-import com.breeze.core.entity.BaseModel;
-import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.core.base.BaseModel;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
- * quartz任务调度
+ * quartz任务实体
  *
  * @author gaoweixuan
  * @date 2023-03-16
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@TableName(value = "sys_quartz_job")
+@Schema(description = "quartz的任务实体")
 public class SysQuartzJob extends BaseModel<SysQuartzJob> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,36 +43,43 @@ public class SysQuartzJob extends BaseModel<SysQuartzJob> implements Serializabl
     /**
      * 任务名称
      */
+    @Schema(description = "任务名")
     private String jobName;
 
     /**
      * 任务组名
      */
+    @Schema(description = "任务组名")
     private String jobGroupName;
 
     /**
      * cron表达式
      */
+    @Schema(description = "cron表达式")
     private String cronExpression;
 
     /**
      * 任务类名
      */
+    @Schema(description = "任务类名")
     private String clazzName;
 
     /**
-     * misfire策略1 立即执行 2 执行一次 3 放弃
+     * misfire策略 1 立即执行 2 执行一次 -1 放弃
      */
+    @Schema(description = "misfire策略 1 立即执行 2 执行一次 -1 放弃")
     private Integer misfirePolicy;
 
     /**
      * 是否并发 0 不并发 1 并发
      */
+    @Schema(description = "是否并发 0 不并发 1 并发")
     private Integer concurrent;
 
     /**
      * 状态 0 关闭 1 开启
      */
+    @Schema(description = "状态 0关闭 1开启")
     private Integer status;
 
 }

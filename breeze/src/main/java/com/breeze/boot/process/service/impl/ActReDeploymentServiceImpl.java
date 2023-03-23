@@ -20,8 +20,8 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.process.domain.ActReDeployment;
-import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
 import com.breeze.boot.process.mapper.ActReDeploymentMapper;
+import com.breeze.boot.process.query.ProcessDeploymentQuery;
 import com.breeze.boot.process.service.ActReDeploymentService;
 import com.breeze.boot.process.vo.DeploymentVO;
 import org.springframework.stereotype.Service;
@@ -38,13 +38,13 @@ public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMappe
     /**
      * 列表页面
      *
-     * @param processDeploymentSearchDTO 搜索过程部署dto
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Page}<{@link DeploymentVO}>
      */
     @DS("flowable")
     @Override
-    public Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO) {
-        return this.baseMapper.listPage(new Page<>(processDeploymentSearchDTO.getCurrent(), processDeploymentSearchDTO.getSize()), processDeploymentSearchDTO);
+    public Page<DeploymentVO> listPage(ProcessDeploymentQuery processDeploymentQuery) {
+        return this.baseMapper.listPage(new Page<>(processDeploymentQuery.getCurrent(), processDeploymentQuery.getSize()), processDeploymentQuery);
     }
 
 }

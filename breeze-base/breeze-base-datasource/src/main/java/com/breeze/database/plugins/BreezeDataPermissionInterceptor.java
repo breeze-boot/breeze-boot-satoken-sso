@@ -24,9 +24,9 @@ import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.breeze.core.enums.ResultCode;
 import com.breeze.core.ex.SystemServiceException;
-import com.breeze.database.annotation.DataPermission;
-import com.breeze.security.entity.DataPermissionDTO;
-import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.database.annotation.BreezeDataPermission;
+import com.breeze.security.userextension.DataPermission;
+import com.breeze.security.userextension.LoginUser;
 import com.breeze.security.utils.SecurityUtils;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
@@ -133,17 +133,17 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         Method[] methods = clazz.getMethods();
         // 遍历类的方法
         for (Method method : methods) {
-            DataPermission annotation = method.getAnnotation(DataPermission.class);
+            BreezeDataPermission annotation = method.getAnnotation(BreezeDataPermission.class);
             // 判断是否存在注解且方法名一致
             if (Objects.isNull(annotation) || !methodName.equals(method.getName())) {
                 continue;
             }
 
-            LoginUserDTO loginUserDTO = SecurityUtils.getCurrentUser();
-            if (loginUserDTO == null) {
+            LoginUser loginUser = SecurityUtils.getCurrentUser();
+            if (loginUser == null) {
                 throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
             }
-            List<DataPermissionDTO> dataPermissionList = loginUserDTO.getDataPermissions();
+            List<DataPermission> dataPermissionList = loginUser.getDataPermissions();
 
             if (CollUtil.isEmpty(dataPermissionList)) {
                 continue;
@@ -155,26 +155,26 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
     }
 
     @NotNull
-    private String getSql(List<DataPermissionDTO> dataPermissionDTOList, DataPermission dataPermission, String originalSql) {
+    private String getSql(List<DataPermission> dataPermissionList, BreezeDataPermission breezeDataPermission, String originalSql) {
         StringBuilder sb = new StringBuilder();
-        String operator = dataPermissionDTOList.get(0).getOperator();
+        String operator = dataPermissionList.get(0).getOperator();
         String sql;
         int index = 0;
         sb.append(" WHERE ");
-        for (DataPermissionDTO permission : dataPermissionDTOList) {
+        for (DataPermission permission : dataPermissionList) {
             if (Objects.equals(permission.getDataPermissionType(), OWN)) {
-                if (StrUtil.isAllBlank(dataPermission.own())) {
-                    throw new SystemServiceException(ResultCode.exception("[OWN= ? ]注解未指定条件字段" + dataPermission.own()));
+                if (StrUtil.isAllBlank(breezeDataPermission.own())) {
+                    throw new SystemServiceException(ResultCode.exception("[OWN= ? ]注解未指定条件字段" + breezeDataPermission.own()));
                 }
-                if (!originalSql.contains(dataPermission.own())) {
-                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + dataPermission.own()));
+                if (!originalSql.contains(breezeDataPermission.own())) {
+                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + breezeDataPermission.own()));
                 }
                 // create_by 字段
                 if (StrUtil.isAllBlank(SecurityUtils.getUserCode())) {
                     continue;
                 }
 
-                sb.append(String.format("%s a.%s = '", permission.getOperator(), dataPermission.own()));
+                sb.append(String.format("%s a.%s = '", permission.getOperator(), breezeDataPermission.own()));
                 sb.append(SecurityUtils.getUserCode());
                 sb.append("' ");
                 index++;
@@ -182,11 +182,11 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 // 没有自定义SQL
                 return sb.toString().replaceFirst("WHERE", "");
             } else if (Objects.equals(permission.getDataPermissionType(), DEPT_AND_LOWER_LEVEL) || Objects.equals(permission.getDataPermissionType(), DEPT_LEVEL)) {
-                if (StrUtil.isAllBlank(dataPermission.scope())) {
-                    throw new SystemServiceException(ResultCode.exception("[SCOPE= ? ]注解未指定条件字段" + dataPermission.scope()));
+                if (StrUtil.isAllBlank(breezeDataPermission.scope())) {
+                    throw new SystemServiceException(ResultCode.exception("[SCOPE= ? ]注解未指定条件字段" + breezeDataPermission.scope()));
                 }
-                if (!originalSql.contains(dataPermission.scope())) {
-                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + dataPermission.scope()));
+                if (!originalSql.contains(breezeDataPermission.scope())) {
+                    throw new SystemServiceException(ResultCode.exception("sql中缺少字段" + breezeDataPermission.scope()));
                 }
                 String deptIds = permission.getDataPermissions();
 
@@ -194,7 +194,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 if (StrUtil.isAllBlank(deptIds)) {
                     continue;
                 }
-                sb.append(String.format("%s a.%s IN ( ", permission.getOperator(), dataPermission.scope()));
+                sb.append(String.format("%s a.%s IN ( ", permission.getOperator(), breezeDataPermission.scope()));
                 sb.append(deptIds);
                 sb.append(" ) ");
                 index++;

@@ -30,7 +30,7 @@ public class MsgSaveEvent extends ApplicationEvent {
     /**
      * 消息保存事件
      *
-     * @param userMsgBO 消息dto
+     * @param userMsgBO 消息BO
      */
     public MsgSaveEvent(UserMsgBO userMsgBO) {
         super(userMsgBO);

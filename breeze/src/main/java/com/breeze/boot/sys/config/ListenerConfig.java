@@ -18,8 +18,8 @@ package com.breeze.boot.sys.config;
 
 import com.breeze.boot.sys.service.SysLogService;
 import com.breeze.boot.sys.service.impl.StompJsMsgServiceImpl;
+import com.breeze.log.bo.SysLogBO;
 import com.breeze.log.config.SysLogSaveEventListener;
-import com.breeze.log.dto.SysLogDTO;
 import com.breeze.websocket.bo.UserMsgBO;
 import com.breeze.websocket.service.MsgSaveEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class ListenerConfig {
      */
     @Bean
     public SysLogSaveEventListener sysLogSaveEventListener() {
-        return new SysLogSaveEventListener((source) -> this.sysLogService.saveSysLog((SysLogDTO) source.getSource()));
+        return new SysLogSaveEventListener((source) -> this.sysLogService.saveSysLog((SysLogBO) source.getSource()));
     }
 
     /**

@@ -18,7 +18,7 @@ package com.breeze.boot.quartz.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
-import com.breeze.boot.quartz.dto.JobDTO;
+import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -27,9 +27,9 @@ import com.breeze.security.annotation.NoAuthentication;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
@@ -54,14 +54,14 @@ public class QuartzJobController {
     /**
      * 列表页面
      *
-     * @param jobDTO 任务DTO
+     * @param jobQuery 任务查询
      * @return {@link Result}<{@link Page}<{@link SysQuartzJob}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:job:list')")
-    public Result<Page<SysQuartzJob>> listPage(@Validated @RequestBody JobDTO jobDTO) {
-        return Result.ok(this.sysQuartzJobService.listPage(jobDTO));
+    public Result<Page<SysQuartzJob>> listPage(@RequestBody JobQuery jobQuery) {
+        return Result.ok(this.sysQuartzJobService.listPage(jobQuery));
     }
 
     /**
@@ -74,7 +74,7 @@ public class QuartzJobController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:job:create')")
     @BreezeSysLog(description = "保存任务", type = LogType.EDIT)
-    public Result<Boolean> save(@Validated @RequestBody SysQuartzJob sysQuartzJob) {
+    public Result<Boolean> save(@Valid @RequestBody SysQuartzJob sysQuartzJob) {
         return this.sysQuartzJobService.saveJob(sysQuartzJob);
     }
 
@@ -88,7 +88,7 @@ public class QuartzJobController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:job:modify')")
     @BreezeSysLog(description = "修改任务", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysQuartzJob sysQuartzJob) {
+    public Result<Boolean> modify(@Valid @RequestBody SysQuartzJob sysQuartzJob) {
         return this.sysQuartzJobService.updateJobById(sysQuartzJob);
     }
 
@@ -103,7 +103,8 @@ public class QuartzJobController {
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:job:modify')")
     @BreezeSysLog(description = "开启或关闭任务", type = LogType.EDIT)
-    public Result<Boolean> open(@RequestParam("jobId") Long jobId, @RequestParam("status") Integer status) {
+    public Result<Boolean> open(@NotNull(message = "任务ID不能为空") @RequestParam("jobId") Long jobId,
+                                @NotNull(message = "状态不能为空") @RequestParam("status") Integer status) {
         return Objects.equals(1, status) ? this.sysQuartzJobService.resumeJob(jobId) : this.sysQuartzJobService.pauseJob(jobId);
     }
 

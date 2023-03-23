@@ -17,8 +17,8 @@
 package com.breeze.boot.process.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
-import com.breeze.boot.process.dto.ProcessStartDTO;
+import com.breeze.boot.process.params.ProcessStartParam;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.service.ActRuExecutionService;
 import com.breeze.boot.process.service.IProcessInstanceService;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
@@ -26,12 +26,11 @@ import com.breeze.security.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.RuntimeService;
-import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 流程运行时服务impl
+ * 流程实例服务实现impl
  *
  * @author gaoweixuan
  * @date 2023-03-01
@@ -55,27 +54,25 @@ public class ProcessInstanceServiceImpl implements IProcessInstanceService {
     /**
      * 发起
      *
-     * @param startDTO 流程发起DTO
+     * @param startParam 流程启动参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean startProcess(ProcessStartDTO startDTO) {
-        // TODO
+    public Boolean startProcess(ProcessStartParam startParam) {
         Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getId()));
-        ProcessInstance processInstance = runtimeService
-                .startProcessInstanceByKeyAndTenantId(startDTO.getProcessKey(), "", startDTO.getVariables(), startDTO.getTenantId());
+        this.runtimeService.startProcessInstanceByKeyAndTenantId(startParam.getProcessKey(), startParam.getBusinessKey(), startParam.getVariables(), startParam.getTenantId());
         return Boolean.TRUE;
     }
 
     /**
      * 列表页面
      *
-     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @param processInstanceQuery 流程实例查询
      * @return {@link Page}<{@link ProcessInstanceVO}>
      */
     @Override
-    public Page<ProcessInstanceVO> listPage(ProcessInstanceSearchDTO processInstanceSearchDTO) {
-        return this.actRuExecutionService.listPage(processInstanceSearchDTO);
+    public Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery) {
+        return this.actRuExecutionService.listPage(processInstanceQuery);
     }
 
 }

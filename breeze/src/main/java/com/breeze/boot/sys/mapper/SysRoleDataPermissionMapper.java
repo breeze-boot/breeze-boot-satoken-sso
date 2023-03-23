@@ -18,7 +18,7 @@ package com.breeze.boot.sys.mapper;
 
 import com.breeze.boot.sys.domain.SysRoleDataPermission;
 import com.breeze.database.mapper.BreezeBaseMapper;
-import com.breeze.security.entity.DataPermissionDTO;
+import com.breeze.security.userextension.DataPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,9 +38,9 @@ public interface SysRoleDataPermissionMapper extends BreezeBaseMapper<SysRoleDat
      * 角色数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link List}<{@link DataPermissionDTO}>
+     * @return {@link List}<{@link DataPermission}>
      */
-    List<DataPermissionDTO> listRoleDataPermissionByRoleIds(@Param("roleIdSet") Set<Long> roleIdSet);
+    List<DataPermission> listRoleDataPermissionByRoleIds(@Param("roleIdSet") Set<Long> roleIdSet);
 
 }
 

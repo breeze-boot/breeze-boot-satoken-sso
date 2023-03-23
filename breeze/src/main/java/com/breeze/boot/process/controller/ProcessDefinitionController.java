@@ -18,20 +18,21 @@ package com.breeze.boot.process.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessDeploymentDTO;
-import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
+import com.breeze.boot.process.params.ProcessDeploymentParam;
+import com.breeze.boot.process.query.ProcessDeploymentQuery;
 import com.breeze.boot.process.service.IProcessDefinitionService;
 import com.breeze.boot.process.vo.DeploymentVO;
 import com.breeze.boot.process.vo.ProcessDefinitionVO;
 import com.breeze.core.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 /**
  * 流程定义控制器
@@ -53,40 +54,40 @@ public class ProcessDefinitionController {
     /**
      * 列表
      *
-     * @param processDeploymentSearchDTO 流程部署查询DTO
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Result}<{@link IPage}<{@link DeploymentVO}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('process:definition:list')")
-    public Result<Page<DeploymentVO>> list(@Validated @RequestBody ProcessDeploymentSearchDTO processDeploymentSearchDTO) {
-        return Result.ok(this.processDefinitionService.listPage(processDeploymentSearchDTO));
+    public Result<Page<DeploymentVO>> list(@RequestBody ProcessDeploymentQuery processDeploymentQuery) {
+        return Result.ok(this.processDefinitionService.listPage(processDeploymentQuery));
     }
 
     /**
      * 流程定义版本列表
      *
-     * @param processDeploymentSearchDTO 流程部署查询DTO
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Result}<{@link Page}<{@link ProcessDefinitionVO}>>
      */
     @Operation(summary = "流程定义版本列表")
     @PostMapping("/listVersion")
     @PreAuthorize("hasAnyAuthority('process:definition:list')")
-    public Result<Page<ProcessDefinitionVO>> listVersion(@Validated @RequestBody ProcessDeploymentSearchDTO processDeploymentSearchDTO) {
-        return Result.ok(this.processDefinitionService.listVersionPage(processDeploymentSearchDTO));
+    public Result<Page<ProcessDefinitionVO>> listVersion(@RequestBody ProcessDeploymentQuery processDeploymentQuery) {
+        return Result.ok(this.processDefinitionService.listVersionPage(processDeploymentQuery));
     }
 
     /**
      * 部署
      *
-     * @param processDeploymentDTO 流程部署dto
+     * @param processDeploymentParam 流程部署参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "部署")
     @PostMapping("/deploy")
     @PreAuthorize("hasAnyAuthority('process:definition:deploy')")
-    public Result<Boolean> deploy(@Validated @RequestBody ProcessDeploymentDTO processDeploymentDTO) {
-        return this.processDefinitionService.deploy(processDeploymentDTO);
+    public Result<Boolean> deploy(@Valid @RequestBody ProcessDeploymentParam processDeploymentParam) {
+        return this.processDefinitionService.deploy(processDeploymentParam);
     }
 
 
@@ -100,8 +101,8 @@ public class ProcessDefinitionController {
     @Operation(summary = "获取流程定义xml")
     @GetMapping("/getProcessDefinitionXml")
     @PreAuthorize("hasAnyAuthority('process:definition:info')")
-    public Result<String> getProcessDefinitionXml(@NotNull(message = "流程定义Key不能为空") @RequestParam String processKey,
-                                                  @NotNull(message = "租户ID不能为空") @RequestParam String tenantId) {
+    public Result<String> getProcessDefinitionXml(@NotBlank(message = "流程定义Key不能为空") @RequestParam String processKey,
+                                                  @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getProcessDefinitionXml(processKey, tenantId));
     }
 
@@ -115,8 +116,8 @@ public class ProcessDefinitionController {
     @Operation(summary = "获取流程定义png")
     @GetMapping("/getProcessDefinitionPng")
     @PreAuthorize("hasAnyAuthority('process:definition:info')")
-    public Result<String> getProcessDefinitionPng(@NotNull(message = "流程定义Key不能为空") @RequestParam String processKey,
-                                                  @NotNull(message = "租户ID不能为空") @RequestParam String tenantId) {
+    public Result<String> getProcessDefinitionPng(@NotBlank(message = "流程定义Key不能为空") @Schema(description = "流程定义KEY") @RequestParam String processKey,
+                                                  @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getProcessDefinitionPng(processKey, tenantId));
     }
 
@@ -130,8 +131,8 @@ public class ProcessDefinitionController {
     @Operation(summary = "获取各个版本流程定义png")
     @GetMapping("/getVersionProcessDefinitionPng")
     @PreAuthorize("hasAnyAuthority('process:definition:info')")
-    public Result<String> getVersionProcessDefinitionPng(@NotNull(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
-                                                         @NotNull(message = "租户ID不能`为空") @RequestParam String tenantId) {
+    public Result<String> getVersionProcessDefinitionPng(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
+                                                         @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getVersionProcessDefinitionPng(processDefinitionId, tenantId));
     }
 
@@ -146,8 +147,8 @@ public class ProcessDefinitionController {
     @Operation(summary = "获取各个版本流程定义xml")
     @GetMapping("/getVersionProcessDefinitionXml")
     @PreAuthorize("hasAnyAuthority('process:definition:info')")
-    public Result<String> getVersionProcessDefinitionXml(@NotNull(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
-                                                         @NotNull(message = "租户ID不能为空") @RequestParam String tenantId) {
+    public Result<String> getVersionProcessDefinitionXml(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
+                                                         @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getVersionProcessDefinitionXml(processDefinitionId, tenantId));
     }
 
@@ -160,7 +161,7 @@ public class ProcessDefinitionController {
     @Operation(summary = "挂起/激活")
     @PutMapping("/isSuspended")
     @PreAuthorize("hasAnyAuthority('process:definition:suspended')")
-    public Result<Boolean> isSuspended(@NotNull(message = "流程定义ID不能为空") @RequestParam String processDefinitionId) {
+    public Result<Boolean> isSuspended(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId) {
         return Result.ok(this.processDefinitionService.isSuspended(processDefinitionId));
     }
 
@@ -174,7 +175,7 @@ public class ProcessDefinitionController {
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyAuthority('process:definition:delete')")
-    public Result<Boolean> delete(@NotNull(message = "部署ID不能为空") @RequestParam("deploymentId") String deploymentId,
+    public Result<Boolean> delete(@NotBlank(message = "部署ID不能为空") @RequestParam("deploymentId") String deploymentId,
                                   @RequestParam(defaultValue = "false") Boolean cascade) {
         return Result.ok(this.processDefinitionService.delete(deploymentId, cascade));
     }

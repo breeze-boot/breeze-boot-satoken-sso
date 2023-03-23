@@ -22,9 +22,9 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysFile;
-import com.breeze.boot.sys.dto.FileDTO;
-import com.breeze.boot.sys.dto.FileSearchDTO;
 import com.breeze.boot.sys.mapper.SysFileMapper;
+import com.breeze.boot.sys.params.FileParam;
+import com.breeze.boot.sys.query.FileQuery;
 import com.breeze.boot.sys.service.SysFileService;
 import com.breeze.core.enums.ResultCode;
 import com.breeze.core.ex.SystemServiceException;
@@ -66,34 +66,34 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     /**
      * 列表页面
      *
-     * @param fileSearchDTO 文件搜索DTO
+     * @param fileQuery 文件查询
      * @return {@link Page}<{@link SysFile}>
      */
     @Override
-    public Page<SysFile> listPage(FileSearchDTO fileSearchDTO) {
-        Page<SysFile> logEntityPage = new Page<>(fileSearchDTO.getCurrent(), fileSearchDTO.getSize());
+    public Page<SysFile> listPage(FileQuery fileQuery) {
+        Page<SysFile> logEntityPage = new Page<>(fileQuery.getCurrent(), fileQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(fileSearchDTO.getNewFileName()), SysFile::getNewFileName, fileSearchDTO.getNewFileName())
-                .like(StrUtil.isAllNotBlank(fileSearchDTO.getOriginalFileName()), SysFile::getOriginalFileName, fileSearchDTO.getOriginalFileName())
+                .like(StrUtil.isAllNotBlank(fileQuery.getNewFileName()), SysFile::getNewFileName, fileQuery.getNewFileName())
+                .like(StrUtil.isAllNotBlank(fileQuery.getOriginalFileName()), SysFile::getOriginalFileName, fileQuery.getOriginalFileName())
                 .page(logEntityPage);
     }
 
     /**
      * 上传
      *
-     * @param fileDTO  文件DTO
-     * @param request  请求
-     * @param response 响应
+     * @param fileParam 文件上传参数
+     * @param request   请求
+     * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @SneakyThrows
     @Override
-    public Result<Map<String, Object>> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
-        MultipartFile file = fileDTO.getFile();
+    public Result<Map<String, Object>> upload(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
+        MultipartFile file = fileParam.getFile();
         String newFileName = UUID.randomUUID().toString().replace("-", "");
         FileBO fileBO = null;
         try {
-            fileBO = this.ossStoreService.upload(fileDTO.getOssStyle(), file,
+            fileBO = this.ossStoreService.upload(fileParam.getOssStyle(), file,
                     String.valueOf(LocalDate.now().getDayOfMonth()), newFileName);
         } catch (Exception ex) {
             log.error("", ex);
@@ -102,11 +102,11 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             return Result.fail("上传失败");
         }
         SysFile sysFile = SysFile.builder()
-                .title(fileDTO.getTitle())
+                .title(fileParam.getTitle())
                 .newFileName(fileBO.getNewFileName())
                 .originalFileName(fileBO.getOriginalFilename())
                 .path(fileBO.getPath())
-                .ossStyle(fileDTO.getOssStyle())
+                .ossStyle(fileParam.getOssStyle())
                 .build();
         this.save(sysFile);
         Map<String, Object> resultMap = Maps.newHashMap();

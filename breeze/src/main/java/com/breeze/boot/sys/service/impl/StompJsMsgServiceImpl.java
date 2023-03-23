@@ -28,7 +28,7 @@ import com.breeze.boot.sys.service.SysUserMsgSnapshotService;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.websocket.bo.UserMsgBO;
-import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.params.MsgParam;
 import com.breeze.websocket.service.MsgSaveEvent;
 import com.breeze.websocket.service.MsgService;
 import com.breeze.websocket.service.PublisherSaveMsgEvent;
@@ -92,12 +92,12 @@ public class StompJsMsgServiceImpl extends MsgService {
     /**
      * 消息广播
      *
-     * @param msgDTO 消息dto
+     * @param msgParam 消息参数
      * @return {@link Result}<{@link MsgVO}>
      */
     @Override
-    public Result<MsgVO> sendBroadcastMsg(MsgDTO msgDTO) {
-        SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
+    public Result<MsgVO> sendBroadcastMsg(MsgParam msgParam) {
+        SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         List<SysUser> sysUserList = this.sysUserService.list();
         List<UserMsgBO.SysUserMsgBO> sysUserMsgList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
@@ -118,14 +118,14 @@ public class StompJsMsgServiceImpl extends MsgService {
     /**
      * 发送消息给用户
      *
-     * @param msgDTO    消息ID
+     * @param msgParam  消息参数
      * @param principal 主要
      * @return {@link Result}<{@link MsgVO}>
      */
     @Override
-    public Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgDTO msgDTO) {
-        log.info("msgId {}, username： {}", msgDTO, principal.getName());
-        SysMsg sysMsg = this.sysMsgService.getById(msgDTO);
+    public Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgParam msgParam) {
+        log.info("msgId {}, username： {}", msgParam, principal.getName());
+        SysMsg sysMsg = this.sysMsgService.getById(msgParam);
         // TODO
         this.toAsyncSendMsg(sysMsg, Lists.newArrayList());
         return Result.ok(MsgVO.builder()
@@ -140,32 +140,32 @@ public class StompJsMsgServiceImpl extends MsgService {
      * 异步发送消息
      *
      * @param sysMsg           系统消息
-     * @param sysUserMsgBOList 系统用户消息DTO列表
+     * @param sysUserMsgBOList 系统用户消息BO列表
      */
     private void toAsyncSendMsg(SysMsg sysMsg, List<UserMsgBO.SysUserMsgBO> sysUserMsgBOList) {
         UserMsgBO userMsgBO = new UserMsgBO();
         userMsgBO.setSysUserMsgBOList(sysUserMsgBOList);
-        userMsgBO.setSysUserMsgSnapshotBO(this.buildSysUserMsgSnapshotDTO(sysMsg));
+        userMsgBO.setSysUserMsgSnapshotBO(this.buildSysUserMsgSnapshot(sysMsg));
         this.publisherSaveMsgEvent.publisherEvent(new MsgSaveEvent(userMsgBO));
     }
 
     /**
-     * 构建系统用户消息快照dto
+     * 构建系统用户消息快照BO
      *
      * @param sysMsg sys消息
      * @return {@link UserMsgBO.SysUserMsgSnapshotBO}
      */
-    private UserMsgBO.SysUserMsgSnapshotBO buildSysUserMsgSnapshotDTO(SysMsg sysMsg) {
-        UserMsgBO.SysUserMsgSnapshotBO userMsgSnapshotDTO = UserMsgBO.SysUserMsgSnapshotBO.builder().build();
-        BeanUtil.copyProperties(sysMsg, userMsgSnapshotDTO, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
-        userMsgSnapshotDTO.setMsgId(sysMsg.getId());
-        return userMsgSnapshotDTO;
+    private UserMsgBO.SysUserMsgSnapshotBO buildSysUserMsgSnapshot(SysMsg sysMsg) {
+        UserMsgBO.SysUserMsgSnapshotBO userMsgSnapshot = UserMsgBO.SysUserMsgSnapshotBO.builder().build();
+        BeanUtil.copyProperties(sysMsg, userMsgSnapshot, CopyOptions.create().setIgnoreProperties("id").setIgnoreNullValue(true).setIgnoreError(true));
+        userMsgSnapshot.setMsgId(sysMsg.getId());
+        return userMsgSnapshot;
     }
 
     /**
      * 保存消息
      *
-     * @param userMsgBO 用户消息dto
+     * @param userMsgBO 用户消息BO
      */
     public void saveMsg(UserMsgBO userMsgBO) {
         // 保存的实体
@@ -186,20 +186,20 @@ public class StompJsMsgServiceImpl extends MsgService {
     /**
      * 发送消息给指定用户
      *
-     * @param msgDTO    消息DTO
+     * @param msgParam  消息参数
      * @param principal 主要
      */
     @Override
-    public void sendMsgToUser(Principal principal, MsgDTO msgDTO) {
-        log.info("msgId {}, username： {}", msgDTO.getMsgId(), principal.getName());
-        SysMsg sysMsg = this.sysMsgService.getById(msgDTO.getMsgId());
+    public void sendMsgToUser(Principal principal, MsgParam msgParam) {
+        log.info("msgId {}, username： {}", msgParam.getMsgId(), principal.getName());
+        SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         MsgVO msgVO = MsgVO.builder().msgTitle(sysMsg.getMsgTitle())
                 .msgCode(sysMsg.getMsgCode())
                 .msgLevel(sysMsg.getMsgLevel())
                 .content(sysMsg.getContent())
                 .msgType(sysMsg.getMsgType()).build();
         List<UserMsgBO.SysUserMsgBO> sysUserMsgList = Lists.newArrayList();
-        List<SysUser> sysUserList = this.sysUserService.listByIds(msgDTO.getUserIds());
+        List<SysUser> sysUserList = this.sysUserService.listByIds(msgParam.getUserIds());
         for (SysUser sysUser : sysUserList) {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
             sysUserMsgList.add(UserMsgBO.SysUserMsgBO.builder()

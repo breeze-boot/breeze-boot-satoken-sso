@@ -16,8 +16,8 @@
 
 package com.breeze.security.email;
 
-import com.breeze.security.entity.CurrentLoginUser;
 import com.breeze.security.service.LocalUserDetailsService;
+import com.breeze.security.userextension.CurrentLoginUser;
 import com.breeze.security.utils.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -91,8 +91,8 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(EMAIL_NOT_FOUND_CODE);
         }
-        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUserDTO -> {
-            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUserDTO.getEmail());
+        this.loginCheck.checkCode((CurrentLoginUser) userDetails, authenticationToken, loginUser -> {
+            Object token = this.redisTemplate.opsForValue().get("sys:validate_code:" + loginUser.getEmail());
             if (Objects.isNull(token)) {
                 log.debug("Failed to authenticate since no credentials provided");
                 throw new BadCredentialsException(this.messages

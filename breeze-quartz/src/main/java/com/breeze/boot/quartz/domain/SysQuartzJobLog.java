@@ -19,11 +19,9 @@ package com.breeze.boot.quartz.domain;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,8 +34,11 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@TableName(value = "sys_quartz_job_log")
+@Schema(description = "quartz的log实体")
 public class SysQuartzJobLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,51 +54,61 @@ public class SysQuartzJobLog implements Serializable {
     /**
      * 任务名称
      */
+    @Schema(description = "任务名称")
     private String jobName;
 
     /**
      * 任务组名
      */
+    @Schema(description = "任务组名")
     private String jobGroupName;
 
     /**
      * 调用目标类名
      */
+    @Schema(description = "调用目标类名")
     private String clazzName;
 
     /**
      * 当前的cron
      */
+    @Schema(description = "当前的cron")
     private String cronExpression;
 
     /**
      * 日志信息
      */
+    @Schema(description = "日志信息")
     private String jobMessage;
 
     /**
      * 执行结果 0 失败 1 成功
      */
+    @Schema(description = "执行结果 0 失败 1 成功")
     private Integer status;
 
     /**
      * 异常信息
      */
+    @Schema(description = "异常信息")
     private String exceptionInfo;
 
     /**
      * 结束时间
      */
+    @Schema(description = "结束时间")
     private LocalDateTime endTime;
 
     /**
      * 创建时间
      */
+    @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
     /**
      * 租户ID
      */
+    @Schema(description = "租户ID")
     private Long tenantId;
 
 }

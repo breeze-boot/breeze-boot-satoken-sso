@@ -121,4 +121,5 @@ class BreezeBootApplicationTests {
         mailSender.sendMessageCarryFile(to, "", title, sb.toString(), imageMap, files);
     }
 
+
 }

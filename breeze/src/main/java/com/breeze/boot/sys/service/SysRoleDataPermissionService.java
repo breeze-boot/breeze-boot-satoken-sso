@@ -18,8 +18,9 @@ package com.breeze.boot.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysRoleDataPermission;
+import com.breeze.boot.sys.query.DataPermissionQuery;
 import com.breeze.core.utils.Result;
-import com.breeze.security.entity.DataPermissionDTO;
+import com.breeze.security.userextension.DataPermission;
 
 import java.util.List;
 import java.util.Set;
@@ -36,9 +37,9 @@ public interface SysRoleDataPermissionService extends IService<SysRoleDataPermis
      * 角色数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link List}<{@link DataPermissionDTO}>
+     * @return {@link List}<{@link DataPermissionQuery}>
      */
-    List<DataPermissionDTO> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet);
+    List<DataPermission> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet);
 
     /**
      * 编辑角色数据权限

@@ -24,13 +24,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysRole;
 import com.breeze.boot.sys.domain.SysRoleDataPermission;
 import com.breeze.boot.sys.domain.SysRoleMenu;
-import com.breeze.boot.sys.dto.RoleSearchDTO;
 import com.breeze.boot.sys.mapper.SysRoleMapper;
+import com.breeze.boot.sys.query.RoleQuery;
 import com.breeze.boot.sys.service.SysRoleDataPermissionService;
 import com.breeze.boot.sys.service.SysRoleMenuService;
 import com.breeze.boot.sys.service.SysRoleService;
 import com.breeze.core.utils.Result;
-import com.breeze.security.entity.UserRoleDTO;
+import com.breeze.security.userextension.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,30 +63,29 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * 用户角色列表
      *
      * @param userId 用户id
-     * @return {@link Set}<{@link UserRoleDTO}>
+     * @return {@link Set}<{@link UserRole}>
      */
     @Override
-    public Set<UserRoleDTO> listRoleByUserId(Long userId) {
+    public Set<UserRole> listRoleByUserId(Long userId) {
         return this.baseMapper.listRoleByUserId(userId)
                 .stream()
                 .map(sysRoleEntity -> {
-                    UserRoleDTO userRoleDTO = new UserRoleDTO();
-                    BeanUtil.copyProperties(sysRoleEntity, userRoleDTO);
-                    userRoleDTO.setRoleId(sysRoleEntity.getId());
-                    return userRoleDTO;
+                    UserRole userRole = new UserRole();
+                    BeanUtil.copyProperties(sysRoleEntity, userRole);
+                    userRole.setRoleId(sysRoleEntity.getId());
+                    return userRole;
                 }).collect(Collectors.toSet());
     }
 
     /**
      * 列表页面
      *
-     * @param roleSearchDTO 角色搜索DTO
+     * @param roleQuery 角色查询
      * @return {@link Page}<{@link SysRole}>
      */
     @Override
-    public Page<SysRole> listPage(RoleSearchDTO roleSearchDTO) {
-        Page<SysRole> rolePage = new Page<>(roleSearchDTO.getCurrent(), roleSearchDTO.getSize());
-        return this.baseMapper.listPage(rolePage, roleSearchDTO);
+    public Page<SysRole> listPage(RoleQuery roleQuery) {
+        return this.baseMapper.listPage(new Page<>(roleQuery.getCurrent(), roleQuery.getSize()), roleQuery);
     }
 
     /**

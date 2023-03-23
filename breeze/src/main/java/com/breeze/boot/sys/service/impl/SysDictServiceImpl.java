@@ -21,9 +21,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysDict;
 import com.breeze.boot.sys.domain.SysDictItem;
-import com.breeze.boot.sys.dto.DictOpenDTO;
-import com.breeze.boot.sys.dto.DictSearchDTO;
 import com.breeze.boot.sys.mapper.SysDictMapper;
+import com.breeze.boot.sys.params.DictOpenParam;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.boot.sys.service.SysDictItemService;
 import com.breeze.boot.sys.service.SysDictService;
 import com.breeze.core.utils.Result;
@@ -48,27 +48,27 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     private SysDictItemService sysDictItemService;
 
     /**
-     * 字典分页
-     *
-     * @param dictSearchDto 字典搜索DTO
-     * @return {@link Page}<{@link SysDict}>
-     */
-    @Override
-    public Page<SysDict> listPage(DictSearchDTO dictSearchDto) {
-        return this.baseMapper.listPage(new Page<>(dictSearchDto.getCurrent(), dictSearchDto.getSize()), dictSearchDto);
-    }
-
-    /**
      * 开关
      *
-     * @param dictOpenDTO 字典开关DTO
+     * @param dictOpenParam 字典开关参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(DictOpenDTO dictOpenDTO) {
+    public Boolean open(DictOpenParam dictOpenParam) {
         return this.update(Wrappers.<SysDict>lambdaUpdate()
-                .set(SysDict::getIsOpen, dictOpenDTO.getIsOpen())
-                .eq(SysDict::getId, dictOpenDTO.getId()));
+                .set(SysDict::getIsOpen, dictOpenParam.getIsOpen())
+                .eq(SysDict::getId, dictOpenParam.getId()));
+    }
+
+    /**
+     * 字典分页
+     *
+     * @param dictQuery 字典查询
+     * @return {@link Page}<{@link SysDict}>
+     */
+    @Override
+    public Page<SysDict> listPage(DictQuery dictQuery) {
+        return this.baseMapper.listPage(new Page<>(dictQuery.getCurrent(), dictQuery.getSize()), dictQuery);
     }
 
     /**

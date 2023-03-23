@@ -19,7 +19,7 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysPost;
-import com.breeze.boot.sys.dto.PostSearchDTO;
+import com.breeze.boot.sys.query.PostQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public interface SysPostService extends IService<SysPost> {
     /**
      * 列表页面
      *
-     * @param postSearchDTO 岗位搜索DTO
+     * @param postQuery 岗位查询
      * @return {@link IPage}<{@link SysPost}>
      */
-    IPage<SysPost> listPage(PostSearchDTO postSearchDTO);
+    IPage<SysPost> listPage(PostQuery postQuery);
 
     /**
      * 通过IDS删除

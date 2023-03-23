@@ -18,7 +18,7 @@ package com.breeze.boot.sys.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysDict;
-import com.breeze.boot.sys.dto.DictSearchDTO;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,10 +35,10 @@ public interface SysDictMapper extends BreezeBaseMapper<SysDict> {
     /**
      * 字典列表
      *
-     * @param page          分页
-     * @param dictSearchDto 字典 dto
+     * @param page      分页
+     * @param dictQuery 字典查询
      * @return {@link Page}<{@link SysDict}>
      */
-    Page<SysDict> listPage(Page<SysDict> page, @Param("dictSearchDto") DictSearchDTO dictSearchDto);
+    Page<SysDict> listPage(Page<SysDict> page, @Param("dictQuery") DictQuery dictQuery);
 
 }

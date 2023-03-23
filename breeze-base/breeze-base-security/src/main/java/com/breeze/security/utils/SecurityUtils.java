@@ -21,7 +21,7 @@ import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.breeze.security.config.JwtProperties;
-import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.userextension.LoginUser;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -101,13 +101,13 @@ public class SecurityUtils {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    public static LoginUserDTO getCurrentUser() {
+    public static LoginUser getCurrentUser() {
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
-        LoginUserDTO loginUserDTO = cacheManager.getCache(LOGIN_USER).get(SecurityUtils.getUsername(), LoginUserDTO.class);
-        if (Objects.isNull(loginUserDTO)) {
+        LoginUser loginUser = cacheManager.getCache(LOGIN_USER).get(SecurityUtils.getUsername(), LoginUser.class);
+        if (Objects.isNull(loginUser)) {
             throw new AccessDeniedException("用户未登录");
         }
-        return loginUserDTO;
+        return loginUser;
     }
 
     /**

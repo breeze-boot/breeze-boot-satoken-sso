@@ -19,7 +19,7 @@ package com.breeze.boot.process.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.process.domain.ActRuExecution;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
 
 /**
@@ -33,9 +33,9 @@ public interface ActRuExecutionService extends IService<ActRuExecution> {
     /**
      * 列表页面
      *
-     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @param processInstanceQuery 流程实例查询
      * @return {@link Page}<{@link ProcessInstanceVO}>
      */
-    Page<ProcessInstanceVO> listPage(ProcessInstanceSearchDTO processInstanceSearchDTO);
+    Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery);
 
 }

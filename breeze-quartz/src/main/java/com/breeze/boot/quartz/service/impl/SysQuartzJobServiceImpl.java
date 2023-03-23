@@ -3,9 +3,9 @@ package com.breeze.boot.quartz.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
-import com.breeze.boot.quartz.dto.JobDTO;
 import com.breeze.boot.quartz.manager.QuartzManager;
 import com.breeze.boot.quartz.mapper.SysQuartzJobMapper;
+import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
 import com.breeze.core.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +43,12 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
     /**
      * 列表页面
      *
-     * @param jobDTO 任务dto
+     * @param jobQuery 任务查询
      * @return {@link Page}<{@link SysQuartzJob}>
      */
     @Override
-    public Page<SysQuartzJob> listPage(JobDTO jobDTO) {
-        return this.baseMapper.listPage(new Page<>(jobDTO.getCurrent(), jobDTO.getSize()), jobDTO);
+    public Page<SysQuartzJob> listPage(JobQuery jobQuery) {
+        return this.baseMapper.listPage(new Page<>(jobQuery.getCurrent(), jobQuery.getSize()), jobQuery);
     }
 
     /**
@@ -126,7 +126,7 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
     public Result<Boolean> deleteJob(List<Long> jobIds) {
         for (Long jobId : jobIds) {
             SysQuartzJob quartzJob = this.getById(jobId);
-            if (Objects.isNull(quartzJob)){
+            if (Objects.isNull(quartzJob)) {
                 continue;
             }
             quartzJob.deleteById();

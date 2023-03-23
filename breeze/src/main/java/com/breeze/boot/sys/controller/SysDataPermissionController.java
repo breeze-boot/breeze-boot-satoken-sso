@@ -19,21 +19,21 @@ package com.breeze.boot.sys.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysDataPermission;
 import com.breeze.boot.sys.domain.SysRoleDataPermission;
-import com.breeze.boot.sys.dto.SysDataPermissionDTO;
+import com.breeze.boot.sys.params.DataPermissionParam;
+import com.breeze.boot.sys.query.DataPermissionQuery;
 import com.breeze.boot.sys.service.SysDataPermissionService;
 import com.breeze.boot.sys.service.SysRoleDataPermissionService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;
-import com.breeze.security.entity.DataPermissionDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -65,42 +65,42 @@ public class SysDataPermissionController {
     /**
      * 列表
      *
-     * @param dataPermissionDTO 角色数据DTO
+     * @param dataPermissionQuery 数据权限查询
      * @return {@link Result}<{@link Page}<{@link SysDataPermission}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:dataPermission:list')")
-    public Result<Page<SysDataPermission>> list(@RequestBody DataPermissionDTO dataPermissionDTO) {
-        return Result.ok(this.sysDataPermissionService.listPage(dataPermissionDTO));
+    public Result<Page<SysDataPermission>> list(@RequestBody DataPermissionQuery dataPermissionQuery) {
+        return Result.ok(this.sysDataPermissionService.listPage(dataPermissionQuery));
     }
 
     /**
      * 创建
      *
-     * @param dataPermissionDTO 数据权限实体入参
+     * @param dataPermissionParam 数据权限参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:dataPermission:create')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysDataPermissionDTO dataPermissionDTO) {
-        return this.sysDataPermissionService.saveDataPermission(dataPermissionDTO);
+    public Result<Boolean> save(@Valid @RequestBody DataPermissionParam dataPermissionParam) {
+        return this.sysDataPermissionService.saveDataPermission(dataPermissionParam);
     }
 
     /**
      * 修改
      *
-     * @param dataPermissionDTO 数据权限DTO
+     * @param dataPermissionParam 数据权限参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:dataPermission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysDataPermissionDTO dataPermissionDTO) {
-        return this.sysDataPermissionService.modifyDataPermission(dataPermissionDTO);
+    public Result<Boolean> modify(@Valid @RequestBody DataPermissionParam dataPermissionParam) {
+        return this.sysDataPermissionService.modifyDataPermission(dataPermissionParam);
     }
 
     /**

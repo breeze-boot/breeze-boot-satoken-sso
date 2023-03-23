@@ -19,7 +19,7 @@ package com.breeze.boot.sys.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.UserSearchDTO;
+import com.breeze.boot.sys.query.UserQuery;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,13 +36,13 @@ import java.util.List;
 public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
 
     /**
-     * 用户列表
+     * 列表页面
      *
-     * @param page          分页
-     * @param userSearchDTO 用户dto
+     * @param page      分页
+     * @param userQuery 用户查询
      * @return {@link IPage}<{@link SysUser}>
      */
-    IPage<SysUser> listPage(Page<Object> page, @Param("userSearchDTO") UserSearchDTO userSearchDTO);
+    IPage<SysUser> listPage(Page<Object> page, @Param("userQuery") UserQuery userQuery);
 
     /**
      * 用户通过部门id列表

@@ -20,10 +20,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.UserOpenDTO;
-import com.breeze.boot.sys.dto.UserResetPasswordDTO;
-import com.breeze.boot.sys.dto.UserRolesDTO;
-import com.breeze.boot.sys.dto.UserSearchDTO;
+import com.breeze.boot.sys.params.UserOpenParam;
+import com.breeze.boot.sys.params.UserResetPasswordParam;
+import com.breeze.boot.sys.params.UserRolesParam;
+import com.breeze.boot.sys.query.UserQuery;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -33,10 +33,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -62,14 +63,14 @@ public class SysUserController {
     /**
      * 列表
      *
-     * @param userSearchDTO 用户搜索DTO
+     * @param userQuery 用户查询
      * @return {@link Result}<{@link IPage}<{@link SysUser}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    public Result<IPage<SysUser>> list(@RequestBody UserSearchDTO userSearchDTO) {
-        return Result.ok(this.sysUserService.listPage(userSearchDTO));
+    public Result<IPage<SysUser>> list(@RequestBody UserQuery userQuery) {
+        return Result.ok(this.sysUserService.listPage(userQuery));
     }
 
     /**
@@ -95,7 +96,7 @@ public class SysUserController {
     @Operation(summary = "校验用户名是否重复")
     @GetMapping("/checkUsername")
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    public Result<Boolean> checkUsername(@RequestParam("username") String username,
+    public Result<Boolean> checkUsername(@NotBlank(message = "用户名不能为空") @RequestParam("username") String username,
                                          @RequestParam(value = "userId", required = false) Long userId) {
         return Result.ok(Objects.isNull(this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
                 .ne(Objects.nonNull(userId), SysUser::getId, userId)
@@ -135,7 +136,7 @@ public class SysUserController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:user:create')")
     @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysUser sysUser) {
+    public Result<Boolean> save(@Valid @RequestBody SysUser sysUser) {
         return sysUserService.saveUser(sysUser);
     }
 
@@ -149,50 +150,51 @@ public class SysUserController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysUser sysUser) {
+    public Result<Boolean> modify(@Valid @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
     /**
      * 重置密码
      *
-     * @param userResetPassword 用户重置密码
+     * @param userResetPasswordParam 用户重置密码参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "重置密码")
     @PutMapping("/resetPass")
     @PreAuthorize("hasAnyAuthority('sys:user:resetPass')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
-    public Result<Boolean> resetPass(@Validated @RequestBody UserResetPasswordDTO userResetPassword) {
-        return Result.ok(sysUserService.resetPass(userResetPassword));
+    public Result<Boolean> resetPass(@Valid @RequestBody UserResetPasswordParam userResetPasswordParam) {
+        return Result.ok(sysUserService.resetPass(userResetPasswordParam));
     }
 
     /**
      * 开启关闭锁定
      *
-     * @param openDTO 用户开关 DTO
+     * @param userOpenParam 用户开关参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户锁定开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:user:modify')")
     @BreezeSysLog(description = "用户锁定", type = LogType.EDIT)
-    public Result<Boolean> open(@Validated @RequestBody UserOpenDTO openDTO) {
-        return Result.ok(sysUserService.open(openDTO));
+    public Result<Boolean> open(@Valid @RequestBody UserOpenParam userOpenParam) {
+        return Result.ok(sysUserService.open(userOpenParam));
     }
 
     /**
+     * 用户添加角色
      * 用户分配角色
      *
-     * @param userRolesDTO 用户角色dto
+     * @param userRolesParam 用户角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户分配角色")
     @PutMapping("/userAddRole")
     @PreAuthorize("hasAnyAuthority('sys:user:userSetRole')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
-    public Result<Boolean> userAddRole(@Validated @RequestBody UserRolesDTO userRolesDTO) {
-        return sysUserService.userAddRole(userRolesDTO);
+    public Result<Boolean> userAddRole(@Valid @RequestBody UserRolesParam userRolesParam) {
+        return sysUserService.userAddRole(userRolesParam);
     }
 
     /**

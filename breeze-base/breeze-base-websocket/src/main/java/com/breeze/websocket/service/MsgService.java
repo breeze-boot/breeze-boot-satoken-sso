@@ -17,7 +17,7 @@
 package com.breeze.websocket.service;
 
 import com.breeze.core.utils.Result;
-import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.params.MsgParam;
 import com.breeze.websocket.vo.MsgVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,26 +35,26 @@ public abstract class MsgService {
     /**
      * 消息广播
      *
-     * @param msgDTO 广播消息dto
+     * @param msgParam 广播消息参数
      * @return {@link Result}<{@link MsgVO}>
      */
-    public abstract Result<MsgVO> sendBroadcastMsg(MsgDTO msgDTO);
+    public abstract Result<MsgVO> sendBroadcastMsg(MsgParam msgParam);
 
     /**
      * 发送消息给用户
      *
      * @param principal 主要
-     * @param msgDTO    消息dto
+     * @param msgParam  消息参数
      * @return {@link Result}<{@link MsgVO}>
      */
-    public abstract Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgDTO msgDTO);
+    public abstract Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgParam msgParam);
 
     /**
      * 发送信息给指定用户
      *
      * @param principal 主要
-     * @param msgDTO    用户消息dto
+     * @param msgParam  用户消息参数
      */
-    public abstract void sendMsgToUser(Principal principal, MsgDTO msgDTO);
+    public abstract void sendMsgToUser(Principal principal, MsgParam msgParam);
 
 }

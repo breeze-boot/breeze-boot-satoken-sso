@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysUserMsgSnapshot;
-import com.breeze.boot.sys.dto.UserMsgSearchDTO;
 import com.breeze.boot.sys.mapper.SysUserMsgSnapshotMapper;
+import com.breeze.boot.sys.query.UserMsgQuery;
 import com.breeze.boot.sys.service.SysUserMsgSnapshotService;
 import com.breeze.boot.sys.vo.SysUserMsgSnapshotVO;
 import org.springframework.stereotype.Service;
@@ -40,12 +40,12 @@ public class SysUserMsgSnapshotServiceImpl extends ServiceImpl<SysUserMsgSnapsho
     /**
      * 列表页面
      *
-     * @param userMsgSearchDTO 用户搜索DTO消息
+     * @param userMsgQuery 用户消息查询
      * @return {@link IPage}<{@link SysUserMsgSnapshotVO}>
      */
     @Override
-    public IPage<SysUserMsgSnapshotVO> listPage(UserMsgSearchDTO userMsgSearchDTO) {
-        return this.baseMapper.listPage(new Page<>(userMsgSearchDTO.getCurrent(), userMsgSearchDTO.getSize()), userMsgSearchDTO);
+    public IPage<SysUserMsgSnapshotVO> listPage(UserMsgQuery userMsgQuery) {
+        return this.baseMapper.listPage(new Page<>(userMsgQuery.getCurrent(), userMsgQuery.getSize()), userMsgQuery);
     }
 
     /**

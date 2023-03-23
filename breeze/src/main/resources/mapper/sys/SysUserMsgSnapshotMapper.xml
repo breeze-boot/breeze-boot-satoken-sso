@@ -46,14 +46,14 @@
             a.is_delete = 0
             AND b.is_delete = 0
             AND c.is_delete = 0
-            <if test="userMsgSearchDTO.msgTitle != null and userMsgSearchDTO.msgTitle != ''">
-                AND b.msg_title LIKE CONCAT('%' , #{userMsgSearchDTO.msgTitle}, '%')
+            <if test="userMsgQuery.msgTitle != null and userMsgQuery.msgTitle != ''">
+                AND b.msg_title LIKE CONCAT('%' , #{userMsgQuery.msgTitle}, '%')
             </if>
-            <if test="userMsgSearchDTO.msgCode != null and userMsgSearchDTO.msgCode != ''">
-                AND a.msg_code LIKE CONCAT('%' , #{userMsgSearchDTO.msgCode}, '%')
+            <if test="userMsgQuery.msgCode != null and userMsgQuery.msgCode != ''">
+                AND a.msg_code LIKE CONCAT('%' , #{userMsgQuery.msgCode}, '%')
             </if>
-            <if test="userMsgSearchDTO.username != null and userMsgSearchDTO.username != ''">
-                AND c.username LIKE CONCAT('%' , #{userMsgSearchDTO.username}, '%')
+            <if test="userMsgQuery.username != null and userMsgQuery.username != ''">
+                AND c.username LIKE CONCAT('%' , #{userMsgQuery.username}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

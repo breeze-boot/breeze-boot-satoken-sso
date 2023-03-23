@@ -16,10 +16,9 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
-        <result property="tenantId" column="tenant_id" jdbcType="BIGINT"/>
     </resultMap>
 
-    <select id="listRoleDataPermissionByRoleIds" resultType="com.breeze.security.entity.DataPermissionDTO">
+    <select id="listRoleDataPermissionByRoleIds" resultType="com.breeze.security.userextension.DataPermission">
         SELECT
         a.data_permission_code,
         a.data_permission_type,

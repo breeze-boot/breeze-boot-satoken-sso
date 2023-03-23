@@ -18,7 +18,7 @@ package com.breeze.log.config;
 
 import cn.hutool.core.date.StopWatch;
 import com.breeze.log.annotation.BreezeSysLog;
-import com.breeze.log.dto.SysLogDTO;
+import com.breeze.log.bo.SysLogBO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
@@ -113,7 +113,7 @@ public class SysLogAspect {
         StopWatch stopWatch = getStopWatch();
         stopWatch.start();
         String userAgent = request.getHeader("User-Agent");
-        SysLogDTO build = SysLogDTO.builder()
+        SysLogBO sysLogBO = SysLogBO.builder()
                 .systemModule("通用权限系统")
                 .system(userAgent)
                 .logTitle(log.description())
@@ -127,12 +127,12 @@ public class SysLogAspect {
                 .result(1)
                 .build();
         if (obj instanceof Exception) {
-            build.setResultMsg(((Exception) obj).getMessage());
-            build.setResult(0);
+            sysLogBO.setResultMsg(((Exception) obj).getMessage());
+            sysLogBO.setResult(0);
         }
         stopWatch.stop();
-        build.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
-        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(build));
+        sysLogBO.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
+        this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(sysLogBO));
         this.printLog(request, methodName, MAPPER.writeValueAsString(param), stopWatch);
     }
 

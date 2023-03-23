@@ -17,7 +17,7 @@
 package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.breeze.boot.sys.dto.UserMsgSearchDTO;
+import com.breeze.boot.sys.query.UserMsgQuery;
 import com.breeze.boot.sys.service.SysUserMsgService;
 import com.breeze.boot.sys.service.SysUserMsgSnapshotService;
 import com.breeze.boot.sys.vo.SysUserMsgSnapshotVO;
@@ -62,14 +62,14 @@ public class SysUserMsgController {
     /**
      * 列表
      *
-     * @param userMsgSearchDTO 消息搜索DTO
+     * @param userMsgQuery 用户消息查询
      * @return {@link Result}<{@link IPage}<{@link SysUserMsgSnapshotVO}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:userMsg:list')")
-    public Result<IPage<SysUserMsgSnapshotVO>> list(@RequestBody UserMsgSearchDTO userMsgSearchDTO) {
-        return Result.ok(this.sysUserMsgSnapshotService.listPage(userMsgSearchDTO));
+    public Result<IPage<SysUserMsgSnapshotVO>> list(@RequestBody UserMsgQuery userMsgQuery) {
+        return Result.ok(this.sysUserMsgSnapshotService.listPage(userMsgQuery));
     }
 
     /**

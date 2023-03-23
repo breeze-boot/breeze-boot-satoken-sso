@@ -18,9 +18,8 @@ package com.breeze.boot.quartz.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
-import com.breeze.boot.quartz.dto.JobDTO;
+import com.breeze.boot.quartz.query.JobQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,11 +35,11 @@ public interface SysQuartzJobLogMapper extends BaseMapper<SysQuartzJobLog> {
     /**
      * 列表页面
      *
-     * @param page   页面
-     * @param jobDTO 任务DTO
+     * @param page     页面
+     * @param jobQuery 任务查询
      * @return {@link Page}<{@link SysQuartzJobLog}>
      */
-    Page<SysQuartzJobLog> listPage(@Param("page") Page<SysQuartzJobLog> page, @Param("jobDTO") JobDTO jobDTO);
+    Page<SysQuartzJobLog> listPage(@Param("page") Page<SysQuartzJobLog> page, @Param("jobQuery") JobQuery jobQuery);
 
     /**
      * 清空

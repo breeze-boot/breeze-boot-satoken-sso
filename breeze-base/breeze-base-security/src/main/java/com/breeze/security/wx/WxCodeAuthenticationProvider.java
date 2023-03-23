@@ -17,7 +17,7 @@
 package com.breeze.security.wx;
 
 import com.breeze.security.config.WxLoginProperties;
-import com.breeze.security.entity.WxLoginBody;
+import com.breeze.security.params.WxLoginParam;
 import com.breeze.security.service.LocalUserDetailsService;
 import com.breeze.security.utils.WxHttpInterfaces;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +72,7 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
-        WxLoginBody wxLoginBody = (WxLoginBody) authenticationToken.getPrincipal();
+        WxLoginParam wxLoginBody = (WxLoginParam) authenticationToken.getPrincipal();
         String openId = WxHttpInterfaces.getOpenId(this.wxLoginProperties.getAppId(), this.wxLoginProperties.getAppSecret(), wxLoginBody.getCode());
         wxLoginBody.setOpenId(openId);
         UserDetails userDetails = this.userDetailsService.createOrLoadUser(wxLoginBody);

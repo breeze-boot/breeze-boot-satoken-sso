@@ -18,7 +18,7 @@ package com.breeze.boot.sys.controller.login;
 
 import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
-import com.breeze.security.entity.LoginUserDTO;
+import com.breeze.security.userextension.LoginUser;
 import com.breeze.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,7 +56,7 @@ public class HelloController {
     @GetMapping("/hello")
     @Operation(security = {@SecurityRequirement(name = "Bearer")}, summary = "测试")
     public Result<String> helloWorld(Authentication authentication) {
-        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
+        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
         assert currentLoginUser != null;
         currentLoginUser.getAuthorities().forEach(System.out::println);
         return Result.ok("Hello, " + authentication.getName() + "!");
@@ -71,7 +71,7 @@ public class HelloController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/hello2")
     public Result<String> helloWorld2(Authentication authentication) {
-        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
+        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
         assert currentLoginUser != null;
         currentLoginUser.getAuthorities().forEach(System.out::println);
         return Result.ok("Hello, " + authentication.getName() + "!");

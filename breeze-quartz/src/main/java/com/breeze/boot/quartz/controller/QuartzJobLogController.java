@@ -18,7 +18,7 @@ package com.breeze.boot.quartz.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
-import com.breeze.boot.quartz.dto.JobDTO;
+import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -26,7 +26,6 @@ import com.breeze.log.config.LogType;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -51,14 +50,14 @@ public class QuartzJobLogController {
     /**
      * 列表页面
      *
-     * @param jobDTO 任务DTO
+     * @param jobQuery 任务查询
      * @return {@link Result}<{@link Page}<{@link SysQuartzJobLog}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:jobLog:list')")
-    public Result<Page<SysQuartzJobLog>> listPage(@Validated @RequestBody JobDTO jobDTO) {
-        return Result.ok(this.quartzJobLogService.listPage(jobDTO));
+    public Result<Page<SysQuartzJobLog>> listPage(@RequestBody JobQuery jobQuery) {
+        return Result.ok(this.quartzJobLogService.listPage(jobQuery));
     }
 
     /**

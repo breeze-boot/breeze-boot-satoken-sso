@@ -18,8 +18,8 @@ package com.breeze.boot.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysDictItem;
-import com.breeze.boot.sys.dto.DictSearchDTO;
 import com.breeze.boot.sys.mapper.SysDictItemMapper;
+import com.breeze.boot.sys.query.DictQuery;
 import com.breeze.boot.sys.service.SysDictItemService;
 import com.breeze.core.utils.Result;
 import org.springframework.beans.factory.InitializingBean;
@@ -41,12 +41,12 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     /**
      * 字典列表项
      *
-     * @param dictSearchDTO 字典搜索DTO
+     * @param dictQuery 字典查询
      * @return {@link List}<{@link SysDictItem}>
      */
     @Override
-    public List<SysDictItem> listDictItem(DictSearchDTO dictSearchDTO) {
-        return this.baseMapper.listDictDetailByDictId(dictSearchDTO.getId());
+    public List<SysDictItem> listDictItem(DictQuery dictQuery) {
+        return this.baseMapper.listDictDetailByDictId(dictQuery.getId());
     }
 
     /**
@@ -64,7 +64,6 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        //   List<Map<String, Object>> dictItemListMap = this.baseMapper.listDictByCode(Lists.newArrayList());
-        //  Map<String, List<Map<String, Object>>> resultMap = dictItemListMap.stream().collect(Collectors.groupingBy(dict -> (String) dict.get("dictCode")));
     }
+
 }

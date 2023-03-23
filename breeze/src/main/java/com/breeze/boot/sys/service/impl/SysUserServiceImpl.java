@@ -21,11 +21,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.*;
-import com.breeze.boot.sys.dto.UserOpenDTO;
-import com.breeze.boot.sys.dto.UserResetPasswordDTO;
-import com.breeze.boot.sys.dto.UserRolesDTO;
-import com.breeze.boot.sys.dto.UserSearchDTO;
 import com.breeze.boot.sys.mapper.SysUserMapper;
+import com.breeze.boot.sys.params.UserOpenParam;
+import com.breeze.boot.sys.params.UserResetPasswordParam;
+import com.breeze.boot.sys.params.UserRolesParam;
+import com.breeze.boot.sys.query.UserQuery;
 import com.breeze.boot.sys.service.*;
 import com.breeze.core.enums.ResultCode;
 import com.breeze.core.utils.EasyExcelExport;
@@ -100,12 +100,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 列表页面
      *
-     * @param userSearchDTO 用户搜索DTO
+     * @param userQuery 用户查询
      * @return {@link IPage}<{@link SysUser}>
      */
     @Override
-    public IPage<SysUser> listPage(UserSearchDTO userSearchDTO) {
-        return this.baseMapper.listPage(new Page<>(userSearchDTO.getCurrent(), userSearchDTO.getSize()), userSearchDTO);
+    public IPage<SysUser> listPage(UserQuery userQuery) {
+        return this.baseMapper.listPage(new Page<>(userQuery.getCurrent(), userQuery.getSize()), userQuery);
     }
 
     /**
@@ -167,17 +167,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 开启关闭锁定
      *
-     * @param userOpen 用户开关 DTO
+     * @param userOpenParam 用户打开参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(UserOpenDTO userOpen) {
+    public Boolean open(UserOpenParam userOpenParam) {
         boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getIsLock, userOpen.getIsLock())
-                .eq(SysUser::getUsername, userOpen.getUsername()));
+                .set(SysUser::getIsLock, userOpenParam.getIsLock())
+                .eq(SysUser::getUsername, userOpenParam.getUsername()));
         if (update) {
             // 刷新菜单权限
-            this.userTokenService.refreshUser(userOpen.getUsername());
+            this.userTokenService.refreshUser(userOpenParam.getUsername());
         }
         return update;
     }
@@ -185,14 +185,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置密码
      *
-     * @param userResetPasswordDTO 用户重置密码dto
+     * @param userResetPasswordParam 用户重置密码参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetPass(UserResetPasswordDTO userResetPasswordDTO) {
-        userResetPasswordDTO.setPassword(this.passwordEncoder.encode(userResetPasswordDTO.getPassword()));
+    public Boolean resetPass(UserResetPasswordParam userResetPasswordParam) {
+        userResetPasswordParam.setPassword(this.passwordEncoder.encode(userResetPasswordParam.getPassword()));
         boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getPassword, userResetPasswordDTO.getPassword()).eq(SysUser::getId, userResetPasswordDTO.getId()));
+                .set(SysUser::getPassword, userResetPasswordParam.getPassword()).eq(SysUser::getId, userResetPasswordParam.getId()));
         if (update) {
             // 刷新菜单权限
             this.userTokenService.refreshUser(SecurityUtils.getUsername());
@@ -221,17 +221,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 用户添加角色
      *
-     * @param userRolesDTO 用户角色dto
+     * @param userRolesParam 用户角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> userAddRole(UserRolesDTO userRolesDTO) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesDTO.getUsername()));
+    public Result<Boolean> userAddRole(UserRolesParam userRolesParam) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesParam.getUsername()));
         if (Objects.isNull(sysUser)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
-        List<SysUserRole> collect = userRolesDTO.getRoleId().stream().map(roleId ->
+        List<SysUserRole> collect = userRolesParam.getRoleId().stream().map(roleId ->
                 SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()
         ).collect(Collectors.toList());
         this.sysUserRoleService.saveBatch(collect);

@@ -17,12 +17,12 @@
 package com.breeze.boot.process.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
-import com.breeze.boot.process.dto.ProcessStartDTO;
+import com.breeze.boot.process.params.ProcessStartParam;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
 
 /**
- * 工作流运行时管理服务服务接口
+ * 流程实例管理服务接口
  *
  * @author gaoweixuan
  * @date 2023-03-01
@@ -32,17 +32,17 @@ public interface IProcessInstanceService {
     /**
      * 发起
      *
-     * @param startDTO 流程发起DTO
+     * @param startParam 流程启动参数
      * @return {@link Boolean}
      */
-    Boolean startProcess(ProcessStartDTO startDTO);
+    Boolean startProcess(ProcessStartParam startParam);
 
     /**
      * 列表页面
      *
-     * @param processInstanceSearchDTO 流程实例搜索DTO
+     * @param processInstanceQuery 流程实例查询
      * @return {@link Page}<{@link ProcessInstanceVO}>
      */
-    Page<ProcessInstanceVO> listPage(ProcessInstanceSearchDTO processInstanceSearchDTO);
+    Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery);
 
 }

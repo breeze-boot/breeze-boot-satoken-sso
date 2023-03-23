@@ -19,7 +19,7 @@ package com.breeze.boot.sys.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysDept;
-import com.breeze.boot.sys.dto.DeptSearchDTO;
+import com.breeze.boot.sys.query.DeptQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public interface SysDeptService extends IService<SysDept> {
     /**
      * 部门列表
      *
-     * @param deptSearchDTO 部门搜索DTO
+     * @param deptQuery 部门查询
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
-    List<Tree<Long>> listDept(DeptSearchDTO deptSearchDTO);
+    List<Tree<Long>> listDept(DeptQuery deptQuery);
 
     /**
      * 删除通过id

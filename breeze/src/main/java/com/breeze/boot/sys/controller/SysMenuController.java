@@ -18,7 +18,7 @@ package com.breeze.boot.sys.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.sys.domain.SysMenu;
-import com.breeze.boot.sys.dto.MenuSearchDTO;
+import com.breeze.boot.sys.query.MenuQuery;
 import com.breeze.boot.sys.service.SysMenuService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -28,9 +28,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -55,14 +55,14 @@ public class SysMenuController {
     /**
      * 列表
      *
-     * @param menuSearchDTO 菜单搜索DTO
+     * @param menuQuery 菜单查询
      * @return {@link Result}
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result<?> list(@RequestBody MenuSearchDTO menuSearchDTO) {
-        return this.sysMenuService.listMenu(menuSearchDTO);
+    public Result<?> list(@RequestBody MenuQuery menuQuery) {
+        return this.sysMenuService.listMenu(menuQuery);
     }
 
     /**
@@ -98,7 +98,7 @@ public class SysMenuController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:menu:info')")
-    public Result<SysMenu> info(@PathVariable("id") Long id) {
+    public Result<SysMenu> info(@NotNull(message = "不能为空") @PathVariable("id") Long id) {
         return Result.ok(sysMenuService.getById(id));
     }
 
@@ -112,7 +112,7 @@ public class SysMenuController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:menu:create')")
     @BreezeSysLog(description = "菜单信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysMenu sysMenu) {
+    public Result<Boolean> save(@Valid @RequestBody SysMenu sysMenu) {
         return this.sysMenuService.saveMenu(sysMenu);
     }
 
@@ -126,7 +126,7 @@ public class SysMenuController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:menu:modify')")
     @BreezeSysLog(description = "菜单信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysMenu sysMenu) {
+    public Result<Boolean> modify(@Valid @RequestBody SysMenu sysMenu) {
         return sysMenuService.updateMenuById(sysMenu);
     }
 

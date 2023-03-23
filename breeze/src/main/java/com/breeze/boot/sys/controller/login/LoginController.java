@@ -21,10 +21,10 @@ import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
 import com.breeze.security.config.WxLoginProperties;
 import com.breeze.security.email.EmailCodeAuthenticationToken;
-import com.breeze.security.entity.EmailLoginBody;
-import com.breeze.security.entity.SmsLoginBody;
-import com.breeze.security.entity.UserLoginBody;
-import com.breeze.security.entity.WxLoginBody;
+import com.breeze.security.params.EmailLoginParam;
+import com.breeze.security.params.SmsLoginParam;
+import com.breeze.security.params.UserLoginParam;
+import com.breeze.security.params.WxLoginParam;
 import com.breeze.security.sms.SmsCodeAuthenticationToken;
 import com.breeze.security.utils.WxHttpInterfaces;
 import com.breeze.security.wx.WxCodeAuthenticationToken;
@@ -38,10 +38,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,78 +77,78 @@ public class LoginController {
     /**
      * 用户名登录
      *
-     * @param userLoginBody 登录
+     * @param userLoginParam 登录
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @PostMapping("/login")
-    public Result<Map<String, Object>> login(@Validated @RequestBody UserLoginBody userLoginBody) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(userLoginBody.getUsername(), userLoginBody.getPassword());
+    public Result<Map<String, Object>> login(@Valid @RequestBody UserLoginParam userLoginParam) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(userLoginParam.getUsername(), userLoginParam.getPassword());
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(usernamePasswordAuthenticationToken)));
     }
 
     /**
      * 手机登录
      *
-     * @param smsLoginBody 手机登录
+     * @param smsLoginParam 手机登录
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @PostMapping("/sms")
     @Operation(summary = "手机登录")
-    public Result<Map<String, Object>> sms(@Validated @RequestBody SmsLoginBody smsLoginBody) {
-        SmsCodeAuthenticationToken smsCodeAuthenticationToken = SmsCodeAuthenticationToken.unauthenticated(smsLoginBody.getPhone(), smsLoginBody.getCode());
+    public Result<Map<String, Object>> sms(@Valid @RequestBody SmsLoginParam smsLoginParam) {
+        SmsCodeAuthenticationToken smsCodeAuthenticationToken = SmsCodeAuthenticationToken.unauthenticated(smsLoginParam.getPhone(), smsLoginParam.getCode());
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(smsCodeAuthenticationToken)));
     }
 
     /**
      * 用户邮箱登录
      *
-     * @param emailLoginBody 登录
+     * @param emailLoginParam 登录
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "邮箱登录")
     @PostMapping("/email")
-    public Result<Map<String, Object>> email(@Validated @RequestBody EmailLoginBody emailLoginBody) {
-        EmailCodeAuthenticationToken emailCodeAuthenticationToken = EmailCodeAuthenticationToken.unauthenticated(emailLoginBody.getEmail(), emailLoginBody.getCode());
+    public Result<Map<String, Object>> email(@Valid @RequestBody EmailLoginParam emailLoginParam) {
+        EmailCodeAuthenticationToken emailCodeAuthenticationToken = EmailCodeAuthenticationToken.unauthenticated(emailLoginParam.getEmail(), emailLoginParam.getCode());
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(emailCodeAuthenticationToken)));
     }
 
     /**
      * 微信授权登录
      *
-     * @param wxLoginBody 微信登录参数
+     * @param wxLoginParam 微信登录参数
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "微信授权登录")
     @PostMapping("/wxLogin")
-    public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginBody wxLoginBody) {
-        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginBody, "");
+    public Result<Map<String, Object>> wxLogin(@RequestBody WxLoginParam wxLoginParam) {
+        WxCodeAuthenticationToken wxCodeAuthenticationToken = WxCodeAuthenticationToken.unauthenticated(wxLoginParam, "");
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(wxCodeAuthenticationToken)));
     }
 
     /**
      * wx手机登录
      *
-     * @param wxLoginBody wx登录dto
+     * @param wxLoginParam wx登录参数
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "微信授权手机号登录")
     @PostMapping("/wxPhoneLogin")
-    public Result<Map<String, Object>> wxPhoneLogin(@RequestBody WxLoginBody wxLoginBody) {
-        WxPhoneAuthenticationToken wxPhoneAuthenticationToken = WxPhoneAuthenticationToken.unauthenticated(wxLoginBody.getCode(), "");
+    public Result<Map<String, Object>> wxPhoneLogin(@RequestBody WxLoginParam wxLoginParam) {
+        WxPhoneAuthenticationToken wxPhoneAuthenticationToken = WxPhoneAuthenticationToken.unauthenticated(wxLoginParam.getCode(), "");
         return Result.ok(this.userTokenService.createJwtToken(36000L, authenticationManager.authenticate(wxPhoneAuthenticationToken)));
     }
 
     /**
      * wx授权手机号
      *
-     * @param wxLoginBody wx登录dto
+     * @param wxLoginParam wx登录参数
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "微信授权手机号")
     @PostMapping("/wxGetPhone")
-    public Result<Map<String, Object>> wxGetPhone(@RequestBody WxLoginBody wxLoginBody) {
+    public Result<Map<String, Object>> wxGetPhone(@RequestBody WxLoginParam wxLoginParam) {
         String accessToken = WxHttpInterfaces.getAccessToken(this.wxLoginProperties.getAppId(), this.wxLoginProperties.getAppSecret());
-        String phoneNumber = WxHttpInterfaces.getPhoneNumber(wxLoginBody.getCode(), accessToken);
+        String phoneNumber = WxHttpInterfaces.getPhoneNumber(wxLoginParam.getCode(), accessToken);
         HashMap<@Nullable String, @Nullable Object> resultMap = Maps.newHashMap();
         resultMap.put("phone", phoneNumber);
         return Result.ok(resultMap);

@@ -17,14 +17,14 @@
 package com.breeze.boot.process.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessDeploymentDTO;
-import com.breeze.boot.process.dto.ProcessDeploymentSearchDTO;
+import com.breeze.boot.process.params.ProcessDeploymentParam;
+import com.breeze.boot.process.query.ProcessDeploymentQuery;
 import com.breeze.boot.process.vo.DeploymentVO;
 import com.breeze.boot.process.vo.ProcessDefinitionVO;
 import com.breeze.core.utils.Result;
 
 /**
- * 工作流资源管理服务服务接口
+ * 流程资源管理服务接口
  *
  * @author gaoweixuan
  * @date 2023-03-01
@@ -34,18 +34,18 @@ public interface IProcessDefinitionService {
     /**
      * 部署
      *
-     * @param processDeploymentDTO 流程部署dto
+     * @param processDeploymentParam 流程部署参数
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> deploy(ProcessDeploymentDTO processDeploymentDTO);
+    Result<Boolean> deploy(ProcessDeploymentParam processDeploymentParam);
 
     /**
      * 列表页面
      *
-     * @param processDeploymentSearchDTO 流程部署查询dto
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Page}<{@link DeploymentVO}>
      */
-    Page<DeploymentVO> listPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO);
+    Page<DeploymentVO> listPage(ProcessDeploymentQuery processDeploymentQuery);
 
     /**
      * 挂起/激活
@@ -78,10 +78,10 @@ public interface IProcessDefinitionService {
     /**
      * 版本列表页面
      *
-     * @param processDeploymentSearchDTO 流程定义搜索DTO
+     * @param processDeploymentQuery 流程部署查询
      * @return {@link Page}<{@link ProcessDefinitionVO}>
      */
-    Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentSearchDTO processDeploymentSearchDTO);
+    Page<ProcessDefinitionVO> listVersionPage(ProcessDeploymentQuery processDeploymentQuery);
 
     /**
      * 获得版本流程定义png

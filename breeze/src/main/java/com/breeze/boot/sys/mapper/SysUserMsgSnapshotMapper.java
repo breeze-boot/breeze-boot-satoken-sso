@@ -20,9 +20,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysUserMsg;
 import com.breeze.boot.sys.domain.SysUserMsgSnapshot;
-import com.breeze.boot.sys.dto.UserMsgSearchDTO;
+import com.breeze.boot.sys.query.UserMsgQuery;
 import com.breeze.boot.sys.vo.SysUserMsgSnapshotVO;
-import com.breeze.database.annotation.DataPermission;
+import com.breeze.database.annotation.BreezeDataPermission;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -41,12 +41,12 @@ public interface SysUserMsgSnapshotMapper extends BreezeBaseMapper<SysUserMsgSna
     /**
      * 列表页面
      *
-     * @param page             页面
-     * @param userMsgSearchDTO 用户搜索DTO消息
+     * @param page         页面
+     * @param userMsgQuery 用户消息查询
      * @return {@link IPage}<{@link SysUserMsg}>
      */
-    @DataPermission(scope = "dept_id", own = "user_code")
-    IPage<SysUserMsgSnapshotVO> listPage(Page<SysUserMsg> page, @Param("userMsgSearchDTO") UserMsgSearchDTO userMsgSearchDTO);
+    @BreezeDataPermission(scope = "dept_id", own = "user_code")
+    IPage<SysUserMsgSnapshotVO> listPage(Page<SysUserMsg> page, @Param("userMsgQuery") UserMsgQuery userMsgQuery);
 
     /**
      * 获取消息列表通过用户名

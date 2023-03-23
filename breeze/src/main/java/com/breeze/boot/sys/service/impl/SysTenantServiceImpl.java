@@ -25,8 +25,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysTenant;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.TenantSearchDTO;
 import com.breeze.boot.sys.mapper.SysTenantMapper;
+import com.breeze.boot.sys.query.TenantQuery;
 import com.breeze.boot.sys.service.SysTenantService;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
@@ -53,14 +53,14 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     /**
      * 列表页面
      *
-     * @param tenantSearchDTO 租户搜索DTO
+     * @param tenantQuery 租户查询
      * @return {@link IPage}<{@link SysTenant}>
      */
     @Override
-    public IPage<SysTenant> listPage(TenantSearchDTO tenantSearchDTO) {
-        Page<SysTenant> logEntityPage = new Page<>(tenantSearchDTO.getCurrent(), tenantSearchDTO.getSize());
+    public IPage<SysTenant> listPage(TenantQuery tenantQuery) {
+        Page<SysTenant> logEntityPage = new Page<>(tenantQuery.getCurrent(), tenantQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(tenantSearchDTO.getTenantName()), SysTenant::getTenantName, tenantSearchDTO.getTenantName())
+                .like(StrUtil.isAllNotBlank(tenantQuery.getTenantName()), SysTenant::getTenantName, tenantQuery.getTenantName())
                 .orderByDesc(SysTenant::getCreateTime)
                 .page(logEntityPage);
     }

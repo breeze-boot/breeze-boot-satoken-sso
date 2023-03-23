@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 消息DTO
+ * 用户消息BO
  *
  * @author gaoweixuan
  * @date 2022-11-23
@@ -33,7 +33,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "消息DTO")
+@Schema(description = "用户消息BO")
 public class UserMsgBO implements Serializable {
 
     private static final long serialVersionUID = 1L;

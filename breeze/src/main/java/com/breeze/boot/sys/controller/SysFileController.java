@@ -18,8 +18,8 @@ package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysFile;
-import com.breeze.boot.sys.dto.FileDTO;
-import com.breeze.boot.sys.dto.FileSearchDTO;
+import com.breeze.boot.sys.params.FileParam;
+import com.breeze.boot.sys.query.FileQuery;
 import com.breeze.boot.sys.service.SysFileService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Map;
@@ -58,14 +59,14 @@ public class SysFileController {
     /**
      * 列表
      *
-     * @param fileSearchDTO 文件搜索DTO
+     * @param fileQuery 文件查询
      * @return {@link Result}<{@link Page}<{@link SysFile}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
-    public Result<Page<SysFile>> list(@RequestBody FileSearchDTO fileSearchDTO) {
-        return Result.ok(this.sysFileService.listPage(fileSearchDTO));
+    public Result<Page<SysFile>> list(@RequestBody FileQuery fileQuery) {
+        return Result.ok(this.sysFileService.listPage(fileQuery));
     }
 
     /**
@@ -77,36 +78,39 @@ public class SysFileController {
     @Operation(summary = "图片预览")
     @GetMapping("/preview")
     @PreAuthorize("hasAnyAuthority('sys:file:preview')")
-    public Result<String> preview(Long fileId) {
+    public Result<String> preview(@NotNull(message = "参数不能为空") Long fileId) {
         return Result.ok(this.sysFileService.preview(fileId));
     }
 
     /**
-     * 文件下载
+     * 下载
      *
-     * @param fileId 文件ID
-     * @return {@link Result}<{@link Boolean}>
+     * @param fileId   文件标识
+     * @param response 响应
      */
     @Operation(summary = "文件下载")
     @GetMapping("/download")
     @PreAuthorize("hasAnyAuthority('sys:file:download')")
-    public void download(Long fileId, HttpServletResponse response, HttpServletRequest request) {
+    public void download(@NotNull(message = "参数不能为空") Long fileId,
+                         HttpServletResponse response) {
         this.sysFileService.download(fileId, response);
     }
 
     /**
      * 上传
      *
-     * @param fileDTO  文件dto
-     * @param request  请求
-     * @param response 响应
+     * @param fileParam 文件上传参数
+     * @param request   请求
+     * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "文件上传")
     @PostMapping("/upload")
     @PreAuthorize("hasAnyAuthority('sys:file:upload')")
-    public Result<Map<String, Object>> upload(FileDTO fileDTO, HttpServletRequest request, HttpServletResponse response) {
-        return this.sysFileService.upload(fileDTO, request, response);
+    public Result<Map<String, Object>> upload(@Valid FileParam fileParam,
+                                              HttpServletRequest request,
+                                              HttpServletResponse response) {
+        return this.sysFileService.upload(fileParam, request, response);
     }
 
     /**

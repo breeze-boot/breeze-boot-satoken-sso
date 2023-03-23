@@ -18,7 +18,7 @@ package com.breeze.boot.sys.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysRole;
-import com.breeze.boot.sys.dto.RoleSearchDTO;
+import com.breeze.boot.sys.query.RoleQuery;
 import com.breeze.core.utils.Result;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -54,11 +54,11 @@ public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
     /**
      * 列表页面
      *
-     * @param rolePage      角色页面
-     * @param roleSearchDTO 角色搜索dto
+     * @param page      页面
+     * @param roleQuery 角色查询
      * @return {@link Page}<{@link SysRole}>
      */
-    Page<SysRole> listPage(Page<SysRole> rolePage, @Param("roleSearchDTO") RoleSearchDTO roleSearchDTO);
+    Page<SysRole> listPage(Page<SysRole> page, @Param("roleQuery") RoleQuery roleQuery);
 
     /**
      * 获取用户角色列表

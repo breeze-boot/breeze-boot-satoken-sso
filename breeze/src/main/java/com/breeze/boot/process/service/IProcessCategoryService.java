@@ -19,7 +19,7 @@ package com.breeze.boot.process.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.process.domain.ProcessCategory;
-import com.breeze.boot.process.dto.ProcessCategoryDTO;
+import com.breeze.boot.process.query.ProcessCategoryQuery;
 
 /**
  * 流程分类服务
@@ -33,8 +33,8 @@ public interface IProcessCategoryService extends IService<ProcessCategory> {
      * 列表页面
      *
      * @param processCategory 流程分类
-     * @return {@link IPage}<{@link ProcessCategoryDTO}>
+     * @return {@link IPage}<{@link ProcessCategory}>
      */
-    IPage<ProcessCategory> listPage(ProcessCategoryDTO processCategory);
+    IPage<ProcessCategory> listPage(ProcessCategoryQuery processCategory);
 
 }

@@ -20,7 +20,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.process.domain.ProcessCategory;
-import com.breeze.boot.process.dto.ProcessCategoryDTO;
+import com.breeze.boot.process.query.ProcessCategoryQuery;
 import com.breeze.boot.process.service.IProcessCategoryService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -29,9 +29,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
@@ -63,7 +64,7 @@ public class ProcessCategoryController {
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('process:category:list')")
-    public Result<IPage<ProcessCategory>> list(@Validated @RequestBody ProcessCategoryDTO processCategory) {
+    public Result<IPage<ProcessCategory>> list(@RequestBody ProcessCategoryQuery processCategory) {
         return Result.ok(this.processCategoryService.listPage(processCategory));
     }
 
@@ -78,7 +79,7 @@ public class ProcessCategoryController {
     @Operation(summary = "校验流程分类编码是否重复")
     @GetMapping("/checkCategoryCode")
     @PreAuthorize("hasAnyAuthority('process:category:list')")
-    public Result<Boolean> checkFlowCategoryCode(@NotNull(message = "编码不能为空") @RequestParam("categoryCode") String categoryCode,
+    public Result<Boolean> checkFlowCategoryCode(@NotBlank(message = "编码不能为空") @RequestParam("categoryCode") String categoryCode,
                                                  @NotNull(message = "ID不能为空") @RequestParam(value = "categoryId", required = false) Long categoryId) {
         return Result.ok(Objects.isNull(this.processCategoryService.getOne(Wrappers.<ProcessCategory>lambdaQuery()
                 .ne(Objects.nonNull(categoryId), ProcessCategory::getId, categoryId)
@@ -96,7 +97,7 @@ public class ProcessCategoryController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('process:category:create')")
     @BreezeSysLog(description = "流程分类信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody ProcessCategory processCategory) {
+    public Result<Boolean> save(@Valid @RequestBody ProcessCategory processCategory) {
         return Result.ok(this.processCategoryService.save(processCategory));
     }
 
@@ -111,7 +112,7 @@ public class ProcessCategoryController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('process:category:modify')")
     @BreezeSysLog(description = "流程分类信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody ProcessCategory processCategory) {
+    public Result<Boolean> modify(@Valid @RequestBody ProcessCategory processCategory) {
         return Result.ok(this.processCategoryService.updateById(processCategory));
     }
 

@@ -16,7 +16,7 @@
 
 package com.breeze.security.service;
 
-import com.breeze.security.entity.WxLoginBody;
+import com.breeze.security.params.WxLoginParam;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,14 +35,14 @@ public class LocalUserDetailsService implements UserDetailsService {
 
     protected Function<String, UserDetails> phoneFunction;
 
-    protected Function<WxLoginBody, UserDetails> wxFunction;
+    protected Function<WxLoginParam, UserDetails> wxFunction;
 
     protected Function<String, UserDetails> emailFunction;
     protected Function<String, UserDetails> wxPhoneFunction;
 
     public LocalUserDetailsService(Function<String, UserDetails> usernameFunction,
                                    Function<String, UserDetails> phoneFunction,
-                                   Function<WxLoginBody, UserDetails> wxFunction,
+                                   Function<WxLoginParam, UserDetails> wxFunction,
                                    Function<String, UserDetails> emailFunction,
                                    Function<String, UserDetails> wxPhoneFunction) {
         this.usernameFunction = usernameFunction;
@@ -60,7 +60,7 @@ public class LocalUserDetailsService implements UserDetailsService {
         return this.phoneFunction.apply(phone);
     }
 
-    public UserDetails createOrLoadUser(WxLoginBody wxLoginBody) {
+    public UserDetails createOrLoadUser(WxLoginParam wxLoginBody) {
         return this.wxFunction.apply(wxLoginBody);
     }
 

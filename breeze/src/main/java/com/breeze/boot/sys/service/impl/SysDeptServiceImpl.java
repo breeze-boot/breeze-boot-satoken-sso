@@ -25,8 +25,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysDept;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.DeptSearchDTO;
 import com.breeze.boot.sys.mapper.SysDeptMapper;
+import com.breeze.boot.sys.query.DeptQuery;
 import com.breeze.boot.sys.service.SysDeptService;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
@@ -57,13 +57,13 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 部门列表
      *
-     * @param deptSearchDTO 部门搜索DTO
+     * @param deptQuery 部门查询
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     @Override
-    public List<Tree<Long>> listDept(DeptSearchDTO deptSearchDTO) {
+    public List<Tree<Long>> listDept(DeptQuery deptQuery) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery()
-                .eq(Objects.nonNull(deptSearchDTO) && StrUtil.isAllNotBlank(deptSearchDTO.getDeptName()), SysDept::getDeptName, deptSearchDTO.getDeptName()));
+                .eq(Objects.nonNull(deptQuery) && StrUtil.isAllNotBlank(deptQuery.getDeptName()), SysDept::getDeptName, deptQuery.getDeptName()));
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
                 sysDept -> {
                     TreeNode<Long> treeNode = new TreeNode<>();
@@ -73,7 +73,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                     Map<String, Object> leafMap = Maps.newHashMap();
                     leafMap.put("deptName", sysDept.getDeptName());
                     leafMap.put("deptCode", sysDept.getDeptCode());
-                    if (Objects.equals(deptSearchDTO.getId(), sysDept.getId())) {
+                    if (Objects.equals(deptQuery.getId(), sysDept.getId())) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
                     leafMap.put("isChecked", Boolean.FALSE);

@@ -32,11 +32,11 @@
         create_time
         FROM sys_quartz_job_log
         <where>
-            <if test="jobDTO.jobName != null and jobDTO.jobName != ''">
-                AND job_name = #{jobDTO.jobName}
+            <if test="jobQuery.jobName != null and jobQuery.jobName != ''">
+                AND job_name = #{jobQuery.jobName}
             </if>
-            <if test="jobDTO.jobGroupName != null and jobDTO.jobGroupName != ''">
-                AND job_group_name = #{jobDTO.jobGroupName}
+            <if test="jobQuery.jobGroupName != null and jobQuery.jobGroupName != ''">
+                AND job_group_name = #{jobQuery.jobGroupName}
             </if>
         </where>
     </select>

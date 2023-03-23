@@ -23,8 +23,8 @@ import com.breeze.boot.sys.service.SysDeptService;
 import com.breeze.boot.sys.service.SysMenuService;
 import com.breeze.boot.sys.service.SysRoleDataPermissionService;
 import com.breeze.boot.sys.service.SysRoleService;
-import com.breeze.security.entity.LoginUserDTO;
-import com.breeze.security.entity.UserRoleDTO;
+import com.breeze.security.userextension.LoginUser;
+import com.breeze.security.userextension.UserRole;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -77,36 +77,36 @@ public class UserTokenCacheService {
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * 获取登录用户DTO
+     * 获取登录用户
      *
      * @param sysUser 系统用户实体
-     * @return {@link LoginUserDTO}
+     * @return {@link LoginUser}
      */
-    public LoginUserDTO getLoginUserDTO(SysUser sysUser) {
-        LoginUserDTO loginUserDTO = new LoginUserDTO();
-        BeanUtil.copyProperties(sysUser, loginUserDTO);
+    public LoginUser getLoginUser(SysUser sysUser) {
+        LoginUser loginUser = new LoginUser();
+        BeanUtil.copyProperties(sysUser, loginUser);
         // 获取部门名称
-        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUserDTO.setDeptName(sysDept.getDeptName()));
+        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
         // 查询 用户的角色
-        Set<UserRoleDTO> roleDtoSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isEmpty(roleDtoSet)) {
-            loginUserDTO.setAuthorities(Sets.newHashSet());
-            return loginUserDTO;
+        Set<UserRole> userRoleSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
+        if (CollUtil.isEmpty(userRoleSet)) {
+            loginUser.setAuthorities(Sets.newHashSet());
+            return loginUser;
         }
 
-        loginUserDTO.setUserRoleList(roleDtoSet);
+        loginUser.setUserRoleList(userRoleSet);
         // 角色ID
-        Set<Long> roleIdSet = roleDtoSet.stream().map(UserRoleDTO::getRoleId).collect(Collectors.toSet());
-        loginUserDTO.setUserRoleIds(roleIdSet);
+        Set<Long> roleIdSet = userRoleSet.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+        loginUser.setUserRoleIds(roleIdSet);
         // 角色CODE
-        Set<String> roleCodeList = roleDtoSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet());
-        loginUserDTO.setUserRoleCodes(roleCodeList);
+        Set<String> roleCodeList = userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet());
+        loginUser.setUserRoleCodes(roleCodeList);
         // 角色权限
-        loginUserDTO.setAuthorities(this.sysMenuService.listUserMenuPermission(roleDtoSet));
+        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(userRoleSet));
         // 用户的多个数据权限
-        loginUserDTO.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
-        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUserDTO);
-        return loginUserDTO;
+        loginUser.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
+        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUser);
+        return loginUser;
     }
 
     public Boolean clearUserInfo(String username, HttpServletRequest request) {

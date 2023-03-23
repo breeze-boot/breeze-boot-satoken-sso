@@ -19,7 +19,7 @@ package com.breeze.boot.sys.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.sys.domain.SysPost;
-import com.breeze.boot.sys.dto.PostSearchDTO;
+import com.breeze.boot.sys.query.PostQuery;
 import com.breeze.boot.sys.service.SysPostService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -29,9 +29,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -57,14 +58,14 @@ public class SysPostController {
     /**
      * 列表
      *
-     * @param postSearchDTO 岗位搜索DTO
+     * @param postQuery 岗位查询
      * @return {@link Result}<{@link IPage}<{@link SysPost}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:post:list')")
-    public Result<IPage<SysPost>> list(@RequestBody PostSearchDTO postSearchDTO) {
-        return Result.ok(this.sysPostService.listPage(postSearchDTO));
+    public Result<IPage<SysPost>> list(@RequestBody PostQuery postQuery) {
+        return Result.ok(this.sysPostService.listPage(postQuery));
     }
 
     /**
@@ -77,7 +78,7 @@ public class SysPostController {
     @Operation(summary = "校验岗位编码是否重复")
     @GetMapping("/checkPostCode")
     @PreAuthorize("hasAnyAuthority('sys:post:list')")
-    public Result<Boolean> checkPostCode(@RequestParam("postCode") String postCode,
+    public Result<Boolean> checkPostCode(@NotBlank(message = "岗位编码不能为空") @RequestParam("postCode") String postCode,
                                          @RequestParam(value = "postId", required = false) Long postId) {
         return Result.ok(Objects.isNull(this.sysPostService.getOne(Wrappers.<SysPost>lambdaQuery()
                 .ne(Objects.nonNull(postId), SysPost::getId, postId)
@@ -94,7 +95,7 @@ public class SysPostController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:post:create')")
     @BreezeSysLog(description = "岗位信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysPost post) {
+    public Result<Boolean> save(@Valid @RequestBody SysPost post) {
         return Result.ok(this.sysPostService.save(post));
     }
 
@@ -108,7 +109,7 @@ public class SysPostController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:post:modify')")
     @BreezeSysLog(description = "岗位信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysPost sysPost) {
+    public Result<Boolean> modify(@Valid @RequestBody SysPost sysPost) {
         return Result.ok(this.sysPostService.updateById(sysPost));
     }
 

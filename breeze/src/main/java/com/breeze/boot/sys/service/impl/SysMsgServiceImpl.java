@@ -23,8 +23,8 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysMsg;
-import com.breeze.boot.sys.dto.MsgSearchDTO;
 import com.breeze.boot.sys.mapper.SysMsgMapper;
+import com.breeze.boot.sys.query.MsgQuery;
 import com.breeze.boot.sys.service.SysMsgService;
 import org.springframework.stereotype.Service;
 
@@ -40,15 +40,15 @@ public class SysMsgServiceImpl extends ServiceImpl<SysMsgMapper, SysMsg> impleme
     /**
      * 列表页面
      *
-     * @param msgSearchDTO 消息搜索DTO
+     * @param msgQuery 消息查询
      * @return {@link IPage}<{@link SysMsg}>
      */
     @Override
-    public IPage<SysMsg> listPage(MsgSearchDTO msgSearchDTO) {
-        Page<SysMsg> msgPage = new Page<>(msgSearchDTO.getCurrent(), msgSearchDTO.getSize());
+    public IPage<SysMsg> listPage(MsgQuery msgQuery) {
+        Page<SysMsg> msgPage = new Page<>(msgQuery.getCurrent(), msgQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(msgSearchDTO.getMsgTitle()), SysMsg::getMsgTitle, msgSearchDTO.getMsgTitle())
-                .like(StrUtil.isAllNotBlank(msgSearchDTO.getMsgCode()), SysMsg::getMsgCode, msgSearchDTO.getMsgCode())
+                .like(StrUtil.isAllNotBlank(msgQuery.getMsgTitle()), SysMsg::getMsgTitle, msgQuery.getMsgTitle())
+                .like(StrUtil.isAllNotBlank(msgQuery.getMsgCode()), SysMsg::getMsgCode, msgQuery.getMsgCode())
                 .page(msgPage);
     }
 

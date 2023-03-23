@@ -21,8 +21,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysPost;
 import com.breeze.boot.sys.domain.SysRole;
 import com.breeze.boot.sys.domain.SysRoleMenu;
-import com.breeze.boot.sys.dto.MenuPermissionDTO;
-import com.breeze.boot.sys.dto.RoleSearchDTO;
+import com.breeze.boot.sys.params.MenuPermissionParam;
+import com.breeze.boot.sys.query.RoleQuery;
 import com.breeze.boot.sys.service.SysRoleMenuService;
 import com.breeze.boot.sys.service.SysRoleService;
 import com.breeze.core.utils.Result;
@@ -33,9 +33,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -68,14 +69,14 @@ public class SysRoleController {
     /**
      * 列表
      *
-     * @param roleSearchDTO 角色搜索DTO
+     * @param roleQuery 角色查询
      * @return {@link Result}<{@link Page}<{@link SysRole}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result<Page<SysRole>> list(@RequestBody RoleSearchDTO roleSearchDTO) {
-        return Result.ok(this.sysRoleService.listPage(roleSearchDTO));
+    public Result<Page<SysRole>> list(@RequestBody RoleQuery roleQuery) {
+        return Result.ok(this.sysRoleService.listPage(roleQuery));
     }
 
     /**
@@ -88,7 +89,7 @@ public class SysRoleController {
     @Operation(summary = "校验角色编码是否重复")
     @GetMapping("/checkRoleCode")
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result<Boolean> checkRoleCode(@RequestParam("roleCode") String roleCode,
+    public Result<Boolean> checkRoleCode(@NotBlank(message = "角色编码不能为空") @RequestParam("roleCode") String roleCode,
                                          @RequestParam(value = "roleId", required = false) Long roleId) {
         return Result.ok(Objects.isNull(this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery()
                 .ne(Objects.nonNull(roleId), SysRole::getId, roleId)
@@ -126,15 +127,15 @@ public class SysRoleController {
     /**
      * 修改权限
      *
-     * @param menuPermissionDTO 菜单权限DTO
+     * @param menuPermissionParam 菜单权限参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "编辑权限")
     @PutMapping("/modifyPermission")
     @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modifyPermission(@Validated @RequestBody MenuPermissionDTO menuPermissionDTO) {
-        return this.sysRoleMenuService.modifyPermission(menuPermissionDTO);
+    public Result<Boolean> modifyPermission(@Valid @RequestBody MenuPermissionParam menuPermissionParam) {
+        return this.sysRoleMenuService.modifyPermission(menuPermissionParam);
     }
 
     /**
@@ -147,7 +148,7 @@ public class SysRoleController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:role:create')")
     @BreezeSysLog(description = "角色信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysRole sysRole) {
+    public Result<Boolean> save(@Valid @RequestBody SysRole sysRole) {
         return Result.ok(sysRoleService.save(sysRole));
     }
 
@@ -161,7 +162,7 @@ public class SysRoleController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysRole sysRole) {
+    public Result<Boolean> modify(@Valid @RequestBody SysRole sysRole) {
         return Result.ok(sysRoleService.updateById(sysRole));
     }
 

@@ -18,7 +18,7 @@ package com.breeze.boot.sys.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.sys.domain.SysMsg;
-import com.breeze.boot.sys.dto.MsgSearchDTO;
+import com.breeze.boot.sys.query.MsgQuery;
 import com.breeze.boot.sys.service.SysMsgService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
@@ -28,9 +28,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
@@ -55,14 +55,14 @@ public class SysMsgController {
     /**
      * 列表
      *
-     * @param msgSearchDTO 消息搜索DTO
+     * @param msgQuery 消息查询
      * @return {@link Result}<{@link IPage}<{@link SysMsg}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('sys:msg:list')")
-    public Result<IPage<SysMsg>> list(@RequestBody MsgSearchDTO msgSearchDTO) {
-        return Result.ok(this.sysMsgService.listPage(msgSearchDTO));
+    public Result<IPage<SysMsg>> list(@RequestBody MsgQuery msgQuery) {
+        return Result.ok(this.sysMsgService.listPage(msgQuery));
     }
 
     /**
@@ -74,7 +74,7 @@ public class SysMsgController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:msg:info')")
-    public Result<SysMsg> info(@PathVariable("id") Long id) {
+    public Result<SysMsg> info(@NotNull(message = "不能为空") @PathVariable("id") Long id) {
         return Result.ok(this.sysMsgService.getById(id));
     }
 
@@ -88,7 +88,7 @@ public class SysMsgController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('sys:msg:create')")
     @BreezeSysLog(description = "消息信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Validated @RequestBody SysMsg msg) {
+    public Result<Boolean> save(@Valid @RequestBody SysMsg msg) {
         return Result.ok(this.sysMsgService.save(msg));
     }
 
@@ -102,7 +102,7 @@ public class SysMsgController {
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:msg:modify')")
     @BreezeSysLog(description = "消息信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Validated @RequestBody SysMsg msg) {
+    public Result<Boolean> modify(@Valid @RequestBody SysMsg msg) {
         return Result.ok(this.sysMsgService.updateById(msg));
     }
 

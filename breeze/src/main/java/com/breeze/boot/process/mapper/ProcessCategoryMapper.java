@@ -19,7 +19,7 @@ package com.breeze.boot.process.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.process.domain.ProcessCategory;
-import com.breeze.boot.process.dto.ProcessCategoryDTO;
+import com.breeze.boot.process.query.ProcessCategoryQuery;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -40,6 +40,6 @@ public interface ProcessCategoryMapper extends BreezeBaseMapper<ProcessCategory>
      * @param category 类别
      * @return {@link IPage}<{@link ProcessCategory}>
      */
-    IPage<ProcessCategory> listPage(Page<ProcessCategory> page, @Param("category") ProcessCategoryDTO category);
+    IPage<ProcessCategory> listPage(Page<ProcessCategory> page, @Param("category") ProcessCategoryQuery category);
 
 }

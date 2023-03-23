@@ -19,10 +19,10 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysUser;
-import com.breeze.boot.sys.dto.UserOpenDTO;
-import com.breeze.boot.sys.dto.UserResetPasswordDTO;
-import com.breeze.boot.sys.dto.UserRolesDTO;
-import com.breeze.boot.sys.dto.UserSearchDTO;
+import com.breeze.boot.sys.params.UserOpenParam;
+import com.breeze.boot.sys.params.UserResetPasswordParam;
+import com.breeze.boot.sys.params.UserRolesParam;
+import com.breeze.boot.sys.query.UserQuery;
 import com.breeze.core.utils.Result;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,10 +39,10 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 列表页面
      *
-     * @param userSearchDTO 用户搜索DTO
+     * @param userQuery 用户查询
      * @return {@link IPage}<{@link SysUser}>
      */
-    IPage<SysUser> listPage(UserSearchDTO userSearchDTO);
+    IPage<SysUser> listPage(UserQuery userQuery);
 
     /**
      * 保存用户
@@ -61,20 +61,20 @@ public interface SysUserService extends IService<SysUser> {
     Boolean updateUserById(SysUser sysUser);
 
     /**
-     * 开启关闭锁定
+     * 开关
      *
-     * @param openDTO 用户开关 DTO
+     * @param userOpenParam 用户打开参数
      * @return {@link Boolean}
      */
-    Boolean open(UserOpenDTO openDTO);
+    Boolean open(UserOpenParam userOpenParam);
 
     /**
      * 重置密码
      *
-     * @param userResetPasswordDTO 用户重置密码dto
+     * @param userResetPasswordParam 用户重置密码参数
      * @return {@link Boolean}
      */
-    Boolean resetPass(UserResetPasswordDTO userResetPasswordDTO);
+    Boolean resetPass(UserResetPasswordParam userResetPasswordParam);
 
     /**
      * 删除用户
@@ -87,10 +87,10 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 用户分配角色
      *
-     * @param userRolesDTO 用户角色dto
+     * @param userRolesParam 用户角色参数
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> userAddRole(UserRolesDTO userRolesDTO);
+    Result<Boolean> userAddRole(UserRolesParam userRolesParam);
 
     /**
      * 通过ID查询用户

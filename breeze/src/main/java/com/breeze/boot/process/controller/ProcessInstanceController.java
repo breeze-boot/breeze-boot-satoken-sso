@@ -17,8 +17,8 @@
 package com.breeze.boot.process.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.process.dto.ProcessInstanceSearchDTO;
-import com.breeze.boot.process.dto.ProcessStartDTO;
+import com.breeze.boot.process.params.ProcessStartParam;
+import com.breeze.boot.process.query.ProcessInstanceQuery;
 import com.breeze.boot.process.service.IProcessInstanceService;
 import com.breeze.boot.process.vo.ProcessInstanceVO;
 import com.breeze.core.utils.Result;
@@ -26,11 +26,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 流程实例控制器
@@ -52,25 +53,27 @@ public class ProcessInstanceController {
     /**
      * 发起流程
      *
+     * @param startParam 流程启动参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "发起")
     @PostMapping("/startProcess")
     @PreAuthorize("hasAnyAuthority('process:instance:start')")
-    public Result<Boolean> startProcess(@Validated @RequestBody ProcessStartDTO startDTO) {
-        return Result.ok(this.processInstanceService.startProcess(startDTO));
+    public Result<Boolean> startProcess(@Valid @RequestBody ProcessStartParam startParam) {
+        return Result.ok(this.processInstanceService.startProcess(startParam));
     }
 
     /**
      * 列表
      *
-     * @return {@link Result}<{@link Boolean}>
+     * @param processInstanceQuery 流程实例查询
+     * @return {@link Result}<{@link Page}<{@link ProcessInstanceVO}>>
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('process:instance:list')")
-    public Result<Page<ProcessInstanceVO>> list(@Validated @RequestBody ProcessInstanceSearchDTO processInstanceSearchDTO) {
-        return Result.ok(this.processInstanceService.listPage(processInstanceSearchDTO));
+    public Result<Page<ProcessInstanceVO>> list(@RequestBody ProcessInstanceQuery processInstanceQuery) {
+        return Result.ok(this.processInstanceService.listPage(processInstanceQuery));
     }
 
 }

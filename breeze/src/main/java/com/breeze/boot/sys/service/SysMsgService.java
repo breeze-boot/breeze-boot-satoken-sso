@@ -19,7 +19,7 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysMsg;
-import com.breeze.boot.sys.dto.MsgSearchDTO;
+import com.breeze.boot.sys.query.MsgQuery;
 
 /**
  * 系统消息服务
@@ -32,10 +32,10 @@ public interface SysMsgService extends IService<SysMsg> {
     /**
      * 列表页面
      *
-     * @param msgSearchDTO 消息搜索DTO
+     * @param msgQuery 消息查询
      * @return {@link IPage}<{@link SysMsg}>
      */
-    IPage<SysMsg> listPage(MsgSearchDTO msgSearchDTO);
+    IPage<SysMsg> listPage(MsgQuery msgQuery);
 
     /**
      * 得到系统消息

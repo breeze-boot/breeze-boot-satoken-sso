@@ -23,10 +23,10 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysLog;
-import com.breeze.boot.sys.dto.LogSearchDTO;
 import com.breeze.boot.sys.mapper.SysLogMapper;
+import com.breeze.boot.sys.query.LogQuery;
 import com.breeze.boot.sys.service.SysLogService;
-import com.breeze.log.dto.SysLogDTO;
+import com.breeze.log.bo.SysLogBO;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -43,20 +43,20 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     /**
      * 日志列表
      *
-     * @param logSearchDTO 日志搜索DTO
+     * @param logQuery 日志查询
      * @return {@link Page}<{@link SysLog}>
      */
     @Override
-    public Page<SysLog> listLog(LogSearchDTO logSearchDTO) {
-        Page<SysLog> logEntityPage = new Page<>(logSearchDTO.getCurrent(), logSearchDTO.getSize());
+    public Page<SysLog> listPage(LogQuery logQuery) {
+        Page<SysLog> logEntityPage = new Page<>(logQuery.getCurrent(), logQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(logSearchDTO.getSystemModule()), SysLog::getSystemModule, logSearchDTO.getSystemModule())
-                .like(StrUtil.isAllNotBlank(logSearchDTO.getLogTitle()), SysLog::getLogTitle, logSearchDTO.getLogTitle())
-                .eq(Objects.nonNull(logSearchDTO.getDoType()), SysLog::getDoType, logSearchDTO.getDoType())
-                .eq(Objects.nonNull(logSearchDTO.getRequestType()), SysLog::getRequestType, logSearchDTO.getRequestType())
-                .eq(Objects.nonNull(logSearchDTO.getResult()), SysLog::getResult, logSearchDTO.getResult())
-                .ge(Objects.nonNull(logSearchDTO.getStartDate()), SysLog::getCreateTime, logSearchDTO.getStartDate())
-                .le(Objects.nonNull(logSearchDTO.getEndDate()), SysLog::getCreateTime, logSearchDTO.getEndDate())
+                .like(StrUtil.isAllNotBlank(logQuery.getSystemModule()), SysLog::getSystemModule, logQuery.getSystemModule())
+                .like(StrUtil.isAllNotBlank(logQuery.getLogTitle()), SysLog::getLogTitle, logQuery.getLogTitle())
+                .eq(Objects.nonNull(logQuery.getDoType()), SysLog::getDoType, logQuery.getDoType())
+                .eq(Objects.nonNull(logQuery.getRequestType()), SysLog::getRequestType, logQuery.getRequestType())
+                .eq(Objects.nonNull(logQuery.getResult()), SysLog::getResult, logQuery.getResult())
+                .ge(Objects.nonNull(logQuery.getStartDate()), SysLog::getCreateTime, logQuery.getStartDate())
+                .le(Objects.nonNull(logQuery.getEndDate()), SysLog::getCreateTime, logQuery.getEndDate())
                 .orderByDesc(SysLog::getCreateTime)
                 .page(logEntityPage);
     }
@@ -64,13 +64,13 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     /**
      * 保存系统日志
      *
-     * @param sysLogDTO 系统日志DTO
+     * @param sysLogBO 系统日志BO
      */
     @DS("master")
     @Override
-    public void saveSysLog(SysLogDTO sysLogDTO) {
+    public void saveSysLog(SysLogBO sysLogBO) {
         SysLog sysLog = new SysLog();
-        BeanUtil.copyProperties(sysLogDTO, sysLog);
+        BeanUtil.copyProperties(sysLogBO, sysLog);
         sysLog.setSystemModule("权限系统");
         this.save(sysLog);
     }

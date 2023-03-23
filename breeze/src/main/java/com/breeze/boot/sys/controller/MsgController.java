@@ -17,7 +17,7 @@
 package com.breeze.boot.sys.controller;
 
 import com.breeze.core.utils.Result;
-import com.breeze.websocket.dto.MsgDTO;
+import com.breeze.websocket.params.MsgParam;
 import com.breeze.websocket.service.MsgService;
 import com.breeze.websocket.vo.MsgVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,40 +52,40 @@ public class MsgController {
     /**
      * 消息广播
      *
-     * @param msgDTO 广播消息
+     * @param msgParam 广播消息
      * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "广播消息")
     @MessageMapping("/sendBroadcastMsg")
     @SendTo("/topic/msg")
-    public Result<MsgVO> sendBroadcastMsg(@Payload MsgDTO msgDTO) {
-        return this.msgService.sendBroadcastMsg(msgDTO);
+    public Result<MsgVO> sendBroadcastMsg(@Payload MsgParam msgParam) {
+        return this.msgService.sendBroadcastMsg(msgParam);
     }
 
     /**
      * 发送消息给用户
      *
      * @param principal 主要
-     * @param msgDTO    用户消息
+     * @param msgParam  用户消息
      * @return {@link Result}<{@link MsgVO}>
      */
     @Operation(summary = "发送消息给用户")
     @MessageMapping("/sendMsgUser")
     @SendToUser("/queue/userMsg")
-    public Result<MsgVO> sendMsgUser(Principal principal, @Payload MsgDTO msgDTO) {
-        return this.msgService.sendMsgToSingleUser(principal, msgDTO);
+    public Result<MsgVO> sendMsgUser(Principal principal, @Payload MsgParam msgParam) {
+        return this.msgService.sendMsgToSingleUser(principal, msgParam);
     }
 
     /**
      * 发送信息给指定的用户
      *
      * @param principal 主要
-     * @param msgDTO    用户消息
+     * @param msgParam  用户消息
      */
     @Operation(summary = "发送信息给指定的用户")
     @MessageMapping("/sendMsgToUser")
-    public void sendMsgToUser(Principal principal, @Payload MsgDTO msgDTO) {
-        this.msgService.sendMsgToUser(principal, msgDTO);
+    public void sendMsgToUser(Principal principal, @Payload MsgParam msgParam) {
+        this.msgService.sendMsgToUser(principal, msgParam);
     }
 
 }

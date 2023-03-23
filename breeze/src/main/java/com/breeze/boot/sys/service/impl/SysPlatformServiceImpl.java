@@ -21,8 +21,8 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysPlatform;
-import com.breeze.boot.sys.dto.PlatformSearchDTO;
 import com.breeze.boot.sys.mapper.SysPlatformMapper;
+import com.breeze.boot.sys.query.PlatformQuery;
 import com.breeze.boot.sys.service.SysPlatformService;
 import org.springframework.stereotype.Service;
 
@@ -40,26 +40,26 @@ public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPl
     /**
      * 列表页面
      *
-     * @param platformSearchDTO 平台搜索DTO
+     * @param platformQuery 平台查询
      * @return {@link Page}<{@link SysPlatform}>
      */
     @Override
-    public Page<SysPlatform> listPage(PlatformSearchDTO platformSearchDTO) {
-        Page<SysPlatform> platformEntityPage = new Page<>(platformSearchDTO.getCurrent(), platformSearchDTO.getSize());
+    public Page<SysPlatform> listPage(PlatformQuery platformQuery) {
+        Page<SysPlatform> platformEntityPage = new Page<>(platformQuery.getCurrent(), platformQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(platformSearchDTO.getPlatformName()), SysPlatform::getPlatformCode, platformSearchDTO.getPlatformName())
-                .like(StrUtil.isAllNotBlank(platformSearchDTO.getPlatformCode()), SysPlatform::getPlatformCode, platformSearchDTO.getPlatformCode())
+                .like(StrUtil.isAllNotBlank(platformQuery.getPlatformName()), SysPlatform::getPlatformCode, platformQuery.getPlatformName())
+                .like(StrUtil.isAllNotBlank(platformQuery.getPlatformCode()), SysPlatform::getPlatformCode, platformQuery.getPlatformCode())
                 .page(platformEntityPage);
     }
 
     /**
      * 批量保存
      *
-     * @param platformSearchDTOList 平台List
+     * @param platformQueryList 平台查询List
      * @return {@link Boolean}
      */
     @Override
-    public Boolean saveAllBatch(List<PlatformSearchDTO> platformSearchDTOList) {
+    public Boolean saveAllBatch(List<PlatformQuery> platformQueryList) {
         return Boolean.TRUE;
     }
 

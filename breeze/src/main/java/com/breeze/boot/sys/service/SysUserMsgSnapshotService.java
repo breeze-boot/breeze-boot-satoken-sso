@@ -19,7 +19,7 @@ package com.breeze.boot.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.sys.domain.SysUserMsgSnapshot;
-import com.breeze.boot.sys.dto.UserMsgSearchDTO;
+import com.breeze.boot.sys.query.UserMsgQuery;
 import com.breeze.boot.sys.vo.SysUserMsgSnapshotVO;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public interface SysUserMsgSnapshotService extends IService<SysUserMsgSnapshot> 
     /**
      * 列表页面
      *
-     * @param userMsgSearchDTO 用户搜索DTO消息
+     * @param userMsgQuery 用户消息查询
      * @return {@link IPage}<{@link SysUserMsgSnapshotVO}>
      */
-    IPage<SysUserMsgSnapshotVO> listPage(UserMsgSearchDTO userMsgSearchDTO);
+    IPage<SysUserMsgSnapshotVO> listPage(UserMsgQuery userMsgQuery);
 
     /**
      * 获取消息列表通过用户名

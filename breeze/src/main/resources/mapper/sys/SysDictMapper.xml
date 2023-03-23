@@ -25,11 +25,11 @@
         FROM sys_dict AS a
         <where>
             a.is_delete = 0
-            <if test="dictSearchDto.dictName != null and dictSearchDto.dictName != ''">
-                AND a.dict_name LIKE CONCAT( '%', #{dictSearchDto.dictName}, '%')
+            <if test="dictQuery.dictName != null and dictQuery.dictName != ''">
+                AND a.dict_name LIKE CONCAT( '%', #{dictQuery.dictName}, '%')
             </if>
-            <if test="dictSearchDto.dictCode != null and dictSearchDto.dictCode != ''">
-                AND a.dict_code LIKE CONCAT( '%', #{dictSearchDto.dictCode}, '%')
+            <if test="dictQuery.dictCode != null and dictQuery.dictCode != ''">
+                AND a.dict_code LIKE CONCAT( '%', #{dictQuery.dictCode}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

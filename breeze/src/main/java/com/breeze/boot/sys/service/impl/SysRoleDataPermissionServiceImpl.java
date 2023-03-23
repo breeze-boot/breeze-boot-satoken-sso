@@ -22,7 +22,8 @@ import com.breeze.boot.sys.domain.SysRoleDataPermission;
 import com.breeze.boot.sys.mapper.SysRoleDataPermissionMapper;
 import com.breeze.boot.sys.service.SysRoleDataPermissionService;
 import com.breeze.core.utils.Result;
-import com.breeze.security.entity.DataPermissionDTO;
+import com.breeze.database.annotation.BreezeDataPermission;
+import com.breeze.security.userextension.DataPermission;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,13 +40,14 @@ import java.util.stream.Collectors;
 public class SysRoleDataPermissionServiceImpl extends ServiceImpl<SysRoleDataPermissionMapper, SysRoleDataPermission> implements SysRoleDataPermissionService {
 
     /**
+     * 角色权限数据角色id列表
      * 角色数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link List}<{@link DataPermissionDTO}>
+     * @return {@link List}<{@link BreezeDataPermission}>
      */
     @Override
-    public List<DataPermissionDTO> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet) {
+    public List<DataPermission> listRoleDataPermissionByRoleIds(Set<Long> roleIdSet) {
         return this.baseMapper.listRoleDataPermissionByRoleIds(roleIdSet);
     }
 

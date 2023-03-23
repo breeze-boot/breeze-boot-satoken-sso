@@ -25,13 +25,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysMenu;
 import com.breeze.boot.sys.domain.SysRoleMenu;
-import com.breeze.boot.sys.dto.MenuSearchDTO;
 import com.breeze.boot.sys.mapper.SysMenuMapper;
+import com.breeze.boot.sys.query.MenuQuery;
 import com.breeze.boot.sys.service.SysMenuService;
 import com.breeze.boot.sys.service.SysRoleMenuService;
 import com.breeze.core.utils.Result;
-import com.breeze.security.entity.LoginUserDTO;
-import com.breeze.security.entity.UserRoleDTO;
+import com.breeze.security.userextension.LoginUser;
+import com.breeze.security.userextension.UserRole;
 import com.breeze.security.utils.SecurityUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -68,12 +68,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 用户菜单权限列表
      *
-     * @param roleDTOList 角色列表
+     * @param userRoleList 用户角色列表
      * @return {@link Set}<{@link String}>
      */
     @Override
-    public Set<String> listUserMenuPermission(Set<UserRoleDTO> roleDTOList) {
-        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(roleDTOList))
+    public Set<String> listUserMenuPermission(Set<UserRole> userRoleList) {
+        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(userRoleList))
                 .orElseGet(HashSet::new);
     }
 
@@ -85,7 +85,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
-        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
+        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
@@ -113,17 +113,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 菜单列表
      *
-     * @param menuSearchDTO 菜单搜索dto
+     * @param menuQuery 菜单查询
      * @return {@link Result}<{@link ?}>
      */
     @Override
-    public Result<?> listMenu(MenuSearchDTO menuSearchDTO) {
-        if (StrUtil.isAllNotBlank(menuSearchDTO.getName()) || StrUtil.isAllNotBlank(menuSearchDTO.getTitle())) {
-            List<SysMenu> entityList = this.baseMapper.listMenu(menuSearchDTO);
+    public Result<?> listMenu(MenuQuery menuQuery) {
+        List<SysMenu> entityList = this.baseMapper.listMenu(menuQuery);
+        if (StrUtil.isAllNotBlank(menuQuery.getName()) || StrUtil.isAllNotBlank(menuQuery.getTitle())) {
             return Result.ok(entityList);
         }
-        List<SysMenu> menuEntityList = this.baseMapper.listMenu(menuSearchDTO);
-        List<Tree<Long>> build = this.buildTrees(menuEntityList, ROOT);
+        List<Tree<Long>> build = this.buildTrees(entityList, ROOT);
         return Result.ok(build);
     }
 
@@ -134,7 +133,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreePermission() {
-        LoginUserDTO currentLoginUser = SecurityUtils.getCurrentUser();
+        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
             return Result.ok();
         }

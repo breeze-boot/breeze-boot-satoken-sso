@@ -16,7 +16,7 @@
 
 package com.breeze.log.config;
 
-import com.breeze.log.dto.SysLogDTO;
+import com.breeze.log.bo.SysLogBO;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -30,10 +30,10 @@ public class SysLogSaveEvent extends ApplicationEvent {
     /**
      * 系统日志保存事件
      *
-     * @param sysLogDTO 系统日志dto
+     * @param sysLogBO 系统日志BO
      */
-    public SysLogSaveEvent(SysLogDTO sysLogDTO) {
-        super(sysLogDTO);
+    public SysLogSaveEvent(SysLogBO sysLogBO) {
+        super(sysLogBO);
     }
 
 }

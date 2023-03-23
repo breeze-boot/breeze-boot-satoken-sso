@@ -30,7 +30,7 @@
         WHERE menu.is_delete = 0
         AND menu.permission != ''
         AND mr.role_id IN
-        <foreach collection="userRoleDTOList" open="(" separator="," close=")" item="roleItem" index="index">
+        <foreach collection="userRoleList" open="(" separator="," close=")" item="roleItem" index="index">
             #{roleItem.roleId }
         </foreach>
     </select>
@@ -57,12 +57,12 @@
         <where>
             a.is_delete = 0
             AND b.is_delete = 0
-            AND a.platform_id = #{menuSearchDTO.platformId}
-            <if test="menuSearchDTO.title != null and menuSearchDTO.title != ''">
-                AND a.title like CONCAT( '%', #{menuSearchDTO.title}, '%')
+            AND a.platform_id = #{menuQuery.platformId}
+            <if test="menuQuery.title != null and menuQuery.title != ''">
+                AND a.title like CONCAT( '%', #{menuQuery.title}, '%')
             </if>
-            <if test="menuSearchDTO.name != null and menuSearchDTO.name != ''">
-                AND a.name like CONCAT( '%', #{menuSearchDTO.name}, '%')
+            <if test="menuQuery.name != null and menuQuery.name != ''">
+                AND a.name like CONCAT( '%', #{menuQuery.name}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

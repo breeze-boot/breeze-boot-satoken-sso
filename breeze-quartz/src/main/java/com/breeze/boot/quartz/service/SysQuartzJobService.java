@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
-import com.breeze.boot.quartz.dto.JobDTO;
+import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.core.utils.Result;
 
 import java.util.List;
@@ -36,10 +36,10 @@ public interface SysQuartzJobService extends IService<SysQuartzJob> {
     /**
      * 列表页面
      *
-     * @param jobDTO 任务dto
+     * @param jobQuery 任务查询
      * @return {@link IPage}<{@link SysQuartzJob}>
      */
-    Page<SysQuartzJob> listPage(JobDTO jobDTO);
+    Page<SysQuartzJob> listPage(JobQuery jobQuery);
 
     /**
      * 保存任务
