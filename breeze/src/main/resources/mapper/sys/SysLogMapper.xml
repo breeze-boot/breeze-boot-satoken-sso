@@ -23,4 +23,46 @@
         TRUNCATE TABLE sys_log;
     </update>
 
+    <select id="listPage" resultType="com.breeze.boot.sys.domain.SysLog">
+        SELECT id,
+        system_module,
+        log_title,
+        log_type,
+        request_type,
+        ip,
+        do_type,
+        browser,
+        `system`,
+        param_content,
+        `result`,
+        result_msg,
+        `time`,
+        create_by,
+        create_name,
+        create_time
+        FROM sys_log
+        <where>
+            <if test="logQuery.startDate != null and logQuery.endDate != null">
+                AND create_time BETWEEN DATE_FORMAT( #{logQuery.startDate}, '%Y-%m-%d %H:%m:%s') AND
+                DATE_FORMAT( #{logQuery.endDate}, '%Y-%m-%d %H:%m:%s')
+            </if>
+            <if test="logQuery.systemModule != null and logQuery.systemModule != ''">
+                AND `system_module` LIKE CONCAT( '%', #{logQuery.systemModule}, '%')
+            </if>
+            <if test="logQuery.logTitle != null and logQuery.logTitle != ''">
+                AND log_title LIKE CONCAT( '%', #{logQuery.logTitle}, '%')
+            </if>
+            <if test="logQuery.requestType != null">
+                AND request_type = #{logQuery.requestType}
+            </if>
+            <if test="logQuery.logType != null">
+                AND log_type = #{logQuery.logType}
+            </if>
+            <if test="logQuery.result != null">
+                AND result = #{logQuery.result}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
 </mapper>

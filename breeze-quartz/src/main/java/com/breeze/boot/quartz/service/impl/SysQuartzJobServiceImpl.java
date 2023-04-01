@@ -15,6 +15,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 
+import static com.breeze.core.constants.QuartzConstants.JOB_NAME;
+
 /**
  * Quartz任务调度Impl
  *
@@ -94,7 +96,7 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
         }
         quartzJob.setStatus(0);
         quartzJob.updateById();
-        this.quartzManager.pauseJob(quartzJob.getJobName(), quartzJob.getJobGroupName());
+        this.quartzManager.pauseJob(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
         return Result.ok(Boolean.TRUE);
     }
 
@@ -112,7 +114,7 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
         }
         quartzJob.setStatus(1);
         quartzJob.updateById();
-        this.quartzManager.resumeJob(quartzJob.getJobName(), quartzJob.getJobGroupName());
+        this.quartzManager.resumeJob(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
         return Result.ok(Boolean.TRUE);
     }
 
@@ -130,7 +132,7 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
                 continue;
             }
             quartzJob.deleteById();
-            this.quartzManager.deleteJob(quartzJob.getJobName(), quartzJob.getJobGroupName());
+            this.quartzManager.deleteJob(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
         }
         return Result.ok(Boolean.TRUE);
     }
@@ -144,7 +146,7 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
     @Override
     public Result<Boolean> runJobNow(Long jobId) {
         SysQuartzJob quartzJob = this.getById(jobId);
-        this.quartzManager.runJobNow(quartzJob.getJobName(), quartzJob.getJobGroupName());
+        this.quartzManager.runJobNow(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
         return Result.ok(Boolean.TRUE);
     }
 

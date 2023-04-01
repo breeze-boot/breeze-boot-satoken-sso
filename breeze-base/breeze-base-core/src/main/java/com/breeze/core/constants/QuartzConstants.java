@@ -29,6 +29,9 @@ public class QuartzConstants {
 
     public static final String JOB_DATA_KEY = "JOB_DATA";
 
+    public static final String JOB_NAME = "JOB_NAME";
+
+    public static final String TRIGGER_NAME = "TRIGGER_NAME";
 
     @Getter
     @AllArgsConstructor

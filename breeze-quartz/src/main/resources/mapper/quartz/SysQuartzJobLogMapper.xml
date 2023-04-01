@@ -10,7 +10,7 @@
         <result property="jobGroupName" column="job_group_name" jdbcType="VARCHAR"/>
         <result property="clazzName" column="clazz_name" jdbcType="VARCHAR"/>
         <result property="jobMessage" column="job_message" jdbcType="VARCHAR"/>
-        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="jobStatus" column="job_status" jdbcType="TINYINT"/>
         <result property="exceptionInfo" column="exception_info" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -27,11 +27,15 @@
         cron_expression,
         clazz_name,
         job_message,
-        `status`,
+        `job_status`,
         exception_info,
         create_time
         FROM sys_quartz_job_log
         <where>
+            <if test="jobQuery.startDate != null and jobQuery.endDate != null">
+                AND create_time BETWEEN DATE_FORMAT( #{jobQuery.startDate}, '%Y-%m-%d %H:%m:%s') AND
+                DATE_FORMAT( #{jobQuery.endDate}, '%Y-%m-%d %H:%m:%s')
+            </if>
             <if test="jobQuery.jobName != null and jobQuery.jobName != ''">
                 AND job_name = #{jobQuery.jobName}
             </if>

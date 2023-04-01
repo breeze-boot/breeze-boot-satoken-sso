@@ -26,18 +26,26 @@
 
     <select id="listPage" resultType="com.breeze.boot.quartz.domain.SysQuartzJob">
         SELECT a.id,
-               a.job_name,
-               a.job_group_name,
-               a.cron_expression,
-               a.clazz_name,
-               a.misfire_policy,
-               a.`concurrent`,
-               a.`status`,
-               a.create_by,
-               a.create_name,
-               a.create_time
+        a.job_name,
+        a.job_group_name,
+        a.cron_expression,
+        a.clazz_name,
+        a.misfire_policy,
+        a.`concurrent`,
+        a.`status`,
+        a.create_by,
+        a.create_name,
+        a.create_time
         FROM sys_quartz_job AS a
-        where a.is_delete = 0
+        <where>
+            AND a.is_delete = 0
+            <if test="jobQuery.jobGroupName != null and jobQuery.jobGroupName != ''">
+                AND a.job_group_name = #{jobQuery.jobGroupName}
+            </if>
+            <if test="jobQuery.jobName != null and jobQuery.jobName != ''">
+                AND a.job_name LIKE CONCAT( '%', #{jobQuery.jobName}, '%')
+            </if>
+        </where>
     </select>
 
 </mapper>

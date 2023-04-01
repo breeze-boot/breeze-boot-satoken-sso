@@ -122,7 +122,7 @@ public class BreezeQuartzJobListener implements JobListener {
             quartzJobLog.setJobGroupName(quartzJob.getJobGroupName());
             if (Objects.nonNull(jobException)) {
                 // 保存执行失败记录
-                quartzJobLog.setStatus(1);
+                quartzJobLog.setJobStatus(0);
                 quartzJobLog.setEndTime(LocalDateTime.now());
                 quartzJobLog.setExceptionInfo(exception(jobException));
                 long millis = quartzJobLog.getCreateTime().until(quartzJobLog.getEndTime(), ChronoUnit.MILLIS);
@@ -132,7 +132,7 @@ public class BreezeQuartzJobListener implements JobListener {
                 return;
             }
             // 保存执行成功记录
-            quartzJobLog.setStatus(1);
+            quartzJobLog.setJobStatus(1);
             quartzJobLog.setEndTime(LocalDateTime.now());
             long millis = quartzJobLog.getCreateTime().until(quartzJobLog.getEndTime(), ChronoUnit.MILLIS);
             log.info("花费时间: {} - {} = {}", quartzJobLog.getCreateTime(), quartzJobLog.getEndTime(), millis);

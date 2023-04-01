@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static com.breeze.core.constants.QuartzConstants.JOB_DATA_KEY;
+import static com.breeze.core.constants.QuartzConstants.*;
 import static com.breeze.core.constants.QuartzConstants.MisfirePolicy.*;
 
 /**
@@ -70,11 +70,11 @@ public class QuartzManager {
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.put(JOB_DATA_KEY, quartzJob);
             JobDetail jobDetail = JobBuilder.newJob(jobClass)
-                    .withIdentity(quartzJob.getJobName(), quartzJob.getJobGroupName())
+                    .withIdentity(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName())
                     .usingJobData(jobDataMap)
                     .build();
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(quartzJob.getJobName(), quartzJob.getJobGroupName())
+                    .withIdentity(quartzJob.getId() + ":" + TRIGGER_NAME, quartzJob.getJobGroupName())
                     .withSchedule(this.getScheduleBuilder(quartzJob))
                     .build();
 
@@ -82,10 +82,11 @@ public class QuartzManager {
             BreezeQuartzJobListener listener = new BreezeQuartzJobListener(this.quartzJobLogService);
             // Matcher<JobKey> matcher = KeyMatcher.keyEquals(jobDetail.getKey());
             // this.scheduler.getListenerManager().addJobListener(listener, matcher);
+
             // 设置全局监听
             this.scheduler.getListenerManager().addJobListener(listener);
 
-            JobKey jobKey = JobKey.jobKey(quartzJob.getJobName(), quartzJob.getJobGroupName());
+            JobKey jobKey = JobKey.jobKey(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
             if (scheduler.checkExists(jobKey)) {
                 // 删除重复流程
                 scheduler.deleteJob(jobKey);

@@ -103,7 +103,6 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      * 用户密码
      */
     @ExcelIgnore
-    @JsonIgnore
     @Schema(description = "用户密码")
     private String password;
 

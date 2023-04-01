@@ -16,9 +16,12 @@
 
 package com.breeze.boot.quartz.query;
 
+import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.breeze.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 /**
  * 任务查询
@@ -41,9 +44,23 @@ public class JobQuery extends PageQuery {
     private String jobName;
 
     /**
-     * 工作组名
+     * 任务组名
      */
     @Schema(description = "任务组名")
     private String jobGroupName;
+
+    /**
+     * 开始时间
+     */
+    @Schema(description = "开始时间")
+    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startDate;
+
+    /**
+     * 结束时间
+     */
+    @Schema(description = "结束时间")
+    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate;
 
 }

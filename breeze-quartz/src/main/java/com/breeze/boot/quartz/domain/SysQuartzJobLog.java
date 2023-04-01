@@ -85,7 +85,7 @@ public class SysQuartzJobLog implements Serializable {
      * 执行结果 0 失败 1 成功
      */
     @Schema(description = "执行结果 0 失败 1 成功")
-    private Integer status;
+    private Integer jobStatus;
 
     /**
      * 异常信息

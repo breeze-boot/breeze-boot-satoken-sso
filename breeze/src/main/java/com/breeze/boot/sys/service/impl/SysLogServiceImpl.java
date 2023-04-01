@@ -17,9 +17,7 @@
 package com.breeze.boot.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.sys.domain.SysLog;
@@ -28,8 +26,6 @@ import com.breeze.boot.sys.query.LogQuery;
 import com.breeze.boot.sys.service.SysLogService;
 import com.breeze.log.bo.SysLogBO;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 /**
  * 系统日志服务impl
@@ -48,17 +44,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
      */
     @Override
     public Page<SysLog> listPage(LogQuery logQuery) {
-        Page<SysLog> logEntityPage = new Page<>(logQuery.getCurrent(), logQuery.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(logQuery.getSystemModule()), SysLog::getSystemModule, logQuery.getSystemModule())
-                .like(StrUtil.isAllNotBlank(logQuery.getLogTitle()), SysLog::getLogTitle, logQuery.getLogTitle())
-                .eq(Objects.nonNull(logQuery.getDoType()), SysLog::getDoType, logQuery.getDoType())
-                .eq(Objects.nonNull(logQuery.getRequestType()), SysLog::getRequestType, logQuery.getRequestType())
-                .eq(Objects.nonNull(logQuery.getResult()), SysLog::getResult, logQuery.getResult())
-                .ge(Objects.nonNull(logQuery.getStartDate()), SysLog::getCreateTime, logQuery.getStartDate())
-                .le(Objects.nonNull(logQuery.getEndDate()), SysLog::getCreateTime, logQuery.getEndDate())
-                .orderByDesc(SysLog::getCreateTime)
-                .page(logEntityPage);
+        return this.baseMapper.listPage(new Page<>(logQuery.getCurrent(), logQuery.getLimit()), logQuery);
     }
 
     /**

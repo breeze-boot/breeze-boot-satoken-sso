@@ -16,9 +16,12 @@
 
 package com.breeze.boot.sys.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.sys.domain.SysLog;
+import com.breeze.boot.sys.query.LogQuery;
 import com.breeze.database.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 系统日志映射器
@@ -33,5 +36,14 @@ public interface SysLogMapper extends BreezeBaseMapper<SysLog> {
      * 清空
      */
     void truncate();
+
+    /**
+     * 列表页面
+     *
+     * @param page     页面
+     * @param logQuery 日志查询
+     * @return {@link Page}<{@link SysLog}>
+     */
+    Page<SysLog> listPage(Page<SysLog> page, @Param("logQuery") LogQuery logQuery);
 
 }

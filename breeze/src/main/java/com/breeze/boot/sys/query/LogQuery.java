@@ -16,6 +16,7 @@
 
 package com.breeze.boot.sys.query;
 
+import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.breeze.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -75,12 +76,14 @@ public class LogQuery extends PageQuery {
     /**
      * 开始日期
      */
+    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
     @Schema(description = "开始日期")
     private LocalDateTime startDate;
 
     /**
      * 结束日期
      */
+    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
     @Schema(description = "结束日期")
     private LocalDateTime endDate;
 

@@ -39,7 +39,7 @@ public interface SysQuartzJobLogMapper extends BaseMapper<SysQuartzJobLog> {
      * @param jobQuery 任务查询
      * @return {@link Page}<{@link SysQuartzJobLog}>
      */
-    Page<SysQuartzJobLog> listPage(@Param("page") Page<SysQuartzJobLog> page, @Param("jobQuery") JobQuery jobQuery);
+    Page<SysQuartzJobLog> listPage(Page<SysQuartzJobLog> page, @Param("jobQuery") JobQuery jobQuery);
 
     /**
      * 清空
