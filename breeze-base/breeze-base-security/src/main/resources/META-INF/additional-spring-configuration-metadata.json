@@ -29,6 +29,26 @@
       "name": "breeze.tenant.ignore-urls",
       "type": "java.lang.String",
       "description": "不需要多租户url"
+    },
+    {
+      "name": "breeze.github.client-secret",
+      "type": "java.lang.String",
+      "description": "github.client-secret."
+    },
+    {
+      "name": "breeze.github.client-id",
+      "type": "java.lang.String",
+      "description": "github.client-id."
+    },
+    {
+      "name": "breeze.gitee.client-id",
+      "type": "java.lang.String",
+      "description": "gitee.client-id."
+    },
+    {
+      "name": "breeze.gitee.client-secret",
+      "type": "java.lang.String",
+      "description": "gitee.client-secret."
     }
   ]
 }

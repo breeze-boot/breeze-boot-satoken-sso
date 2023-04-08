@@ -20,9 +20,11 @@ import com.breeze.core.utils.Result;
 import com.breeze.security.annotation.NoAuthentication;
 import com.breeze.security.userextension.LoginUser;
 import com.breeze.security.utils.SecurityUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 你好控制器
@@ -139,6 +143,15 @@ public class HelloController {
     @PostMapping("/v4/test2")
     public void test2(@RequestBody TestDTO testDTO) {
         log.info("{}", testDTO.toString());
+    }
+
+    @Data
+    static class TestDTO {
+        private String a;
+        private Long b;
+        private LocalDate c;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        private LocalDateTime d;
     }
 
 }

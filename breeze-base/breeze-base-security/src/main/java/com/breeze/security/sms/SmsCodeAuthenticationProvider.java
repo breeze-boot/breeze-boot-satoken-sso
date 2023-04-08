@@ -94,7 +94,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             }
             return String.valueOf(token);
         });
-        SmsCodeAuthenticationToken smsCodeAuthenticationToken = new SmsCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
+        SmsCodeAuthenticationToken smsCodeAuthenticationToken = new SmsCodeAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         smsCodeAuthenticationToken.setDetails(userDetails);
         return smsCodeAuthenticationToken;
     }

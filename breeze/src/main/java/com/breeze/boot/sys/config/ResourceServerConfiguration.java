@@ -51,7 +51,8 @@ public class ResourceServerConfiguration {
                 , userTokenService::loadUserByPhone
                 , userTokenService::createOrLoadUser
                 , userTokenService::loadUserByEmail
-                , userTokenService::createOrLoadUserByWxPhone);
+                , userTokenService::createOrLoadUserByWxPhone
+                , userTokenService::createOrLoadUser);
     }
 
 }

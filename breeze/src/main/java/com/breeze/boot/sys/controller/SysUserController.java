@@ -28,6 +28,8 @@ import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.log.annotation.BreezeSysLog;
 import com.breeze.log.config.LogType;
+import com.breeze.security.userextension.LoginUser;
+import com.breeze.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -218,4 +220,15 @@ public class SysUserController {
         return Result.ok();
     }
 
+    /**
+     * 查询用户信息
+     *
+     * @return {@link String }
+     */
+    @Operation(summary = "查询用户信息")
+    @GetMapping("/userInfo")
+    public Result<LoginUser> userInfo() {
+        LoginUser currentUser = SecurityUtils.getCurrentUser();
+        return Result.ok(currentUser);
+    }
 }

@@ -22,6 +22,7 @@ import com.breeze.boot.sys.domain.SysUser;
 import com.breeze.boot.sys.service.SysUserService;
 import com.breeze.core.utils.Result;
 import com.breeze.security.config.JwtConfiguration;
+import com.breeze.security.params.AuthLoginParam;
 import com.breeze.security.params.WxLoginParam;
 import com.breeze.security.userextension.CurrentLoginUser;
 import com.breeze.security.userextension.LoginUser;
@@ -83,7 +84,7 @@ public class UserTokenService {
             throw new UsernameNotFoundException("用户名不存在");
         }
         LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
-        return this.getLoginUser(loginUser);
+        return this.convertResponseUserData(loginUser);
     }
 
     /**
@@ -98,7 +99,7 @@ public class UserTokenService {
             throw new UsernameNotFoundException("邮箱不存在");
         }
         LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
-        return this.getLoginUser(loginUser);
+        return this.convertResponseUserData(loginUser);
     }
 
     /**
@@ -113,7 +114,7 @@ public class UserTokenService {
             throw new UsernameNotFoundException("电话不存在");
         }
         LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
-        return this.getLoginUser(loginUser);
+        return this.convertResponseUserData(loginUser);
     }
 
     /**
@@ -133,10 +134,33 @@ public class UserTokenService {
                     .sex(wxLoginParam.getSex())
                     .phone(wxLoginParam.getEmail())
                     .username(wxLoginParam.getOpenId().substring(0, 5) + RandomUtil.randomString(6))
-                    .build());
+                    .build(), "ROLE_MINI");
         }
         LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
-        return this.getLoginUser(loginUser);
+        return this.convertResponseUserData(loginUser);
+    }
+
+    /**
+     * 创建或者加载用户
+     *
+     * @param authLoginParam auth三方登录消息体
+     * @return {@link CurrentLoginUser}
+     */
+    public CurrentLoginUser createOrLoadUser(AuthLoginParam authLoginParam) {
+        SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, authLoginParam.getPhone()));
+        if (Objects.isNull(sysUser)) {
+            // 不存在就去创建
+            sysUser = this.sysUserService.registerUser(SysUser.builder()
+                    .phone(authLoginParam.getPhone())
+                    .amountName(authLoginParam.getAppUserName())
+                    .sex(authLoginParam.getSex())
+                    .email(authLoginParam.getEmail())
+                    .tenantId(authLoginParam.getTenantId())
+                    .username(authLoginParam.getAppUserName() + RandomUtil.randomString(5))
+                    .build(), "ROLE_AUTH");
+        }
+        LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
+        return this.convertResponseUserData(loginUser);
     }
 
     /**
@@ -150,24 +174,23 @@ public class UserTokenService {
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
             sysUser = this.sysUserService.registerUser(SysUser.builder().phone(phone)
-                    .username(phone + RandomUtil.randomString(6)).build());
+                    .username(phone + RandomUtil.randomString(6)).build(), "ROLE_MINI");
         }
         LoginUser loginUser = this.userTokenCacheService.getLoginUser(sysUser);
-        return this.getLoginUser(loginUser);
+        return this.convertResponseUserData(loginUser);
     }
 
     /**
      * 刷新用户
      *
      * @param username 用户名
-     * @return {@link LoginUser}
      */
-    public LoginUser refreshUser(String username) {
+    public void refreshUser(String username) {
         SysUser sysUser = this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
         if (Objects.isNull(sysUser)) {
             throw new UsernameNotFoundException("用户名错误或不存在");
         }
-        return this.userTokenCacheService.getLoginUser(sysUser);
+        this.userTokenCacheService.getLoginUser(sysUser);
     }
 
     /**
@@ -176,7 +199,7 @@ public class UserTokenService {
      * @param loginUser 登录用户
      * @return {@link CurrentLoginUser}
      */
-    public CurrentLoginUser getLoginUser(LoginUser loginUser) {
+    public CurrentLoginUser convertResponseUserData(LoginUser loginUser) {
         List<GrantedAuthority> authorities = Lists.newArrayList();
         Optional.ofNullable(loginUser.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
         Optional.ofNullable(loginUser.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));

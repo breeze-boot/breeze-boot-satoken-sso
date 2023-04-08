@@ -52,12 +52,10 @@
         b.dept_name
         FROM
         sys_user AS a
-        LEFT JOIN sys_dept AS b ON a.dept_id = b.id
-        LEFT JOIN sys_post AS c ON a.post_id = c.id
+        LEFT JOIN sys_dept AS b ON a.dept_id = b.id AND b.is_delete = 0
+        LEFT JOIN sys_post AS c ON a.post_id = c.id AND c.is_delete = 0
         <where>
             a.is_delete = 0
-            AND b.is_delete = 0
-            AND c.is_delete = 0
             <if test="userQuery.phone != null and userQuery.phone != ''">
                 AND a.phone like CONCAT('%' , #{phone}, '%')
             </if>

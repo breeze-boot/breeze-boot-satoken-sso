@@ -100,7 +100,7 @@ public class EmailCodeAuthenticationProvider implements AuthenticationProvider {
             }
             return String.valueOf(token);
         });
-        EmailCodeAuthenticationToken emailCodeAuthenticationToken = new EmailCodeAuthenticationToken(userDetails, userDetails.getAuthorities());
+        EmailCodeAuthenticationToken emailCodeAuthenticationToken = new EmailCodeAuthenticationToken( userDetails, "", userDetails.getAuthorities());
         emailCodeAuthenticationToken.setDetails(userDetails);
         return emailCodeAuthenticationToken;
     }

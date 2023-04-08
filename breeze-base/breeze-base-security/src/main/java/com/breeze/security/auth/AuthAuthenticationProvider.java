@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.breeze.security.wx;
+package com.breeze.security.auth;
 
-import com.breeze.security.config.WxLoginProperties;
-import com.breeze.security.params.WxLoginParam;
+import com.breeze.security.params.AuthLoginParam;
 import com.breeze.security.service.LocalUserDetailsService;
-import com.breeze.security.utils.WxHttpInterfaces;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -30,7 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Objects;
 
 /**
- * 微信Code身份验证提供者
+ * auth gitee / github 等身份验证提供者
  * <p>
  * 参考：
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
@@ -39,27 +37,20 @@ import java.util.Objects;
  * @date 2022-11-09
  */
 @Slf4j
-public class WxCodeAuthenticationProvider implements AuthenticationProvider {
+public class AuthAuthenticationProvider implements AuthenticationProvider {
 
     /**
      * 创建失败
      */
-    private static final String CREATE_FAIL = "微信用户获取失败";
+    private static final String CREATE_FAIL = "三方登录失败";
 
     /**
      * 用户详细信息服务
      */
     private final LocalUserDetailsService userDetailsService;
 
-    /**
-     * wx登录属性
-     */
-    private final WxLoginProperties wxLoginProperties;
-
-    public WxCodeAuthenticationProvider(LocalUserDetailsService userDetailsService,
-                                        WxLoginProperties wxLoginProperties) {
+    public AuthAuthenticationProvider(LocalUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.wxLoginProperties = wxLoginProperties;
     }
 
     /**
@@ -71,17 +62,15 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        WxCodeAuthenticationToken authenticationToken = (WxCodeAuthenticationToken) authentication;
-        WxLoginParam wxLoginBody = (WxLoginParam) authenticationToken.getPrincipal();
-        String openId = WxHttpInterfaces.getOpenId(this.wxLoginProperties.getAppId(), this.wxLoginProperties.getAppSecret(), wxLoginBody.getCode());
-        wxLoginBody.setOpenId(openId);
-        UserDetails userDetails = this.userDetailsService.createOrLoadUser(wxLoginBody);
+        AuthAuthenticationToken authenticationToken = (AuthAuthenticationToken) authentication;
+        AuthLoginParam authLoginParam = (AuthLoginParam) authenticationToken.getPrincipal();
+        UserDetails userDetails = this.userDetailsService.createOrLoadUser(authLoginParam);
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(CREATE_FAIL);
         }
-        WxCodeAuthenticationToken wxCodeAuthenticationToken = new WxCodeAuthenticationToken(userDetails,"", userDetails.getAuthorities());
-        wxCodeAuthenticationToken.setDetails(userDetails);
-        return wxCodeAuthenticationToken;
+        AuthAuthenticationToken authAuthenticationToken = new AuthAuthenticationToken(userDetails, "" , userDetails.getAuthorities());
+        authAuthenticationToken.setDetails(userDetails);
+        return authAuthenticationToken;
     }
 
     /**
@@ -94,7 +83,7 @@ public class WxCodeAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return WxCodeAuthenticationToken.class.isAssignableFrom(authentication);
+        return AuthAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
 }

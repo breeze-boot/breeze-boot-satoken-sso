@@ -16,6 +16,7 @@
 
 package com.breeze.security.config;
 
+import com.breeze.security.auth.AuthAuthenticationProvider;
 import com.breeze.security.email.EmailCodeAuthenticationProvider;
 import com.breeze.security.service.LocalUserDetailsService;
 import com.breeze.security.sms.SmsCodeAuthenticationProvider;
@@ -47,14 +48,14 @@ import org.springframework.security.web.SecurityFilterChain;
  * @date 2022-08-31
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(WxLoginProperties.class)
+@EnableConfigurationProperties({WxLoginProperties.class, OauthLoginProperties.class})
 public class SecurityConfiguration {
 
     /**
      * 不需要认证切面类
      */
     @Autowired
-    private BreezeNoAuthenticationInit noAuthenticationAspect;
+    private BreezeNoAuthenticationInit noAuthenticationInit;
 
     /**
      * 身份验证配置
@@ -115,7 +116,7 @@ public class SecurityConfiguration {
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.authorizeRequests();
         // 只有{{没有登录}}可以访问
-        noAuthenticationAspect.ignoreUrlProperties.getIgnoreUrls()
+        noAuthenticationInit.ignoreUrlProperties.getIgnoreUrls()
                 .forEach(url -> expressionInterceptUrlRegistry.antMatchers(url).permitAll());
         // 其余的必须登录
         expressionInterceptUrlRegistry
@@ -191,7 +192,7 @@ public class SecurityConfiguration {
 
 
     /**
-     * 微信令牌身份验证提供者 Bean
+     * 微信电话授权身份验证提供者 Bean
      *
      * @return {@link WxPhoneAuthenticationProvider}
      */
@@ -200,6 +201,18 @@ public class SecurityConfiguration {
         WxPhoneAuthenticationProvider wxPhoneAuthenticationProvider = new WxPhoneAuthenticationProvider(userDetailsService, wxLoginProperties);
         this.authenticationManagerBuilder.authenticationProvider(wxPhoneAuthenticationProvider);
         return wxPhoneAuthenticationProvider;
+    }
+
+    /**
+     * 三方登录身份验证提供者 Bean
+     *
+     * @return {@link AuthAuthenticationProvider}
+     */
+    @Bean
+    public AuthAuthenticationProvider authAuthenticationProvider() {
+        AuthAuthenticationProvider authAuthenticationProvider = new AuthAuthenticationProvider(userDetailsService);
+        this.authenticationManagerBuilder.authenticationProvider(authAuthenticationProvider);
+        return authAuthenticationProvider;
     }
 
 }

@@ -58,6 +58,7 @@ public class BreezeNoAuthenticationInit implements InitializingBean {
 
     /**
      * 请求映射处理程序映射
+     * 使用Bean名称注入
      */
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;

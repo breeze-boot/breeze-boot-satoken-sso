@@ -103,10 +103,11 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 注册用户
      *
-     * @param sysUser 系统用户
+     * @param sysUser  系统用户
+     * @param roleCode 角色代码
      * @return {@link SysUser}
      */
-    SysUser registerUser(SysUser sysUser);
+    SysUser registerUser(SysUser sysUser, String roleCode);
 
     /**
      * 查询用户通过部门id

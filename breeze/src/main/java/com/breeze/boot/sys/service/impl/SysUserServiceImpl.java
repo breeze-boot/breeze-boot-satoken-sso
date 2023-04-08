@@ -264,25 +264,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 注册用户
      *
      * @param registerUser 注册用户
+     * @param roleCode     角色编码
      * @return {@link SysUser}
      */
     @Override
-    public SysUser registerUser(SysUser registerUser) {
-        SysUser user = SysUser.builder()
+    public SysUser registerUser(SysUser registerUser, String roleCode) {
+        SysUser sysUser = SysUser.builder()
                 .username(registerUser.getUsername())
-                .amountName("微信用户" + registerUser.getUsername())
+                .amountName(registerUser.getUsername())
                 .password(this.passwordEncoder.encode("123456"))
                 .openId(registerUser.getOpenId())
                 .phone(registerUser.getPhone())
+                .tenantId(registerUser.getTenantId())
                 .build();
-        this.save(user);
-        // 给用户赋予一个临时角色，临时角色指定为小程序用户接口的权限
-        SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, "ROLE_MINI"));
+        this.save(sysUser);
+        // 给用户赋予一个临时角色，临时角色指定接口的权限
+        SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
         if (Objects.isNull(sysRole)) {
             throw new AccessException(ResultCode.FORBIDDEN);
         }
-        this.sysUserRoleService.save(SysUserRole.builder().userId(registerUser.getId()).roleId(sysRole.getId()).build());
-        return user;
+        this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
+        return sysUser;
     }
 
     /**

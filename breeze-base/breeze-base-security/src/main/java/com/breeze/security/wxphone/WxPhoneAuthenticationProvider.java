@@ -79,7 +79,7 @@ public class WxPhoneAuthenticationProvider implements AuthenticationProvider {
         if (Objects.isNull(userDetails)) {
             throw new InternalAuthenticationServiceException(CREATE_FAIL);
         }
-        WxPhoneAuthenticationToken wxPhoneAuthenticationToken = new WxPhoneAuthenticationToken(userDetails, userDetails.getAuthorities());
+        WxPhoneAuthenticationToken wxPhoneAuthenticationToken = new WxPhoneAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         wxPhoneAuthenticationToken.setDetails(userDetails);
         return wxPhoneAuthenticationToken;
     }

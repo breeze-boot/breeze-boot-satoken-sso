@@ -16,6 +16,7 @@
 
 package com.breeze.security.service;
 
+import com.breeze.security.params.AuthLoginParam;
 import com.breeze.security.params.WxLoginParam;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,17 +40,20 @@ public class LocalUserDetailsService implements UserDetailsService {
 
     protected Function<String, UserDetails> emailFunction;
     protected Function<String, UserDetails> wxPhoneFunction;
+    protected Function<AuthLoginParam, UserDetails> authFunction;
 
     public LocalUserDetailsService(Function<String, UserDetails> usernameFunction,
                                    Function<String, UserDetails> phoneFunction,
                                    Function<WxLoginParam, UserDetails> wxFunction,
                                    Function<String, UserDetails> emailFunction,
-                                   Function<String, UserDetails> wxPhoneFunction) {
+                                   Function<String, UserDetails> wxPhoneFunction,
+                                   Function<AuthLoginParam, UserDetails> authFunction) {
         this.usernameFunction = usernameFunction;
         this.phoneFunction = phoneFunction;
         this.wxFunction = wxFunction;
         this.emailFunction = emailFunction;
         this.wxPhoneFunction = wxPhoneFunction;
+        this.authFunction = authFunction;
     }
 
     public UserDetails loadUserByEmail(String email) {
@@ -62,6 +66,10 @@ public class LocalUserDetailsService implements UserDetailsService {
 
     public UserDetails createOrLoadUser(WxLoginParam wxLoginBody) {
         return this.wxFunction.apply(wxLoginBody);
+    }
+
+    public UserDetails createOrLoadUser(AuthLoginParam authLoginParam) {
+        return this.authFunction.apply(authLoginParam);
     }
 
     public UserDetails createOrLoadUserByPhone(String phone) {
