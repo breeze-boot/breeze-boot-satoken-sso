@@ -25,7 +25,6 @@ import com.breeze.boot.sys.service.SysRoleDataPermissionService;
 import com.breeze.boot.sys.service.SysRoleService;
 import com.breeze.security.userextension.LoginUser;
 import com.breeze.security.userextension.UserRole;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.breeze.core.constants.CacheConstants.LOGIN_USER;
@@ -89,23 +89,19 @@ public class UserTokenCacheService {
         Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
         // 查询 用户的角色
         Set<UserRole> userRoleSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isEmpty(userRoleSet)) {
-            loginUser.setAuthorities(Sets.newHashSet());
-            return loginUser;
+        if (CollUtil.isNotEmpty(userRoleSet)) {
+            loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(userRoleSet));
+            loginUser.setUserRoleList(userRoleSet);
+            // 角色CODE
+            loginUser.setUserRoleCodes(userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet()));
+            // 角色ID
+            Set<Long> roleIdSet = userRoleSet.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+            loginUser.setUserRoleIds(roleIdSet);
+            // 用户的多个数据权限
+            loginUser.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
         }
-
-        loginUser.setUserRoleList(userRoleSet);
-        // 角色ID
-        Set<Long> roleIdSet = userRoleSet.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
-        loginUser.setUserRoleIds(roleIdSet);
-        // 角色CODE
-        Set<String> roleCodeList = userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet());
-        loginUser.setUserRoleCodes(roleCodeList);
         // 角色权限
-        loginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(userRoleSet));
-        // 用户的多个数据权限
-        loginUser.setDataPermissions(this.sysRoleDataPermissionService.listRoleDataPermissionByRoleIds(roleIdSet));
-        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUser);
+        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUser, 24L, TimeUnit.HOURS);
         return loginUser;
     }
 
