@@ -2,6 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.breeze</groupId>
         <artifactId>breeze-boot</artifactId>
@@ -13,13 +14,16 @@
     <description>基础模块</description>
 
     <modules>
+        <module>breeze-base-xxljob</module>
         <module>breeze-base-websocket</module>
         <module>breeze-base-datasource</module>
+        <module>breeze-base-redis-cache</module>
+        <module>breeze-base-mybatis</module>
         <module>breeze-base-mail</module>
-        <module>breeze-base-oss</module>
+        <module>breeze-base-storage</module>
+        <module>breeze-base-oss-s3</module>
         <module>breeze-base-xss</module>
         <module>breeze-base-log</module>
-        <module>breeze-base-springdoc</module>
         <module>breeze-base-validator</module>
         <module>breeze-base-security</module>
         <module>breeze-base-core</module>

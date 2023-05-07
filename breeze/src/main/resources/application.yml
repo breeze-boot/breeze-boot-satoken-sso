@@ -77,30 +77,28 @@ breeze:
       - "/swagger-resources/**"
       - "/v3/api-docs/**"
 
-  # 多租户过滤路径
+  # 租户配置
   tenant:
-    ignore-urls:
-      - "/captcha/**"
-      - "/common/selectTenant"
-      - "/breeze/**"
-      - "/process/**"
-      - "/quartz/**"
-      - "/**/*.js"
-      - "/**/*.css"
-      - "/**/*.png"
-      - "/*.html"
-      - "/**/*.html"
-      - "/**/*.ico"
-      - "/druid/**"
-      - "/v3/api-docs/**"
-      - "/swagger-ui/**"
-      - "/swagger-resources/**"
-      - "/actuator/**"
+    tables:
+      - "sys_permission"
+      - "sys_platform"
+      - "sys_user"
+      - "sys_dept"
+      - "sys_role"
+      - "sys_dict"
+      - "sys_dict_item"
+      - "sys_post"
+      - "sys_file"
+      - "sys_log"
+      - "sys_menu"
+      - "sys_msg"
+      - "sys_user_msg_snapshot"
+      - "sys_role"
 
   # xss过滤路径
   xss:
     ignore-urls:
-      - "/process/definition/**"
+
   jwt:
     rsa-private-key: classpath:app.key
     rsa-public-key: classpath:app.pub

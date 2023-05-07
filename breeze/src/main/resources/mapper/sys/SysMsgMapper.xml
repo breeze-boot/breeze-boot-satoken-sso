@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.sys.mapper.SysMsgMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysMsgMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.sys.domain.SysMsg">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysMsg">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="msgTitle" column="msg_title" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>

@@ -2,12 +2,12 @@ package com.breeze.boot.quartz.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.manager.QuartzManager;
 import com.breeze.boot.quartz.mapper.SysQuartzJobMapper;
 import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
-import com.breeze.core.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 
-import static com.breeze.core.constants.QuartzConstants.JOB_NAME;
+import static com.breeze.boot.core.constants.QuartzConstants.JOB_NAME;
 
 /**
  * Quartz任务调度Impl

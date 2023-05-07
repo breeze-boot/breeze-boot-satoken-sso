@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.sys.mapper.SysMenuMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysMenuMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.sys.domain.SysMenu" id="sysMenuMap">
+    <resultMap type="com.breeze.boot.system.domain.SysMenu" id="sysMenuMap">
         <id property="id" column="id"/>
         <result property="platformId" column="platform_id"/>
         <result property="title" column="title"/>
@@ -35,7 +35,7 @@
         </foreach>
     </select>
 
-    <select id="listMenu" resultType="com.breeze.boot.sys.domain.SysMenu">
+    <select id="listMenu" resultType="com.breeze.boot.system.domain.SysMenu">
         SELECT
         a.id,
         a.name,
@@ -68,7 +68,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="selectMenusByRoleId" resultType="com.breeze.boot.sys.domain.SysMenu">
+    <select id="selectMenusByRoleId" resultType="com.breeze.boot.system.domain.SysMenu">
         SELECT
         b.id,
         b.platform_id,

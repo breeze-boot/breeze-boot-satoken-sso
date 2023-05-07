@@ -16,12 +16,12 @@
 
 package com.breeze.boot.quartz.manager;
 
+import com.breeze.boot.core.constants.QuartzConstants;
 import com.breeze.boot.quartz.conf.AllowConcurrentExecutionJob;
 import com.breeze.boot.quartz.conf.BreezeQuartzJobListener;
 import com.breeze.boot.quartz.conf.DisallowConcurrentExecutionJob;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
-import com.breeze.core.constants.QuartzConstants;
 import com.google.common.collect.Maps;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -31,8 +31,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static com.breeze.core.constants.QuartzConstants.*;
-import static com.breeze.core.constants.QuartzConstants.MisfirePolicy.*;
+import static com.breeze.boot.core.constants.QuartzConstants.*;
+import static com.breeze.boot.core.constants.QuartzConstants.MisfirePolicy.*;
 
 /**
  * quartz经理
@@ -116,53 +116,6 @@ public class QuartzManager {
             return CronScheduleBuilder.cronSchedule(quartzJob.getCronExpression()).withMisfireHandlingInstructionFireAndProceed();
         }
         throw new RuntimeException("策略不存在");
-    }
-
-    /**
-     * 添加或更新任务
-     *
-     * @param jobClass       任务实现类
-     * @param jobName        任务名称
-     * @param jobGroupName   任务组名
-     * @param cronExpression cron表达式
-     * @param status         状态
-     * @param jobData        任务数据
-     */
-    public void addOrUpdateJob(Class<? extends QuartzJobBean> jobClass,
-                               String jobName,
-                               String jobGroupName,
-                               String cronExpression,
-                               Integer status,
-                               Map<String, Object> jobData) {
-        try {
-            JobDataMap jobDataMap = new JobDataMap();
-            jobDataMap.put(JOB_DATA_KEY, jobData);
-            JobDetail jobDetail = JobBuilder.newJob(jobClass)
-                    .withIdentity(jobName, jobGroupName)
-                    .usingJobData(jobDataMap)
-                    .build();
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(jobName, jobGroupName)
-                    .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
-                    .build();
-            if (scheduler.checkExists(JobKey.jobKey(jobName, jobGroupName))) {
-                // 删除重复流程
-                scheduler.deleteJob(JobKey.jobKey(jobName, jobGroupName));
-            }
-            // 绑定trigger
-            this.scheduler.scheduleJob(jobDetail, trigger);
-
-            // 根据用户提交的参数判断任务是否启动
-            if (Objects.equals(status, QuartzConstants.Status.PAUSE.getStatus())) {
-                scheduler.pauseJob(JobKey.jobKey(jobName, jobGroupName));
-            } else {
-                if (!this.scheduler.isShutdown()) {
-                    this.scheduler.start();
-                }
-            }
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

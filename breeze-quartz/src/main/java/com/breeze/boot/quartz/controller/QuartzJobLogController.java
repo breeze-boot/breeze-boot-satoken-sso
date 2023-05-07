@@ -17,12 +17,12 @@
 package com.breeze.boot.quartz.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.log.annotation.BreezeSysLog;
+import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
-import com.breeze.core.utils.Result;
-import com.breeze.log.annotation.BreezeSysLog;
-import com.breeze.log.config.LogType;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

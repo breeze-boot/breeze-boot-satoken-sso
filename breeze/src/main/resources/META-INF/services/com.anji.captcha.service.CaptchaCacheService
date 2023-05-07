@@ -1,1 +1,1 @@
-com.breeze.boot.sys.service.impl.CaptchaCacheServiceRedisImpl
+com.breeze.boot.system.service.impl.CaptchaCacheServiceRedisImpl

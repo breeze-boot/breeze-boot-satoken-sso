@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.sys.mapper.SysLogMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysLogMapper">
 
-    <resultMap id="sysLogResultMap" type="com.breeze.boot.sys.domain.SysLog">
+    <resultMap id="sysLogResultMap" type="com.breeze.boot.system.domain.SysLog">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="systemModule" column="system_module" jdbcType="VARCHAR"/>
         <result property="logTitle" column="log_title" jdbcType="VARCHAR"/>
@@ -23,7 +23,7 @@
         TRUNCATE TABLE sys_log;
     </update>
 
-    <select id="listPage" resultType="com.breeze.boot.sys.domain.SysLog">
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysLog">
         SELECT id,
         system_module,
         log_title,

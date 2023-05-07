@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breeze.boot.flow.mapper.ActRuExecutionMapper">
+
+    <resultMap id="BaseResultMap" type="com.breeze.boot.flow.domain.ActRuExecution">
+        <id property="id" column="ID_" jdbcType="VARCHAR"/>
+        <result property="rev" column="REV_" jdbcType="INTEGER"/>
+        <result property="procInstId" column="PROC_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="businessKey" column="BUSINESS_KEY_" jdbcType="VARCHAR"/>
+        <result property="parentId" column="PARENT_ID_" jdbcType="VARCHAR"/>
+        <result property="procDefId" column="PROC_DEF_ID_" jdbcType="VARCHAR"/>
+        <result property="superExec" column="SUPER_EXEC_" jdbcType="VARCHAR"/>
+        <result property="rootProcInstId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="actId" column="ACT_ID_" jdbcType="VARCHAR"/>
+        <result property="isActive" column="IS_ACTIVE_" jdbcType="TINYINT"/>
+        <result property="isConcurrent" column="IS_CONCURRENT_" jdbcType="TINYINT"/>
+        <result property="isScope" column="IS_SCOPE_" jdbcType="TINYINT"/>
+        <result property="isEventScope" column="IS_EVENT_SCOPE_" jdbcType="TINYINT"/>
+        <result property="isMiRoot" column="IS_MI_ROOT_" jdbcType="TINYINT"/>
+        <result property="suspensionState" column="SUSPENSION_STATE_" jdbcType="INTEGER"/>
+        <result property="cachedEntState" column="CACHED_ENT_STATE_" jdbcType="INTEGER"/>
+        <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME_" jdbcType="VARCHAR"/>
+        <result property="startActId" column="START_ACT_ID_" jdbcType="VARCHAR"/>
+        <result property="startTime" column="START_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="startUserId" column="START_USER_ID_" jdbcType="VARCHAR"/>
+        <result property="lockTime" column="LOCK_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="lockOwner" column="LOCK_OWNER_" jdbcType="VARCHAR"/>
+        <result property="isCountEnabled" column="IS_COUNT_ENABLED_" jdbcType="TINYINT"/>
+        <result property="evtSubscrCount" column="EVT_SUBSCR_COUNT_" jdbcType="INTEGER"/>
+        <result property="taskCount" column="TASK_COUNT_" jdbcType="INTEGER"/>
+        <result property="jobCount" column="JOB_COUNT_" jdbcType="INTEGER"/>
+        <result property="timerJobCount" column="TIMER_JOB_COUNT_" jdbcType="INTEGER"/>
+        <result property="suspJobCount" column="SUSP_JOB_COUNT_" jdbcType="INTEGER"/>
+        <result property="deadletterJobCount" column="DEADLETTER_JOB_COUNT_" jdbcType="INTEGER"/>
+        <result property="externalWorkerJobCount" column="EXTERNAL_WORKER_JOB_COUNT_" jdbcType="INTEGER"/>
+        <result property="varCount" column="VAR_COUNT_" jdbcType="INTEGER"/>
+        <result property="idLinkCount" column="ID_LINK_COUNT_" jdbcType="INTEGER"/>
+        <result property="callbackId" column="CALLBACK_ID_" jdbcType="VARCHAR"/>
+        <result property="callbackType" column="CALLBACK_TYPE_" jdbcType="VARCHAR"/>
+        <result property="referenceId" column="REFERENCE_ID_" jdbcType="VARCHAR"/>
+        <result property="referenceType" column="REFERENCE_TYPE_" jdbcType="VARCHAR"/>
+        <result property="propagatedStageInstId" column="PROPAGATED_STAGE_INST_ID_" jdbcType="VARCHAR"/>
+        <result property="businessStatus" column="BUSINESS_STATUS_" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="listPage" resultType="com.breeze.boot.flow.vo.ProcessInstanceVO">
+        SELECT RES.ID_              AS id,
+               RES.PROC_INST_ID_    AS procInstId,
+               RES.BUSINESS_KEY_    AS businessKey,
+               RES.TENANT_ID_       AS tenantId,
+               RES.START_ACT_ID_    AS startActId,
+               RES.START_TIME_      AS startTime,
+               RES.START_USER_ID_   AS startUserId,
+               P.KEY_               AS `key`,
+               P.ID_                AS processDefinitionId,
+               P.NAME_              AS `name`,
+               P.VERSION_           AS version,
+               P.DEPLOYMENT_ID_     AS deploymentId,
+               `user`.DISPLAY_NAME_ AS startUserName,
+               `user`.EMAIL_        AS email
+        FROM act_ru_execution AS RES
+                 INNER JOIN act_re_procdef AS P ON RES.PROC_DEF_ID_ = P.ID_
+                 INNER JOIN act_id_user AS `user` ON RES.START_USER_ID_ = `user`.ID_
+        WHERE RES.PARENT_ID_ IS NULL
+        ORDER BY RES.ID_ ASC
+    </select>
+
+</mapper>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.sys.mapper.SysRoleMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.sys.domain.SysRole" id="sysRoleMap">
+    <resultMap type="com.breeze.boot.system.domain.SysRole" id="sysRoleMap">
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
@@ -17,7 +17,7 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listRoleByUserId" resultType="com.breeze.boot.sys.domain.SysRole">
+    <select id="listRoleByUserId" resultType="com.breeze.boot.system.domain.SysRole">
         SELECT role.id,
                role.role_code,
                role.role_name
@@ -37,24 +37,23 @@
         ORDER BY role.create_time DESC
     </select>
 
-    <select id="listPage" resultType="com.breeze.boot.sys.domain.SysRole">
+    <select id="listPage" resultType="com.breeze.boot.system.domain.SysRole">
         SELECT
         a.id,
         a.role_code,
         a.role_name,
-        b.data_permission_name
+        b.permission_name
         FROM
         sys_role AS a
         LEFT JOIN (
         SELECT
         a.role_id,
-        GROUP_CONCAT( b.data_permission_name ) data_permission_name
+        GROUP_CONCAT( b.permission_name ) permission_name
         FROM
-        sys_role_data_permission AS a
-        LEFT JOIN sys_data_permission AS b ON a.data_permission_id = b.id
+        sys_role_permission AS a
+        LEFT JOIN sys_permission AS b ON a.permission_id = b.id
         WHERE
-        a.is_delete = 0
-        AND b.is_delete = 0
+        b.is_delete = 0
         GROUP BY
         a.role_id
         ) b ON a.id = b.role_id

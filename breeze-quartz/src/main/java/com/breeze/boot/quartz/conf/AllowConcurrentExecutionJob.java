@@ -17,9 +17,9 @@
 package com.breeze.boot.quartz.conf;
 
 import cn.hutool.extra.spring.SpringUtil;
+import com.breeze.boot.core.constants.QuartzConstants;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.utils.JobInvokeUtils;
-import com.breeze.core.constants.QuartzConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;

@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "breeze.oss.s3.endpoint",
+      "type": "java.lang.String",
+      "description": "breeze.oss.endpoint."
+    },
+    {
+      "name": "breeze.oss.s3.secretKey",
+      "type": "java.lang.String",
+      "description": "breeze.oss.secretKey."
+    },
+    {
+      "name": "breeze.oss.s3.accessKey",
+      "type": "java.lang.String",
+      "description": "breeze.oss.accessKey."
+    }
+  ]
+}

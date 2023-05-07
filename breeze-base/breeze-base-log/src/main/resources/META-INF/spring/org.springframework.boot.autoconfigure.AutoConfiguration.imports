@@ -1,1 +1,1 @@
-com.breeze.log.config.EnableSysLogConfiguration
+com.breeze.boot.log.EnableSysLogConfiguration

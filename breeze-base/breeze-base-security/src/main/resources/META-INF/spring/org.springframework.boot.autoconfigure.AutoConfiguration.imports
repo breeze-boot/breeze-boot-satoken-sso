@@ -1,4 +1,1 @@
-com.breeze.security.config.SysTenantLoadFilter
-com.breeze.security.config.JwtConfiguration
-com.breeze.security.config.PwdConfiguration
-com.breeze.security.config.RedisConfiguration
+com.breeze.boot.security.config.JwtPasswordConfiguration

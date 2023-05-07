@@ -111,11 +111,6 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-datasource</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.breeze</groupId>
             <artifactId>breeze-quartz</artifactId>
         </dependency>
 
@@ -131,11 +126,6 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-springdoc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.breeze</groupId>
             <artifactId>breeze-base-xss</artifactId>
         </dependency>
 
@@ -146,12 +136,32 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-oss</artifactId>
+            <artifactId>breeze-base-datasource</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-oss-s3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-redis-cache</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-storage</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
         </dependency>
     </dependencies>
 

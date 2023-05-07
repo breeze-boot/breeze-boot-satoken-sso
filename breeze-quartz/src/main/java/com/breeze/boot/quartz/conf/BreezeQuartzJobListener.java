@@ -17,10 +17,10 @@
 package com.breeze.boot.quartz.conf;
 
 import cn.hutool.core.date.DateUtil;
+import com.breeze.boot.core.constants.QuartzConstants;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
-import com.breeze.core.constants.QuartzConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 

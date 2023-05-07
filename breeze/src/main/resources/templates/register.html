@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" rel="stylesheet">
+    <title>Custom consent page - Consent required</title>
+    <style>
+        body {
+            background-color: aliceblue;
+        }
+    </style>
+    <script>
+        function cancelConsent() {
+            document.consent_form.reset();
+            document.consent_form.submit();
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="py-5">
+        <h1 class="text-center text-primary">创建用户</h1>
+    </div>
+    <div class=" row">
+        <div class="col">
+            <form method="post" name="consent_form" th:action="@{/breeze/auth/create}" th:object="${authLoginParam}">
+                <div class="row">
+                    <div class="col">
+                        已获取到应用：<span class="font-weight-bold text-primary" th:text="*{appName}"></span>
+                        <br>
+                        您的账户： <span class="font-weight-bold" th:text="*{appUserName}"></span>
+                        <br>
+                        scope: <span class="font-weight-bold" th:text="*{scope}"></span>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col">
+                        <p>
+                            将要使您的<span th:text="*{appName}"></span>账户在系统中创建本系统用户<br/>
+                        </p>
+                        请绑定的您的手机号，若手机号存在直接登录，若不存在将创建一个新的账户
+                    </div>
+                </div>
+                <div class="text-center">
+                    <img alt="头像" class="rounded" style="width: 50px; height: 50px;" th:src="*{avatarUrl}"/>
+                </div>
+                <input class="form-control" id="id" th:field="*{id}" type="hidden">
+                <input class="form-control" id="avatarUrl" th:field="*{avatarUrl}" type="hidden">
+                <input class="form-control" id="scope" th:field="*{scope}" type="hidden">
+                <input class="form-control" id="login" th:field="*{login}" type="hidden">
+                <input class="form-control" id="appUserName" th:field="*{appUserName}" type="hidden">
+                <input class="form-control" id="appName" th:field="*{appName}" type="hidden">
+                <input class="form-control" id="email" th:field="*{email}" type="hidden">
+                <input class="form-control" id="tenantId" th:field="*{tenantId}" type="hidden">
+
+                <div class="form-group">
+                    Email: <span th:text="*{appName}"></span>
+                </div>
+                <div class="form-group">
+                    用户名: <span th:text="*{appUserName}"></span>
+                </div>
+                <div class="form-group">
+                    账户名：<span th:text="*{login}"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-group row">
+                        <label class="col-sm-1 col-form-label" for="phone">手机号</label>
+                        <div class="col-sm-6">
+                            <input class="form-control"
+                                   id="phone"
+                                   placeholder="请输入在此系统绑定的手机号"
+                                   th:field="*{phone}"
+                                   type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group pt-3">
+                    <button class="btn btn-primary" id="submit-consent" type="submit">
+                        提交
+                    </button>
+                    <button class="btn btn-link regular" id="cancel-consent" onclick="cancelConsent();" type="button">
+                        取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col text-center">
+            <p>
+                <small>
+                    测试
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

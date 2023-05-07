@@ -1,10 +1,26 @@
+/*
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.breeze.boot.sys;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.breeze.boot.sys.domain.SysPlatform;
-import com.breeze.boot.sys.mapper.SysPlatformMapper;
-import com.breeze.mail.MailSender;
+import com.breeze.boot.mail.service.MailSenderService;
+import com.breeze.boot.system.domain.SysPlatform;
+import com.breeze.boot.system.mapper.SysPlatformMapper;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +44,7 @@ class BreezeBootApplicationTests {
     private SysPlatformMapper sysPlatformMapper;
 
     @Autowired
-    private MailSender mailSender;
+    private MailSenderService mailSenderService;
 
     @Test
     void contextLoads() {
@@ -69,7 +85,7 @@ class BreezeBootApplicationTests {
         String title = "文本邮件主题";
         String content = "文本邮件内容";
         String to = "@qq.com";
-        mailSender.sendMessage(to, title, content);
+        mailSenderService.sendMessage(to, title, content);
     }
 
     /**
@@ -81,7 +97,7 @@ class BreezeBootApplicationTests {
         String content = "单附件邮件内容";
         String to = "@qq.com";
         File file = new File("D:\\collect\\demo-mail.zip");
-        mailSender.sendMessageCarryFile(to, title, content, file);
+        mailSenderService.sendMessageCarryFile(to, title, content, file);
     }
 
     /**
@@ -96,7 +112,7 @@ class BreezeBootApplicationTests {
         File[] files = new File[2];
         files[0] = new File("D:\\collect\\demo-mail.zip");
         files[1] = new File("D:\\collect\\apache-maven-3.6.3-bin.zip");
-        mailSender.sendMessageCarryFile(to, cc, title, content, new HashMap<>(), files);
+        mailSenderService.sendMessageCarryFile(to, cc, title, content, new HashMap<>(), files);
     }
 
     /**
@@ -109,16 +125,15 @@ class BreezeBootApplicationTests {
         Map<String, File> imageMap = new HashMap<>();
         imageMap.put("NO1", new File("C:\\Users\\JAVA_DEVELOPER\\Desktop\\文档\\test.png"));
         // 内嵌图片
-        StringBuilder sb = new StringBuilder();
-        sb.append("<h2>HTML邮件</h2>")
-                .append("<p style='text-align:left'>HTML邮件...</p>")
-                .append("<img src=\"cid:NO1\"><br/><br/>")
-                .append("<p> 时间为：").append(LocalDateTime.now()).append("</p>");
+        String sb = "<h2>HTML邮件</h2>" +
+                "<p style='text-align:left'>HTML邮件...</p>" +
+                "<img src=\"cid:NO1\"><br/><br/>" +
+                "<p> 时间为：" + LocalDateTime.now() + "</p>";
 
         File[] files = new File[2];
         files[0] = new File("D:\\collect\\demo-mail.zip");
         files[1] = new File("D:\\collect\\apache-maven-3.6.3-bin.zip");
-        mailSender.sendMessageCarryFile(to, "", title, sb.toString(), imageMap, files);
+        mailSenderService.sendMessageCarryFile(to, "", title, sb, imageMap, files);
     }
 
 

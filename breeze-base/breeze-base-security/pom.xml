@@ -2,15 +2,16 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>breeze-base</artifactId>
         <groupId>com.breeze</groupId>
+        <artifactId>breeze-base</artifactId>
         <version>1.0</version>
     </parent>
 
     <artifactId>breeze-base-security</artifactId>
     <packaging>jar</packaging>
-    <description>JWT 登录依赖</description>
+    <description>JWT Security 登录依赖</description>
 
     <dependencies>
         <dependency>
@@ -35,16 +36,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
@@ -52,6 +43,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-redis-cache</artifactId>
         </dependency>
     </dependencies>
 </project>

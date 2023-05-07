@@ -1,1 +1,1 @@
-com.breeze.xss.config.XssFilterRegisterConfiguration
+com.breeze.boot.xss.XssFilterRegisterConfiguration

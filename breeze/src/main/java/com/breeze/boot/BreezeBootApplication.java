@@ -16,11 +16,10 @@
 
 package com.breeze.boot;
 
-import com.breeze.springdoc.annotation.EnableSpringDoc;
-import com.breeze.validater.annotation.EnableFastValidator;
+import com.breeze.boot.security.annotation.EnableResourceServer;
+import com.breeze.boot.validater.EnableFastValidator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * 微风启动应用程序
@@ -28,8 +27,7 @@ import org.springframework.cache.annotation.EnableCaching;
  * @author gaoweixuan
  * @date 2022-11-16
  */
-@EnableSpringDoc
-@EnableCaching
+@EnableResourceServer
 @EnableFastValidator
 @SpringBootApplication
 public class BreezeBootApplication {

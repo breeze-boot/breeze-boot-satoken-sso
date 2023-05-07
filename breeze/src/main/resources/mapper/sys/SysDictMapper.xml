@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.sys.mapper.SysDictMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysDictMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.sys.domain.SysDict" id="sysDictMap">
+    <resultMap type="com.breeze.boot.system.domain.SysDict" id="sysDictMap">
         <id property="id" column="id"/>
         <result property="dictName" column="dict_name"/>
         <result property="dictCode" column="dict_code"/>
         <result property="isOpen" column="is_open"/>
         <collection property="sysDictDetailList" javaType="java.util.List"
-                    ofType="com.breeze.boot.sys.domain.SysDictItem"
+                    ofType="com.breeze.boot.system.domain.SysDictItem"
                     column="{pdictId=id}"
-                    select="com.breeze.boot.sys.mapper.SysDictItemMapper.listDictDetailByDictId">
+                    select="com.breeze.boot.system.mapper.SysDictItemMapper.listDictDetailByDictId">
         </collection>
     </resultMap>
 

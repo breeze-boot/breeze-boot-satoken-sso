@@ -1,2 +1,1 @@
-com.breeze.mail.MailSender
-com.breeze.mail.MailProperties
+com.breeze.boot.mail.service.MailSenderService
