@@ -6,7 +6,10 @@
 
     <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysMsg">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="msgTitle" column="msg_title" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createName" column="create_name" jdbcType="VARCHAR"/>

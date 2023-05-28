@@ -22,16 +22,16 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.ext.UserRole;
 import com.breeze.boot.system.domain.SysRole;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.domain.SysRolePermission;
+import com.breeze.boot.system.dto.UserRole;
 import com.breeze.boot.system.mapper.SysRoleMapper;
 import com.breeze.boot.system.query.RoleQuery;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.breeze.boot.system.service.SysRolePermissionService;
 import com.breeze.boot.system.service.SysRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,19 +45,18 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     /**
      * 系统角色菜单服务
      */
-    @Autowired
-    private SysRoleMenuService sysRoleMenuService;
+    private final SysRoleMenuService sysRoleMenuService;
 
     /**
      * 数据权限服务系统作用
      */
-    @Autowired
-    private SysRolePermissionService sysRolePermissionService;
+    private final SysRolePermissionService sysRolePermissionService;
 
     /**
      * 用户角色列表

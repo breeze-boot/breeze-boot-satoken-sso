@@ -26,13 +26,13 @@ import com.breeze.boot.flow.service.IProcessDefinitionService;
 import com.breeze.boot.flow.vo.DeploymentVO;
 import com.breeze.boot.flow.vo.ProcessDefinitionVO;
 import com.breeze.boot.security.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.ProcessDefinition;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -47,19 +47,18 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProcessDefinitionServiceImpl implements IProcessDefinitionService {
 
     /**
      * 流程资源库服务
      */
-    @Autowired
-    private RepositoryService repositoryService;
+    private final RepositoryService repositoryService;
 
     /**
      * 流程部署服务
      */
-    @Autowired
-    private ActReDeploymentService actReDeploymentService;
+    private final ActReDeploymentService actReDeploymentService;
 
     /**
      * 部署

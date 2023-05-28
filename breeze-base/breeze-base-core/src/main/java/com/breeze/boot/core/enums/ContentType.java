@@ -17,8 +17,8 @@
 package com.breeze.boot.core.enums;
 
 import cn.hutool.core.util.StrUtil;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 内容类型
@@ -27,7 +27,7 @@ import lombok.Getter;
  * @date 2023-04-18
  */
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ContentType {
 
     /**
@@ -66,12 +66,12 @@ public enum ContentType {
     /**
      * 类型
      */
-    private String type;
+    private final String type;
 
     /**
      * 内容类型
      */
-    private String contentType;
+    private final String contentType;
 
     /**
      * 根据文件名获取内容类型

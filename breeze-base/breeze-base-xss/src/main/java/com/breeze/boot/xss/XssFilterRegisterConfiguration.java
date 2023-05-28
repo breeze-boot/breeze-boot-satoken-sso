@@ -18,7 +18,7 @@ package com.breeze.boot.xss;
 
 import com.breeze.boot.xss.config.XssProperties;
 import com.breeze.boot.xss.filters.XssFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -36,20 +36,18 @@ import javax.servlet.Filter;
  * @date 2022-10-21
  */
 @Configuration
+@RequiredArgsConstructor
 @EnableConfigurationProperties(XssProperties.class)
 public class XssFilterRegisterConfiguration {
 
     /**
      * xss属性
      */
-    @Autowired
-    private XssProperties xssProperties;
+    private final XssProperties xssProperties;
 
-    @Autowired
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     /**
      * xss过滤器登记

@@ -17,10 +17,11 @@
 package com.breeze.boot.security.init;
 
 import com.breeze.boot.core.utils.LoadAnnotationUtils;
-import com.breeze.boot.security.properties.IgnoreAuthProperties;
+import com.breeze.boot.security.config.IgnoreAuthProperties;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -35,27 +36,25 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @date 2022/08/31
  */
 @Slf4j
+@RequiredArgsConstructor
 @EnableConfigurationProperties(IgnoreAuthProperties.class)
 public class BreezeJumpAuthPathInit implements InitializingBean {
 
     /**
      * 忽略的url
      */
-    @Autowired
-    public IgnoreAuthProperties ignoreAuthProperties;
+    @Getter
+    private final IgnoreAuthProperties ignoreAuthProperties;
 
     /**
      * 请求映射处理程序映射
-     * 使用Bean名称注入
      */
-    @Autowired
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     /**
      * 应用程序上下文
      */
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     /**
      * 请求

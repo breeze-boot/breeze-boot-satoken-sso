@@ -17,9 +17,10 @@
 package com.breeze.boot.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.breeze.boot.security.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 
@@ -34,17 +35,34 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createBy", SecurityUtils::getUserCode, String.class);
-        this.strictInsertFill(metaObject, "createName", SecurityUtils::getUsername, String.class);
+        this.strictInsertFill(metaObject, "createBy", this::getUserCode, String.class);
+        this.strictInsertFill(metaObject, "createName", this::getUsername, String.class);
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "updateBy", SecurityUtils::getUserCode, String.class);
-        this.strictUpdateFill(metaObject, "updateName", SecurityUtils::getUsername, String.class);
+        this.strictUpdateFill(metaObject, "updateBy", this::getUserCode, String.class);
+        this.strictUpdateFill(metaObject, "updateName", this::getUsername, String.class);
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
     }
 
+    private String getUsername() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (null != authentication) {
+            return authentication.getName();
+        }
+        return null;
+    }
+
+    private String getUserCode() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (null != authentication) {
+            return authentication.getName();
+        }
+        return null;
+    }
 }
 

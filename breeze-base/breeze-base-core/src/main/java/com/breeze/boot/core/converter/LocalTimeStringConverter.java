@@ -54,6 +54,6 @@ public class LocalTimeStringConverter implements Converter<LocalTime> {
     public WriteCellData<?> convertToExcelData(WriteConverterContext<LocalTime> context) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String format = formatter.format(context.getValue());
-        return new WriteCellData(format);
+        return new WriteCellData<>(format);
     }
 }

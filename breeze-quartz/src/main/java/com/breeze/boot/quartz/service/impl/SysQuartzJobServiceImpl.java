@@ -8,7 +8,7 @@ import com.breeze.boot.quartz.manager.QuartzManager;
 import com.breeze.boot.quartz.mapper.SysQuartzJobMapper;
 import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,13 +23,13 @@ import static com.breeze.boot.core.constants.QuartzConstants.JOB_NAME;
  * @author gaoweixuan
  */
 @Service
+@RequiredArgsConstructor
 public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, SysQuartzJob> implements SysQuartzJobService {
 
     /**
      * quartz 管理器
      */
-    @Autowired
-    private QuartzManager quartzManager;
+    private final QuartzManager quartzManager;
 
     /**
      * 负载任务

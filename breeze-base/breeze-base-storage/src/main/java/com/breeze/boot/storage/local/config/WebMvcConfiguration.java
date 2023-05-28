@@ -17,7 +17,7 @@
 package com.breeze.boot.storage.local.config;
 
 import com.breeze.boot.storage.local.template.LocalStorageTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -32,13 +32,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2022-11-14
  */
 @Configuration
+@RequiredArgsConstructor
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(LocalProperties.class)
 @Import({LocalStorageTemplate.class})
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    @Autowired
-    private LocalProperties localProperties;
+    private final LocalProperties localProperties;
 
     /**
      * 添加资源处理程序

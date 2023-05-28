@@ -23,19 +23,19 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.ext.LoginUser;
-import com.breeze.boot.security.ext.UserRole;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysMenu;
 import com.breeze.boot.system.domain.SysRoleMenu;
+import com.breeze.boot.system.dto.UserRole;
 import com.breeze.boot.system.mapper.SysMenuMapper;
 import com.breeze.boot.system.query.MenuQuery;
 import com.breeze.boot.system.service.SysMenuService;
 import com.breeze.boot.system.service.SysRoleMenuService;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -51,19 +51,13 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     /**
      * 系统角色菜单服务
      */
-    @Autowired
-    private SysRoleMenuService sysRoleMenuService;
-
-    /**
-     * 用户token服务
-     */
-    @Autowired
-    private UserTokenService userTokenService;
+    private final SysRoleMenuService sysRoleMenuService;
 
     /**
      * 用户菜单权限列表
@@ -85,13 +79,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
-        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
+        BaseLoginUser currentBaseLoginUser = SecurityUtils.getCurrentUser();
+        if (CollUtil.isEmpty(currentBaseLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
 
         // 查询角色下的菜单信息
-        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentLoginUser.getUserRoleIds(), platformCode);
+        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
         return Result.ok(this.buildTrees(menuList, ROOT));
     }
 
@@ -133,8 +127,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreePermission() {
-        LoginUser currentLoginUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentLoginUser.getUserRoleIds())) {
+        BaseLoginUser currentBaseLoginUser = SecurityUtils.getCurrentUser();
+        if (CollUtil.isEmpty(currentBaseLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
         return this.listTreeRolePermission();
@@ -156,8 +150,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (remove) {
             // 删除已经关联的角色的菜单
             this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, id));
-            // 刷新菜单权限
-            this.userTokenService.refreshUser(SecurityUtils.getUsername());
             return Result.ok(Boolean.TRUE, "删除成功");
         }
         return Result.fail(Boolean.FALSE, "删除失败");
@@ -176,10 +168,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return Result.fail("上一层组件不存在");
         }
         boolean save = this.save(menuEntity);
-        if (save) {
-            // 刷新菜单权限
-            this.userTokenService.refreshUser(SecurityUtils.getUsername());
-        }
         return Result.ok();
     }
 
@@ -192,10 +180,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result<Boolean> updateMenuById(SysMenu menuEntity) {
         boolean update = this.updateById(menuEntity);
-        if (update) {
-            // 刷新菜单权限
-            this.userTokenService.refreshUser(SecurityUtils.getUsername());
-        }
         return Result.ok(update);
     }
 

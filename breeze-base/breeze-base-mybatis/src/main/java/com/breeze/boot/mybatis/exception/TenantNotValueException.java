@@ -26,8 +26,8 @@ import com.breeze.boot.core.enums.ResultCode;
  */
 public class TenantNotValueException extends RuntimeException {
 
+    private int code;
     private final String msg;
-    private int code = 0;
 
     public TenantNotValueException(ResultCode resultCode) {
         super(resultCode.getMsg());

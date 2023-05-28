@@ -38,13 +38,13 @@ public class UserMsgQuery extends PageQuery {
      * 消息标题
      */
     @Schema(description = "消息标题")
-    private String msgTitle;
+    private String title;
 
     /**
      * 消息编码
      */
     @Schema(description = "消息编码")
-    private String msgCode;
+    private String code;
 
     /**
      * 用户名称

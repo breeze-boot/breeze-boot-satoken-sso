@@ -32,7 +32,7 @@ import com.breeze.boot.system.params.DataPermissionParam;
 import com.breeze.boot.system.query.DataPermissionQuery;
 import com.breeze.boot.system.service.SysPermissionService;
 import com.breeze.boot.system.service.SysRolePermissionService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +47,7 @@ import static com.breeze.boot.core.enums.DataPermissionCode.DEPT_LEVEL;
  * @date 2022-10-30
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 
     /**

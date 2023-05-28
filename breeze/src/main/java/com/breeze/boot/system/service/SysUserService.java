@@ -18,11 +18,10 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysUser;
-import com.breeze.boot.system.params.UserOpenParam;
-import com.breeze.boot.system.params.UserResetPasswordParam;
-import com.breeze.boot.system.params.UserRolesParam;
+import com.breeze.boot.system.params.*;
 import com.breeze.boot.system.query.UserQuery;
 
 import javax.servlet.http.HttpServletResponse;
@@ -123,5 +122,44 @@ public interface SysUserService extends IService<SysUser> {
      * @param response 响应
      */
     void export(HttpServletResponse response);
+    /**
+     * 加载用户通过用户名
+     *
+     * @param username 用户名
+     * @return {@link Result}<{@link BaseLoginUser}>
+     */
+    Result<BaseLoginUser> loadUserByUsername(String username);
+
+    /**
+     * 加载用户通过电话
+     *
+     * @param phone 电话
+     * @return {@link Result}<{@link BaseLoginUser}>
+     */
+    Result<BaseLoginUser> loadUserByPhone(String phone);
+
+    /**
+     * 加载用户通过电子邮件
+     *
+     * @param email 电子邮件
+     * @return {@link Result}<{@link BaseLoginUser}>
+     */
+    Result<BaseLoginUser> loadUserByEmail(String email);
+
+    /**
+     * 加载注册用户通过开放id
+     *
+     * @param wxLoginParam wx登录参数
+     * @return {@link Result}<{@link BaseLoginUser}>
+     */
+    Result<BaseLoginUser> loadRegisterUserByOpenId(WxLoginParam wxLoginParam);
+
+    /**
+     * 加载注册用户通过电话
+     *
+     * @param authLoginParam 身份验证登录参数
+     * @return {@link Result}<{@link BaseLoginUser}>
+     */
+    Result<BaseLoginUser> loadRegisterUserByPhone(AuthLoginParam authLoginParam);
 
 }

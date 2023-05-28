@@ -17,8 +17,8 @@
 package com.breeze.boot.system.mapper;
 
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
-import com.breeze.boot.security.ext.UserRole;
 import com.breeze.boot.system.domain.SysMenu;
+import com.breeze.boot.system.dto.UserRole;
 import com.breeze.boot.system.query.MenuQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -27,7 +27,7 @@ import com.breeze.boot.system.service.SysTenantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +45,7 @@ import java.util.Objects;
  * @date 2022-11-06
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/tenant")
 @Tag(name = "系统租户管理模块", description = "SysTenantController")
@@ -53,8 +54,7 @@ public class SysTenantController {
     /**
      * 系统租户服务
      */
-    @Autowired
-    private SysTenantService sysTenantService;
+    private final SysTenantService sysTenantService;
 
     /**
      * 列表
@@ -103,15 +103,15 @@ public class SysTenantController {
     /**
      * 修改
      *
-     * @param sysPost 平台实体
+     * @param sysTenant 租户实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping("/modify")
     @PreAuthorize("hasAnyAuthority('sys:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysTenant sysPost) {
-        return Result.ok(this.sysTenantService.updateById(sysPost));
+    public Result<Boolean> modify(@Valid @RequestBody SysTenant sysTenant) {
+        return Result.ok(this.sysTenantService.updateById(sysTenant));
     }
 
     /**

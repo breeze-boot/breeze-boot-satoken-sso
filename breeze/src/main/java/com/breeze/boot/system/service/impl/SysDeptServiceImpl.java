@@ -25,14 +25,12 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysDept;
-import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.mapper.SysDeptMapper;
 import com.breeze.boot.system.query.DeptQuery;
 import com.breeze.boot.system.service.SysDeptService;
-import com.breeze.boot.system.service.SysUserService;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,10 +47,8 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
  * @date 2021-12-06 22:03:39
  */
 @Service
+@RequiredArgsConstructor
 public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
-
-    @Autowired
-    private SysUserService sysUserService;
 
     /**
      * 部门列表
@@ -63,7 +59,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public List<Tree<Long>> listDept(DeptQuery deptQuery) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery()
-                .eq(Objects.nonNull(deptQuery) && StrUtil.isAllNotBlank(deptQuery.getDeptName()), SysDept::getDeptName, deptQuery.getDeptName()));
+                .eq(Objects.nonNull(deptQuery) && StrUtil.isAllNotBlank(deptQuery.getDeptName()),
+                        SysDept::getDeptName, deptQuery.getDeptName()));
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
                 sysDept -> {
                     TreeNode<Long> treeNode = new TreeNode<>();
@@ -97,10 +94,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
         if (CollUtil.isNotEmpty(deptEntityList)) {
             return Result.warning(Boolean.FALSE, "此部门存在下级部门,不允许删除");
-        }
-        List<SysUser> userEntityList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id));
-        if (CollUtil.isNotEmpty(userEntityList)) {
-            return Result.warning(Boolean.FALSE, "此部门内有在职员工,不允许删除");
         }
         boolean remove = this.removeById(id);
         if (remove) {

@@ -17,6 +17,7 @@
 package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -34,7 +35,7 @@ import com.breeze.boot.system.params.FileParam;
 import com.breeze.boot.system.query.FileQuery;
 import com.breeze.boot.system.service.SysFileService;
 import com.google.common.collect.Maps;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDate;
@@ -58,7 +59,7 @@ import static com.breeze.boot.core.constants.CoreConstants.SYSTEM_BUCKET_NAME;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
 
     /**
@@ -97,9 +98,11 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @SneakyThrows
     @Override
     public Result<Map<String, Object>> uploadMinioS3(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
+        LocalDate now = LocalDate.now();
+
         MultipartFile file = fileParam.getFile();
         String originalFilename = file.getOriginalFilename();
-        LocalDate now = LocalDate.now();
+        Assert.isNull(originalFilename, "文件名不能为空");
         String newFileName = now.getYear() + now.getMonthOfYear() + now.getDayOfMonth() + RandomUtil.randomInt(6)
                 + originalFilename.substring(originalFilename.lastIndexOf("."));
         String path = now.getYear() + "/" + now.getMonthOfYear() + "/" + now.getDayOfMonth() + "/";

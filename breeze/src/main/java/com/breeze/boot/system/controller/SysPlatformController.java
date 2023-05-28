@@ -30,7 +30,7 @@ import com.breeze.boot.system.service.SysPlatformService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +48,7 @@ import java.util.Objects;
  * @date 2021-12-06
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/platform")
 @Tag(name = "系统平台管理模块", description = "SysPlatformController")
@@ -56,14 +57,12 @@ public class SysPlatformController {
     /**
      * 系统平台服务
      */
-    @Autowired
-    private SysPlatformService sysPlatformService;
+    private final SysPlatformService sysPlatformService;
 
     /**
      * 系统菜单服务
      */
-    @Autowired
-    private SysMenuService sysMenuService;
+    private final SysMenuService sysMenuService;
 
     /**
      * 列表

@@ -29,7 +29,7 @@ import com.breeze.boot.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +47,7 @@ import java.util.Objects;
  * @date 2022-09-02
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/dict")
 @Tag(name = "系统字典管理模块", description = "SysDictController")
@@ -55,14 +56,12 @@ public class SysDictController {
     /**
      * 系统字典服务
      */
-    @Autowired
-    private SysDictService sysDictService;
+    private final SysDictService sysDictService;
 
     /**
      * 系统字典项服务
      */
-    @Autowired
-    private SysDictItemService sysDictItemService;
+    private final SysDictItemService sysDictItemService;
 
     /**
      * 列表

@@ -19,12 +19,11 @@ package com.breeze.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.mapper.SysRoleMenuMapper;
 import com.breeze.boot.system.params.MenuPermissionParam;
 import com.breeze.boot.system.service.SysRoleMenuService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,13 +36,8 @@ import java.util.stream.Collectors;
  * @date 2021-12-06 22:03:39
  */
 @Service
+@RequiredArgsConstructor
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
-
-    /**
-     * 用户token服务
-     */
-    @Autowired
-    private UserTokenService userTokenService;
 
     /**
      * 编辑权限
@@ -61,10 +55,6 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             return sysRoleMenu;
         }).collect(Collectors.toList());
         boolean batch = this.saveBatch(sysRoleMenuList);
-        if (batch) {
-            // 刷新菜单权限
-            this.userTokenService.refreshUser(SecurityUtils.getUsername());
-        }
         return Result.ok(batch);
     }
 

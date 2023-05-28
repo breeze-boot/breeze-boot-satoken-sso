@@ -21,7 +21,6 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysRoleMenu;
 import com.breeze.boot.system.params.MenuPermissionParam;
 
-
 /**
  * 系统菜单角色服务
  *

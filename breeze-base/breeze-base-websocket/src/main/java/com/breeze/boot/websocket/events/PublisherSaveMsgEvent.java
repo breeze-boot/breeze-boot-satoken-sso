@@ -16,7 +16,7 @@
 
 package com.breeze.boot.websocket.events;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -26,13 +26,13 @@ import org.springframework.context.ApplicationEventPublisher;
  * @author gaoweixuan
  * @date 2022-11-28
  */
+@RequiredArgsConstructor
 public class PublisherSaveMsgEvent {
 
     /**
      * 应用程序事件发布者
      */
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 发布事件

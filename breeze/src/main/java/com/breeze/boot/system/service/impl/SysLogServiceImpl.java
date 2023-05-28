@@ -25,6 +25,7 @@ import com.breeze.boot.system.domain.SysLog;
 import com.breeze.boot.system.mapper.SysLogMapper;
 import com.breeze.boot.system.query.LogQuery;
 import com.breeze.boot.system.service.SysLogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
  * @date 2022-09-02
  */
 @Service
+@RequiredArgsConstructor
 public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     /**

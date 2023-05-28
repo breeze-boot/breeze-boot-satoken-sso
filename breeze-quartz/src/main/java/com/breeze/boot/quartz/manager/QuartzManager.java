@@ -23,9 +23,9 @@ import com.breeze.boot.quartz.conf.DisallowConcurrentExecutionJob;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -41,13 +41,12 @@ import static com.breeze.boot.core.constants.QuartzConstants.MisfirePolicy.*;
  * @date 2023-03-16
  */
 @Component
+@RequiredArgsConstructor
 public class QuartzManager {
 
-    @Autowired
-    private SysQuartzJobLogService quartzJobLogService;
+    private final SysQuartzJobLogService quartzJobLogService;
 
-    @Autowired
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
 
     @SuppressWarnings("unchecked")
     private static Class<? extends QuartzJobBean> getClass(String classname) throws Exception {

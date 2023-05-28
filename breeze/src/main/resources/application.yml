@@ -4,10 +4,18 @@ server:
     context-path: /
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+  # json提交时 [Date Calendar] 的全局序列化和反序列化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   application:
     name: ${project.artifactId}
-  main:
-    allow-circular-references: true
   profiles:
     active: ${profiles.active}
     group:
@@ -59,9 +67,13 @@ management:
       enabled: true
 
 breeze:
+  # 前端传入的密码AES加解密密钥
+  aesSecret: 1234567890123456
   # 权限过滤路径
   security:
     ignore-urls:
+      - "/auth/**"
+      - "/oauth2/**"
       - "/ws/**"
       - "/img/**"
       - "/actuator/**"
@@ -92,8 +104,8 @@ breeze:
       - "sys_log"
       - "sys_menu"
       - "sys_msg"
-      - "sys_user_msg_snapshot"
-      - "sys_role"
+      - "sys_msg_user"
+      - "sys_msg_channel"
 
   # xss过滤路径
   xss:

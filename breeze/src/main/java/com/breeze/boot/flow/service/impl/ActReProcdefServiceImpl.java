@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.flow.domain.ActReProcdef;
 import com.breeze.boot.flow.mapper.ActReProcdefMapper;
 import com.breeze.boot.flow.service.ActReProcdefService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,5 +30,6 @@ import org.springframework.stereotype.Service;
  * @date 2023-03-08
  */
 @Service
+@RequiredArgsConstructor
 public class ActReProcdefServiceImpl extends ServiceImpl<ActReProcdefMapper, ActReProcdef> implements ActReProcdefService {
 }

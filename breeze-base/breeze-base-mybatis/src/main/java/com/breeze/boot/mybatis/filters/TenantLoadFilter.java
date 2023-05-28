@@ -18,8 +18,8 @@ package com.breeze.boot.mybatis.filters;
 
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,11 +36,11 @@ import java.io.IOException;
  * @date 2022-11-08
  */
 @Slf4j
+@RequiredArgsConstructor
 @EnableConfigurationProperties(TenantProperties.class)
 public class TenantLoadFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TenantProperties tenantProperties;
+    private final TenantProperties tenantProperties;
 
     /**
      * 过滤器
@@ -53,18 +53,21 @@ public class TenantLoadFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("[当前进入的请求]： {}", request.getRequestURI());
-        String apiTenantId = request.getHeader(tenantProperties.getParam());
-        String webSocketTenantId = request.getParameter(tenantProperties.getParam());
-        if (StrUtil.isAllNotBlank(apiTenantId) && StrUtil.isAllNotBlank(webSocketTenantId)) {
-            BreezeThreadLocal.set(1L);
-        } else if (StrUtil.isAllNotBlank(apiTenantId)) {
-            BreezeThreadLocal.set(Long.parseLong(apiTenantId));
-        } else if (StrUtil.isAllNotBlank(webSocketTenantId)) {
-            BreezeThreadLocal.set(Long.parseLong(webSocketTenantId));
+        try {
+            log.info("[当前进入的请求]： {}", request.getRequestURI());
+            String apiTenantId = request.getHeader(tenantProperties.getParam());
+            String webSocketTenantId = request.getParameter(tenantProperties.getParam());
+            if (StrUtil.isAllBlank(apiTenantId) && StrUtil.isAllBlank(webSocketTenantId)) {
+                BreezeThreadLocal.set(1L);
+            } else if (StrUtil.isAllNotBlank(apiTenantId)) {
+                BreezeThreadLocal.set(Long.parseLong(apiTenantId));
+            } else if (StrUtil.isAllNotBlank(webSocketTenantId)) {
+                BreezeThreadLocal.set(Long.parseLong(webSocketTenantId));
+            }
+            filterChain.doFilter(request, response);
+        } finally {
+            BreezeThreadLocal.remove();
         }
-        filterChain.doFilter(request, response);
-        BreezeThreadLocal.remove();
     }
 
 }

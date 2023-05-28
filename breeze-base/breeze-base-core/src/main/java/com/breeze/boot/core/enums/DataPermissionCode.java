@@ -16,7 +16,7 @@
 
 package com.breeze.boot.core.enums;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 枚举数据权限
@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
  * @author gaoweixuan
  * @date 2022-10-29
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum DataPermissionCode {
 
     /**
@@ -45,11 +45,11 @@ public enum DataPermissionCode {
     /**
      * 编码
      */
-    private String code;
+    private final String code;
 
     /**
      * 描述
      */
-    private String desc;
+    private final String desc;
 
 }

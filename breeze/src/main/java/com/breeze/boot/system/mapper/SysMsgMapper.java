@@ -30,7 +30,3 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SysMsgMapper extends BreezeBaseMapper<SysMsg> {
 
 }
-
-
-
-

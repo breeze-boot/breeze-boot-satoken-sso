@@ -16,7 +16,7 @@
 
 package com.breeze.boot.log.events;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -26,13 +26,13 @@ import org.springframework.context.ApplicationEventPublisher;
  * @author gaoweixuan
  * @date 2022-10-19
  */
+@RequiredArgsConstructor
 public class PublisherSaveSysLogEvent {
 
     /**
      * 应用程序事件发布者
      */
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 发布事件
@@ -40,7 +40,7 @@ public class PublisherSaveSysLogEvent {
      * @param applicationEvent 应用程序事件
      */
     public void publisherEvent(ApplicationEvent applicationEvent) {
-        applicationEventPublisher.publishEvent(applicationEvent);
+        this.applicationEventPublisher.publishEvent(applicationEvent);
     }
 
 }

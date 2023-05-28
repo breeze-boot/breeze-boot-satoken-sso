@@ -11,9 +11,15 @@
 
     <artifactId>breeze-base-security</artifactId>
     <packaging>jar</packaging>
-    <description>JWT Security 登录依赖</description>
+    <description>资源服务包</description>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -25,12 +31,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-core</artifactId>
         </dependency>
@@ -38,16 +38,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-redis-cache</artifactId>
         </dependency>
     </dependencies>
 </project>

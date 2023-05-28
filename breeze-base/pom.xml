@@ -27,6 +27,7 @@
         <module>breeze-base-validator</module>
         <module>breeze-base-security</module>
         <module>breeze-base-core</module>
+        <module>breeze-flowable-ui-bom</module>
     </modules>
 
 </project>

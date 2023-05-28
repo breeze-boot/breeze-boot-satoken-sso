@@ -18,9 +18,9 @@ package com.breeze.boot.system.service.impl;
 
 import com.breeze.boot.system.service.MateService;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -40,20 +40,19 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MateDataServiceImpl implements MateService {
+
+    private final SqlSessionFactory sqlSessionFactory;
 
     /**
      * 连接
      */
-    Connection connection;
-
+    private Connection connection;
     /**
      * 元数据
      */
-    DatabaseMetaData metaData;
-
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
+    private DatabaseMetaData metaData;
 
     @PostConstruct
     public void init() {

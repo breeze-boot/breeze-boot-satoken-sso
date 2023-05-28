@@ -38,28 +38,34 @@ public class MsgVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 消息ID
+     */
+    @Schema(description = "消息Id")
+    private Long id;
+
+    /**
      * 消息标题
      */
     @Schema(description = "消息标题")
-    private String msgTitle;
+    private String title;
 
     /**
      * 消息Code
      */
     @Schema(description = "消息Code")
-    private String msgCode;
+    private String code;
 
     /**
      * 消息类型 1 通知 2 公告
      */
     @Schema(description = "消息类型 1 通知 2 公告")
-    private Integer msgType;
+    private Integer type;
 
     /**
-     * 消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息
+     * 消息级别 error 紧急消息 info 一般消息 warning 警示消消息 success 正常消息
      */
-    @Schema(description = "消息级别 error 紧急消息（多次提醒） info 一般消息 warning 警示消消息 success 正常消息")
-    private String msgLevel;
+    @Schema(description = "消息级别 error 紧急消息 info 一般消息 warning 警示消消息 success 正常消息")
+    private String level;
 
     /**
      * 内容

@@ -26,7 +26,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.breeze.boot.oss.s3.config.OssProperties;
 import com.breeze.boot.oss.s3.operation.OssTemplate;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,7 +42,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableConfigurationProperties(OssProperties.class)
 public class OssConfiguration {
 

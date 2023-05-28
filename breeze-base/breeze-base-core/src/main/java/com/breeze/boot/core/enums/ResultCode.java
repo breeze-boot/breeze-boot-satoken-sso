@@ -28,49 +28,55 @@ import lombok.Getter;
 public enum ResultCode {
 
     /**
-     * 客户端身份验证失败
-     */
-    CLIENT_AUTHENTICATION_FAILED(1001, "客户端认证失败"),
-    /**
      * 错误用户名或密码
      */
     WRONG_USERNAME_OR_PASSWORD(1002, "用户名或者密码错误"),
-    /**
-     * 格兰特不支持类型
-     */
-    UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式"),
-    /**
-     * 令牌无效
-     */
-    TOKEN_INVALID(1004, "验证失效"),
+
     /**
      * 用户名没有发现异常
      */
     USERNAME_NOT_FOUND_EXCEPTION(1005, "用户名或者密码错误"),
+
     /**
-     * 内部身份验证服务异常
+     * 时间异常
      */
-    FEIGN_INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(5003, "内部身份验证服务异常"),
+    TIME_OUT_EXCEPTION(500, "服务器错误"),
+
+    /**
+     * http身份验证异常
+     */
+    HTTP_AUTHENTICATION_EXCEPTION(10000, "客户端身份验证失败：Client_secret/client_id"),
+
+    /**
+     * GRANT_TYP不支持类型
+     */
+    UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式"),
+
+    /**
+     * 令牌无效
+     */
+    TOKEN_INVALID(1004, "验证失效"),
+
     /**
      * 未授权资源，请联系管理员授权
      */
     UNAUTHORIZED(401, "未授权资源，请联系管理员授权"),
+
     /**
      * 身份验证异常
      */
     FORBIDDEN(403, "身份验证异常"),
+
     /**
      * 服务器错误
      */
     INTERNAL_SERVER_ERROR(500, "服务器错误"),
-    /**
-     * 超时
-     */
-    TIME_OUT_EXCEPTION(500, "服务器错误"),
+
     /**
      * http消息转换异常
      */
     HTTP_MESSAGE_CONVERSION_EXCEPTION(500, "请求参数错误"),
+
     /**
      * 成功
      */
@@ -91,7 +97,7 @@ public enum ResultCode {
     /**
      * 响应代码
      */
-    private final int code;
+    private int code;
     /**
      * 响应信息
      */
@@ -111,12 +117,36 @@ public enum ResultCode {
     /**
      * 系统异常 返回结果代码
      *
+     * @param msg  msg
+     * @param code 代码
+     * @return {@link ResultCode}
+     */
+    public static ResultCode exception(int code, String msg) {
+        EXCEPTION.code = code;
+        EXCEPTION.msg = msg;
+        return ResultCode.EXCEPTION;
+    }
+
+    /**
+     * 系统异常 返回结果代码
+     *
      * @param msg msg
      * @return {@link ResultCode}
      */
     public static ResultCode exception(String msg) {
         EXCEPTION.msg = msg;
         return ResultCode.EXCEPTION;
+    }
+
+    /**
+     * 系统异常 返回结果代码
+     *
+     * @param msg msg
+     * @return {@link ResultCode}
+     */
+    public static ResultCode httpAuthenticationException(String msg) {
+        HTTP_AUTHENTICATION_EXCEPTION.msg = msg;
+        return ResultCode.HTTP_AUTHENTICATION_EXCEPTION;
     }
 
 }

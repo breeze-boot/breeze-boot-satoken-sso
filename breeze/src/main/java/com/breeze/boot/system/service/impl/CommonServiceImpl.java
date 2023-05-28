@@ -29,7 +29,7 @@ import com.breeze.boot.system.query.DeptQuery;
 import com.breeze.boot.system.service.*;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +51,7 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
  * @date 2022-10-08
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService {
 
     /**

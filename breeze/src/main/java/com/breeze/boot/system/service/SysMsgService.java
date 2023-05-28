@@ -37,12 +37,4 @@ public interface SysMsgService extends IService<SysMsg> {
      */
     IPage<SysMsg> listPage(MsgQuery msgQuery);
 
-    /**
-     * 得到系统消息
-     *
-     * @param msgCode 消息代码
-     * @return {@link SysMsg}
-     */
-    SysMsg getSysMsg(String msgCode);
-
 }

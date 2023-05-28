@@ -18,13 +18,13 @@ package com.breeze.boot.log;
 
 import com.breeze.boot.log.aspect.SysLogAspect;
 import com.breeze.boot.log.events.PublisherSaveSysLogEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 
 /**
  * 开启日志配置
@@ -34,10 +34,15 @@ import org.springframework.context.annotation.Import;
  **/
 @Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
+@RequiredArgsConstructor
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "breeze.log", value = "enable", havingValue = "true")
-@Import({PublisherSaveSysLogEvent.class})
 public class EnableSysLogConfiguration {
+
+    /**
+     * 发布系统日志事件
+     */
+    private final PublisherSaveSysLogEvent publisherSaveSysLogEvent;
 
     /**
      * 系统日志AOP Bean
@@ -47,7 +52,7 @@ public class EnableSysLogConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SysLogAspect sysLogAspect() {
-        return new SysLogAspect();
+        return new SysLogAspect(publisherSaveSysLogEvent);
     }
 
 }

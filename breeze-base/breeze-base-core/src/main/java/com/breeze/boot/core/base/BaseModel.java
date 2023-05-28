@@ -83,6 +83,10 @@ public class BaseModel<T> extends Model<BaseModel<T>> {
 
     /**
      * 创建时间
+     * <p>
+     * JsonFormat 注解支持序列化和反序列化，反序列化只能用于Post请求的json提交[application/json]提交
+     * <p>
+     * DateTimeFormat 注解支持表单提交[application/x-www-form-urlencoded, multipart/form-data]或者Get请求的反序列化，若使用注解就不需要定义参数转换器
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)

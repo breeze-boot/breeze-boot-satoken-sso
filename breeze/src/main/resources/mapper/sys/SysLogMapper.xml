@@ -11,7 +11,6 @@
         <result property="requestType" column="request_type" jdbcType="TINYINT"/>
         <result property="ip" column="ip" jdbcType="VARCHAR"/>
         <result property="doType" column="do_type" jdbcType="TINYINT"/>
-        <result property="browser" column="browser" jdbcType="VARCHAR"/>
         <result property="system" column="system" jdbcType="VARCHAR"/>
         <result property="result" column="result" jdbcType="TINYINT"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
@@ -31,7 +30,6 @@
         request_type,
         ip,
         do_type,
-        browser,
         `system`,
         param_content,
         `result`,

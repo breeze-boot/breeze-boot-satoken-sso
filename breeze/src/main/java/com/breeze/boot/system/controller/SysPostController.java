@@ -27,7 +27,7 @@ import com.breeze.boot.system.service.SysPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +44,7 @@ import java.util.Objects;
  * @date 2022-11-06
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/post")
 @Tag(name = "系统岗位管理模块", description = "SysPostController")
@@ -52,8 +53,7 @@ public class SysPostController {
     /**
      * 系统岗位服务
      */
-    @Autowired
-    private SysPostService sysPostService;
+    private final SysPostService sysPostService;
 
     /**
      * 列表

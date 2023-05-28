@@ -46,6 +46,6 @@ public class TenantProperties {
     /**
      * 参数
      */
-    private String param = "tenant_id";
+    private String param = "tenantId";
 
 }

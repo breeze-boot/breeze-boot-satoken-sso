@@ -16,10 +16,7 @@
 
 package com.breeze.boot.system.config;
 
-import com.breeze.boot.security.service.LocalUserDetailsService;
-import com.breeze.boot.system.service.impl.UserTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -29,29 +26,8 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022-08-31
  */
 @Configuration
+@RequiredArgsConstructor
 public class ResourceServerConfiguration {
-
-    /**
-     * 用户令牌服务
-     */
-    @Autowired
-    private UserTokenService userTokenService;
-
-    /**
-     * 加载当前登录用户服务
-     *
-     * @return {@link LocalUserDetailsService}
-     */
-    @Bean
-    public LocalUserDetailsService loadCurrentLoginUser() {
-        return new LocalUserDetailsService(
-                userTokenService::loadUserByUsername
-                , userTokenService::loadUserByPhone
-                , userTokenService::createOrLoadUser
-                , userTokenService::loadUserByEmail
-                , userTokenService::createOrLoadUserByWxPhone
-                , userTokenService::createOrLoadUser);
-    }
 
 }
 

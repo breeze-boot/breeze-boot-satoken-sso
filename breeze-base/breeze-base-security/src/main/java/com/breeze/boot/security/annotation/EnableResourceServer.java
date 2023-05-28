@@ -16,7 +16,7 @@
 
 package com.breeze.boot.security.annotation;
 
-import com.breeze.boot.security.config.SecurityConfiguration;
+import com.breeze.boot.security.config.ResourceServerConfiguration;
 import com.breeze.boot.security.init.BreezeJumpAuthPathInit;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -34,8 +34,8 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity()
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Import({SecurityConfiguration.class, BreezeJumpAuthPathInit.class})
+@Import({ResourceServerConfiguration.class, BreezeJumpAuthPathInit.class})
 public @interface EnableResourceServer {
 }

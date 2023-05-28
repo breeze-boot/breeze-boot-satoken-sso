@@ -80,6 +80,7 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
         // 检测用户订阅内容（防止用户订阅不合法频道）
         if (StompCommand.SUBSCRIBE.equals(command)) {
             // TODO
+            log.debug("[订阅内容]");
         }
         return message;
     }
@@ -103,6 +104,9 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
         }
         if (StompCommand.DISCONNECT.equals(command)) {
             simpMessagingTemplate.convertAndSend("/topic/sendMsg", "{'msg':'用户断开连接'}");
+        }
+        if (StompCommand.SEND.equals(command)) {
+            simpMessagingTemplate.convertAndSend("/topic/sendMsg", "{'msg':'开始发送消息'}");
         }
     }
 }

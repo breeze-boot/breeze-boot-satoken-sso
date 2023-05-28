@@ -27,7 +27,7 @@ import com.breeze.boot.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +44,7 @@ import java.util.Objects;
  * @date 2022-09-02
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/dept")
 @Tag(name = "系统部门管理模块", description = "SysDeptController")
@@ -52,8 +53,7 @@ public class SysDeptController {
     /**
      * 系统部门服务
      */
-    @Autowired
-    private SysDeptService sysDeptService;
+    private final SysDeptService sysDeptService;
 
     /**
      * 列表

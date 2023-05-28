@@ -16,8 +16,8 @@
 
 package com.breeze.boot.core.constants;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Quartz常量
@@ -43,7 +43,7 @@ public class QuartzConstants {
     public static final String TRIGGER_NAME = "TRIGGER_NAME";
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     public enum Status {
 
         /**
@@ -58,12 +58,12 @@ public class QuartzConstants {
         /**
          * 状态
          */
-        private Integer status;
+        private final Integer status;
 
         /**
          * 描述
          */
-        private String desc;
+        private final String desc;
 
     }
 
@@ -76,7 +76,7 @@ public class QuartzConstants {
      * @date 2023-03-16
      */
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     public enum MisfirePolicy {
 
         /**
@@ -101,17 +101,17 @@ public class QuartzConstants {
         /**
          * 编码
          */
-        private Integer code;
+        private final Integer code;
 
         /**
          * 方法名
          */
-        private String methodName;
+        private final String methodName;
 
         /**
          * 描述
          */
-        private String desc;
+        private final String desc;
     }
 
 }

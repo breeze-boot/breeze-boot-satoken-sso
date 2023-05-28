@@ -58,12 +58,12 @@
         a.role_id
         ) b ON a.id = b.role_id
         <where>
-            a.is_delete = 0
+            AND a.is_delete = 0
             <if test="roleQuery.roleName != null and roleQuery.roleName != ''">
-                a.role_name LIKE CONCAT( '%', #{roleQuery.roleName}, '%')
+                AND a.role_name LIKE CONCAT( '%', #{roleQuery.roleName}, '%')
             </if>
             <if test="roleQuery.roleCode != null and roleQuery.roleCode != ''">
-                a.role_code LIKE CONCAT( '%', #{roleQuery.roleCode}, '%')
+                AND a.role_code LIKE CONCAT( '%', #{roleQuery.roleCode}, '%')
             </if>
         </where>
         ORDER BY

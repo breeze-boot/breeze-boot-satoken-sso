@@ -29,7 +29,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -45,20 +44,18 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 public class SysLogAspect {
 
-    /**
-     * 映射器
-     */
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    static {
-        MAPPER.registerModule(new JavaTimeModule());
-    }
+    private final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * 发布保存系统的日志事件
      */
-    @Autowired
-    private PublisherSaveSysLogEvent publisherSaveSysLogEvent;
+    private final PublisherSaveSysLogEvent publisherSaveSysLogEvent;
+
+
+    public SysLogAspect(PublisherSaveSysLogEvent publisherSaveSysLogEvent) {
+        this.publisherSaveSysLogEvent = publisherSaveSysLogEvent;
+        mapper.registerModules(new JavaTimeModule());
+    }
 
     /**
      * 环绕通知
@@ -93,7 +90,7 @@ public class SysLogAspect {
             stopWatch.stop();
             sysLogBO.setTime(String.valueOf(stopWatch.getTotalTimeSeconds()));
             this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(sysLogBO));
-            this.printLog(request, methodName, MAPPER.writeValueAsString(param), stopWatch);
+            this.printLog(methodName, this.write(param), stopWatch);
         }
         return obj;
     }
@@ -118,7 +115,7 @@ public class SysLogAspect {
                 .resultMsg("")
                 .ip(request.getRemoteAddr())
                 .requestType(request.getMethod())
-                .paramContent(MAPPER.writeValueAsString(param))
+                .paramContent(this.write(param))
                 .result(1)
                 .build();
     }
@@ -126,13 +123,11 @@ public class SysLogAspect {
     /**
      * 打印日志
      *
-     * @param request   请求
      * @param stopWatch 时间监听
      */
-    private void printLog(HttpServletRequest request, String methodName, String jsonString, StopWatch stopWatch) {
-        log.trace("[URL]: {}", request.getRequestURL());
+    private void printLog(String methodName, String jsonString, StopWatch stopWatch) {
         log.info("[传入参数]：\n {}", jsonString);
-        log.trace("[方法]: {} [执行时间]: {}", methodName, stopWatch.getTotalTimeMillis());
+        log.trace("[方法名称]: {} [执行时间]: {}", methodName, stopWatch.getTotalTimeMillis());
     }
 
     /**
@@ -146,5 +141,18 @@ public class SysLogAspect {
         return attributes.getRequest();
     }
 
+    /**
+     * 写
+     *
+     * @param data 数据
+     * @return {@link String}
+     */
+    public String write(Object data) {
+        try {
+            return mapper.writeValueAsString(data);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex.getMessage(), ex);
+        }
+    }
 
 }

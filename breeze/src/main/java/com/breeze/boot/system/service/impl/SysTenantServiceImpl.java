@@ -30,7 +30,7 @@ import com.breeze.boot.system.mapper.SysTenantMapper;
 import com.breeze.boot.system.query.TenantQuery;
 import com.breeze.boot.system.service.SysTenantService;
 import com.breeze.boot.system.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,13 +42,13 @@ import java.util.List;
  * @date 2022-11-06
  */
 @Service
+@RequiredArgsConstructor
 public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService {
 
     /**
      * 系统用户服务
      */
-    @Autowired
-    private SysUserService sysUserService;
+    private final SysUserService sysUserService;
 
     /**
      * 列表页面

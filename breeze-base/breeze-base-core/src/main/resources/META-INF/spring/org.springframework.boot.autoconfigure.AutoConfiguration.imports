@@ -1,0 +1,2 @@
+com.breeze.boot.core.jackson.JacksonConfig
+com.breeze.boot.core.propertise.AesSecretProperties

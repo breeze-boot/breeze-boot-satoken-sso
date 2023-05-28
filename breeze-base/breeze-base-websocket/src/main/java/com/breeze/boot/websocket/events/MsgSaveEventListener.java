@@ -16,7 +16,7 @@
 
 package com.breeze.boot.websocket.events;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @date 2022-11-28
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MsgSaveEventListener {
 
     /**
@@ -38,7 +38,7 @@ public class MsgSaveEventListener {
      * <p>
      * 去执行保存逻辑
      */
-    private Consumer<MsgSaveEvent> consumer;
+    private final Consumer<MsgSaveEvent> consumer;
 
     /**
      * 应用程序事件

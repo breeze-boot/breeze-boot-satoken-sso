@@ -23,10 +23,10 @@ import com.breeze.boot.core.enums.ContentType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.storage.local.config.LocalProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,13 +42,13 @@ import java.nio.charset.StandardCharsets;
  * @date 2022-11-14
  */
 @Slf4j
+@RequiredArgsConstructor
 public class LocalStorageTemplate {
 
     /**
      * 局部属性
      */
-    @Autowired
-    private LocalProperties localProperties;
+    private final LocalProperties localProperties;
 
     /**
      * 获取扩展名

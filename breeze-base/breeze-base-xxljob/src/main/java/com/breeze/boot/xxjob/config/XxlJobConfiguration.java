@@ -17,7 +17,7 @@
 package com.breeze.boot.xxjob.config;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableConfigurationProperties(XxlJobProperties.class)
 public class XxlJobConfiguration {
 

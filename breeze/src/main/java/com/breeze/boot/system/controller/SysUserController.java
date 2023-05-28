@@ -19,10 +19,10 @@ package com.breeze.boot.system.controller;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.security.ext.LoginUser;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.params.UserOpenParam;
@@ -33,7 +33,7 @@ import com.breeze.boot.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +51,7 @@ import java.util.Objects;
  * @date 2021-12-06 22:03:39
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/user")
 @Tag(name = "系统用户管理模块", description = "SysUserController")
@@ -59,8 +60,7 @@ public class SysUserController {
     /**
      * 系统用户服务
      */
-    @Autowired
-    private SysUserService sysUserService;
+    private final SysUserService sysUserService;
 
     /**
      * 列表
@@ -227,8 +227,8 @@ public class SysUserController {
      */
     @Operation(summary = "查询用户信息")
     @GetMapping("/userInfo")
-    public Result<LoginUser> userInfo() {
-        LoginUser currentUser = SecurityUtils.getCurrentUser();
+    public Result<BaseLoginUser> userInfo() {
+        BaseLoginUser currentUser = SecurityUtils.getCurrentUser();
         return Result.ok(currentUser);
     }
 }

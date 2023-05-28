@@ -17,12 +17,12 @@
 package com.breeze.boot.system.config;
 
 import com.breeze.boot.log.bo.SysLogBO;
-import com.breeze.boot.log.events.SysLogSaveEventListener;
+import com.breeze.boot.log.events.LocalSysLogSaveEventListener;
 import com.breeze.boot.system.service.SysLogService;
-import com.breeze.boot.system.service.impl.StompJsMsgServiceImpl;
-import com.breeze.boot.websocket.bo.UserMsgBO;
+import com.breeze.boot.system.service.SysMsgUserService;
+import com.breeze.boot.websocket.dto.UserMsgDTO;
 import com.breeze.boot.websocket.events.MsgSaveEventListener;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,38 +33,37 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022-08-31
  */
 @Configuration
+@RequiredArgsConstructor
 public class ListenerConfig {
 
     /**
      * 系统日志服务
      */
-    @Autowired
-    private SysLogService sysLogService;
+    private final SysLogService sysLogService;
 
     /**
-     * stomp js消息服务
+     * 用户消息服务
      */
-    @Autowired
-    private StompJsMsgServiceImpl stompJsMsgService;
+    private final SysMsgUserService sysMsgUserService;
 
     /**
-     * 侦听器
+     * 日志保存侦听器
      *
-     * @return {@link SysLogSaveEventListener}
+     * @return {@link LocalSysLogSaveEventListener}
      */
     @Bean
-    public SysLogSaveEventListener sysLogSaveEventListener() {
-        return new SysLogSaveEventListener((source) -> this.sysLogService.saveSysLog((SysLogBO) source.getSource()));
+    public LocalSysLogSaveEventListener logSaveEventListener() {
+        return new LocalSysLogSaveEventListener((source) -> this.sysLogService.saveSysLog((SysLogBO) source.getSource()));
     }
 
     /**
-     * 侦听器
+     * 消息快照保存侦听器
      *
-     * @return {@link SysLogSaveEventListener}
+     * @return {@link MsgSaveEventListener}
      */
     @Bean
-    public MsgSaveEventListener msgSaveEventListener() {
-        return new MsgSaveEventListener((source) -> this.stompJsMsgService.saveMsg((UserMsgBO) source.getSource()));
+    public MsgSaveEventListener msgSaveMsgSnappedEventListener() {
+        return new MsgSaveEventListener((source) -> this.sysMsgUserService.saveUserMsg((UserMsgDTO) source.getSource()));
     }
 
 }

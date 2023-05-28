@@ -9,10 +9,10 @@
     <!-- 日志相对路径 -->
     <property name="log_path" value="logs/${spring.application.name}"/>
 
-    <property name="file_name_pattern" value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i.log"/>
+    <property name="file_name_pattern" value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i.log.gz"/>
 
     <property name="file_name_pattern_error"
-              value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i-error.log"/>
+              value="${log_path}/${spring.application.name}.%d{yyyy-MM-dd}.%i-error.log.gz"/>
 
     <!-- 日志打印格式 -->
     <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %-40.40logger{39} :: %msg%n"/>

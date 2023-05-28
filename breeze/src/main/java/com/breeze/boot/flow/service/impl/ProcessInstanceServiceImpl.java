@@ -23,10 +23,10 @@ import com.breeze.boot.flow.service.ActRuExecutionService;
 import com.breeze.boot.flow.service.IProcessInstanceService;
 import com.breeze.boot.flow.vo.ProcessInstanceVO;
 import com.breeze.boot.security.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.RuntimeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,19 +37,18 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProcessInstanceServiceImpl implements IProcessInstanceService {
 
     /**
      * 运行时服务
      */
-    @Autowired
-    private RuntimeService runtimeService;
+    private final RuntimeService runtimeService;
 
     /**
      * 流程执行实例服务
      */
-    @Autowired
-    private ActRuExecutionService actRuExecutionService;
+    private final ActRuExecutionService actRuExecutionService;
 
     /**
      * 发起

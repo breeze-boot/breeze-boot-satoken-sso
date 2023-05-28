@@ -16,6 +16,7 @@
 
 package com.breeze.boot.core.utils;
 
+import com.breeze.boot.core.enums.ResultCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -37,10 +38,10 @@ public class ResponseUtil {
     /**
      * 响应
      *
-     * @param response  响应
-     * @param resultMsg 结果信息
+     * @param response 响应
+     * @param result   结果
      */
-    public static void response(HttpServletResponse response, String resultMsg) {
+    public static void response(HttpServletResponse response, ResultCode result) {
         ServletOutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
@@ -48,7 +49,7 @@ public class ResponseUtil {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             out = response.getOutputStream();
             ObjectMapper objectMapper = new ObjectMapper();
-            out.write(objectMapper.writeValueAsString(Result.fail(resultMsg)).getBytes(StandardCharsets.UTF_8));
+            out.write(objectMapper.writeValueAsString(Result.fail(result)).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             log.error("response 响应失败", e);
         } finally {

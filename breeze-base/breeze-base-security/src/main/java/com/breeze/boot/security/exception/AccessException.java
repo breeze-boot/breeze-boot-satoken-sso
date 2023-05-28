@@ -18,7 +18,6 @@ package com.breeze.boot.security.exception;
 
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 访问异常
@@ -27,7 +26,6 @@ import lombok.EqualsAndHashCode;
  * @date 2022-08-31
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class AccessException extends RuntimeException {
 
     /**

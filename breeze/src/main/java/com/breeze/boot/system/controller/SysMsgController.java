@@ -26,7 +26,7 @@ import com.breeze.boot.system.service.SysMsgService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +41,7 @@ import java.util.Arrays;
  * @date 2022-11-20
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/msg")
 @Tag(name = "系统消息管理模块", description = "SysMsgController")

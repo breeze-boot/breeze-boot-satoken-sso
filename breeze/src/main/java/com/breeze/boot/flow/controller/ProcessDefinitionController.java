@@ -27,7 +27,7 @@ import com.breeze.boot.flow.vo.ProcessDefinitionVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +41,7 @@ import javax.validation.constraints.NotBlank;
  * @date 2023-03-01
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/definition")
 @Tag(name = "流程定义管理模块", description = "ProcessDefinitionController")
 public class ProcessDefinitionController {
@@ -48,8 +49,7 @@ public class ProcessDefinitionController {
     /**
      * 流程资源服务
      */
-    @Autowired
-    private IProcessDefinitionService processDefinitionService;
+    private final IProcessDefinitionService processDefinitionService;
 
     /**
      * 列表

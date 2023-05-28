@@ -20,7 +20,7 @@ import com.breeze.boot.log.bo.SysLogBO;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 日志保存事件
+ * 本地日志保存事件
  *
  * @author gaoweixuan
  * @date 2022-10-19

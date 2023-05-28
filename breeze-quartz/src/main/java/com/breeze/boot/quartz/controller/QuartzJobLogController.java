@@ -24,7 +24,7 @@ import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +38,14 @@ import java.util.List;
  * @date 2023-03-16
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/jobLog")
 public class QuartzJobLogController {
 
     /**
      * quartz 任务服务
      */
-    @Autowired
-    private SysQuartzJobLogService quartzJobLogService;
+    private final SysQuartzJobLogService quartzJobLogService;
 
     /**
      * 列表页面

@@ -63,7 +63,7 @@ public class SysLogBO implements Serializable {
     private String ip;
 
     /**
-     * 操作类型 0 添加 1 删除 2 修改 3 查询
+     * 操作类型 0 添加 1 删除 2 修改 3 查询 4 doLogin
      */
     private Integer doType;
 
@@ -73,7 +73,7 @@ public class SysLogBO implements Serializable {
     private String browser;
 
     /**
-     * 系统
+     * 操作系统类型
      */
     private String system;
 

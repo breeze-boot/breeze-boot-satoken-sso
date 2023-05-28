@@ -24,7 +24,7 @@ import com.breeze.boot.flow.service.IProcessInstanceService;
 import com.breeze.boot.flow.vo.ProcessInstanceVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +40,7 @@ import javax.validation.Valid;
  * @date 2023-03-01
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/instance")
 @Tag(name = "流程实例管理模块", description = "ProcessInstanceController")
 public class ProcessInstanceController {
@@ -47,8 +48,7 @@ public class ProcessInstanceController {
     /**
      * 流程资源服务
      */
-    @Autowired
-    private IProcessInstanceService processInstanceService;
+    private final IProcessInstanceService processInstanceService;
 
     /**
      * 发起流程

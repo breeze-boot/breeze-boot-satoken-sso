@@ -26,7 +26,7 @@ import com.breeze.boot.system.service.SysLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +40,7 @@ import java.util.Arrays;
  * @date 2022-09-02
  */
 @RestController
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/log")
 @Tag(name = "系统日志管理模块", description = "SysLogController")
@@ -48,8 +49,7 @@ public class SysLogController {
     /**
      * 系统日志服务
      */
-    @Autowired
-    private SysLogService sysLogService;
+    private final SysLogService sysLogService;
 
     /**
      * 列表
@@ -62,6 +62,7 @@ public class SysLogController {
     public Result<Page<SysLog>> list(@RequestBody LogQuery logQuery) {
         return Result.ok(this.sysLogService.listPage(logQuery));
     }
+
 
     /**
      * 清空日志表

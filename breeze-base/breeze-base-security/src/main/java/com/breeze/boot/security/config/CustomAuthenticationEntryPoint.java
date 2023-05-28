@@ -16,6 +16,7 @@
 
 package com.breeze.boot.security.config;
 
+import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -25,6 +26,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,41 +53,47 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (response.isCommitted()) {
             return;
         }
-
-        Throwable trace = e.fillInStackTrace();
-        String errMsg = "认证失败";
-        if (trace instanceof BadCredentialsException) {
-            ResponseUtil.response(response, e.getMessage());
+        if (e instanceof BadCredentialsException) {
+            ResponseUtil.response(response, ResultCode.exception(e.getMessage()));
             return;
         }
 
         Throwable cause = e.getCause();
-        if (cause instanceof JwtValidationException) {
-            log.error("[JWT Token 过期]", cause);
-            errMsg = "无效的token信息";
-        } else if (cause instanceof BadJwtException) {
-            log.error("[JWT 签名异常]", cause);
-            errMsg = "无效的token信息";
-        } else if (cause instanceof AccountExpiredException) {
-            log.error("[账户已过期]", cause);
-            errMsg = "账户已过期";
-        } else if (cause instanceof LockedException) {
-            log.warn("[账户已经锁定]", cause);
-            errMsg = "账户已被锁定";
-        } else if (trace instanceof InsufficientAuthenticationException) {
-            String message = trace.getMessage();
-            if (message.contains("Invalid token does not contain resource id")) {
-                log.warn("[未经授权的服务器]", cause);
-                errMsg = "未经授权的资源服务器";
-            } else if (message.contains("Full authentication is required to access this resource")) {
-                log.warn("[访问需要登录]", cause);
-                errMsg = "访问需要登录";
+        if (e instanceof InvalidBearerTokenException) {
+            if (cause instanceof JwtValidationException) {
+                log.error("[JWT Token 过期]", cause);
+                ResponseUtil.response(response, ResultCode.exception("JWT Token 过期"));
+                return;
             }
-        } else {
-            log.error("[验证异常]", cause);
-            errMsg = "验证异常";
+            if (cause instanceof BadJwtException) {
+                log.error("[登录已过期]", cause);
+                ResponseUtil.response(response, ResultCode.exception("登录已过期"));
+                return;
+            }
+            if (cause instanceof AccountExpiredException) {
+                log.warn("[账户已过期]", cause);
+                ResponseUtil.response(response, ResultCode.exception("账户已过期"));
+                return;
+            }
+            if (cause instanceof LockedException) {
+                log.warn("[账户已经锁定]", cause);
+                ResponseUtil.response(response, ResultCode.exception("账户已经锁定"));
+                return;
+            }
         }
-        ResponseUtil.response(response, errMsg);
-    }
+        if (e instanceof InsufficientAuthenticationException) {
+            String message = e.getMessage();
+            if (message.contains("Invalid token does not contain resource id")) {
+                log.warn("[未经授权的服务器]", e);
+            } else if (message.contains("Full authentication is required to access this resource")) {
+                log.warn("[访问需要登录]", e);
+            }
+            ResponseUtil.response(response, ResultCode.exception("未经授权的服务器"));
+            return;
+        }
 
+        String errMsg = "认证失败";
+        log.error("[验证异常]", cause);
+        ResponseUtil.response(response, ResultCode.exception(errMsg));
+    }
 }

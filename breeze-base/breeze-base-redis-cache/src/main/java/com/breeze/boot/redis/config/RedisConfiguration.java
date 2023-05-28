@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -52,17 +52,17 @@ public class RedisConfiguration {
     /**
      * redis 配置
      *
-     * @param redisConnectionFactory redis 连接工厂
+     * @param lettuceConnectionFactory redis 连接工厂
      * @return {@link RedisTemplate}<{@link Object}, {@link Object}>
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<String, Object> defaultRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
 
         // 设置hashKey和hashValue的序列化规则
         redisTemplate.setHashKeySerializer(StringRedisSerializer.UTF_8);
-        redisTemplate.setHashValueSerializer(RedisSerializer.json());
+        redisTemplate.setHashValueSerializer(this.getJsonRedisSerializer());
         // 设置key和value的序列化规则
         redisTemplate.setKeySerializer(StringRedisSerializer.UTF_8);
         redisTemplate.setValueSerializer(this.getJsonRedisSerializer());
@@ -76,11 +76,11 @@ public class RedisConfiguration {
     /**
      * 自定义缓存管理器
      *
-     * @param redisConnectionFactory redis 连接工厂
+     * @param lettuceConnectionFactory redis 连接工厂
      * @return {@link RedisCacheManager}
      */
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager defaultCacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
         RedisSerializer<String> strSerializer = new StringRedisSerializer();
 
@@ -97,7 +97,7 @@ public class RedisConfiguration {
                 // 对空数据不操作
                 .disableCachingNullValues();
 
-        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
+        return RedisCacheManager.builder(lettuceConnectionFactory).cacheDefaults(config).build();
     }
 
     /**
@@ -121,4 +121,5 @@ public class RedisConfiguration {
         serializer.setObjectMapper(mapper);
         return serializer;
     }
+
 }

@@ -27,7 +27,7 @@ import com.breeze.boot.system.params.DictOpenParam;
 import com.breeze.boot.system.query.DictQuery;
 import com.breeze.boot.system.service.SysDictItemService;
 import com.breeze.boot.system.service.SysDictService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,13 +39,13 @@ import java.util.List;
  * @date 2021-12-06 22:03:39
  */
 @Service
+@RequiredArgsConstructor
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     /**
      * 系统字典项服务
      */
-    @Autowired
-    private SysDictItemService sysDictItemService;
+    private final SysDictItemService sysDictItemService;
 
     /**
      * 开关

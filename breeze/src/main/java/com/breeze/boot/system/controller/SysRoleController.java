@@ -31,7 +31,7 @@ import com.breeze.boot.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ import java.util.Objects;
  * @date 2021-12-06 22:03:39
  */
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
 @RequestMapping("/role")
 @Tag(name = "系统角色管理模块", description = "SysRoleController")
