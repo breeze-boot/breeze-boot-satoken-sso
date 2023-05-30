@@ -59,7 +59,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('process:definition:list')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:list')")
     public Result<Page<DeploymentVO>> list(@RequestBody ProcessDeploymentQuery processDeploymentQuery) {
         return Result.ok(this.processDefinitionService.listPage(processDeploymentQuery));
     }
@@ -72,7 +72,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "流程定义版本列表")
     @PostMapping("/listVersion")
-    @PreAuthorize("hasAnyAuthority('process:definition:list')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:list')")
     public Result<Page<ProcessDefinitionVO>> listVersion(@RequestBody ProcessDeploymentQuery processDeploymentQuery) {
         return Result.ok(this.processDefinitionService.listVersionPage(processDeploymentQuery));
     }
@@ -85,7 +85,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "部署")
     @PostMapping("/deploy")
-    @PreAuthorize("hasAnyAuthority('process:definition:deploy')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:deploy')")
     public Result<Boolean> deploy(@Valid @RequestBody ProcessDeploymentParam processDeploymentParam) {
         return this.processDefinitionService.deploy(processDeploymentParam);
     }
@@ -100,7 +100,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "获取流程定义xml")
     @GetMapping("/getProcessDefinitionXml")
-    @PreAuthorize("hasAnyAuthority('process:definition:info')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:info')")
     public Result<String> getProcessDefinitionXml(@NotBlank(message = "流程定义Key不能为空") @RequestParam String processKey,
                                                   @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getProcessDefinitionXml(processKey, tenantId));
@@ -115,7 +115,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "获取流程定义png")
     @GetMapping("/getProcessDefinitionPng")
-    @PreAuthorize("hasAnyAuthority('process:definition:info')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:info')")
     public Result<String> getProcessDefinitionPng(@NotBlank(message = "流程定义Key不能为空") @Schema(description = "流程定义KEY") @RequestParam String processKey,
                                                   @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getProcessDefinitionPng(processKey, tenantId));
@@ -130,7 +130,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "获取各个版本流程定义png")
     @GetMapping("/getVersionProcessDefinitionPng")
-    @PreAuthorize("hasAnyAuthority('process:definition:info')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:info')")
     public Result<String> getVersionProcessDefinitionPng(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
                                                          @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getVersionProcessDefinitionPng(processDefinitionId, tenantId));
@@ -146,7 +146,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "获取各个版本流程定义xml")
     @GetMapping("/getVersionProcessDefinitionXml")
-    @PreAuthorize("hasAnyAuthority('process:definition:info')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:info')")
     public Result<String> getVersionProcessDefinitionXml(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId,
                                                          @NotBlank(message = "租户ID不能为空") @RequestParam String tenantId) {
         return Result.ok(this.processDefinitionService.getVersionProcessDefinitionXml(processDefinitionId, tenantId));
@@ -160,7 +160,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "挂起/激活")
     @PutMapping("/isSuspended")
-    @PreAuthorize("hasAnyAuthority('process:definition:suspended')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:suspended')")
     public Result<Boolean> isSuspended(@NotBlank(message = "流程定义ID不能为空") @RequestParam String processDefinitionId) {
         return Result.ok(this.processDefinitionService.isSuspended(processDefinitionId));
     }
@@ -174,7 +174,7 @@ public class ProcessDefinitionController {
      */
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('process:definition:delete')")
+    @PreAuthorize("hasAnyAuthority('flow:definition:delete')")
     public Result<Boolean> delete(@NotBlank(message = "部署ID不能为空") @RequestParam("deploymentId") String deploymentId,
                                   @RequestParam(defaultValue = "false") Boolean cascade) {
         return Result.ok(this.processDefinitionService.delete(deploymentId, cascade));

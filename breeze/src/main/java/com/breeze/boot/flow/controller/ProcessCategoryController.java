@@ -63,7 +63,7 @@ public class ProcessCategoryController {
     @DS("flowable")
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('process:category:list')")
+    @PreAuthorize("hasAnyAuthority('flow:category:list')")
     public Result<IPage<ProcessCategory>> list(@RequestBody ProcessCategoryQuery processCategory) {
         return Result.ok(this.processCategoryService.listPage(processCategory));
     }
@@ -78,7 +78,7 @@ public class ProcessCategoryController {
     @DS("flowable")
     @Operation(summary = "校验流程分类编码是否重复")
     @GetMapping("/checkCategoryCode")
-    @PreAuthorize("hasAnyAuthority('process:category:list')")
+    @PreAuthorize("hasAnyAuthority('flow:category:list')")
     public Result<Boolean> checkFlowCategoryCode(@NotBlank(message = "编码不能为空") @RequestParam("categoryCode") String categoryCode,
                                                  @NotNull(message = "ID不能为空") @RequestParam(value = "categoryId", required = false) Long categoryId) {
         return Result.ok(Objects.isNull(this.processCategoryService.getOne(Wrappers.<ProcessCategory>lambdaQuery()
@@ -95,7 +95,7 @@ public class ProcessCategoryController {
     @DS("flowable")
     @Operation(summary = "保存")
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('process:category:create')")
+    @PreAuthorize("hasAnyAuthority('flow:category:create')")
     @BreezeSysLog(description = "流程分类信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody ProcessCategory processCategory) {
         return Result.ok(this.processCategoryService.save(processCategory));
@@ -110,7 +110,7 @@ public class ProcessCategoryController {
     @DS("flowable")
     @Operation(summary = "修改")
     @PutMapping("/modify")
-    @PreAuthorize("hasAnyAuthority('process:category:modify')")
+    @PreAuthorize("hasAnyAuthority('flow:category:modify')")
     @BreezeSysLog(description = "流程分类信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody ProcessCategory processCategory) {
         return Result.ok(this.processCategoryService.updateById(processCategory));
@@ -125,7 +125,7 @@ public class ProcessCategoryController {
     @DS("flowable")
     @Operation(summary = "删除")
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('process:category:delete')")
+    @PreAuthorize("hasAnyAuthority('flow:category:delete')")
     @BreezeSysLog(description = "流程分类信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.processCategoryService.removeByIds(Arrays.asList(ids)));

@@ -37,7 +37,7 @@ import java.util.List;
 public class MenuPermissionParam {
 
     /**
-     * 角色id
+     * 角色Id
      */
     @Schema(description = "角色ID")
     @NotNull(message = "角色ID不能为空")

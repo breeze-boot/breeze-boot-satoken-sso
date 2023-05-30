@@ -9,6 +9,7 @@
         <version>1.0</version>
     </parent>
 
+    <name>breeze</name>
     <artifactId>breeze</artifactId>
     <packaging>jar</packaging>
     <description>系统模块</description>
@@ -92,16 +93,26 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!-- OpenAPI 3 -->
         <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-engine-core</artifactId>
-            <scope>test</scope>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-security</artifactId>
         </dependency>
 
         <!-- 校验 -->
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-validator</artifactId>
+        </dependency>
+
+        <!--接口文档-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-doc</artifactId>
         </dependency>
 
         <dependency>
@@ -160,45 +171,14 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
-
-
-        <!-- 认证配置 -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-authorization-server</artifactId>
-            <version>0.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>5.1.3</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.6.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

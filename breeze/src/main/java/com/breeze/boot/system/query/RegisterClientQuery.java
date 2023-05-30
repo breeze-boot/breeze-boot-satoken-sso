@@ -38,7 +38,7 @@ public class RegisterClientQuery extends PageQuery {
     private String id;
 
     /**
-     * 客户机id
+     * 客户端ID
      */
     private String clientId;
     private String clientName;

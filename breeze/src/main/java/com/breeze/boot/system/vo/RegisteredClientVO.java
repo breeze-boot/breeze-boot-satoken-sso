@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.vo;
 
+import com.breeze.boot.system.domain.TokenSettingsVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -38,7 +39,12 @@ import java.util.Set;
 public class RegisteredClientVO {
 
     /**
-     * 客户机id
+     * ID
+     */
+    private Long id;
+
+    /**
+     * 客户端ID
      */
     private String clientId;
 

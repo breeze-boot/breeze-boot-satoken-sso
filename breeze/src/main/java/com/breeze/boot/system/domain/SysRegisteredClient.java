@@ -18,13 +18,14 @@ package com.breeze.boot.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.base.BaseModel;
+import com.breeze.boot.security.domain.BaseSysRegisteredClient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 /**
- * 注册客户端实体类
+ * 系统注册客户端
  *
  * @author gaoweixuan
  * @date 2023/05/08
@@ -36,10 +37,10 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_registered_client")
 @Schema(description = "注册客户端实体")
-public class SysRegisteredClient extends BaseModel<SysRegisteredClient> {
+public class SysRegisteredClient extends BaseSysRegisteredClient {
 
     /**
-     * 客户机id
+     * 客户端ID
      */
     private String clientId;
 

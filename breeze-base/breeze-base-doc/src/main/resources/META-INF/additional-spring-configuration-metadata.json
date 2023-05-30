@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "springdoc.description",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.description."
+    },
+    {
+      "name": "springdoc.title",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.title."
+    },
+    {
+      "name": "springdoc.server-url",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.server-url."
+    },
+    {
+      "name": "springdoc.external-Documentation-description",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.external-Documentation-description."
+    },
+    {
+      "name": "springdoc.external-Documentation-url",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.external-Documentation-url."
+    },
+    {
+      "name": "springdoc.type",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.type."
+    }
+  ] }

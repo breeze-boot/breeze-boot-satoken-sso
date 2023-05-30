@@ -21,11 +21,12 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.security.annotation.JumpAuth;
+import com.breeze.boot.security.domain.BaseSysRegisteredClient;
 import com.breeze.boot.system.domain.SysRegisteredClient;
 import com.breeze.boot.system.params.RegisteredClientParam;
 import com.breeze.boot.system.params.ResetClientSecretParam;
 import com.breeze.boot.system.query.RegisterClientQuery;
-import com.breeze.boot.system.service.SysRegisterClientService;
+import com.breeze.boot.system.service.SysRegisteredClientService;
 import com.breeze.boot.system.vo.RegisteredClientVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -55,7 +56,7 @@ public class SysRegisteredClientController {
     /**
      * 客户端注册服务
      */
-    private final SysRegisterClientService sysRegisterClientService;
+    private final SysRegisteredClientService registeredClientService;
 
     /**
      * 列表
@@ -67,7 +68,7 @@ public class SysRegisteredClientController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:client:list')")
     public Result<Page<RegisteredClientVO>> list(RegisterClientQuery registerClientQuery) {
-        return Result.ok(this.sysRegisterClientService.listPage(registerClientQuery));
+        return Result.ok(this.registeredClientService.listPage(registerClientQuery));
     }
 
     /**
@@ -80,7 +81,7 @@ public class SysRegisteredClientController {
     @Operation(summary = "通过客户端id获取客户端")
     @GetMapping("/getByClientId/{clientId}")
     public SysRegisteredClient getByClientId(@PathVariable("clientId") String clientId) {
-        return this.sysRegisterClientService.getByClientId(clientId);
+        return this.registeredClientService.getByClientId(clientId);
     }
 
     /**
@@ -93,7 +94,7 @@ public class SysRegisteredClientController {
     @Operation(summary = "通过id获取客户端")
     @GetMapping("/getById/{id}")
     public SysRegisteredClient getById(@PathVariable("id") String id) {
-        return this.sysRegisterClientService.getById(id);
+        return this.registeredClientService.getById(id);
     }
 
     /**
@@ -106,7 +107,7 @@ public class SysRegisteredClientController {
     @Operation(summary = "通过clientId获取客户端")
     @GetMapping("/info/{clientId}")
     public Result<RegisteredClientVO> info(@PathVariable("clientId") Long clientId) {
-        return Result.ok(this.sysRegisterClientService.info(clientId));
+        return Result.ok(this.registeredClientService.info(clientId));
     }
 
     /**
@@ -120,7 +121,7 @@ public class SysRegisteredClientController {
     @PreAuthorize("hasAnyAuthority('sys:client:create')")
     @BreezeSysLog(description = "客户端信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
-        return this.sysRegisterClientService.saveRegisteredClient(registeredClientParam);
+        return this.registeredClientService.saveRegisteredClient(registeredClientParam);
     }
 
     /**
@@ -134,7 +135,7 @@ public class SysRegisteredClientController {
     @PreAuthorize("hasAnyAuthority('sys:client:modify')")
     @BreezeSysLog(description = "客户端信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
-        return Result.ok(this.sysRegisterClientService.update(registeredClientParam));
+        return Result.ok(this.registeredClientService.update(registeredClientParam));
     }
 
     /**
@@ -148,7 +149,7 @@ public class SysRegisteredClientController {
     @PreAuthorize("hasAnyAuthority('sys:client:delete')")
     @BreezeSysLog(description = "客户端信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return this.sysRegisterClientService.deleteById(Arrays.asList(ids));
+        return this.registeredClientService.deleteById(Arrays.asList(ids));
     }
 
     /**
@@ -162,6 +163,6 @@ public class SysRegisteredClientController {
     @PreAuthorize("hasAnyAuthority('sys:client:resetClientSecret')")
     @BreezeSysLog(description = "重置密钥", type = LogType.EDIT)
     public Result<Boolean> resetClientSecret(@Valid @RequestBody ResetClientSecretParam resetClientSecretParam) {
-        return Result.ok(this.sysRegisterClientService.resetClientSecretParam(resetClientSecretParam));
+        return Result.ok(this.registeredClientService.resetClientSecretParam(resetClientSecretParam));
     }
 }

@@ -58,7 +58,7 @@ public class ProcessInstanceController {
      */
     @Operation(summary = "发起")
     @PostMapping("/startProcess")
-    @PreAuthorize("hasAnyAuthority('process:instance:start')")
+    @PreAuthorize("hasAnyAuthority('flow:instance:start')")
     public Result<Boolean> startProcess(@Valid @RequestBody ProcessStartParam startParam) {
         return Result.ok(this.processInstanceService.startProcess(startParam));
     }
@@ -71,7 +71,7 @@ public class ProcessInstanceController {
      */
     @Operation(summary = "列表")
     @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('process:instance:list')")
+    @PreAuthorize("hasAnyAuthority('flow:instance:list')")
     public Result<Page<ProcessInstanceVO>> list(@RequestBody ProcessInstanceQuery processInstanceQuery) {
         return Result.ok(this.processInstanceService.listPage(processInstanceQuery));
     }

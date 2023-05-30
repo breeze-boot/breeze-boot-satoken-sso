@@ -8,8 +8,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
-          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://127.0.0.1:9000
+          jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
   # json提交时 [Date Calendar] 的全局序列化和反序列化配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -72,22 +72,36 @@ breeze:
   # 权限过滤路径
   security:
     ignore-urls:
-      - "/auth/**"
-      - "/oauth2/**"
+      # SpringDoc
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      - "/swagger-ui.html"
+      ## Knife4j
+      - "/webjars/"
+      - "/doc.html"
+      - "/v2/api-docs-ext"
+      - "/swagger-resources"
+      - "/v2/api-docs"
+      - "/swagger-ui.html"
+      - "/swagger-resources/configuration/security"
+      # websocket
       - "/ws/**"
-      - "/img/**"
+      # monitor
       - "/actuator/**"
+      # 验证码
       - "/captcha/**"
+      # 本地文件存储
+      - "/img/**"
+      # 静态资源
       - "/**/*.js"
       - "/**/*.css"
       - "/**/*.png"
       - "/*.html"
       - "/**/*.html"
+      - "/*.ico"
       - "/**/*.ico"
+      # 数据源
       - "/druid/**"
-      - "/swagger-ui/**"
-      - "/swagger-resources/**"
-      - "/v3/api-docs/**"
 
   # 租户配置
   tenant:

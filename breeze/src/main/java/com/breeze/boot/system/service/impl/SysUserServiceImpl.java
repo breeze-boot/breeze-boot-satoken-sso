@@ -27,6 +27,8 @@ import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.params.AuthLoginParam;
+import com.breeze.boot.security.params.WxLoginParam;
 import com.breeze.boot.security.exception.AccessException;
 import com.breeze.boot.system.domain.*;
 import com.breeze.boot.system.dto.UserRole;

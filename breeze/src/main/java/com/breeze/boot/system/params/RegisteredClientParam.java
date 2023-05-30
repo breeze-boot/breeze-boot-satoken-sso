@@ -43,12 +43,12 @@ public class RegisteredClientParam implements Serializable {
     private Long id;
 
     /**
-     * 客户机id
+     * 客户端ID
      */
     private String clientId;
 
     /**
-     * 客户机id发表在
+     * 客户端ID发表在
      */
     private LocalDateTime clientIdIssuedAt;
 

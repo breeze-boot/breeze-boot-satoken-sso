@@ -16,8 +16,19 @@
 
 package com.breeze.boot.system.config;
 
+import com.breeze.boot.security.service.impl.RemoteRegisterClientService;
+import com.breeze.boot.security.service.ISysRegisteredClientService;
+import com.breeze.boot.security.service.ISysUserService;
+import com.breeze.boot.security.service.impl.UserDetailService;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
 /**
  * 资源服务器配置
@@ -29,6 +40,44 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ResourceServerConfiguration {
 
+    /**
+     * 用户令牌服务
+     */
+    private final ISysRegisteredClientService registeredClientService;
+
+    /**
+     * 用户服务
+     */
+    private final ISysUserService userService;
+
+    /**
+     * 注册客户端库
+     *
+     * @return {@link RegisteredClientRepository}
+     */
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        return new RemoteRegisterClientService(() -> registeredClientService);
+    }
+
+    /**
+     * 用户服务
+     *
+     * @return {@link UserDetailService}
+     */
+    @Bean
+    public UserDetailService userDetailService() {
+        return new UserDetailService(() -> userService);
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
+        return new OpenAPI()
+                .components(new Components())
+                .info(new Info().title("Foo API").version(appVersion)
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
+    }
 }
+
 
 

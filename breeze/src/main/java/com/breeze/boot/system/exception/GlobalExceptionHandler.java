@@ -16,17 +16,11 @@
 
 package com.breeze.boot.system.exception;
 
-import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.exception.AccessException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.breeze.boot.core.enums.ResultCode.HTTP_MESSAGE_CONVERSION_EXCEPTION;
@@ -92,18 +86,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 自定义身份验证异常
-     *
-     * @param ex 错误
-     * @return {@link Result}<{@link ?}>
-     */
-    @ExceptionHandler(AccessException.class)
-    public Result<?> accessException(AccessException ex) {
-        log.error("AccessException 异常：", ex);
-        return Result.fail(ex.getCode(), ex.getMsg());
-    }
-
-    /**
      * 运行时异常
      *
      * @param ex 错误
@@ -114,31 +96,4 @@ public class GlobalExceptionHandler {
         log.error("RuntimeException 运行时异常：", ex);
         return Result.fail(INTERNAL_SERVER_ERROR);
     }
-
-    /**
-     * 拒绝访问异常
-     *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?}>
-     */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(AccessDeniedException.class)
-    public Result<?> accessDeniedException(AccessDeniedException ex) {
-        log.error("AccessDeniedException 拒绝访问异常：", ex);
-        return Result.fail(ResultCode.UNAUTHORIZED, ex.getMessage());
-    }
-
-    /**
-     * 身份验证异常
-     *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?}>
-     */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(AuthenticationException.class)
-    public Result<?> authenticationException(AuthenticationException ex) {
-        log.error("AuthenticationException 身份验证异常： {}", ex);
-        return Result.fail(ResultCode.FORBIDDEN, ex.getMessage());
-    }
-
 }

@@ -1,0 +1,112 @@
+version: '3'
+services:
+  # 数据库
+  breeze-mysql:
+    build:
+      context: ./db
+    container_name: breeze-mysql
+    hostname: breeze-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./docker/mysql/conf/my.ini:/etc/mysql/my.ini
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/data/:/var/lib/mysql
+      - ./docker/mysql/logs:/var/log/mysql
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      # 可以配置在mysql的 my.ini 中
+      --max_connections=1024
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+      --default-time_zone='+8:00'
+    privileged: true
+    networks:
+      - breeze-net
+
+  # redis
+  breeze-redis:
+    image: redis
+    container_name: breeze-redis
+    hostname: breeze-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./docker/redis/data/:/data
+      - ./docker/redis/logs/:/logs
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      redis-server /etc/redis/redis.conf
+    privileged: true
+    networks:
+      - breeze-net
+
+  breeze:
+    build:
+      context: ./breeze
+    restart: always
+    container_name: breeze
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./docker/logs:/usr/local/boot/logs
+      - /etc/localtime:/etc/localtime:ro
+    hostname: breeze
+    image: breeze
+    networks:
+      - breeze-net
+
+  breeze-monitor:
+    build:
+      context: ./breeze-monitor
+    restart: always
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./docker/logs:/usr/local/boot/logs
+      - /etc/localtime:/etc/localtime:ro
+    container_name: breeze-monitor
+    hostname: breeze-monitor
+    image: breeze-monitor
+    networks:
+      - breeze-net
+
+  breeze-minio:
+    container_name: breeze-minio
+    image: minio/minio
+    hostname: breeze-minio
+    ports:
+      - "9092:9092" # api端口
+      - "9091:9091" # 控制台端口
+    environment:
+      MINIO_ACCESS_KEY: admin     #管理平台用户名
+      MINIO_SECRET_KEY: 12345678    #管理平台密码
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker/minio/data:/data
+      - ./docker/minio/config:/root/.minio/
+      - /etc/localtime:/etc/localtime:ro
+    command: server --console-address ':9091' --address ':9092' /data  #指定容器中的目录 /data
+    privileged: true
+    restart: always
+    networks:
+      - breeze-net
+
+networks:
+  breeze-net:
+    # 如果要创建外部隔离的覆盖网络，您可以将此internal选项设置为true
+    external: false

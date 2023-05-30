@@ -3,14 +3,6 @@ breeze:
   wx:
     app-id: wx269d15f14a5fc7e2
     app-secret: 273950b557912864a8627ff5ff9db82b
-  gitee:
-    client-id: ba7002b13ee57b211d5ee7bf9567cf8c6718bbc934aa38f06095398ba70e2ee8
-    client-secret: 5e55b2001bf704aa1f02113e909e9ba470408fe5e7eb30195b289e1e6263f58a
-    redirect-uri: https://2224wa2776.oicp.vip/breeze/auth/gitee/callback
-  github:
-    client-id:
-    client-secret:
-    redirect-uri: https://2224wa2776.oicp.vip/breeze/auth/github/callback
 
 # ==================================验证码==============================================
 # 滑动验证，底图路径，不配置将使用默认图片
