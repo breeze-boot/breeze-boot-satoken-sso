@@ -20,12 +20,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.security.annotation.JumpAuth;
-import com.breeze.boot.security.domain.BaseSysRegisteredClient;
 import com.breeze.boot.system.domain.SysRegisteredClient;
 import com.breeze.boot.system.params.RegisteredClientParam;
 import com.breeze.boot.system.params.ResetClientSecretParam;
-import com.breeze.boot.system.query.RegisterClientQuery;
+import com.breeze.boot.system.query.RegisteredClientQuery;
 import com.breeze.boot.system.service.SysRegisteredClientService;
 import com.breeze.boot.system.vo.RegisteredClientVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,40 +59,14 @@ public class SysRegisteredClientController {
     /**
      * 列表
      *
-     * @param registerClientQuery 客户端查询
+     * @param registeredClientQuery 客户端查询
      * @return {@link Result}<{@link Page}<{@link RegisteredClientVO}>>
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:client:list')")
-    public Result<Page<RegisteredClientVO>> list(RegisterClientQuery registerClientQuery) {
-        return Result.ok(this.registeredClientService.listPage(registerClientQuery));
-    }
-
-    /**
-     * 通过客户端id获取客户端
-     *
-     * @param clientId 客户端id
-     * @return {@link SysRegisteredClient}
-     */
-    @JumpAuth
-    @Operation(summary = "通过客户端id获取客户端")
-    @GetMapping("/getByClientId/{clientId}")
-    public SysRegisteredClient getByClientId(@PathVariable("clientId") String clientId) {
-        return this.registeredClientService.getByClientId(clientId);
-    }
-
-    /**
-     * 通过id获取客户端
-     *
-     * @param id id
-     * @return {@link SysRegisteredClient}
-     */
-    @JumpAuth
-    @Operation(summary = "通过id获取客户端")
-    @GetMapping("/getById/{id}")
-    public SysRegisteredClient getById(@PathVariable("id") String id) {
-        return this.registeredClientService.getById(id);
+    public Result<Page<RegisteredClientVO>> list(RegisteredClientQuery registeredClientQuery) {
+        return Result.ok(this.registeredClientService.listPage(registeredClientQuery));
     }
 
     /**
@@ -103,7 +75,6 @@ public class SysRegisteredClientController {
      * @param clientId 客户端ID
      * @return {@link SysRegisteredClient}
      */
-    @JumpAuth
     @Operation(summary = "通过clientId获取客户端")
     @GetMapping("/info/{clientId}")
     public Result<RegisteredClientVO> info(@PathVariable("clientId") Long clientId) {

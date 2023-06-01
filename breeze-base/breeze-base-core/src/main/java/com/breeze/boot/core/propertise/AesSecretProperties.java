@@ -20,6 +20,12 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * aes√ÿ√‹ Ù–‘
+ *
+ * @author gaoweixuan
+ * @date 2023/05/25
+ */
 @Data
 @Component
 @ConfigurationProperties(prefix = "breeze")

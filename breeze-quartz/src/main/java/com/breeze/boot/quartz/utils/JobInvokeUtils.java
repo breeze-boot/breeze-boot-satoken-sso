@@ -17,12 +17,11 @@
 package com.breeze.boot.quartz.utils;
 
 import cn.hutool.core.util.StrUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 工作调用Utils
  *
- * @author breeze
+ * @author gaoweixuan
  * @date 2023-03-18
  */
 public class JobInvokeUtils {
@@ -65,7 +64,6 @@ public class JobInvokeUtils {
      * @param param 参数
      * @return {@link String}
      */
-    @NotNull
     public static String getTrim(String param) {
         return param.substring(0, param.length() - 1).trim();
     }
@@ -77,7 +75,6 @@ public class JobInvokeUtils {
      * @param parameterTypes 参数类型
      * @param parameters     参数
      */
-    @NotNull
     public static void getParams(String[] paramArray, Class<?>[] parameterTypes, Object[] parameters) {
         for (int i = 0; i < paramArray.length; i++) {
             String param = paramArray[i].trim();

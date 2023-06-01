@@ -62,9 +62,9 @@ public class SysDeptController {
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:dept:list')")
-    public Result<List<Tree<Long>>> list(@RequestBody DeptQuery deptQuery) {
+    public Result<List<?>> list(DeptQuery deptQuery) {
         return Result.ok(this.sysDeptService.listDept(deptQuery));
     }
 
@@ -92,7 +92,7 @@ public class SysDeptController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:dept:create')")
     @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysDept sysDept) {
@@ -106,7 +106,7 @@ public class SysDeptController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:dept:modify')")
     @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysDept sysDept) {
@@ -120,7 +120,7 @@ public class SysDeptController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
     @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {

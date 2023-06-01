@@ -31,6 +31,11 @@
                     column="{userId=id}"
                     select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleIdsByUserId">
         </collection>
+        <collection property="roleNames" javaType="java.util.List"
+                    ofType="java.lang.Long"
+                    column="{userId=id}"
+                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleNamesByUserId">
+        </collection>
     </resultMap>
 
     <select id="listPage" resultMap="sysUserMap">
@@ -57,7 +62,7 @@
         <where>
             a.is_delete = 0
             <if test="userQuery.phone != null and userQuery.phone != ''">
-                AND a.phone like CONCAT('%' , #{phone}, '%')
+                AND a.phone like CONCAT('%' , #{userQuery.phone}, '%')
             </if>
             <if test="userQuery.username != null and userQuery.username != ''">
                 AND a.username like CONCAT('%' , #{userQuery.username}, '%')

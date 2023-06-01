@@ -19,6 +19,7 @@ package com.breeze.boot.core.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -31,6 +32,7 @@ import java.nio.charset.StandardCharsets;
  * @author gaoweixuan
  * @date 2023/05/18
  */
+@Slf4j
 public class AesUtil {
 
     /**
@@ -76,17 +78,14 @@ public class AesUtil {
             return null;
         }
         try {
-            byte[] raw = key.getBytes();
-            //根据密码生成AES密钥
-            SecretKeySpec secretKeySpec = new SecretKeySpec(raw, "AES");
-            //根据指定算法ALGORITHM自成密码器
+            byte[] keyBytes = key.getBytes();
+            // 根据指定算法ALGORITHM生成密码器
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            //初始化密码器，参数:(加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE),AES密钥)
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-            byte[] encode_content = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
-            return Base64.encodeBase64String(encode_content);
+            // 初始化密码器，参数:(加密(ENCRYPT_MODE)或者解密(DECRYPT_MODE),AES密钥)
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(keyBytes, "AES"));
+            return Base64.encodeBase64String(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[解密失败]", e);
             return null;
         }
     }
@@ -102,19 +101,16 @@ public class AesUtil {
         if (StrUtil.isBlank(key)) {
             return "";
         }
-
         if (key.length() != 16) {
             return null;
         }
         try {
-            byte[] raw = key.getBytes();
-            SecretKeySpec secretKeySpec = new SecretKeySpec(raw, "AES");
+            byte[] keyBytes = key.getBytes();
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-            byte[] byte_content = cipher.doFinal(Base64.decodeBase64(content));
-            return new String(byte_content, StandardCharsets.UTF_8);
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyBytes, "AES"));
+            return new String(cipher.doFinal(Base64.decodeBase64(content)), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[加密失败]", e);
             return null;
         }
     }

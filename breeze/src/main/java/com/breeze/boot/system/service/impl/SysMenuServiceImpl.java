@@ -167,8 +167,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (!Objects.equals(ROOT, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
             return Result.fail("上一层组件不存在");
         }
-        boolean save = this.save(menuEntity);
-        return Result.ok();
+        return Result.ok(this.save(menuEntity));
     }
 
     /**
@@ -179,8 +178,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<Boolean> updateMenuById(SysMenu menuEntity) {
-        boolean update = this.updateById(menuEntity);
-        return Result.ok(update);
+        return Result.ok(this.updateById(menuEntity));
     }
 
     /**

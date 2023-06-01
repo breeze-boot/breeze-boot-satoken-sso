@@ -78,4 +78,13 @@
           AND a.is_delete = 0
     </select>
 
+    <select id="listRoleNamesByUserId" resultType="java.lang.String">
+        SELECT role.role_name
+        FROM sys_role AS role
+                 LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
+        WHERE role.is_delete = 0
+          AND ru.user_id = #{userId}
+        ORDER BY role.create_time DESC
+    </select>
+
 </mapper>

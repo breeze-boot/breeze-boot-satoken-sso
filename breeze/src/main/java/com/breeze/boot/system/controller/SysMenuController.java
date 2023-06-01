@@ -59,9 +59,9 @@ public class SysMenuController {
      * @return {@link Result}
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:menu:list')")
-    public Result<?> list(@RequestBody MenuQuery menuQuery) {
+    public Result<?> list(MenuQuery menuQuery) {
         return this.sysMenuService.listMenu(menuQuery);
     }
 
@@ -109,7 +109,7 @@ public class SysMenuController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:menu:create')")
     @BreezeSysLog(description = "菜单信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysMenu sysMenu) {
@@ -123,7 +123,7 @@ public class SysMenuController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:menu:modify')")
     @BreezeSysLog(description = "菜单信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysMenu sysMenu) {
@@ -137,7 +137,7 @@ public class SysMenuController {
      * @return {@link Result}
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:menu:delete')")
     @BreezeSysLog(description = "菜单信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {

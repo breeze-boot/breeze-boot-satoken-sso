@@ -36,7 +36,7 @@ public class DeptQuery {
     /**
      * ID
      */
-    @Schema(description = "ID")
+    @Schema(description = "Id")
     private Long id;
 
     /**
@@ -46,9 +46,9 @@ public class DeptQuery {
     private String deptName;
 
     /**
-     * 父id
+     * 父Id
      */
-    @Schema(description = "父id")
+    @Schema(description = "父Id")
     private Long parentId;
 
 }

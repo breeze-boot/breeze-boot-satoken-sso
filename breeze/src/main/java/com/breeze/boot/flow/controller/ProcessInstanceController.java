@@ -26,10 +26,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -70,9 +67,9 @@ public class ProcessInstanceController {
      * @return {@link Result}<{@link Page}<{@link ProcessInstanceVO}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('flow:instance:list')")
-    public Result<Page<ProcessInstanceVO>> list(@RequestBody ProcessInstanceQuery processInstanceQuery) {
+    public Result<Page<ProcessInstanceVO>> list( ProcessInstanceQuery processInstanceQuery) {
         return Result.ok(this.processInstanceService.listPage(processInstanceQuery));
     }
 

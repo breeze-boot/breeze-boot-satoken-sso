@@ -70,9 +70,9 @@ public class SysDictController {
      * @return {@link Result}<{@link Page}<{@link SysDict}>>
      */
     @Operation(summary = "列表", description = "分页")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDict>> list(@RequestBody DictQuery dictQuery) {
+    public Result<Page<SysDict>> list(DictQuery dictQuery) {
         return Result.ok(this.sysDictService.listPage(dictQuery));
     }
 
@@ -113,7 +113,7 @@ public class SysDictController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysDict sysDict) {
@@ -127,7 +127,7 @@ public class SysDictController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息修改", type = LogType.EDIT)
     public Result<Boolean> update(@Valid @RequestBody SysDict sysDict) {
@@ -155,7 +155,7 @@ public class SysDictController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
     @BreezeSysLog(description = "字典信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

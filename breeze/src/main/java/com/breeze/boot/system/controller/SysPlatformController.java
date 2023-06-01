@@ -71,9 +71,9 @@ public class SysPlatformController {
      * @return {@link Result}<{@link Page}<{@link SysPlatform}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:platform:list')")
-    public Result<Page<SysPlatform>> list(@RequestBody PlatformQuery platformQuery) {
+    public Result<Page<SysPlatform>> list(PlatformQuery platformQuery) {
         return Result.ok(this.sysPlatformService.listPage(platformQuery));
     }
 
@@ -101,7 +101,7 @@ public class SysPlatformController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:platform:create')")
     @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysPlatform platform) {
@@ -115,7 +115,7 @@ public class SysPlatformController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:platform:modify')")
     @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysPlatform sysPlatform) {
@@ -129,7 +129,7 @@ public class SysPlatformController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
     @BreezeSysLog(description = "平台信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

@@ -105,10 +105,5 @@ public class SysQuartzJobLog implements Serializable {
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
-    /**
-     * 租户ID
-     */
-    @Schema(description = "租户ID")
-    private Long tenantId;
 
 }

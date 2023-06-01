@@ -57,9 +57,9 @@ public class SysLogController {
      * @param logQuery 日志查询
      * @return {@link Result}<{@link Page}<{@link SysLog}>>
      */
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(@RequestBody LogQuery logQuery) {
+    public Result<Page<SysLog>> list(LogQuery logQuery) {
         return Result.ok(this.sysLogService.listPage(logQuery));
     }
 
@@ -82,7 +82,7 @@ public class SysLogController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:log:delete')")
     @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

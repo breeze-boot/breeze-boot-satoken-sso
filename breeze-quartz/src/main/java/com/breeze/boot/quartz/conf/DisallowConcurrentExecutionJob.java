@@ -39,6 +39,11 @@ import java.lang.reflect.Method;
 @DisallowConcurrentExecution
 public class DisallowConcurrentExecutionJob extends QuartzJobBean {
 
+    /**
+     * 执行内部
+     *
+     * @param context 上下文
+     */
     @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext context) {

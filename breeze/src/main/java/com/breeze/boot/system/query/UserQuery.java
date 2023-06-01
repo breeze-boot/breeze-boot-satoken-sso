@@ -52,10 +52,4 @@ public class UserQuery extends PageQuery {
     @Schema(description = "电话")
     private String phone;
 
-    /**
-     * 图片预览地址前缀
-     */
-    @Schema(description = "图片预览地址前缀")
-    private String nginxHost;
-
 }

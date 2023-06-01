@@ -58,9 +58,9 @@ public class ProcessDefinitionController {
      * @return {@link Result}<{@link IPage}<{@link DeploymentVO}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('flow:definition:list')")
-    public Result<Page<DeploymentVO>> list(@RequestBody ProcessDeploymentQuery processDeploymentQuery) {
+    public Result<Page<DeploymentVO>> list( ProcessDeploymentQuery processDeploymentQuery) {
         return Result.ok(this.processDefinitionService.listPage(processDeploymentQuery));
     }
 
@@ -173,7 +173,7 @@ public class ProcessDefinitionController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('flow:definition:delete')")
     public Result<Boolean> delete(@NotBlank(message = "部署ID不能为空") @RequestParam("deploymentId") String deploymentId,
                                   @RequestParam(defaultValue = "false") Boolean cascade) {

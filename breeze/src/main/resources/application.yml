@@ -118,7 +118,6 @@ breeze:
       - "sys_log"
       - "sys_menu"
       - "sys_msg"
-      - "sys_msg_user"
       - "sys_msg_channel"
 
   # xss过滤路径

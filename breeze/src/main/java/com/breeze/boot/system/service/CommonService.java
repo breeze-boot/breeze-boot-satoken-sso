@@ -55,7 +55,7 @@ public interface CommonService {
      * @param id id
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
-    Result<List<Tree<Long>>> selectDept(Long id);
+    Result<List<?>> selectDept(Long id);
 
     /**
      * 用户下拉框

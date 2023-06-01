@@ -24,7 +24,9 @@ import com.alibaba.excel.enums.poi.HorizontalAlignmentEnum;
 import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.annotation.SensitiveInfo;
 import com.breeze.boot.core.base.BaseModel;
+import com.breeze.boot.core.enums.SensitiveType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -150,6 +152,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "身份证号")
     @ExcelProperty(value = "身份证号", index = 7)
+    @SensitiveInfo(SensitiveType.ID_CARD)
     private String idCard;
 
     /**
@@ -157,6 +160,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "手机号")
     @ExcelProperty(value = "手机号", index = 8)
+    @SensitiveInfo(SensitiveType.PHONE)
     private String phone;
 
     /**
@@ -172,6 +176,7 @@ public class SysUser extends BaseModel<SysUser> implements Serializable {
      */
     @Schema(description = "邮件")
     @ExcelProperty(value = "邮件", index = 10)
+    @SensitiveInfo(SensitiveType.EMAIL)
     private String email;
 
     /**

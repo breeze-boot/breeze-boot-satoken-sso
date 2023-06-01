@@ -27,8 +27,10 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,6 +83,18 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
         if (StompCommand.SUBSCRIBE.equals(command)) {
             // TODO
             log.debug("[订阅内容]");
+        }
+        // 检测用户发送内容
+        if (StompCommand.SEND.equals(command)) {
+            Object nativeHeaders = message.getHeaders().get("nativeHeaders");
+            List<?> tenantIdList = ((LinkedMultiValueMap<?, ?>) nativeHeaders).get("tenantId");
+            if (CollUtil.isEmpty(tenantIdList)) {
+                return message;
+            }
+            Long tenantId = Long.valueOf(
+                    ((ArrayList<?>) tenantIdList).get(0).toString()
+            );
+            log.debug("[订阅内容] {}",tenantId);
         }
         return message;
     }

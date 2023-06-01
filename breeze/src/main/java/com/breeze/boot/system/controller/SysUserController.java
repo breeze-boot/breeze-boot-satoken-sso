@@ -26,7 +26,7 @@ import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.params.UserOpenParam;
-import com.breeze.boot.system.params.UserResetPasswordParam;
+import com.breeze.boot.system.params.UserResetParam;
 import com.breeze.boot.system.params.UserRolesParam;
 import com.breeze.boot.system.query.UserQuery;
 import com.breeze.boot.system.service.SysUserService;
@@ -69,10 +69,38 @@ public class SysUserController {
      * @return {@link Result}<{@link IPage}<{@link SysUser}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:user:list')")
-    public Result<IPage<SysUser>> list(@RequestBody UserQuery userQuery) {
+    public Result<IPage<SysUser>> list(UserQuery userQuery) {
         return Result.ok(this.sysUserService.listPage(userQuery));
+    }
+
+    /**
+     * 创建
+     *
+     * @param sysUser 系统用户
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "保存")
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority('sys:user:create')")
+    @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Valid @RequestBody SysUser sysUser) {
+        return sysUserService.saveUser(sysUser);
+    }
+
+    /**
+     * 修改
+     *
+     * @param sysUser 系统用户
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "修改")
+    @PutMapping
+    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
+    @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
+    public Result<Boolean> modify(@Valid @RequestBody SysUser sysUser) {
+        return Result.ok(sysUserService.updateUserById(sysUser));
     }
 
     /**
@@ -118,6 +146,27 @@ public class SysUserController {
     }
 
     /**
+     * 删除
+     *
+     * @param ids 用户ids
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "删除")
+    @DeleteMapping
+    @PreAuthorize("hasAnyAuthority('sys:user:delete')")
+    @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
+    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
+        List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getId, ids));
+        if (CollUtil.isEmpty(sysUserList)) {
+            return Result.fail(Boolean.FALSE, "用户不存在");
+        }
+        for (SysUser sysUser : sysUserList) {
+            this.sysUserService.removeUser(sysUser);
+        }
+        return Result.ok();
+    }
+
+    /**
      * 导出
      *
      * @param response 响应
@@ -129,45 +178,17 @@ public class SysUserController {
     }
 
     /**
-     * 创建
-     *
-     * @param sysUser 系统用户
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Operation(summary = "保存")
-    @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('sys:user:create')")
-    @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysUser sysUser) {
-        return sysUserService.saveUser(sysUser);
-    }
-
-    /**
-     * 修改
-     *
-     * @param sysUser 系统用户
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Operation(summary = "修改")
-    @PutMapping("/modify")
-    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
-    @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysUser sysUser) {
-        return Result.ok(sysUserService.updateUserById(sysUser));
-    }
-
-    /**
      * 重置密码
      *
-     * @param userResetPasswordParam 用户重置密码参数
+     * @param userResetParam 用户重置密码参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "重置密码")
-    @PutMapping("/resetPass")
-    @PreAuthorize("hasAnyAuthority('sys:user:resetPass')")
+    @PutMapping("/reset")
+    @PreAuthorize("hasAnyAuthority('sys:user:reset')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
-    public Result<Boolean> resetPass(@Valid @RequestBody UserResetPasswordParam userResetPasswordParam) {
-        return Result.ok(sysUserService.resetPass(userResetPasswordParam));
+    public Result<Boolean> reset(@Valid @RequestBody UserResetParam userResetParam) {
+        return Result.ok(sysUserService.reset(userResetParam));
     }
 
     /**
@@ -192,32 +213,11 @@ public class SysUserController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户分配角色")
-    @PutMapping("/userAddRole")
-    @PreAuthorize("hasAnyAuthority('sys:user:userSetRole')")
+    @PutMapping("/setRole")
+    @PreAuthorize("hasAnyAuthority('sys:user:setRole')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
-    public Result<Boolean> userAddRole(@Valid @RequestBody UserRolesParam userRolesParam) {
-        return sysUserService.userAddRole(userRolesParam);
-    }
-
-    /**
-     * 删除
-     *
-     * @param ids 用户 ids
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Operation(summary = "删除")
-    @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('sys:user:delete')")
-    @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
-        List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getId, ids));
-        if (CollUtil.isEmpty(sysUserList)) {
-            return Result.fail(Boolean.FALSE, "用户不存在");
-        }
-        for (SysUser sysUser : sysUserList) {
-            this.sysUserService.removeUser(sysUser);
-        }
-        return Result.ok();
+    public Result<Boolean> setRole(@Valid @RequestBody UserRolesParam userRolesParam) {
+        return sysUserService.setRole(userRolesParam);
     }
 
     /**
@@ -226,9 +226,9 @@ public class SysUserController {
      * @return {@link String }
      */
     @Operation(summary = "查询用户信息")
+    @PreAuthorize("hasAnyAuthority('sys:user:info')")
     @GetMapping("/userInfo")
     public Result<BaseLoginUser> userInfo() {
-        BaseLoginUser currentUser = SecurityUtils.getCurrentUser();
-        return Result.ok(currentUser);
+        return Result.ok(SecurityUtils.getCurrentUser());
     }
 }

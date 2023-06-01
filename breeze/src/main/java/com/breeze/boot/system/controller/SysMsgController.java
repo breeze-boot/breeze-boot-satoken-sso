@@ -59,9 +59,9 @@ public class SysMsgController {
      * @return {@link Result}<{@link IPage}<{@link SysMsg}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:list')")
-    public Result<IPage<SysMsg>> list(@RequestBody MsgQuery msgQuery) {
+    public Result<IPage<SysMsg>> list(MsgQuery msgQuery) {
         return Result.ok(this.sysMsgService.listPage(msgQuery));
     }
 
@@ -85,7 +85,7 @@ public class SysMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:create')")
     @BreezeSysLog(description = "消息信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysMsg msg) {
@@ -99,7 +99,7 @@ public class SysMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:modify')")
     @BreezeSysLog(description = "消息信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysMsg msg) {
@@ -113,7 +113,7 @@ public class SysMsgController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:delete')")
     @BreezeSysLog(description = "消息信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

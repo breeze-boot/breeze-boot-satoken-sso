@@ -24,7 +24,7 @@ import com.breeze.boot.security.service.ISysRegisteredClientService;
 import com.breeze.boot.system.domain.SysRegisteredClient;
 import com.breeze.boot.system.params.RegisteredClientParam;
 import com.breeze.boot.system.params.ResetClientSecretParam;
-import com.breeze.boot.system.query.RegisterClientQuery;
+import com.breeze.boot.system.query.RegisteredClientQuery;
 import com.breeze.boot.system.vo.RegisteredClientVO;
 
 import java.util.List;
@@ -56,10 +56,10 @@ public interface SysRegisteredClientService extends IService<SysRegisteredClient
     /**
      * 列表页面
      *
-     * @param registerClientQuery 注册客户端参数
+     * @param registeredClientQuery 注册客户端参数
      * @return {@link Page}<{@link RegisteredClientVO}>
      */
-    Page<RegisteredClientVO> listPage(RegisterClientQuery registerClientQuery);
+    Page<RegisteredClientVO> listPage(RegisteredClientQuery registeredClientQuery);
 
     /**
      * 保存注册客户端

@@ -42,7 +42,7 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      * @param userQuery 用户查询
      * @return {@link IPage}<{@link SysUser}>
      */
-    IPage<SysUser> listPage(Page<Object> page, @Param("userQuery") UserQuery userQuery);
+    IPage<SysUser> listPage(Page<SysUser> page, @Param("userQuery") UserQuery userQuery);
 
     /**
      * 用户通过部门id列表

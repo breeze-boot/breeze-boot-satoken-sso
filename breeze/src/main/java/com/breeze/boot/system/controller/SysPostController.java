@@ -62,9 +62,9 @@ public class SysPostController {
      * @return {@link Result}<{@link IPage}<{@link SysPost}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:post:list')")
-    public Result<IPage<SysPost>> list(@RequestBody PostQuery postQuery) {
+    public Result<IPage<SysPost>> list(PostQuery postQuery) {
         return Result.ok(this.sysPostService.listPage(postQuery));
     }
 
@@ -92,7 +92,7 @@ public class SysPostController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:post:create')")
     @BreezeSysLog(description = "岗位信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysPost post) {
@@ -106,7 +106,7 @@ public class SysPostController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:post:modify')")
     @BreezeSysLog(description = "岗位信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysPost sysPost) {
@@ -120,7 +120,7 @@ public class SysPostController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:post:delete')")
     @BreezeSysLog(description = "岗位信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {

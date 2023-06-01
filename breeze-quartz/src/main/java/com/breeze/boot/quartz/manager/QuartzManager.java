@@ -24,6 +24,7 @@ import com.breeze.boot.quartz.domain.SysQuartzJob;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -40,6 +41,7 @@ import static com.breeze.boot.core.constants.QuartzConstants.MisfirePolicy.*;
  * @author gaoweixuan
  * @date 2023-03-16
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class QuartzManager {
@@ -102,7 +104,7 @@ public class QuartzManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("添加任务失败", e);
         }
     }
 
@@ -132,7 +134,7 @@ public class QuartzManager {
                 this.scheduler.deleteJob(jobKey);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("删除任务失败", e);
         }
     }
 
@@ -149,7 +151,7 @@ public class QuartzManager {
                 this.scheduler.pauseJob(jobKey);
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("暂停任务失败", e);
         }
     }
 
@@ -166,7 +168,7 @@ public class QuartzManager {
                 this.scheduler.resumeJob(jobKey);
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("恢复任务失败", e);
         }
     }
 
@@ -183,7 +185,7 @@ public class QuartzManager {
                 this.scheduler.triggerJob(jobKey);
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("运行任务失败", e);
         }
     }
 
@@ -217,7 +219,7 @@ public class QuartzManager {
                 }
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("查询任务务失败", e);
         }
         return jobList;
     }

@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.query;
+package com.breeze.boot.core.annotation;
 
-import com.breeze.boot.core.base.PageQuery;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.breeze.boot.core.enums.SensitiveType;
+import com.breeze.boot.core.jackson.SensitiveInfoSerialize;
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * 注册客户端查询参数
+ * 敏感信息
  *
  * @author gaoweixuan
- * @date 2023/05/08
+ * @date 2023/06/01
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class RegisterClientQuery extends PageQuery {
+@Retention(RetentionPolicy.RUNTIME)
+@JacksonAnnotationsInside // 表示自定义自己的注解PrivacyEncrypt
+@JsonSerialize(using = SensitiveInfoSerialize.class)// 该注解使用序列化的方式
+public @interface SensitiveInfo {
 
-    /**
-     * id
-     */
-    private String id;
-
-    /**
-     * 客户端ID
-     */
-    private String clientId;
-    private String clientName;
+    SensitiveType value();
 
 }

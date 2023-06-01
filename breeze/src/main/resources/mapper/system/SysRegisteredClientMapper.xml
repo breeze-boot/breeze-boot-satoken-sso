@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.system.mapper.SysRegisterClientMapper">
+<mapper namespace="com.breeze.boot.system.mapper.SysRegisteredClientMapper">
 
     <select id="listPage"
             resultType="com.breeze.boot.system.vo.RegisteredClientVO">
@@ -22,8 +22,11 @@
         sys_registered_client
         <where>
             AND is_delete = 0
-            <if test="registerClientQuery.clientName != null and registerClientQuery.clientName != ''">
-                AND client_name LIKE CONCAT( '%', #{registerClientQuery.clientName} ,'%')
+            <if test="registeredClientQuery.clientName != null and registeredClientQuery.clientName != ''">
+                AND client_name LIKE CONCAT( '%', #{registeredClientQuery.clientName} ,'%')
+            </if>
+            <if test="registeredClientQuery.clientId != null and registeredClientQuery.clientId != ''">
+                AND client_id LIKE CONCAT( '%', #{registeredClientQuery.clientId} ,'%')
             </if>
         </where>
     </select>

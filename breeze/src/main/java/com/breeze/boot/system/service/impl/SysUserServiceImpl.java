@@ -187,15 +187,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置密码
      *
-     * @param userResetPasswordParam 用户重置密码参数
+     * @param userResetParam 用户重置密码参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetPass(UserResetPasswordParam userResetPasswordParam) {
-        userResetPasswordParam.setPassword(this.passwordEncoder.encode(userResetPasswordParam.getPassword()));
-        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getPassword, userResetPasswordParam.getPassword()).eq(SysUser::getId, userResetPasswordParam.getId()));
-        return update;
+    public Boolean reset(UserResetParam userResetParam) {
+        userResetParam.setPassword(this.passwordEncoder.encode(userResetParam.getPassword()));
+        return this.update(Wrappers.<SysUser>lambdaUpdate()
+                .set(SysUser::getPassword, userResetParam.getPassword()).eq(SysUser::getId, userResetParam.getId()));
     }
 
     /**
@@ -223,7 +222,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> userAddRole(UserRolesParam userRolesParam) {
+    public Result<Boolean> setRole(UserRolesParam userRolesParam) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesParam.getUsername()));
         if (Objects.isNull(sysUser)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
@@ -311,7 +310,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
-
     /**
      * 加载用户通过用户名
      *
@@ -324,7 +322,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (Objects.isNull(sysUser)) {
             return Result.fail("未获取到用户");
         }
-
         return Result.ok(this.buildLoginUserInfo(sysUser));
     }
 

@@ -63,9 +63,9 @@ public class SysTenantController {
      * @return {@link Result}<{@link IPage}<{@link SysTenant}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
-    public Result<IPage<SysTenant>> list(@RequestBody TenantQuery tenantQuery) {
+    public Result<IPage<SysTenant>> list(TenantQuery tenantQuery) {
         return Result.ok(this.sysTenantService.listPage(tenantQuery));
     }
 
@@ -76,7 +76,7 @@ public class SysTenantController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:tenant:create')")
     @BreezeSysLog(description = "租户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysTenant tenant) {
@@ -107,7 +107,7 @@ public class SysTenantController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysTenant sysTenant) {
@@ -121,7 +121,7 @@ public class SysTenantController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:tenant:delete')")
     @BreezeSysLog(description = "租户信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {

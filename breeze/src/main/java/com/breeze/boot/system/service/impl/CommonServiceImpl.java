@@ -156,7 +156,7 @@ public class CommonServiceImpl implements CommonService {
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Override
-    public Result<List<Tree<Long>>> selectDept(Long id) {
+    public Result<List<?>> selectDept(Long id) {
         return Result.ok(this.deptService.listDept(DeptQuery.builder().id(id).build()));
     }
 

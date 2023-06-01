@@ -38,7 +38,7 @@ public interface SysDeptService extends IService<SysDept> {
      * @param deptQuery 部门查询
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
-    List<Tree<Long>> listDept(DeptQuery deptQuery);
+    List<?> listDept(DeptQuery deptQuery);
 
     /**
      * 删除通过id

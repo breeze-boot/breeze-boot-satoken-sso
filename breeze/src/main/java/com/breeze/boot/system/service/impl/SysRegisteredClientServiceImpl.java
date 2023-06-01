@@ -23,10 +23,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysRegisteredClient;
 import com.breeze.boot.system.domain.TokenSettingsVO;
-import com.breeze.boot.system.mapper.SysRegisterClientMapper;
+import com.breeze.boot.system.mapper.SysRegisteredClientMapper;
 import com.breeze.boot.system.params.RegisteredClientParam;
 import com.breeze.boot.system.params.ResetClientSecretParam;
-import com.breeze.boot.system.query.RegisterClientQuery;
+import com.breeze.boot.system.query.RegisteredClientQuery;
 import com.breeze.boot.system.service.SysRegisteredClientService;
 import com.breeze.boot.system.vo.ClientSettingsVO;
 import com.breeze.boot.system.vo.RegisteredClientVO;
@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisterClientMapper, SysRegisteredClient> implements SysRegisteredClientService {
+public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredClientMapper, SysRegisteredClient> implements SysRegisteredClientService {
 
     /**
      * 密码编码器
@@ -75,12 +75,12 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisterClien
     /**
      * 列表页面
      *
-     * @param registerClientQuery 注册客户端参数
+     * @param registeredClientQuery 注册客户端参数
      * @return {@link Page}<{@link RegisteredClientVO}>
      */
     @Override
-    public Page<RegisteredClientVO> listPage(RegisterClientQuery registerClientQuery) {
-        Page<RegisteredClientVO> registeredClientPage = this.baseMapper.listPage(new Page<>(registerClientQuery.getCurrent(), registerClientQuery.getSize()), registerClientQuery);
+    public Page<RegisteredClientVO> listPage(RegisteredClientQuery registeredClientQuery) {
+        Page<RegisteredClientVO> registeredClientPage = this.baseMapper.listPage(new Page<>(registeredClientQuery.getCurrent(), registeredClientQuery.getSize()), registeredClientQuery);
         return registeredClientPage.setRecords(registeredClientPage.getRecords().stream().peek(this::getClientVO).collect(Collectors.toList()));
     }
 
@@ -178,7 +178,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisterClien
      */
     @Override
     public SysRegisteredClient getByClientId(String clientId) {
-        return this.baseMapper.getRegisteredClientBy(RegisterClientQuery.builder().clientId(clientId).build());
+        return this.baseMapper.getRegisteredClientBy(RegisteredClientQuery.builder().clientId(clientId).build());
     }
 
     /**
@@ -189,7 +189,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisterClien
      */
     @Override
     public SysRegisteredClient getById(String id) {
-        return this.baseMapper.getRegisteredClientBy(RegisterClientQuery.builder().id(id).build());
+        return this.baseMapper.getRegisteredClientBy(RegisteredClientQuery.builder().id(Long.valueOf(id)).build());
     }
 
     /**

@@ -39,7 +39,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/jobLog")
+@RequestMapping(value = "/jLog")
 public class QuartzJobLogController {
 
     /**
@@ -54,9 +54,9 @@ public class QuartzJobLogController {
      * @return {@link Result}<{@link Page}<{@link SysQuartzJobLog}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
-    @PreAuthorize("hasAnyAuthority('sys:jobLog:list')")
-    public Result<Page<SysQuartzJobLog>> listPage(@RequestBody JobQuery jobQuery) {
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('sys:jLog:list')")
+    public Result<Page<SysQuartzJobLog>> listPage(JobQuery jobQuery) {
         return Result.ok(this.quartzJobLogService.listPage(jobQuery));
     }
 
@@ -67,8 +67,8 @@ public class QuartzJobLogController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyAuthority('sys:jobLog:delete')")
+    @DeleteMapping
+    @PreAuthorize("hasAnyAuthority('sys:jLog:delete')")
     @BreezeSysLog(description = "删除任务日志", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> logIds) {
         return Result.ok(this.quartzJobLogService.deleteLogs(logIds));
@@ -79,7 +79,7 @@ public class QuartzJobLogController {
      */
     @Operation(summary = "清空")
     @PutMapping("/truncate")
-    @PreAuthorize("hasAnyAuthority('sys:jobLog:truncate')")
+    @PreAuthorize("hasAnyAuthority('sys:jLog:truncate')")
     @BreezeSysLog(description = "清空任务日志", type = LogType.DELETE)
     public void truncate() {
         this.quartzJobLogService.truncate();

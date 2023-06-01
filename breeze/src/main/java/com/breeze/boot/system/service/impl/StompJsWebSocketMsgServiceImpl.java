@@ -16,6 +16,7 @@
 
 package com.breeze.boot.system.service.impl;
 
+import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.system.domain.SysMsg;
 import com.breeze.boot.system.domain.SysUser;
@@ -105,12 +106,14 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
      */
     @Override
     public Result<MsgVO> sendBroadcastMsg(MsgParam msgParam) {
+        BreezeThreadLocal.set(msgParam.getTenantId());
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
             return Result.fail("消息不存在");
         }
         sendMsg2User(this.sysUserService.list(), sysMsg);
+        BreezeThreadLocal.remove();
         return Result.ok(buildMsgVO(sysMsg));
     }
 
@@ -123,6 +126,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
      */
     @Override
     public Result<MsgVO> sendMsgToSingleUser(Principal principal, MsgParam msgParam) {
+        BreezeThreadLocal.set(msgParam.getTenantId());
         log.debug("[msgId]：{}, [username]： {}", msgParam, principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgParam);
         if (Objects.isNull(sysMsg)) {
@@ -130,6 +134,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
             return Result.fail("消息不存在");
         }
         sendMsg2User(this.sysUserService.listByIds(msgParam.getUserIds()), sysMsg);
+        BreezeThreadLocal.remove();
         return Result.ok(buildMsgVO(sysMsg));
     }
 
@@ -152,6 +157,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
      */
     @Override
     public void sendMsgToUser(Principal principal, MsgParam msgParam) {
+        BreezeThreadLocal.set(msgParam.getTenantId());
         log.debug("[msgId]： {}, [username]： {}", msgParam.getMsgId(), principal.getName());
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
@@ -172,6 +178,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
             sysUserMsgList.add(buildMsgBody(sysMsg, sysUser));
         }
+        BreezeThreadLocal.remove();
         this.asyncSendMsg(sysUserMsgList);
     }
 

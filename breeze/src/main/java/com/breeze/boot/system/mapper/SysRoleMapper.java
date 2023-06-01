@@ -51,6 +51,14 @@ public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
     List<Long> listRoleIdsByUserId(@Param("userId") Long userId);
 
     /**
+     * 用户角色名称列表
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link Long}>
+     */
+    List<String> listRoleNamesByUserId(@Param("userId") Long userId);
+
+    /**
      * 列表页面
      *
      * @param page      页面

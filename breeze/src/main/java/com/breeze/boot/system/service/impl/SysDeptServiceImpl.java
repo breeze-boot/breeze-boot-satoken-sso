@@ -57,10 +57,13 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     @Override
-    public List<Tree<Long>> listDept(DeptQuery deptQuery) {
+    public List<?> listDept(DeptQuery deptQuery) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery()
-                .eq(Objects.nonNull(deptQuery) && StrUtil.isAllNotBlank(deptQuery.getDeptName()),
+                .like(Objects.nonNull(deptQuery) && StrUtil.isAllNotBlank(deptQuery.getDeptName()),
                         SysDept::getDeptName, deptQuery.getDeptName()));
+        if (StrUtil.isAllNotBlank(deptQuery.getDeptName())) {
+            return deptEntityList;
+        }
         List<TreeNode<Long>> treeNodeList = deptEntityList.stream().map(
                 sysDept -> {
                     TreeNode<Long> treeNode = new TreeNode<>();

@@ -62,9 +62,9 @@ public class ProcessCategoryController {
      */
     @DS("flowable")
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('flow:category:list')")
-    public Result<IPage<ProcessCategory>> list(@RequestBody ProcessCategoryQuery processCategory) {
+    public Result<IPage<ProcessCategory>> list( ProcessCategoryQuery processCategory) {
         return Result.ok(this.processCategoryService.listPage(processCategory));
     }
 
@@ -94,7 +94,7 @@ public class ProcessCategoryController {
      */
     @DS("flowable")
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('flow:category:create')")
     @BreezeSysLog(description = "流程分类信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody ProcessCategory processCategory) {
@@ -109,7 +109,7 @@ public class ProcessCategoryController {
      */
     @DS("flowable")
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('flow:category:modify')")
     @BreezeSysLog(description = "流程分类信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody ProcessCategory processCategory) {
@@ -124,7 +124,7 @@ public class ProcessCategoryController {
      */
     @DS("flowable")
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('flow:category:delete')")
     @BreezeSysLog(description = "流程分类信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

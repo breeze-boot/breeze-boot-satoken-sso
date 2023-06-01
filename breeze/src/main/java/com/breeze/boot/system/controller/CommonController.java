@@ -87,7 +87,7 @@ public class CommonController {
      */
     @Operation(summary = "部门下拉框", description = "下拉框接口")
     @GetMapping("/selectDept")
-    public Result<List<Tree<Long>>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
+    public Result<List<?>> selectDept(@RequestParam(defaultValue = "", required = false) Long id) {
         return this.commonService.selectDept(id);
     }
 

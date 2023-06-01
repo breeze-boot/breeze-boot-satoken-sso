@@ -68,9 +68,9 @@ public class SysPermissionController {
      * @return {@link Result}<{@link Page}<{@link SysPermission}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:permission:list')")
-    public Result<Page<SysPermission>> list(@RequestBody DataPermissionQuery permissionQuery) {
+    public Result<Page<SysPermission>> list(DataPermissionQuery permissionQuery) {
         return Result.ok(this.sysPermissionService.listPage(permissionQuery));
     }
 
@@ -81,7 +81,7 @@ public class SysPermissionController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:permission:create')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody DataPermissionParam permissionParam) {
@@ -95,7 +95,7 @@ public class SysPermissionController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:permission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody DataPermissionParam permissionParam) {
@@ -109,7 +109,7 @@ public class SysPermissionController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:permission:delete')")
     @BreezeSysLog(description = "数据权限信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

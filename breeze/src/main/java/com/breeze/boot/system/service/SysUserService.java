@@ -22,7 +22,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.service.ISysUserService;
 import com.breeze.boot.system.domain.SysUser;
 import com.breeze.boot.system.params.UserOpenParam;
-import com.breeze.boot.system.params.UserResetPasswordParam;
+import com.breeze.boot.system.params.UserResetParam;
 import com.breeze.boot.system.params.UserRolesParam;
 import com.breeze.boot.system.query.UserQuery;
 
@@ -72,10 +72,10 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
     /**
      * 重置密码
      *
-     * @param userResetPasswordParam 用户重置密码参数
+     * @param userResetParam 用户重置密码参数
      * @return {@link Boolean}
      */
-    Boolean resetPass(UserResetPasswordParam userResetPasswordParam);
+    Boolean reset(UserResetParam userResetParam);
 
     /**
      * 删除用户
@@ -91,7 +91,7 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
      * @param userRolesParam 用户角色参数
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> userAddRole(UserRolesParam userRolesParam);
+    Result<Boolean> setRole(UserRolesParam userRolesParam);
 
     /**
      * 通过ID查询用户

@@ -56,9 +56,9 @@ public class QuartzJobController {
      * @return {@link Result}<{@link Page}<{@link SysQuartzJob}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:job:list')")
-    public Result<Page<SysQuartzJob>> listPage(@RequestBody JobQuery jobQuery) {
+    public Result<Page<SysQuartzJob>> listPage(JobQuery jobQuery) {
         return Result.ok(this.sysQuartzJobService.listPage(jobQuery));
     }
 
@@ -69,7 +69,7 @@ public class QuartzJobController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:job:create')")
     @BreezeSysLog(description = "保存任务", type = LogType.EDIT)
     public Result<Boolean> save(@Valid @RequestBody SysQuartzJob sysQuartzJob) {
@@ -83,7 +83,7 @@ public class QuartzJobController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:job:modify')")
     @BreezeSysLog(description = "修改任务", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysQuartzJob sysQuartzJob) {
@@ -113,7 +113,7 @@ public class QuartzJobController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:job:delete')")
     @BreezeSysLog(description = "删除任务", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] jobIds) {

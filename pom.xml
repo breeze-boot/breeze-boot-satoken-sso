@@ -45,9 +45,9 @@
         <spring.version>5.3.26</spring.version>
 
         <!--Swagger Resources-->
-        <springdoc.version>1.6.10</springdoc.version>
-        <swagger.version>2.2.4</swagger.version>
-        <knife4j.version>3.0.3</knife4j.version>
+        <springdoc.version>1.7.0</springdoc.version>
+        <swagger.version>2.2.9</swagger.version>
+        <knife4j.version>4.1.0</knife4j.version>
 
         <lombok.version>1.18.18</lombok.version>
         <hutool.version>5.8.9</hutool.version>
@@ -224,21 +224,33 @@
 
             <!-- OpenAPI 3 -->
             <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-ui</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
-                <version>1.6.9</version>
+                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-security</artifactId>
-                <version>1.6.9</version>
+                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-webmvc-core</artifactId>
-                <version>1.6.9</version>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
 
             <dependency>

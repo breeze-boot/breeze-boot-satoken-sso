@@ -14,40 +14,39 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.params;
+package com.breeze.boot.system.query;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.breeze.boot.core.base.PageQuery;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 /**
- * 用户重置密码参数
+ * 注册客户端查询参数
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @date 2023/05/08
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "用户重置密码参数")
-public class UserResetPasswordParam {
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class RegisteredClientQuery extends PageQuery {
 
     /**
-     * 用户Id
+     * ID
+     * <p>
+     * service中使用
      */
-    @NotNull(message = "用户Id不能为空")
-    @Schema(description = "用户Id")
     private Long id;
 
     /**
-     * 用户密码
+     * 客户端ID
      */
-    @NotBlank(message = "密码不可为空")
-    @Schema(description = "用户密码")
-    private String password;
+    private String clientId;
+
+    /**
+     * 客户端名称
+     */
+    private String clientName;
 
 }

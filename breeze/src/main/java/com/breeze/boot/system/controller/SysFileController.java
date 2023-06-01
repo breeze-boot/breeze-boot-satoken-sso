@@ -63,9 +63,9 @@ public class SysFileController {
      * @return {@link Result}<{@link Page}<{@link SysFile}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
-    public Result<Page<SysFile>> list(@RequestBody FileQuery fileQuery) {
+    public Result<Page<SysFile>> list(FileQuery fileQuery) {
         return Result.ok(this.sysFileService.listPage(fileQuery));
     }
 
@@ -137,7 +137,7 @@ public class SysFileController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:file:delete')")
     @BreezeSysLog(description = "文件信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {

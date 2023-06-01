@@ -72,9 +72,9 @@ public class SysRoleController {
      * @return {@link Result}<{@link Page}<{@link SysRole}>>
      */
     @Operation(summary = "列表")
-    @PostMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:role:list')")
-    public Result<Page<SysRole>> list(@RequestBody RoleQuery roleQuery) {
+    public Result<Page<SysRole>> list(RoleQuery roleQuery) {
         return Result.ok(this.sysRoleService.listPage(roleQuery));
     }
 
@@ -144,7 +144,7 @@ public class SysRoleController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:role:create')")
     @BreezeSysLog(description = "角色信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysRole sysRole) {
@@ -158,7 +158,7 @@ public class SysRoleController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping("/modify")
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('sys:role:modify')")
     @BreezeSysLog(description = "角色信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysRole sysRole) {
@@ -172,7 +172,7 @@ public class SysRoleController {
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "删除")
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:role:delete')")
     @BreezeSysLog(description = "角色信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
