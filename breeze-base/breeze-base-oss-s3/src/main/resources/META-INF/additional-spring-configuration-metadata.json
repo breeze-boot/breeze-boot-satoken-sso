@@ -6,14 +6,14 @@
       "description": "breeze.oss.endpoint."
     },
     {
-      "name": "breeze.oss.s3.secretKey",
+      "name": "breeze.oss.s3.minioRootUser",
       "type": "java.lang.String",
-      "description": "breeze.oss.secretKey."
+      "description": "breeze.oss.s3.minioRootUser."
     },
     {
-      "name": "breeze.oss.s3.accessKey",
+      "name": "breeze.oss.s3.minioRootPassword",
       "type": "java.lang.String",
-      "description": "breeze.oss.accessKey."
+      "description": "breeze.oss.s3.minioRootPassword."
     }
   ]
 }

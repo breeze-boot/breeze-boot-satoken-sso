@@ -18,7 +18,7 @@ package com.breeze.boot.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -82,8 +82,9 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     public Page<SysFile> listPage(FileQuery fileQuery) {
         Page<SysFile> logEntityPage = new Page<>(fileQuery.getCurrent(), fileQuery.getSize());
         return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(fileQuery.getNewFileName()), SysFile::getNewFileName, fileQuery.getNewFileName())
-                .like(StrUtil.isAllNotBlank(fileQuery.getOriginalFileName()), SysFile::getOriginalFileName, fileQuery.getOriginalFileName())
+                .like(StrUtil.isAllNotBlank(fileQuery.getTitle()), SysFile::getTitle, fileQuery.getTitle())
+                .like(StrUtil.isAllNotBlank(fileQuery.getBizType()), SysFile::getBizType, fileQuery.getBizType())
+                .like(StrUtil.isAllNotBlank(fileQuery.getCreateName()), SysFile::getCreateName, fileQuery.getCreateName())
                 .page(logEntityPage);
     }
 
@@ -98,32 +99,35 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @SneakyThrows
     @Override
     public Result<Map<String, Object>> uploadMinioS3(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
-        LocalDate now = LocalDate.now();
-
+        Map<String, Object> resultMap = Maps.newHashMap();
         MultipartFile file = fileParam.getFile();
+        LocalDate now = LocalDate.now();
         String originalFilename = file.getOriginalFilename();
-        Assert.isNull(originalFilename, "文件名不能为空");
-        String newFileName = now.getYear() + now.getMonthOfYear() + now.getDayOfMonth() + RandomUtil.randomInt(6)
-                + originalFilename.substring(originalFilename.lastIndexOf("."));
-        String path = now.getYear() + "/" + now.getMonthOfYear() + "/" + now.getDayOfMonth() + "/";
+        Assert.notNull(originalFilename, "文件名不能为空");
+        String objectName = String.valueOf(now.getYear()) + now.getMonthOfYear() + now.getDayOfMonth() + IdUtil.simpleUUID() + "/" + originalFilename;
 
         try {
             this.ossTemplate.createBucket(SYSTEM_BUCKET_NAME);
-            this.ossTemplate.putObject(SYSTEM_BUCKET_NAME, path + newFileName, file.getInputStream(), ContentType.getContentType(originalFilename));
+            this.ossTemplate.putObject(SYSTEM_BUCKET_NAME, objectName, file.getInputStream(), ContentType.getContentType(originalFilename));
+
+            SysFile sysFile = SysFile.builder()
+                    .title(fileParam.getTitle())
+                    .fileName(originalFilename)
+                    .objectName(objectName)
+                    .path(objectName)
+                    .bizId(fileParam.getBizId())
+                    .bizType(fileParam.getBizType())
+                    .fileFormat(originalFilename.substring(originalFilename.indexOf(".")))
+                    .contentType(request.getContentType())
+                    .bucket(SYSTEM_BUCKET_NAME)
+                    .storeType(fileParam.getStoreType())
+                    .build();
+            this.save(sysFile);
+            resultMap.put("url", this.ossTemplate.getObjectURL(SYSTEM_BUCKET_NAME, objectName, 2));
+            resultMap.put("fileId", sysFile.getId());
         } catch (Exception ex) {
             log.error("[文件上传失败]", ex);
         }
-        SysFile sysFile = SysFile.builder()
-                .title(fileParam.getTitle())
-                .newFileName(newFileName)
-                .originalFileName(originalFilename)
-                .path(path)
-                .ossStyle(fileParam.getOssStyle())
-                .build();
-        this.save(sysFile);
-        Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("url", this.ossTemplate.getObjectURL(SYSTEM_BUCKET_NAME, sysFile.getPath() + sysFile.getNewFileName(), 2));
-        resultMap.put("fileId", sysFile.getId());
         return Result.ok(resultMap);
     }
 
@@ -139,21 +143,25 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     public Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
         String originalFilename = fileParam.getFile().getOriginalFilename();
         LocalDate now = LocalDate.now();
-        String newFileName = now.getYear() + now.getMonthOfYear() + now.getDayOfMonth() + RandomUtil.randomInt(6)
-                + originalFilename.substring(originalFilename.lastIndexOf("."));
-        String path = now.getYear() + "/" + now.getMonthOfYear() + "/" + now.getDayOfMonth() + "/";
-        String filePath = this.localStorageTemplate.uploadFile(fileParam.getFile(), path, newFileName);
-        log.debug("[上传的文件路径]：{}", filePath);
+        String objectName = String.valueOf(now.getYear()) + now.getMonthOfYear() + now.getDayOfMonth() + IdUtil.simpleUUID() + "/" + originalFilename;
+        Assert.notNull(originalFilename, "文件名不能为空");
+
+        String path = this.localStorageTemplate.uploadFile(fileParam.getFile(), objectName, originalFilename);
+        log.debug("[上传的文件路径]：{}", path);
         SysFile sysFile = SysFile.builder()
                 .title(fileParam.getTitle())
-                .newFileName(newFileName)
-                .originalFileName(originalFilename)
-                .path(path)
-                .ossStyle(fileParam.getOssStyle())
+                .fileName(originalFilename)
+                .objectName(objectName)
+                .bizId(fileParam.getBizId())
+                .bizType(fileParam.getBizType())
+                .fileFormat(originalFilename.substring(originalFilename.indexOf(".")))
+                .contentType(request.getContentType())
+                .bucket(SYSTEM_BUCKET_NAME)
+                .storeType(fileParam.getStoreType())
                 .build();
         this.save(sysFile);
         Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("url", this.localStorageTemplate.previewImg(sysFile.getPath(), sysFile.getNewFileName()));
+        resultMap.put("url", this.localStorageTemplate.previewImg(sysFile.getPath(), originalFilename));
         resultMap.put("fileId", sysFile.getId());
         return Result.ok(resultMap);
     }
@@ -172,7 +180,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             // TODO 缺省图
             return "";
         }
-        return this.ossTemplate.getObjectURL(SYSTEM_BUCKET_NAME, sysFile.getPath() + sysFile.getNewFileName(), 2);
+        return this.ossTemplate.getObjectURL(SYSTEM_BUCKET_NAME, sysFile.getPath(), 2);
     }
 
     /**
@@ -188,7 +196,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         if (Objects.isNull(sysFile)) {
             throw new SystemServiceException(ResultCode.exception("文件不存在"));
         }
-        this.ossTemplate.downloadObject(SYSTEM_BUCKET_NAME, sysFile.getPath() + sysFile.getNewFileName(), sysFile.getOriginalFileName(), response);
+        this.ossTemplate.downloadObject(SYSTEM_BUCKET_NAME, sysFile.getPath(), sysFile.getFileName(), response);
     }
 
     /**
@@ -205,7 +213,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             return Result.fail(Boolean.FALSE, "文件不存在");
         }
         for (SysFile sysFile : sysFileList) {
-            this.ossTemplate.removeObject(SYSTEM_BUCKET_NAME, sysFile.getPath() + sysFile.getNewFileName());
+            this.ossTemplate.removeObject(SYSTEM_BUCKET_NAME, sysFile.getPath());
             this.removeById(sysFile.getId());
         }
         return Result.ok(Boolean.TRUE, "删除成功");

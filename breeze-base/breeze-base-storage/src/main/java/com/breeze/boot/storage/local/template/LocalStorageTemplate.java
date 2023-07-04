@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 /**
  * 本地上传 工具
@@ -75,30 +76,28 @@ public class LocalStorageTemplate {
      *
      * @param file        文件
      * @param path        路径
-     * @param newFileName 新文件名字
+     * @param fileName 新文件名字
      * @return {@link String}
      */
-    public String uploadFile(MultipartFile file, String path, String newFileName) {
+    public String uploadFile(MultipartFile file, String path, String fileName) {
         String originalFilename = file.getOriginalFilename();
-        if (StrUtil.isEmpty(newFileName)) {
+        if (StrUtil.isEmpty(fileName)) {
             assert originalFilename != null;
             //文件类型
             String extension = this.getExtension(originalFilename);
-            newFileName = getNewFileName(extension);
+            fileName = getNewFileName(extension);
         }
         File newFilePath = new File(localProperties.getRootPath() + path);
-        if (!newFilePath.exists()) {
-            newFilePath.mkdirs();
-        }
+        newFilePath.mkdirs();
         try {
             if (log.isInfoEnabled()) {
                 log.info("[文件名]： {}， [类型]: {}，[文件大小]：{}", originalFilename, file.getContentType(), file.getSize());
             }
-            FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(new File(newFilePath, newFileName)));
+            FileCopyUtils.copy(file.getInputStream(), Files.newOutputStream(new File(newFilePath, fileName).toPath()));
         } catch (IOException e) {
             log.error("[上传失败] {}", e.getMessage());
         }
-        return path + "/" + newFileName;
+        return path + "/" + fileName;
     }
 
     /**

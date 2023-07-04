@@ -7,6 +7,6 @@ breeze:
   # oss s3 配置
   oss:
     s3:
-      endpoint: http://10.100.201.35:9092
-      accessKey: BS2F32UehPanopBG
-      secretKey: 4i0hyIfnxlZA6EbojRqKFFgbZ0nb6amK
+      endpoint: http://localhost:9092
+      minio-root-user: admin
+      minio-root-password: 12345678

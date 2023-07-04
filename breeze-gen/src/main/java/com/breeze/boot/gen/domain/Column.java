@@ -14,49 +14,44 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.oss.s3.config;
+package com.breeze.boot.gen.domain;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * oss属性
- *
- * @author gaoweixuan
- * @date 2022-11-14
+ * 列
  */
 @Data
-@ConfigurationProperties(prefix = "breeze.oss.s3")
-public class OssProperties {
+public class Column {
 
     /**
-     * 对象存储服务的URL
+     * 列名
      */
-    private String endpoint;
+    private String columnName;
 
     /**
-     * 区域
+     * 数据库字段类型
      */
-    private String region;
+    private String dataType;
 
     /**
-     * minio连接用户名
+     * 数据库字段备注
      */
-    private String minioRootUser;
+    private String comments;
 
     /**
-     * minio连接密码
+     * 首字母大写属性名称，如：user_name => UserName
      */
-    private String minioRootPassword;
+    private String attrName;
 
     /**
-     * 最大线程数
+     * 首字母小写属性名称，如：user_name => userName
      */
-    private Integer maxConnections = 60;
+    private String lowCaseAttrName;
 
     /**
-     * 路径方式访问
+     * 转换成java类后的属性类型
      */
-    private Boolean pathStyleAccess = true;
+    private String attrType;
 
 }

@@ -38,6 +38,18 @@ import javax.validation.constraints.NotNull;
 public class FileParam {
 
     /**
+     * 业务ID
+     */
+    @Schema(description = "业务ID")
+    private Long bizId;
+
+    /**
+     * 业务类型
+     */
+    @Schema(description = "业务类型")
+    private String bizType;
+
+    /**
      * 文件
      */
     @Schema(description = "文件流")
@@ -56,6 +68,6 @@ public class FileParam {
      */
     @Schema(description = "上传方式")
     @NotNull(message = "上传方式不能为空")
-    private Integer ossStyle;
+    private Integer storeType;
 
 }

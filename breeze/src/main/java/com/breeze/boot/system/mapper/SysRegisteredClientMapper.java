@@ -41,7 +41,7 @@ public interface SysRegisteredClientMapper extends BreezeBaseMapper<SysRegistere
      * @param registeredClientQuery 注册客户端查询
      * @return {@link Page}<{@link SysRegisteredClient}>
      */
-    Page<RegisteredClientVO> listPage(@Param("page") Page<SysRegisteredClient> page, @Param("registerClientQuery") RegisteredClientQuery registeredClientQuery);
+    Page<RegisteredClientVO> listPage(@Param("page") Page<SysRegisteredClient> page, @Param("registeredClientQuery") RegisteredClientQuery registeredClientQuery);
 
     /**
      * 获取注册客户端

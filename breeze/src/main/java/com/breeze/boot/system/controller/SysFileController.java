@@ -105,7 +105,7 @@ public class SysFileController {
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "文件上传")
-    @PostMapping("/upload")
+    @PostMapping("/uploadMinioS3")
     @PreAuthorize("hasAnyAuthority('sys:file:upload')")
     public Result<Map<String, Object>> uploadMinioS3(@Valid FileParam fileParam,
                                                      HttpServletRequest request,

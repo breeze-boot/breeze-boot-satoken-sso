@@ -14,48 +14,60 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.query;
+package com.breeze.boot.gen.domain;
 
-import com.breeze.boot.core.base.PageQuery;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * 文件查询参数
+ * 表
  *
  * @author gaoweixuan
- * @date 2022-09-02
+ * @date 2023/07/03
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "文件查询参数")
-public class FileQuery extends PageQuery {
+public class Table {
 
     /**
-     * 标题
+     * 表名
      */
-    @Schema(description = "标题")
-    private String title;
+    private String tableName;
 
     /**
-     * 文件名称
+     * 表备注
      */
-    @Schema(description = "文件名称")
-    private String fileName;
+    private String comments;
 
     /**
-     * 业务类型
+     * 编码格式
      */
-    @Schema(description = "业务类型")
-    private String bizType;
+    private String collation;
 
     /**
-     * 用户名称
+     * 创建时间
      */
-    @Schema(description = "用户名称")
-    private String createName;
+    private LocalDateTime createTime;
+
+    /**
+     * 首字母大大写类名，如：sys_user => SysUser
+     */
+    private String className;
+
+    /**
+     * 首字母小写类名，如：sys_user => SysUser
+     */
+    private String lowCaseClassName;
+
+    /**
+     * 主键
+     */
+    private Column pkColumn;
+
+    /**
+     * 列
+     */
+    private List<Column> columns;
 
 }

@@ -6,8 +6,16 @@
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.breeze.boot.system.domain.SysFile" id="sysFileMap">
         <id property="id" column="id"/>
-        <result property="newFileName" column="new_file_name"/>
-        <result property="originalFileName" column="original_file_name"/>
+        <result property="title" column="title"/>
+        <result property="fileName" column="file_name"/>
+        <result property="contentType" column="content_type"/>
+        <result property="fileFormat" column="file_format"/>
+        <result property="bucket" column="bucket"/>
+        <result property="objectName" column="object_name"/>
+        <result property="path" column="path"/>
+        <result property="bizId" column="biz_id"/>
+        <result property="bizType" column="biz_id"/>
+        <result property="storeType" column="file_name"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>

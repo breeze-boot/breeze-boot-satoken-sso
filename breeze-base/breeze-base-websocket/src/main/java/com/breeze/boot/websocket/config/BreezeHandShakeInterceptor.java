@@ -25,7 +25,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import java.util.Map;
 
 /**
- * 微风握手拦截器
+ * 握手拦截器
  *
  * @author gaoweixuan
  * @date 2022-11-16

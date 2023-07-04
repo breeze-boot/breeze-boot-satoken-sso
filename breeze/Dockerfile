@@ -13,10 +13,10 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
 
 # 指定路径
-WORKDIR /usr/local/boot
+WORKDIR /usr/local/boot/breeze
 
 # 复制jar文件到路径
-COPY ./target/breeze.jar /usr/local/boot/breeze.jar
+COPY ./target/breeze.jar /usr/local/boot/breeze/breeze.jar
 
 # 启动应用
-ENTRYPOINT ["java","-jar","-Duser.timezone=GMT+08","breeze.jar"]
+ENTRYPOINT ["java","-jar","-Xms1024m","-Xmx1024m","-Duser.timezone=GMT+08","breeze.jar","--spring.profiles.active=dev"]

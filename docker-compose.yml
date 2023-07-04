@@ -55,6 +55,27 @@ services:
     networks:
       - breeze-net
 
+  breeze-minio:
+    container_name: breeze-minio
+    image: minio/minio
+    hostname: breeze-minio
+    ports:
+      - "9092:9092" # api端口
+      - "9091:9091" # 控制台端口
+    environment:
+      MINIO_ACCESS_KEY: admin     #管理平台用户名
+      MINIO_SECRET_KEY: 12345678    #管理平台密码
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker/minio/data:/data
+      - ./docker/minio/config:/root/.minio/
+      - /etc/localtime:/etc/localtime:ro
+    command: server --console-address ':9091' --address ':9092' /data  #指定容器中的目录 /data
+    privileged: true
+    restart: always
+    networks:
+      - breeze-net
+
   breeze:
     build:
       context: ./breeze
@@ -82,27 +103,6 @@ services:
     container_name: breeze-monitor
     hostname: breeze-monitor
     image: breeze-monitor
-    networks:
-      - breeze-net
-
-  breeze-minio:
-    container_name: breeze-minio
-    image: minio/minio
-    hostname: breeze-minio
-    ports:
-      - "9092:9092" # api端口
-      - "9091:9091" # 控制台端口
-    environment:
-      MINIO_ACCESS_KEY: admin     #管理平台用户名
-      MINIO_SECRET_KEY: 12345678    #管理平台密码
-      TZ: Asia/Shanghai
-    volumes:
-      - ./docker/minio/data:/data
-      - ./docker/minio/config:/root/.minio/
-      - /etc/localtime:/etc/localtime:ro
-    command: server --console-address ':9091' --address ':9092' /data  #指定容器中的目录 /data
-    privileged: true
-    restart: always
     networks:
       - breeze-net
 

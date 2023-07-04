@@ -25,6 +25,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import com.breeze.boot.core.enums.ContentType;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
@@ -98,14 +99,12 @@ public class OssTemplate implements OssOperations {
      * @param objectName  对象名称
      * @param stream      流
      * @param contentType 内容类型
+     * @return {@link PutObjectResult}
      */
     @Override
-    public void putObject(String bucketName, String objectName, InputStream stream, String contentType) {
-        try {
-            this.putObject(bucketName, objectName, stream, stream.available(), contentType);
-        } catch (IOException e) {
-            log.error("上传失败", e);
-        }
+    @SneakyThrows
+    public PutObjectResult putObject(String bucketName, String objectName, InputStream stream, String contentType) {
+        return this.putObject(bucketName, objectName, stream, stream.available(), contentType);
     }
 
     /**
@@ -132,17 +131,17 @@ public class OssTemplate implements OssOperations {
     protected PutObjectResult putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) {
         byte[] bytes;
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        ByteArrayInputStream byteArrayInputStream = null;
+        ByteArrayInputStream bs = null;
         try {
             bytes = IOUtils.toByteArray(stream);
             objectMetadata.setContentLength(size);
             objectMetadata.setContentType(contextType);
-            byteArrayInputStream = new ByteArrayInputStream(bytes);
-            // 上传
+            bs = new ByteArrayInputStream(bytes);
         } catch (IOException e) {
             log.error("上传失败", e);
         }
-        return this.amazonS3.putObject(bucketName, objectName, byteArrayInputStream, objectMetadata);
+        // 上传
+        return this.amazonS3.putObject(bucketName, objectName, bs, objectMetadata);
     }
 
     /**
@@ -190,15 +189,15 @@ public class OssTemplate implements OssOperations {
      *
      * @param bucketName       bucket名称
      * @param objectName       对象名称
-     * @param originalFilename 原始文件名
+     * @param fileName 原始文件名
      * @param response         响应
      */
     @Override
-    public void downloadObject(String bucketName, String objectName, String originalFilename, HttpServletResponse response) {
+    public void downloadObject(String bucketName, String objectName, String fileName, HttpServletResponse response) {
         try (S3Object object = amazonS3.getObject(bucketName, objectName)) {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(ContentType.getContentType(objectName));
-            response.setHeader("Content-disposition", "attachment;filename*=utf-8" + URLEncoder.encode(originalFilename, StandardCharsets.UTF_8.name()));
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
             OutputStream os = response.getOutputStream();
             IoUtil.copy(object.getObjectContent(), os);
         } catch (Exception e) {

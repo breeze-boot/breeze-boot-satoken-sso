@@ -64,7 +64,7 @@ public class OssConfiguration {
                 = new AwsClientBuilder.EndpointConfiguration(ossProperties.getEndpoint(), ossProperties.getRegion());
         // 认证凭证
         AWSCredentials awsCredentials
-                = new BasicAWSCredentials(ossProperties.getAccessKey(), ossProperties.getSecretKey());
+                = new BasicAWSCredentials(ossProperties.getMinioRootUser(), ossProperties.getMinioRootPassword());
 
         AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
         return AmazonS3Client.builder()

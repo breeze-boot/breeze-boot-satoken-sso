@@ -17,6 +17,7 @@
 package com.breeze.boot.oss.s3.operation;
 
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.SneakyThrows;
 
@@ -60,9 +61,10 @@ public interface OssOperations {
      * @param bucketName bucket名称
      * @param objectName 对象名称
      * @param stream     文件流
+     * @return
      * @throws Exception 异常
      */
-    void putObject(String bucketName, String objectName, InputStream stream, String contentType);
+    PutObjectResult putObject(String bucketName, String objectName, InputStream stream, String contentType);
 
     /**
      * 上传对象

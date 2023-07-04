@@ -14,48 +14,42 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.query;
+package com.breeze.boot.gen.dto;
 
-import com.breeze.boot.core.base.PageQuery;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
 
 /**
- * 文件查询参数
+ * 数据源dto
  *
  * @author gaoweixuan
- * @date 2022-09-02
+ * @date 2023/07/04
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Schema(description = "文件查询参数")
-public class FileQuery extends PageQuery {
+public class DataSourceDTO {
 
     /**
-     * 标题
+     * 连接池名称
      */
-    @Schema(description = "标题")
-    private String title;
+    private String poolName;
 
     /**
-     * 文件名称
+     * JDBC driver
      */
-    @Schema(description = "文件名称")
-    private String fileName;
+    private String driverClassName;
 
     /**
-     * 业务类型
+     * JDBC url 地址
      */
-    @Schema(description = "业务类型")
-    private String bizType;
+    private String url;
 
     /**
-     * 用户名称
+     * JDBC 用户名
      */
-    @Schema(description = "用户名称")
-    private String createName;
+    private String username;
+
+    /**
+     * JDBC 密码
+     */
+    private String password;
 
 }

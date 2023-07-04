@@ -14,48 +14,36 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.system.query;
+package ${package}.${moduleName}.entity;
 
-import com.breeze.boot.core.base.PageQuery;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import lombok.Data;
 
 /**
- * 文件查询参数
+ * ${comments}
  *
- * @author gaoweixuan
- * @date 2022-09-02
+ * @author ${author}
+ * @date ${datetime}
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "文件查询参数")
-public class FileQuery extends PageQuery {
+@TableName("${tableName}")
+@Schema(description = "${comments}")
+public class ${className} extends BaseModel<${className}> implements Serializable {
 
-    /**
-     * 标题
-     */
-    @Schema(description = "标题")
-    private String title;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 文件名称
-     */
-    @Schema(description = "文件名称")
-    private String fileName;
-
-    /**
-     * 业务类型
-     */
-    @Schema(description = "业务类型")
-    private String bizType;
-
-    /**
-     * 用户名称
-     */
-    @Schema(description = "用户名称")
-    private String createName;
-
+	#foreach ($column in $columns)/**
+	 * $column.comments
+	 */
+	#if($column.columnName == $pkColumn.columnName)
+@TableId
+	#end
+private $column.attrType $column.lowCaseAttrName;
+	#end
 }

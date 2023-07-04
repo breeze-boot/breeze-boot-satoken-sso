@@ -41,39 +41,63 @@ public class SysFile extends BaseModel<SysFile> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 文件标题
+     * 标题
      */
-    @Schema(description = "文件标题")
+    @Schema(description = "标题")
     private String title;
 
     /**
-     * 原文件名称
+     * 文件名称
      */
-    @Schema(description = "原文件名称")
-    private String originalFileName;
+    @Schema(description = "文件名称")
+    private String fileName;
 
     /**
-     * 文件格式
+     * 文件扩展名
      */
-    @Schema(description = "文件格式")
+    @Schema(description = "文件扩展名")
+    private String fileFormat;
+
+    /**
+     * 上传格式
+     */
+    @Schema(description = "上传格式")
     private String contentType;
 
     /**
-     * 新文件名字
+     * 桶
      */
-    @Schema(description = "新文件名字")
-    private String newFileName;
+    @Schema(description = "桶")
+    private String bucket;
 
     /**
-     * 路径
+     * 对象名称
      */
-    @Schema(description = "路径")
+    @Schema(description = "对象名称")
+    private String objectName;
+
+    /**
+     * 存储的路径
+     */
+    @Schema(description = "存储的路径")
     private String path;
+
+    /**
+     * 业务ID
+     */
+    @Schema(description = "业务ID")
+    private Long bizId;
+
+    /**
+     * 业务类型
+     */
+    @Schema(description = "业务类型")
+    private String bizType;
 
     /**
      * 存储方式
      */
     @Schema(description = "存储方式 0 本地 1 minio")
-    private Integer ossStyle;
+    private Integer storeType;
 
 }

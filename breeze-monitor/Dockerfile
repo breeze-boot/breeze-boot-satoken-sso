@@ -19,6 +19,4 @@ WORKDIR /usr/local/boot
 COPY ./target/breeze-monitor.jar /usr/local/boot/breeze-monitor.jar
 
 # 启动应用
-ENTRYPOINT ["java","-jar","-Duser.timezone=GMT+08","breeze-monitor.jar"]
-
-
+ENTRYPOINT ["java","-jar","-Xms1024m","-Xmx1024m","-Duser.timezone=GMT+08","breeze-monitor.jar","--spring.profiles.active=dev"]
