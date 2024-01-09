@@ -40,7 +40,7 @@ import static org.springframework.security.oauth2.core.AuthorizationGrantType.PA
  * oauth2资源所有者密码身份验证转换器
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public class OAuth2ResourceOwnerPasswordAuthenticationConverter extends OAuth2ResourceOwnerAuthenticationConverter {
 

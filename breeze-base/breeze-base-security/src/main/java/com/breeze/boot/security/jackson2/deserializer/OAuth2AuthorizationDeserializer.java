@@ -45,7 +45,7 @@ import static org.springframework.security.oauth2.server.authorization.OAuth2Aut
  * oauth2授权反序列化器
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 public class OAuth2AuthorizationDeserializer extends JsonDeserializer<OAuth2Authorization> {
 

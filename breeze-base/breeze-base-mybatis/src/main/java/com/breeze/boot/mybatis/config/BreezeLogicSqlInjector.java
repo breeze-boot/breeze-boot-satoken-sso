@@ -27,7 +27,7 @@ import java.util.List;
  * 微风 sql注入器
  *
  * @author gaoweixuan
- * @date 2022-10-12
+ * @since 2022-10-12
  */
 public class BreezeLogicSqlInjector extends DefaultSqlInjector {
 

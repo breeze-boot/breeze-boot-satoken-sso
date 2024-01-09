@@ -27,7 +27,7 @@ import java.util.Set;
  * oauth2资源所有者密码身份验证令牌
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public class OAuth2ResourceOwnerPasswordAuthenticationToken extends OAuth2ResourceOwnerAuthenticationToken {
 

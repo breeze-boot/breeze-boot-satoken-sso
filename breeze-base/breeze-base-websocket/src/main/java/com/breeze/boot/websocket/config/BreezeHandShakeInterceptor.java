@@ -28,7 +28,7 @@ import java.util.Map;
  * 握手拦截器
  *
  * @author gaoweixuan
- * @date 2022-11-16
+ * @since 2022-11-16
  */
 @Slf4j
 public class BreezeHandShakeInterceptor implements HandshakeInterceptor {

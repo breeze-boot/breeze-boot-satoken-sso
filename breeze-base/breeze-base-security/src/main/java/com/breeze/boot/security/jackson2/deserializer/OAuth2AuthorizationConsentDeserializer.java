@@ -33,7 +33,7 @@ import java.util.Set;
  * oauth2授权同意反序列化器
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 public class OAuth2AuthorizationConsentDeserializer extends JsonDeserializer<OAuth2AuthorizationConsent> {
 

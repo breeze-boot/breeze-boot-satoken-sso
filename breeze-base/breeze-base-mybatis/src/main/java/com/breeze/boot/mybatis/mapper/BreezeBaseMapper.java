@@ -25,7 +25,7 @@ import java.util.List;
  * 基础 映射器
  *
  * @author gaoweixuan
- * @date 2022-10-22
+ * @since 2022-10-22
  */
 public interface BreezeBaseMapper<T> extends BaseMapper<T> {
 

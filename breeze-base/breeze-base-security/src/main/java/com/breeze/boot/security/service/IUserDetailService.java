@@ -39,7 +39,7 @@ import java.util.Set;
  * 用户服务接口
  *
  * @author gaoweixuan
- * @date 2023/05/09
+ * @since 2023/05/09
  */
 public interface IUserDetailService extends UserDetailsService {
 

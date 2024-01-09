@@ -26,7 +26,7 @@ import java.util.List;
  * 租户白名单属性
  *
  * @author gaoweixuan
- * @date 2023-03-06
+ * @since 2023-03-06
  */
 @Getter
 @Setter

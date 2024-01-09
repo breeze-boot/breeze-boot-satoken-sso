@@ -30,7 +30,7 @@ import java.util.List;
  * Quartz定时任务日志服务impl
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 @Service
 public class SysQuartzJobLogServiceImpl extends ServiceImpl<SysQuartzJobLogMapper, SysQuartzJobLog> implements SysQuartzJobLogService {

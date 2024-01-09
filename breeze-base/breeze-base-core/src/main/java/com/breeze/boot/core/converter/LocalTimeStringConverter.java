@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter;
  * 时间字符串转换
  *
  * @author gaoweixuan
- * @date 2022-12-09
+ * @since 2022-12-09
  */
 public class LocalTimeStringConverter implements Converter<LocalTime> {
 

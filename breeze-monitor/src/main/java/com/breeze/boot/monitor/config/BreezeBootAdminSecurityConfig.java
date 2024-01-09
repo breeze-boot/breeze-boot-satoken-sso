@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
  * 微风启动管理安全配置
  *
  * @author gaoweixuan
- * @date 2022-10-10
+ * @since 2022-10-10
  */
 @EnableWebSecurity(debug = true)
 public class BreezeBootAdminSecurityConfig {

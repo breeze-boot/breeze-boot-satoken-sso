@@ -31,7 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * 安全配置
  *
  * @author gaoweixuan
- * @date 2023-04-14
+ * @since 2023-04-14
  */
 @RequiredArgsConstructor
 @EnableWebSecurity(debug = true)

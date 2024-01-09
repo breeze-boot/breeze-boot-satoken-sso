@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  * 内容类型
  *
  * @author gaoweixuan
- * @date 2023-04-18
+ * @since 2023-04-18
  */
 @Getter
 @RequiredArgsConstructor

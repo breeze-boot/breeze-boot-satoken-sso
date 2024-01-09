@@ -28,7 +28,7 @@ import java.lang.annotation.RetentionPolicy;
  * 敏感信息
  *
  * @author gaoweixuan
- * @date 2023/06/01
+ * @since 2023/06/01
  */
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotationsInside // 表示自定义自己的注解PrivacyEncrypt

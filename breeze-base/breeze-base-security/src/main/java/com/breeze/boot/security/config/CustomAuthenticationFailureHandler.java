@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  * 自定义身份验证失败处理程序
  *
  * @author gaoweixuan
- * @date 2023/05/09
+ * @since 2023/05/09
  */
 @Slf4j
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
@@ -49,7 +49,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             OAuth2Error errorMsg = ((OAuth2AuthenticationException) exception).getError();
             log.error("[校验 {}] ", errorMsg.getDescription(), exception);
             // 使用系统中的错误码
-            ResponseUtil.response(response, ResultCode.httpAuthenticationException(errorMsg.getDescription()));
+            ResponseUtil.response(response, ResultCode.exception(errorMsg.getDescription()));
         }
     }
 

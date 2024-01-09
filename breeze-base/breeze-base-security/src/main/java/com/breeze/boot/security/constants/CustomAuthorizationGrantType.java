@@ -27,7 +27,7 @@ import java.util.List;
  * 自定义授权授予类型
  *
  * @author gaoweixuan
- * @date 2023-04-24
+ * @since 2023-04-24
  */
 public final class CustomAuthorizationGrantType implements Serializable {
 

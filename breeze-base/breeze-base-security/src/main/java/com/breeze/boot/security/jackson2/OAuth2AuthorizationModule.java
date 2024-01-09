@@ -31,7 +31,7 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
  * oauth2授权模块
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 public class OAuth2AuthorizationModule extends SimpleModule {
 

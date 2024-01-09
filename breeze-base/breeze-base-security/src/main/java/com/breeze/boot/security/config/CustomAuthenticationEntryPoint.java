@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * 请求资源 不携带token或者token无效： 401
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -62,22 +62,22 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (e instanceof InvalidBearerTokenException) {
             if (cause instanceof JwtValidationException) {
                 log.error("[JWT Token 过期]", cause);
-                ResponseUtil.response(response, ResultCode.exception("JWT Token 过期"));
+                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
                 return;
             }
             if (cause instanceof BadJwtException) {
                 log.error("[登录已过期]", cause);
-                ResponseUtil.response(response, ResultCode.exception("登录已过期"));
+                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
                 return;
             }
             if (cause instanceof AccountExpiredException) {
                 log.warn("[账户已过期]", cause);
-                ResponseUtil.response(response, ResultCode.exception("账户已过期"));
+                ResponseUtil.response(response, ResultCode.ACCOUNT_EXPIRED);
                 return;
             }
             if (cause instanceof LockedException) {
                 log.warn("[账户已经锁定]", cause);
-                ResponseUtil.response(response, ResultCode.exception("账户已经锁定"));
+                ResponseUtil.response(response, ResultCode.ACCOUNT_LOCKED);
                 return;
             }
         }
@@ -88,7 +88,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             } else if (message.contains("Full authentication is required to access this resource")) {
                 log.warn("[访问需要登录]", e);
             }
-            ResponseUtil.response(response, ResultCode.exception("未经授权的服务器"));
+            ResponseUtil.response(response, ResultCode.INSUFFICIENT_AUTHENTICATION);
             return;
         }
 

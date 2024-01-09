@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.system.mapper.SysRoleMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.domain.SysRole" id="sysRoleMap">
+    <resultMap type="com.breeze.boot.modules.system.domain.SysRole" id="sysRoleMap">
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
@@ -17,7 +17,7 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listRoleByUserId" resultType="com.breeze.boot.system.domain.SysRole">
+    <select id="listRoleByUserId" resultType="com.breeze.boot.modules.system.domain.SysRole">
         SELECT role.id,
                role.role_code,
                role.role_name
@@ -37,7 +37,7 @@
         ORDER BY role.create_time DESC
     </select>
 
-    <select id="listPage" resultType="com.breeze.boot.system.domain.SysRole">
+    <select id="listPage" resultType="com.breeze.boot.modules.system.domain.SysRole">
         SELECT
         a.id,
         a.role_code,

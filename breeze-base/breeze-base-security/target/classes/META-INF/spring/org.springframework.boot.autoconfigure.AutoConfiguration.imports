@@ -1,0 +1,2 @@
+com.breeze.boot.security.config.PasswordConfiguration
+com.breeze.boot.security.init.BreezeJumpAuthPathInit

@@ -36,7 +36,7 @@ import static com.breeze.boot.security.constants.CustomOAuth2ParameterNames.PHON
  * oauth2资源所有者手机身份验证提供者
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 @Slf4j
 public class OAuth2ResourceOwnerSmsAuthenticationProvider extends OAuth2ResourceOwnerAuthenticationProvider {

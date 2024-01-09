@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.system.mapper.SysPostMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysPostMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysPost">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.system.domain.SysPost">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="postCode" column="post_code" jdbcType="VARCHAR"/>
         <result property="postName" column="post_name" jdbcType="VARCHAR"/>

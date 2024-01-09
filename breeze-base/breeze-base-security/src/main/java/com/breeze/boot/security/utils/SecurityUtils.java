@@ -33,7 +33,7 @@ import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
  * 安全工具
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 public class SecurityUtils {
 

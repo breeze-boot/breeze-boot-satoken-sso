@@ -31,7 +31,7 @@ import java.util.Map;
  * oauth2端点工具
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public class OAuth2EndpointUtils {
 

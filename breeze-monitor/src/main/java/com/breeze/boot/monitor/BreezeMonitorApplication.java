@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 监控 应用程序
  *
  * @author gaoweixuan
- * @date 2022-10-10
+ * @since 2022-10-10
  */
 @EnableAdminServer
 @SpringBootApplication

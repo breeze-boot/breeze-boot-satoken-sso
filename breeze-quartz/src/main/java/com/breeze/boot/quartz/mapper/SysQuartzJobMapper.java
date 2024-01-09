@@ -27,7 +27,7 @@ import org.apache.ibatis.annotations.Param;
  * Quartz任务日志映射器
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 @Mapper
 public interface SysQuartzJobMapper extends BaseMapper<SysQuartzJob> {

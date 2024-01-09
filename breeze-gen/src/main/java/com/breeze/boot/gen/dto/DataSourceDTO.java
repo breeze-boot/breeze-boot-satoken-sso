@@ -18,17 +18,11 @@ package com.breeze.boot.gen.dto;
 
 import lombok.Data;
 
-/**
- * 数据源dto
- *
- * @author gaoweixuan
- * @date 2023/07/04
- */
 @Data
 public class DataSourceDTO {
 
     /**
-     * 连接池名称
+     * 连接池名称(只是一个名称标识)</br> 默认是配置文件上的名称
      */
     private String poolName;
 
@@ -51,5 +45,15 @@ public class DataSourceDTO {
      * JDBC 密码
      */
     private String password;
+
+    /**
+     * jndi数据源名称(设置即表示启用)
+     */
+    private String jndiName;
+
+    /**
+     * 自动运行的建表脚本
+     */
+    private String schema;
 
 }

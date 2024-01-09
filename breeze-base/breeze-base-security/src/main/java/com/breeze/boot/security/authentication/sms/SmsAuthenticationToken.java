@@ -31,7 +31,7 @@ import java.util.Collection;
  * <p>
  *
  * @author gaoweixuan
- * @date 2022-09-03
+ * @since 2022-09-03
  */
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {
 

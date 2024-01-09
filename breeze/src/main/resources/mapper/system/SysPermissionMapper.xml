@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.system.mapper.SysPermissionMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysPermissionMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysPermission">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.system.domain.SysPermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
         <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>

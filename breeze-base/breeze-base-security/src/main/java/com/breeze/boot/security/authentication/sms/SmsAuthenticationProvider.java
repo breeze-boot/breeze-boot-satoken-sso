@@ -36,7 +36,7 @@ import static com.breeze.boot.core.constants.CacheConstants.VALIDATE_PHONE_CODE;
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
  *
  * @author gaoweixuan
- * @date 2022-09-03
+ * @since 2022-09-03
  */
 @Slf4j
 public class SmsAuthenticationProvider implements AuthenticationProvider {

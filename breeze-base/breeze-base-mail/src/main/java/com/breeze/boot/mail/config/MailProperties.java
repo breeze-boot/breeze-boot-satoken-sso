@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * 邮件配置
  *
  * @author gaoweixuan
- * @date 2022-11-12
+ * @since 2022-11-12
  */
 @Data
 @Configuration

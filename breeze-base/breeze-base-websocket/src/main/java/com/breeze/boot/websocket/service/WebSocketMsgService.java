@@ -27,7 +27,7 @@ import java.security.Principal;
  * 消息模块接口
  *
  * @author gaoweixuan
- * @date 2022-10-08
+ * @since 2022-10-08
  */
 @Slf4j
 public abstract class WebSocketMsgService {

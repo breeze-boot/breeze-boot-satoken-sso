@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.system.mapper.SysRolePermissionMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysRolePermissionMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.system.domain.SysRolePermission">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.system.domain.SysRolePermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="permissionId" column="data_permission_id" jdbcType="BIGINT"/>
         <result property="roleId" column="role_id" jdbcType="BIGINT"/>
@@ -13,7 +13,7 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="listRolePermissionByRoleIds" resultType="com.breeze.boot.system.domain.SysPermission">
+    <select id="listRolePermissionByRoleIds" resultType="com.breeze.boot.modules.system.domain.SysPermission">
         SELECT
         a.permission_name,
         a.permission_code,

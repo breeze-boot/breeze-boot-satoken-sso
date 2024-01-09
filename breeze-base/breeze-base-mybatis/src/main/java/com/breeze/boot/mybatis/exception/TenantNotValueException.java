@@ -22,11 +22,11 @@ import com.breeze.boot.core.enums.ResultCode;
  * 租户未获取到值异常
  *
  * @author gaoweixuan
- * @date 2023/04/16
+ * @since 2023/04/16
  */
 public class TenantNotValueException extends RuntimeException {
 
-    private int code;
+    private String code;
     private final String msg;
 
     public TenantNotValueException(ResultCode resultCode) {

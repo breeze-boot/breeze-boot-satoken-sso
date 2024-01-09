@@ -18,20 +18,22 @@ package com.breeze.boot.security.exception;
 
 import com.breeze.boot.core.enums.ResultCode;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 访问异常
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class AccessException extends RuntimeException {
 
     /**
      * 代码
      */
-    private final int code;
+    private final String code;
     /**
      * 信息
      */

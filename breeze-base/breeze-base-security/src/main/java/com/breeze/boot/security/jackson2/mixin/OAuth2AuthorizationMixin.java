@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * oauth2授权mixin
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 @JsonDeserialize(using = OAuth2AuthorizationDeserializer.class)

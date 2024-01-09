@@ -17,6 +17,7 @@
 package com.breeze.boot.core.utils;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.CryptoException;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  * AES
  *
  * @author gaoweixuan
- * @date 2023/05/18
+ * @since 2023/05/18
  */
 @Slf4j
 public class AesUtil {
@@ -59,8 +60,13 @@ public class AesUtil {
      * @return {@link String}
      */
     public static String decryptStr(String content, String key) {
-        AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
-        return aes.decryptStr(content);
+        try {
+            AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
+            return aes.decryptStr(content);
+        } catch (CryptoException ex) {
+            log.error("[密码解密失败]", ex);
+        }
+        return "";
     }
 
     /**

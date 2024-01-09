@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * xxl工作配置
  *
  * @author gaoweixuan
- * @date 2023/04/15
+ * @since 2023/04/15
  */
 @Slf4j
 @Configuration

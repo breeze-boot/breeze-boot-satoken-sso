@@ -27,7 +27,7 @@ import java.io.Serializable;
  * quartz任务实体
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 @Data
 @Builder

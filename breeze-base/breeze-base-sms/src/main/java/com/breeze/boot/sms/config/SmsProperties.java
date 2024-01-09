@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * 短信属性
  *
  * @author gaoweixuan
- * @date 2023/05/31
+ * @since 2023/05/31
  */
 @Data
 @Configuration

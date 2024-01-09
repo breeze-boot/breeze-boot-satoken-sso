@@ -19,7 +19,7 @@ import java.util.Set;
  * 加载注解配置工具包
  *
  * @author gaoweixuan
- * @date 2023/04/16
+ * @since 2023/04/16
  */
 @Slf4j
 public class LoadAnnotationUtils {

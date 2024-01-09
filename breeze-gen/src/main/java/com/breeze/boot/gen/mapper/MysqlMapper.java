@@ -22,7 +22,7 @@ import org.apache.ibatis.annotations.Mapper;
  * mysql映射器
  *
  * @author gaoweixuan
- * @date 2023/07/03
+ * @since 2023/07/03
  */
 @Mapper
 public interface MysqlMapper {

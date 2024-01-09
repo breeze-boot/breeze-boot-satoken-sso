@@ -52,7 +52,7 @@ import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
  * 数据权限内拦截器
  *
  * @author gaoweixuan
- * @date 2022-10-28
+ * @since 2022-10-28
  */
 @Slf4j
 public class BreezeDataPermissionInterceptor extends JsqlParserSupport implements InnerInterceptor {
@@ -67,8 +67,8 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
                 SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         if (name == null) {
-            log.error("[登录名不存在]");
-            throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
+            log.error("[未登录，获取不到登录名]");
+            throw new SystemServiceException(ResultCode.UN_LOGIN);
         }
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
         Cache cache = cacheManager.getCache(LOGIN_USER);
@@ -78,7 +78,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         BaseLoginUser currentUser = cache.get(name, BaseLoginUser.class);
         if (currentUser == null) {
             log.error("[登录名称对应的用户信息不存在]");
-            throw new SystemServiceException(ResultCode.exception("未登录，数据权限不可实现"));
+            throw new SystemServiceException(ResultCode.UN_LOGIN);
         }
         return currentUser;
     }

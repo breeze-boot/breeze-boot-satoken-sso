@@ -20,7 +20,7 @@ package com.breeze.boot.core.enums;
  * 敏感类型
  *
  * @author gaoweixuan
- * @date 2023/06/01
+ * @since 2023/06/01
  */
 public enum SensitiveType {
 

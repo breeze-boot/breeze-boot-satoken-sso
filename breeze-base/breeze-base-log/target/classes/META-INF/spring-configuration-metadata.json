@@ -1,0 +1,11 @@
+{
+  "groups": [],
+  "properties": [
+    {
+      "name": "breeze.log.enable",
+      "type": "java.lang.String",
+      "description": "开启日志切面收集信息"
+    }
+  ],
+  "hints": []
+}

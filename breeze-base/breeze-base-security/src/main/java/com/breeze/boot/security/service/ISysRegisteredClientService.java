@@ -22,7 +22,7 @@ import com.breeze.boot.security.domain.BaseSysRegisteredClient;
  * 全局注册客户服务接口
  *
  * @author gaoweixuan
- * @date 2023/05/09
+ * @since 2023/05/09
  */
 public interface ISysRegisteredClientService {
 

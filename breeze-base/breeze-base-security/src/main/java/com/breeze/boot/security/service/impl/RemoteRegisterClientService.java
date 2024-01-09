@@ -50,15 +50,13 @@ import static org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.*;
  * 重写auth注册客户端库
  *
  * @author gaoweixuan
- * @date 2023/05/09
+ * @since 2023/05/09
  */
 @Slf4j
 public class RemoteRegisterClientService implements RegisteredClientRepository {
 
     /**
-     * 消费者
-     * <p>
-     * 去执行保存逻辑
+     *
      */
     private final Supplier<ISysRegisteredClientService> sysRegisterClientServiceSupplier;
 

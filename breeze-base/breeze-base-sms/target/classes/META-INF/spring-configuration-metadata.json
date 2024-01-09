@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "name": "spring.sms",
+      "type": "com.breeze.boot.sms.config.SmsProperties",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring.sms.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    },
+    {
+      "name": "spring.sms.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    },
+    {
+      "name": "spring.sms.region-id",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    },
+    {
+      "name": "spring.sms.sign-name",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    },
+    {
+      "name": "spring.sms.template-code",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    },
+    {
+      "name": "spring.sms.template-param",
+      "type": "java.lang.String",
+      "sourceType": "com.breeze.boot.sms.config.SmsProperties"
+    }
+  ],
+  "hints": []
+}

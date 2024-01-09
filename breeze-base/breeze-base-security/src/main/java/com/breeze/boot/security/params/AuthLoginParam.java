@@ -23,7 +23,7 @@ import lombok.*;
  * 三方登录参数
  *
  * @author gaoweixuan
- * @date 2022-11-09
+ * @since 2022-11-09
  */
 @Data
 @Builder

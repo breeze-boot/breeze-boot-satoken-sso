@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * oauth2资源所有者身份验证提供者
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 @Slf4j
 public abstract class OAuth2ResourceOwnerAuthenticationProvider implements AuthenticationProvider {

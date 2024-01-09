@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationEvent;
  * 本地日志保存事件
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 public class SysLogSaveEvent extends ApplicationEvent {
 

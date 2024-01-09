@@ -37,7 +37,7 @@ import static com.breeze.boot.core.constants.CacheConstants.VALIDATE_EMAIL_CODE;
  * {@link  org.springframework.security.authentication.dao.DaoAuthenticationProvider}
  *
  * @author gaoweixuan
- * @date 2022-09-03
+ * @since 2022-09-03
  */
 @Slf4j
 public class EmailAuthenticationProvider implements AuthenticationProvider {

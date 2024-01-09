@@ -27,7 +27,7 @@ import java.io.Serializable;
  * 系统日志BO
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 @Data
 @Builder

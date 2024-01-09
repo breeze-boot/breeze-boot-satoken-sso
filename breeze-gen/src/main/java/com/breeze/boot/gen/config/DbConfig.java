@@ -18,12 +18,6 @@ package com.breeze.boot.gen.config;
 
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 数据库配置
- *
- * @author gaoweixuan
- * @date 2023/07/04
- */
 @Configuration
 public class DbConfig {
 

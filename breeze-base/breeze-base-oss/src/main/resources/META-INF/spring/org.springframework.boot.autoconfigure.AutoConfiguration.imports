@@ -1,0 +1,2 @@
+com.breeze.boot.oss.OssConfiguration
+com.breeze.boot.local.config.WebMvcConfiguration

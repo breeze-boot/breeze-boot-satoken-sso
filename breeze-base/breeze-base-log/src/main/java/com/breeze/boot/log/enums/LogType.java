@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
  * 日志类型
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 @Getter
 @NoArgsConstructor

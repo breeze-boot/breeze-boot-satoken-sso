@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "name": "breeze.sap",
+      "type": "com.breeze.boot.sap.config.SapConnectionFileProperties",
+      "sourceType": "com.breeze.boot.sap.config.SapConnectionFileProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "breeze.sap.sap-client-id",
+      "type": "java.lang.String",
+      "description": "客户端ID",
+      "sourceType": "com.breeze.boot.sap.config.SapConnectionFileProperties"
+    },
+    {
+      "name": "breeze.sap.sap-file-path",
+      "type": "java.lang.String",
+      "description": "文件地址",
+      "sourceType": "com.breeze.boot.sap.config.SapConnectionFileProperties"
+    },
+    {
+      "name": "breeze.sap.sap-file-type",
+      "type": "java.lang.String",
+      "description": "文件类型",
+      "sourceType": "com.breeze.boot.sap.config.SapConnectionFileProperties"
+    }
+  ],
+  "hints": []
+}

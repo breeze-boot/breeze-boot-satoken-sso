@@ -33,7 +33,7 @@ import javax.servlet.Filter;
  * xxs过滤器注册配置
  *
  * @author gaoweixuan
- * @date 2022-10-21
+ * @since 2022-10-21
  */
 @Configuration
 @RequiredArgsConstructor

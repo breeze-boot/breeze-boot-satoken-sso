@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * 启用验证器
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 @Documented
 @Target(ElementType.TYPE)

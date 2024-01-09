@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @param <T>
  * @author gaoweixuan
- * @date 2021/10/1
+ * @since 2021/10/1
  */
 @Getter
 @Setter
@@ -38,7 +38,7 @@ public class Result<T> implements Serializable {
     /**
      * 代码
      */
-    private int code;
+    private String code;
 
     /**
      * 消息
@@ -167,7 +167,7 @@ public class Result<T> implements Serializable {
      * @param code    代码
      * @return {@link Result}<{@link T}>
      */
-    public static <T> Result<T> fail(Integer code, T data, String message) {
+    public static <T> Result<T> fail(String code, T data, String message) {
         Result<T> result = new Result<>();
         result.setCode(code);
         result.setData(data);
@@ -195,7 +195,7 @@ public class Result<T> implements Serializable {
      * @param msg  信息
      * @return {@link Result}<{@link String}>
      */
-    public static Result<String> fail(Integer code, String msg) {
+    public static Result<String> fail(String code, String msg) {
         Result<String> result = new Result<>();
         result.setCode(code);
         result.setMessage(msg);

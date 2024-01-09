@@ -20,7 +20,7 @@ package com.breeze.boot.security.exception;
  * 不支持异常
  *
  * @author gaoweixuan
- * @date 2022-09-25
+ * @since 2022-09-25
  */
 public class NotSupportException extends RuntimeException {
 

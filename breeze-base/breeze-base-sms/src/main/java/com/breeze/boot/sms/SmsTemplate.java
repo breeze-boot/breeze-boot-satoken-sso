@@ -37,7 +37,7 @@ import java.util.concurrent.ExecutionException;
  * 短信模板
  *
  * @author gaoweixuan
- * @date 2023/06/01
+ * @since 2023/06/01
  */
 @Slf4j
 @RequiredArgsConstructor

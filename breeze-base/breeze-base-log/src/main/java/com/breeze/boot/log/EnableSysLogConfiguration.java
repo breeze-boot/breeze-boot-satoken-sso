@@ -30,7 +30,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * 开启日志配置
  *
  * @author gaoweixuan
- * @date 2021/10/20
+ * @since 2021/10/20
  **/
 @Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy

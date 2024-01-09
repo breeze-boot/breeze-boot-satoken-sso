@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * 日志
  *
  * @author gaoweixuan
- * @date 2021/10/19
+ * @since 2021/10/19
  **/
 @Documented
 @Target({ElementType.METHOD})

@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  * 分页查询参数
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "分页查询参数", hidden = true)

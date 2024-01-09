@@ -1,0 +1,40 @@
+{
+  "groups": [
+    {
+      "name": "breeze.local",
+      "type": "com.breeze.boot.local.config.LocalProperties",
+      "sourceType": "com.breeze.boot.local.config.LocalProperties"
+    },
+    {
+      "name": "breeze.oss",
+      "type": "com.breeze.boot.oss.config.OssProperties",
+      "sourceType": "com.breeze.boot.oss.config.OssProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "breeze.local.nginx-host",
+      "type": "java.lang.String",
+      "description": "breeze.storage.local.nginx-host.",
+      "sourceType": "com.breeze.boot.local.config.LocalProperties"
+    },
+    {
+      "name": "breeze.local.path",
+      "type": "java.lang.String",
+      "description": "本地存储路径"
+    },
+    {
+      "name": "breeze.local.root-path",
+      "type": "java.lang.String",
+      "description": "路径",
+      "sourceType": "com.breeze.boot.local.config.LocalProperties"
+    },
+    {
+      "name": "breeze.oss.s3",
+      "type": "java.util.Map<java.lang.String,com.breeze.boot.oss.config.OssProperties$ConfigEntity>",
+      "description": "Oss",
+      "sourceType": "com.breeze.boot.oss.config.OssProperties"
+    }
+  ],
+  "hints": []
+}

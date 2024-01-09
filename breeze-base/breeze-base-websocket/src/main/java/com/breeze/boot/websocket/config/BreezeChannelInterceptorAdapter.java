@@ -37,7 +37,7 @@ import java.util.List;
  * 通道拦截器适配器
  *
  * @author gaoweixuan
- * @date 2022-11-16
+ * @since 2022-11-16
  */
 @Slf4j
 public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {

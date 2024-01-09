@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.system.mapper.SysUserMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.system.domain.SysUser" id="sysUserMap">
+    <resultMap type="com.breeze.boot.modules.system.domain.SysUser" id="sysUserMap">
         <id property="id" column="id"/>
         <result property="userCode" column="user_code"/>
         <result property="username" column="username"/>
@@ -29,12 +29,12 @@
         <collection property="roleIds" javaType="java.util.List"
                     ofType="java.lang.Long"
                     column="{userId=id}"
-                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleIdsByUserId">
+                    select="com.breeze.boot.modules.system.mapper.SysRoleMapper.listRoleIdsByUserId">
         </collection>
         <collection property="roleNames" javaType="java.util.List"
                     ofType="java.lang.Long"
                     column="{userId=id}"
-                    select="com.breeze.boot.system.mapper.SysRoleMapper.listRoleNamesByUserId">
+                    select="com.breeze.boot.modules.system.mapper.SysRoleMapper.listRoleNamesByUserId">
         </collection>
     </resultMap>
 
@@ -74,7 +74,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listUserByDeptId" resultType="com.breeze.boot.system.domain.SysUser">
+    <select id="listUserByDeptId" resultType="com.breeze.boot.modules.system.domain.SysUser">
         SELECT
         a.id,
         a.dept_id,
@@ -109,7 +109,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listAllUser" resultType="com.breeze.boot.system.domain.SysUser">
+    <select id="listAllUser" resultType="com.breeze.boot.modules.system.domain.SysUser">
         SELECT
         a.id,
         a.dept_id,

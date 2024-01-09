@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationEventPublisher;
  * 发布保存系统日志事件
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 @RequiredArgsConstructor
 public class PublisherSaveSysLogEvent {

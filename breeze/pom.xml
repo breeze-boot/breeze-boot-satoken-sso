@@ -73,11 +73,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.anji-plus</groupId>
-            <artifactId>spring-boot-starter-captcha</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
         </dependency>
@@ -154,7 +149,7 @@
         <!--oss s3 封装-->
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-oss-s3</artifactId>
+            <artifactId>breeze-base-oss</artifactId>
         </dependency>
 
         <!--redis 和 spring-cache-->
@@ -169,18 +164,23 @@
             <artifactId>breeze-base-websocket</artifactId>
         </dependency>
 
-        <!--本地存储-->
-        <dependency>
-            <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-storage</artifactId>
-        </dependency>
-
         <!--代码生成-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-sap-interface</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-anji-captcha</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

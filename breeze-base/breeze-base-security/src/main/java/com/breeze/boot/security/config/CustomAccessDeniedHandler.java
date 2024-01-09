@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * 携带了合法token,但权限不足以访问其请求的资源：403
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @Slf4j
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {

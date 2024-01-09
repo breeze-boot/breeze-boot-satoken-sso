@@ -25,7 +25,7 @@ import java.io.Serializable;
  * 消息VO
  *
  * @author gaoweixuan
- * @date 2022-11-23
+ * @since 2022-11-23
  */
 @Data
 @Builder

@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "breeze.local.path",
+      "type": "java.lang.String",
+      "description": "本地存储路径"
+    },
+    {
+      "name": "breeze.local.nginx-host",
+      "type": "java.lang.String",
+      "description": "breeze.storage.local.nginx-host."
+    }
+  ]
+}

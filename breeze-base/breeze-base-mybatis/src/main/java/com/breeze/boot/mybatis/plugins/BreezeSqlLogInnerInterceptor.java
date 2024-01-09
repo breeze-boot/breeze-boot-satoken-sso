@@ -38,7 +38,7 @@ import java.util.*;
  * sql日志内拦截器
  *
  * @author gaoweixuan
- * @date 2022-10-28
+ * @since 2022-10-28
  */
 @Slf4j
 public class BreezeSqlLogInnerInterceptor implements InnerInterceptor {

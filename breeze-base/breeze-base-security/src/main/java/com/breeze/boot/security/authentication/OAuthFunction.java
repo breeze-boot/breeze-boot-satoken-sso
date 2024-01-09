@@ -20,7 +20,7 @@ package com.breeze.boot.security.authentication;
  * oauth函数
  *
  * @author gaoweixuan
- * @date 2023/05/29
+ * @since 2023/05/29
  */
 @FunctionalInterface
 public interface OAuthFunction<T, W, E, R> {

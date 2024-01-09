@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
  * 基本实体 通用字段
  *
  * @author gaoweixuan
- * @date 2021-12-06 22:03:39
+ * @since 2021-12-06 22:03:39
  */
 @Data
 @Schema(name = "基础实体")

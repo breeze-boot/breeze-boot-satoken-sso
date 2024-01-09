@@ -36,7 +36,7 @@ import static org.springframework.security.oauth2.core.AuthorizationGrantType.PA
  * oauth2资源所有者密码身份验证提供者
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 @Slf4j
 public class OAuth2ResourceOwnerPasswordAuthenticationProvider extends OAuth2ResourceOwnerAuthenticationProvider {

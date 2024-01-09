@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
  * 开启资源服务配置
  *
  * @author gaoweixuan
- * @date 2021/10/1
+ * @since 2021/10/1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

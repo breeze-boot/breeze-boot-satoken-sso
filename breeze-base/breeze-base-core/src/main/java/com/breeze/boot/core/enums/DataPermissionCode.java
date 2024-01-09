@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
  * 枚举数据权限
  *
  * @author gaoweixuan
- * @date 2022-10-29
+ * @since 2022-10-29
  */
 @RequiredArgsConstructor
 public enum DataPermissionCode {

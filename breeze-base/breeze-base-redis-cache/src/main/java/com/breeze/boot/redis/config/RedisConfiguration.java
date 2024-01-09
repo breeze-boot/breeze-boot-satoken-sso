@@ -43,7 +43,7 @@ import java.time.Duration;
  * redis 配置
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @EnableCaching
 @Configuration(proxyBeanMethods = false)
@@ -105,8 +105,8 @@ public class RedisConfiguration {
      *
      * @return {@link Jackson2JsonRedisSerializer}
      */
-    private Jackson2JsonRedisSerializer getJsonRedisSerializer() {
-        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+    private Jackson2JsonRedisSerializer<Object> getJsonRedisSerializer() {
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper mapper = new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule((new SimpleModule()))

@@ -23,12 +23,12 @@ import lombok.Getter;
  * 系统服务异常
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @Getter
 public class SystemServiceException extends RuntimeException {
 
-    private final int code;
+    private final String code;
 
     private final String msg;
 

@@ -36,7 +36,7 @@ import static com.breeze.boot.security.constants.CustomOAuth2ParameterNames.EMAI
  * oauth2资源所有者Email身份验证提供者
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 @Slf4j
 public class OAuth2ResourceOwnerEmailAuthenticationProvider extends OAuth2ResourceOwnerAuthenticationProvider {

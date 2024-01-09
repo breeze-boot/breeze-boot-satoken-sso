@@ -25,7 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * 密码配置
  *
  * @author gaoweixuan
- * @date 2022-08-31
+ * @since 2022-08-31
  */
 @Configuration(proxyBeanMethods = false)
 public class PasswordConfiguration {

@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter;
  * jackson配置
  *
  * @author gaoweixuan
- * @date 2023/05/16
+ * @since 2023/05/16
  */
 @Configuration
 public class JacksonConfig {

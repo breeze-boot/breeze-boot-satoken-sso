@@ -49,7 +49,7 @@ import static com.breeze.boot.core.constants.CacheConstants.*;
  * 在 redis中 oauth2授权服务
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 @Slf4j
 public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationService {
@@ -305,7 +305,7 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
      * ttl
      *
      * @author gaoweixuan
-     * @date 2023/05/05
+     * @since 2023/05/05
      */
     private static class Ttl {
         /**

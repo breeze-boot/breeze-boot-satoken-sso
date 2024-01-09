@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
  * mybatis元对象处理程序
  *
  * @author gaoweixuan
- * @date 2022-10-12
+ * @since 2022-10-12
  */
 @Slf4j
 public class MybatisMetaObjectHandler implements MetaObjectHandler {

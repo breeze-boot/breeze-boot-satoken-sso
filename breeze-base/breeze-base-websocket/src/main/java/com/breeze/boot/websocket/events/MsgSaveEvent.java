@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationEvent;
  * 消息保存事件
  *
  * @author gaoweixuan
- * @date 2022-11-28
+ * @since 2022-11-28
  */
 public class MsgSaveEvent extends ApplicationEvent {
 

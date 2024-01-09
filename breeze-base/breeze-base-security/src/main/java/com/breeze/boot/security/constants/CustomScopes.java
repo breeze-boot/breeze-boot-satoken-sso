@@ -20,7 +20,7 @@ package com.breeze.boot.security.constants;
  * 自定义oauth2参数名称
  *
  * @author gaoweixuan
- * @date 2023-04-24
+ * @since 2023-04-24
  */
 public class CustomScopes {
 

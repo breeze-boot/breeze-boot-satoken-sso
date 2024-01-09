@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * xxlJob属性
  *
  * @author gaoweixuan
- * @date 2023/04/15
+ * @since 2023/04/15
  */
 @Data
 @Configuration
@@ -43,10 +43,10 @@ public class XxlJobProperties {
 
     /**
      * @author gaoweixuan
-     * @date 2023/04/15
+     * @since 2023/04/15
      */
     @Data
-    class Admin {
+    static class Admin {
 
         /**
          * 调度中心部署根地址 [选填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
@@ -57,10 +57,10 @@ public class XxlJobProperties {
 
     /**
      * @author gaoweixuan
-     * @date 2023/04/15
+     * @since 2023/04/15
      */
     @Data
-    class Executor {
+    static class Executor {
 
         /**
          * 执行器通讯TOKEN [选填]：非空时启用；

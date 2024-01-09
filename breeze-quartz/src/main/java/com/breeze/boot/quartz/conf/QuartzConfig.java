@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
  * Quartz配置
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 @Configuration
 public class QuartzConfig {

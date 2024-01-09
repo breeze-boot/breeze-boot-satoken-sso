@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
  * response 返回JSON工具类
  *
  * @author gaoweixuan
- * @date 2021/10/2
+ * @since 2021/10/2
  */
 @Slf4j
 public class ResponseUtil {
@@ -38,10 +38,10 @@ public class ResponseUtil {
     /**
      * 响应
      *
-     * @param response 响应
-     * @param result   结果
+     * @param response   响应
+     * @param resultCode 结果
      */
-    public static void response(HttpServletResponse response, ResultCode result) {
+    public static void response(HttpServletResponse response, ResultCode resultCode) {
         ServletOutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
@@ -49,7 +49,7 @@ public class ResponseUtil {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             out = response.getOutputStream();
             ObjectMapper objectMapper = new ObjectMapper();
-            out.write(objectMapper.writeValueAsString(Result.fail(result)).getBytes(StandardCharsets.UTF_8));
+            out.write(objectMapper.writeValueAsString(Result.fail(resultCode)).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             log.error("response 响应失败", e);
         } finally {

@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * oauth2资源所有者身份验证转换器
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public abstract class OAuth2ResourceOwnerAuthenticationConverter implements AuthenticationConverter {
 

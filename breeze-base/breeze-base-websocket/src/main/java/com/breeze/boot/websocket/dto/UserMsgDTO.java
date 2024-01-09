@@ -26,7 +26,7 @@ import java.util.List;
  * 用户消息传输类
  *
  * @author gaoweixuan
- * @date 2022-11-23
+ * @since 2022-11-23
  */
 @Data
 @Builder

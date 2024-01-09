@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "name": "breeze.tenant",
+      "type": "com.breeze.boot.mybatis.filters.TenantProperties",
+      "sourceType": "com.breeze.boot.mybatis.filters.TenantProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "breeze.tenant.column",
+      "type": "java.lang.String",
+      "description": "列",
+      "sourceType": "com.breeze.boot.mybatis.filters.TenantProperties"
+    },
+    {
+      "name": "breeze.tenant.param",
+      "type": "java.lang.String",
+      "description": "参数",
+      "sourceType": "com.breeze.boot.mybatis.filters.TenantProperties"
+    },
+    {
+      "name": "breeze.tenant.tables",
+      "type": "java.util.List<java.lang.String>",
+      "description": "增加租户的表",
+      "sourceType": "com.breeze.boot.mybatis.filters.TenantProperties"
+    }
+  ],
+  "hints": []
+}

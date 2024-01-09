@@ -29,7 +29,7 @@ import java.util.List;
  * quartz定时任务日志服务
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 public interface SysQuartzJobService extends IService<SysQuartzJob> {
 

@@ -28,7 +28,7 @@ import java.util.*;
  * oauth2资源所有者身份验证令牌
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public class OAuth2ResourceOwnerAuthenticationToken extends AbstractAuthenticationToken {
 

@@ -106,14 +106,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.breeze</groupId>
-                <artifactId>breeze-flowable-ui-bom</artifactId>
-                <version>1.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
@@ -292,6 +284,18 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-anji-captcha</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-sap-interface</artifactId>
+                <version>${breeze-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-log</artifactId>
                 <version>${breeze-boot.version}</version>
             </dependency>
@@ -310,19 +314,13 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-storage</artifactId>
-                <version>${breeze-boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-websocket</artifactId>
                 <version>${breeze-boot.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-oss-s3</artifactId>
+                <artifactId>breeze-base-oss</artifactId>
                 <version>${breeze-boot.version}</version>
             </dependency>
 
@@ -462,14 +460,6 @@
         </plugins>
     </build>
 
-
-    <!-- repositories 名为仓库，解决项目依赖的第三方jar包存放位置，以及多个项目公用第三方jar包。
-        pluginRepositories 名为插件仓库，存放maven插件的仓库，告诉项目您使用的插件应该去什么地方下载。
-        在不用Maven的时候，比如说以前我们用Ant构建项目，在项目目录下，往往会看到一个名为/lib的子目录，那里存放着各类第三方依赖jar文件，如log4j.jar，junit.jar等等。每建立一个项目，你都需要建立这样的一个/lib目录，然后复制一对jar文件，这是很明显的重复。重复永远是噩梦的起点，多个项目不共用相同的jar文件，不仅会造成磁盘资源的浪费，也使得版本的一致性管理变得困难。此外，如果你使用版本管理工具，如SVN（你没有使用版本管理工具？马上试试SVN吧，它能帮你解决很多头疼的问题），你需要将大量的jar文件提交到代码库里，可是版本管理工具在处理二进制文件方面并不出色。
-
-        Maven仓库就是放置所有JAR文件（WAR，ZIP，POM等等）的地方，所有Maven项目可以从同一个Maven仓库中获取自己所需要的依赖JAR，这节省了磁盘资源。此外，由于Maven仓库中所有的JAR都有其自己的坐标，该坐标告诉Maven它的组ID，构件ID，版本，打包方式等等，因此Maven项目可以方便的进行依赖版本管理。你也不在需要提交JAR文件到SCM仓库中，你可以建立一个组织层次的Maven仓库，供所有成员使用。
-        简言之，Maven仓库能帮助我们管理构件（主要是JAR）
-    -->
     <pluginRepositories>
         <pluginRepository>
             <id>aliyun-plugin</id>
@@ -489,7 +479,6 @@
             <name>aliyun</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
-        <!-- ... possibly other repository elements ... -->
         <repository>
             <id>spring-snapshot</id>
             <name>Spring Snapshot Repository</name>

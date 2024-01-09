@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationEventPublisher;
  * 发布保存消息事件
  *
  * @author gaoweixuan
- * @date 2022-11-28
+ * @since 2022-11-28
  */
 @RequiredArgsConstructor
 public class PublisherSaveMsgEvent {

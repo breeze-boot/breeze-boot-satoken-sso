@@ -38,7 +38,7 @@ import static org.springframework.security.oauth2.server.resource.BearerTokenErr
  * oauth2资源所有者Email验证转换器
  *
  * @author gaoweixuan
- * @date 2023-04-21
+ * @since 2023-04-21
  */
 public class OAuth2ResourceOwnerEmailAuthenticationConverter extends OAuth2ResourceOwnerAuthenticationConverter {
 

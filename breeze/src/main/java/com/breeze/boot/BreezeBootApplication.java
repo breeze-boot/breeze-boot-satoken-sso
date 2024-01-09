@@ -25,7 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 微风启动应用程序
  *
  * @author gaoweixuan
- * @date 2022-11-16
+ * @since 2022-11-16
  */
 @EnableResourceServer
 @EnableFastValidator

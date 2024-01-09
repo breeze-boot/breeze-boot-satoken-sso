@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * 短信配置
  *
  * @author gaoweixuan
- * @date 2023/05/31
+ * @since 2023/05/31
  */
 @Slf4j
 @Configuration

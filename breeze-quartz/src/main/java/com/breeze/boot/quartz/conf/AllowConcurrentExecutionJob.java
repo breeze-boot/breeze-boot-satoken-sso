@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  * 允许并发的Job
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 @Slf4j
 public class AllowConcurrentExecutionJob extends QuartzJobBean {

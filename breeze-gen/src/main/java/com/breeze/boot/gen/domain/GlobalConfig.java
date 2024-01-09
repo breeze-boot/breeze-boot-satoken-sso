@@ -22,7 +22,7 @@ import lombok.Data;
  * 配置
  *
  * @author gaoweixuan
- * @date 2023/07/03
+ * @since 2023/07/03
  */
 @Data
 public class GlobalConfig {

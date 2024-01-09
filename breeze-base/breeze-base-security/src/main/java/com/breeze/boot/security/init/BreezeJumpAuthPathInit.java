@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * 跳过认证注解切面
  *
  * @author gaoweixuan
- * @date 2022/08/31
+ * @since 2022/08/31
  */
 @Slf4j
 @RequiredArgsConstructor

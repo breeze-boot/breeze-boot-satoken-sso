@@ -26,7 +26,7 @@ import java.util.Set;
  * 登录的用户信息 redis存储实体
  *
  * @author gaoweixuan
- * @date 2022-01-28
+ * @since 2022-01-28
  */
 @Data
 @Builder

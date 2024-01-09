@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
  * Quartz常量
  *
  * @author gaoweixuan
- * @date 2023-03-16
+ * @since 2023-03-16
  */
 public class QuartzConstants {
 
@@ -73,7 +73,7 @@ public class QuartzConstants {
      * 1 立即执行 2 执行一次 3 放弃
      *
      * @author gaoweixuan
-     * @date 2023-03-16
+     * @since 2023-03-16
      */
     @Getter
     @RequiredArgsConstructor

@@ -18,7 +18,8 @@ package com.breeze.boot.security.domain;
 
 import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +27,7 @@ import java.time.LocalDateTime;
  * 基础系统注册客户端
  *
  * @author gaoweixuan
- * @date 2023/05/29
+ * @since 2023/05/29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

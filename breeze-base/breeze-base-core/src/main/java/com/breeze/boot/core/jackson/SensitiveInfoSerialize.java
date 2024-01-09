@@ -34,7 +34,7 @@ import java.util.Objects;
  * 敏感信息进行序列化
  *
  * @author gaoweixuan
- * @date 2023/06/01
+ * @since 2023/06/01
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -86,6 +86,7 @@ public class SensitiveInfoSerialize extends JsonSerializer<String> implements Co
      * @param beanProperty       bean属性
      * @return {@link JsonSerializer}<{@link ?}>
      */
+    @Override
     @SneakyThrows
     public JsonSerializer<?> createContextual(SerializerProvider serializerProvider, BeanProperty beanProperty) {
         if (Objects.isNull(beanProperty)) {

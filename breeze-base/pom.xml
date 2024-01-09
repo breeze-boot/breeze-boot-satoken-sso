@@ -20,8 +20,7 @@
         <module>breeze-base-redis-cache</module>
         <module>breeze-base-mybatis</module>
         <module>breeze-base-mail</module>
-        <module>breeze-base-storage</module>
-        <module>breeze-base-oss-s3</module>
+        <module>breeze-base-oss</module>
         <module>breeze-base-xss</module>
         <module>breeze-base-log</module>
         <module>breeze-base-validator</module>
@@ -30,6 +29,8 @@
         <module>breeze-base-doc</module>
         <module>breeze-base-sms</module>
         <module>breeze-flowable-ui-bom</module>
+        <module>breeze-base-sap-interface</module>
+        <module>breeze-base-anji-captcha</module>
     </modules>
 
 </project>

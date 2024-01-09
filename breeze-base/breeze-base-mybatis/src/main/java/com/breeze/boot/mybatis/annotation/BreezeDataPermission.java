@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * 数据权限
  *
  * @author gaoweixuan
- * @date 2022-10-29
+ * @since 2022-10-29
  */
 @Inherited
 @Documented

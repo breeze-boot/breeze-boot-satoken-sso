@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 不需要register的ObjectMapper工具类
  *
  * @author gaoweixuan
- * @date 2023/05/07
+ * @since 2023/05/07
  */
 public class MapperUtils {
 

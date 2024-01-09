@@ -27,7 +27,7 @@ import java.util.function.Consumer;
  * 系统日志保存事件监听器
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 @Slf4j
 @RequiredArgsConstructor

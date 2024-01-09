@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
  * 数据角色
  *
  * @author gaoweixuan
- * @date 2023/05/25
+ * @since 2023/05/25
  */
 @Getter
 @RequiredArgsConstructor

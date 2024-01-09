@@ -24,8 +24,8 @@ import com.breeze.boot.security.authentication.password.OAuth2ResourceOwnerPassw
 import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthenticationConverter;
 import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthenticationProvider;
 import com.breeze.boot.security.authentication.sms.SmsAuthenticationProvider;
-import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationService;
 import com.breeze.boot.security.jose.Jwks;
+import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationService;
 import com.breeze.boot.security.service.impl.UserDetailService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -75,7 +75,7 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
  * 授权服务器配置
  *
  * @author gaoweixuan
- * @date 2023-04-10
+ * @since 2023-04-10
  */
 @SuppressWarnings("ALL")
 @Slf4j

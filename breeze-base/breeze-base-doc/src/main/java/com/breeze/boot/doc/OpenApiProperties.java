@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 开放api特性
  *
  * @author gaoweixuan
- * @date 2023/05/30
+ * @since 2023/05/30
  */
 @Data
 @ConfigurationProperties(prefix = "springdoc")

@@ -29,7 +29,7 @@ import javax.validation.ValidatorFactory;
  * 验证器配置
  *
  * @author gaoweixuan
- * @date 2022-10-19
+ * @since 2022-10-19
  */
 public class ValidatorConfiguration {
 

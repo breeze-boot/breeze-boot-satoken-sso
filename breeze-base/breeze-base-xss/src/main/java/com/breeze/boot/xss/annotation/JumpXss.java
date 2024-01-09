@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * 跳过XSS过滤
  *
  * @author gaoweixuan
- * @date 2022-10-29
+ * @since 2022-10-29
  */
 @BaseFilter
 @Inherited

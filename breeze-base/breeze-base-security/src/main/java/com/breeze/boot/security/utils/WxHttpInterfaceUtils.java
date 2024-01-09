@@ -32,7 +32,7 @@ import java.util.Objects;
  * wx http接口
  *
  * @author gaoweixuan
- * @date 2023-02-28
+ * @since 2023-02-28
  */
 @Slf4j
 public class WxHttpInterfaceUtils {

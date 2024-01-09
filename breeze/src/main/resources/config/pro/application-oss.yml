@@ -1,0 +1,24 @@
+# oss s3 配置
+breeze:
+  # 本地硬盘存储配置
+  local:
+    path: /usr/local/breeze/
+    nginx-host: http://localhost:9000/img/
+  # oss s3 配置
+  oss:
+    s3:
+      minio:
+        domain-url: http://localhost:9092
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      cos:
+        domain-url: http://localhost:9092
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      kodo:
+        domain-url: http://localhost:9092
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.breeze.boot.system.mapper.SysRegisteredClientMapper">
+<mapper namespace="com.breeze.boot.modules.system.mapper.SysRegisteredClientMapper">
 
     <select id="listPage"
-            resultType="com.breeze.boot.system.vo.RegisteredClientVO">
+            resultType="com.breeze.boot.modules.system.domain.vo.RegisteredClientVO">
         SELECT
         id,
         client_id,
@@ -32,7 +32,7 @@
     </select>
 
     <select id="getRegisteredClientBy"
-            resultType="com.breeze.boot.system.domain.SysRegisteredClient">
+            resultType="com.breeze.boot.modules.system.domain.SysRegisteredClient">
         SELECT
         id,
         client_id,

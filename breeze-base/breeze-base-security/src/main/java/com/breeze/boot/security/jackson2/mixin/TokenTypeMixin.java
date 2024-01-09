@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * 令牌类型混合
  *
  * @author gaoweixuan
- * @date 2023/05/05
+ * @since 2023/05/05
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,

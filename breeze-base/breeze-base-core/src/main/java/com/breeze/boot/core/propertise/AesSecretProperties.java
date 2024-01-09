@@ -21,10 +21,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * aesÃØÃÜÊôĞÔ
+ * aesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  *
  * @author gaoweixuan
- * @date 2023/05/25
+ * @since 2023/05/25
  */
 @Data
 @Component

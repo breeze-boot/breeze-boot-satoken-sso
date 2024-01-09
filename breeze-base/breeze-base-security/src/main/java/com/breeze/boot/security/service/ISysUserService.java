@@ -25,7 +25,7 @@ import com.breeze.boot.security.params.WxLoginParam;
  * 系统用户服务
  *
  * @author gaoweixuan
- * @date 2021-12-06 22:03:39
+ * @since 2021-12-06 22:03:39
  */
 public interface ISysUserService {
 

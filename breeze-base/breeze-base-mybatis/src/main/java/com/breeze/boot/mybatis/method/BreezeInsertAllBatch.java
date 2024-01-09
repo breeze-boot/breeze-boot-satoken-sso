@@ -30,7 +30,7 @@ import static com.breeze.boot.core.constants.BreezeStrPoolConstants.*;
  * 批量插入
  *
  * @author gaoweixuan
- * @date 2022-10-22
+ * @since 2022-10-22
  */
 public class BreezeInsertAllBatch extends AbstractMethod {
 

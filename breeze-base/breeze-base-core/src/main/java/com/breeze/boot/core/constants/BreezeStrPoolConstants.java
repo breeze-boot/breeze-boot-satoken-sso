@@ -22,7 +22,7 @@ import cn.hutool.core.text.StrPool;
  * str池
  *
  * @author gaoweixuan
- * @date 2022-10-22
+ * @since 2022-10-22
  */
 public interface BreezeStrPoolConstants extends StrPool {
 
