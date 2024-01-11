@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.system.domain;
+package com.breeze.boot.modules.auth.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,53 +23,44 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 系统字典项实体
+ * 系统角色实体
  *
  * @author gaoweixuan
- * @since 2022-09-02
+ * @since 2021-12-06 22:03:39
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName("sys_dict_item")
-@Schema(description = "系统字典项实体")
-public class SysDictItem extends BaseModel<SysDictItem> implements Serializable {
+@TableName("sys_role")
+@Schema(description = "系统角色实体")
+public class SysRole extends BaseModel<SysRole> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字典ID
+     * 角色编码
      */
-    @NotNull(message = "字典ID不能为空")
-    @Schema(description = "字典ID")
-    private Long dictId;
+    @NotBlank(message = "角色编码不可为空")
+    @Schema(description = "角色编码")
+    private String roleCode;
 
     /**
-     * 字典项的值
+     * 角色名称
      */
-    @NotBlank(message = "字典项的值不可为空")
-    @Schema(description = "字典项的值")
-    @TableField("`value`")
-    private String value;
+    @NotBlank(message = "角色名称不可为空")
+    @Schema(description = "角色名称")
+    private String roleName;
 
     /**
-     * 字典项名称
+     * 数据权限名称
      */
-    @NotBlank(message = "key不可为空")
-    @Schema(description = "字典项名称")
-    @TableField("`label`")
-    private String label;
-
-    /**
-     * 排序
-     */
-    @Schema(description = "排序")
-    private Integer sort;
+    @Schema(description = "数据权限名称")
+    @TableField(exist = false)
+    private String dataPermissionName;
 
 }

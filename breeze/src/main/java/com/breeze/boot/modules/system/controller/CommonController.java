@@ -18,7 +18,7 @@ package com.breeze.boot.modules.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysUser;
+import com.breeze.boot.modules.auth.domain.SysUser;
 import com.breeze.boot.modules.system.domain.params.FileParam;
 import com.breeze.boot.modules.system.service.CommonService;
 import com.breeze.boot.security.annotation.JumpAuth;

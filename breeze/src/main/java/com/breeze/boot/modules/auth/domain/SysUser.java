@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.msg.domain.vo;
+package com.breeze.boot.modules.auth.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -22,7 +22,12 @@ import com.alibaba.excel.annotation.write.style.*;
 import com.alibaba.excel.enums.poi.BorderStyleEnum;
 import com.alibaba.excel.enums.poi.HorizontalAlignmentEnum;
 import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
-import com.breeze.boot.modules.auth.domain.SysRole;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.breeze.boot.core.annotation.SensitiveInfo;
+import com.breeze.boot.core.base.BaseModel;
+import com.breeze.boot.core.enums.SensitiveType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -32,7 +37,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 系统用户VO
+ * 系统用户实体
  *
  * @author gaoweixuan
  * @since 2021-12-06 22:03:39
@@ -53,14 +58,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "系统用户VO")
-public class SysUserVO implements Serializable {
+@TableName("sys_user")
+@Schema(description = "系统用户实体")
+public class SysUser extends BaseModel<SysUser> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户名
      */
+    @NotBlank(message = "用户名不可为空")
     @Schema(description = "用户名称")
     @ExcelProperty(value = "用户名称", index = 0)
     private String username;
@@ -88,6 +95,20 @@ public class SysUserVO implements Serializable {
     private String avatar;
 
     /**
+     * 头像文件ID
+     */
+    @ExcelIgnore
+    @Schema(description = "头像文件ID")
+    private Long avatarFileId;
+
+    /**
+     * 用户密码
+     */
+    @ExcelIgnore
+    @Schema(description = "用户密码")
+    private String password;
+
+    /**
      * 岗位ID
      */
     @ExcelIgnore
@@ -97,6 +118,7 @@ public class SysUserVO implements Serializable {
     /**
      * 岗位名称
      */
+    @TableField(exist = false)
     @Schema(description = "岗位名称")
     @ExcelProperty(value = "岗位名称", index = 4)
     private String postName;
@@ -112,9 +134,11 @@ public class SysUserVO implements Serializable {
     /**
      * 部门名称
      */
+    @TableField(exist = false)
     @Schema(description = "部门名称")
     @ExcelProperty(value = "部门名称", index = 5)
     private String deptName;
+
 
     /**
      * 性别 0 女性 1 男性
@@ -128,6 +152,7 @@ public class SysUserVO implements Serializable {
      */
     @Schema(description = "身份证号")
     @ExcelProperty(value = "身份证号", index = 7)
+    @SensitiveInfo(SensitiveType.ID_CARD)
     private String idCard;
 
     /**
@@ -135,6 +160,7 @@ public class SysUserVO implements Serializable {
      */
     @Schema(description = "手机号")
     @ExcelProperty(value = "手机号", index = 8)
+    @SensitiveInfo(SensitiveType.PHONE)
     private String phone;
 
     /**
@@ -142,6 +168,7 @@ public class SysUserVO implements Serializable {
      */
     @Schema(description = "微信OpenID")
     @ExcelProperty(value = "微信OpenID", index = 9)
+    @JsonIgnore
     private String openId;
 
     /**
@@ -149,6 +176,7 @@ public class SysUserVO implements Serializable {
      */
     @Schema(description = "邮件")
     @ExcelProperty(value = "邮件", index = 10)
+    @SensitiveInfo(SensitiveType.EMAIL)
     private String email;
 
     /**
@@ -171,6 +199,7 @@ public class SysUserVO implements Serializable {
      * 查询用户详情返回使用
      */
     @ExcelIgnore
+    @TableField(exist = false)
     @Schema(description = "用户角色")
     private List<SysRole> sysRoles;
 
@@ -180,7 +209,18 @@ public class SysUserVO implements Serializable {
      * 查询用户详情返回使用
      */
     @ExcelIgnore
+    @TableField(exist = false)
     @Schema(description = "用户角色ID")
     private List<Long> roleIds;
+
+    /**
+     * 用户角色名称
+     * <p>
+     * 查询用户详情返回使用
+     */
+    @ExcelIgnore
+    @TableField(exist = false)
+    @Schema(description = "用户角色名称")
+    private List<String> roleNames;
 
 }
