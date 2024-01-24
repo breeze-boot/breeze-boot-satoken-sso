@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>com.breeze</groupId>
-        <artifactId>breeze-boot</artifactId>
+        <artifactId>breeze</artifactId>
         <version>1.0</version>
     </parent>
 
@@ -16,7 +16,6 @@
     <modules>
         <module>breeze-base-xxljob</module>
         <module>breeze-base-websocket</module>
-        <module>breeze-base-datasource</module>
         <module>breeze-base-redis-cache</module>
         <module>breeze-base-mybatis</module>
         <module>breeze-base-mail</module>

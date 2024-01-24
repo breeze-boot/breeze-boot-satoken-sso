@@ -52,7 +52,6 @@
   │ │ ├─ src\java\com\breeze\boot\..\system 【系统相关的包】 \
   ├─ breeze-base \
   │ ├─ breeze-base-core \
-  │ ├─ breeze-base-datasource\
   │ ├─ breeze-base-log \
   │ ├─ breeze-base-mail \
   │ ├─ breeze-base-oss-s3 \

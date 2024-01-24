@@ -94,8 +94,7 @@ public class RedisConfiguration {
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(strSerializer))
                 // 使用 jacksonSeial 对value的数据类型进行转换
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(this.getJsonRedisSerializer()))
-                // 对空数据不操作
-                .disableCachingNullValues();
+                ;
 
         return RedisCacheManager.builder(lettuceConnectionFactory).cacheDefaults(config).build();
     }

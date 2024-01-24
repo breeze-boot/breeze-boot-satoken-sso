@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.breeze</groupId>
-    <artifactId>breeze-boot</artifactId>
+    <artifactId>breeze</artifactId>
     <version>1.0</version>
 
     <name>${project.artifactId}</name>
@@ -31,7 +31,7 @@
     </organization>
 
     <modules>
-        <module>breeze</module>
+        <module>breeze-boot</module>
         <module>breeze-base</module>
         <module>breeze-quartz</module>
         <module>breeze-gen</module>
@@ -275,12 +275,6 @@
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-security</artifactId>
-                <version>${breeze-boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-datasource</artifactId>
                 <version>${breeze-boot.version}</version>
             </dependency>
 
