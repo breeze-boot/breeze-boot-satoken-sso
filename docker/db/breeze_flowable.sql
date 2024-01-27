@@ -1,14 +1,10 @@
-DROP
-DATABASE IF EXISTS `breeze_flowable`;
-CREATE
-DATABASE  `breeze_flowable` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+DROP DATABASE IF EXISTS breeze_flowable;
+CREATE DATABASE breeze_flowable DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE breeze_flowable;
 
 SET NAMES utf8mb4;
-SET
-FOREIGN_KEY_CHECKS = 0;
-
-USE
-`breeze_flowable`;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for process_category

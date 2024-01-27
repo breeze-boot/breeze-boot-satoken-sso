@@ -1,14 +1,10 @@
-DROP
-DATABASE IF EXISTS `breeze_boot`;
-CREATE
-DATABASE  `breeze_boot` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+DROP DATABASE IF EXISTS breeze_boot;
+CREATE DATABASE breeze_boot DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE breeze_boot;
 
 SET NAMES utf8mb4;
-SET
-FOREIGN_KEY_CHECKS = 0;
-
-USE
-`breeze_boot`;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -794,100 +790,100 @@ CREATE TABLE `sys_menu`
 -- ----------------------------
 INSERT INTO `sys_menu`
 VALUES (1578702340612321378, 1111111111111111111, 1594135789623184129, '任务日志', 'jLog', 1, 'el-icon-s-comment',
-        '/jLog', '/quartz/jlog/index', 'modules:jLog:list', 0, 0, 1, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/jLog', '/quartz/jlog/index', 'sys:jLog:list', 0, 0, 1, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340612325378, 1111111111111111111, 1578702340666851329, '日志管理', 'log', 1, 'icon-rizhiguanli', '/log',
-        '/system/log/index', 'modules:log:list', 0, 0, 0, 7, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/system/log/index', 'sys:log:list', 0, 0, 0, 7, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340620713986, 1111111111111111111, 1580357263003439106, '设计器', 'designer', 1, 'icon-shejishi',
         '/designer', '/flow/designer/index', 'flow:designer', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL,
         1);
 INSERT INTO `sys_menu`
 VALUES (1578702340620713987, 1111111111111111111, 1578702340683628545, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:user:modify', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:modify', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340620713988, 1111111111111111111, 1578702340683628545, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:user:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340624908290, 1111111111111111111, 1578702340683628545, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:user:create', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:create', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340624908291, 1111111111111111111, 1578702340683628546, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:menu:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:menu:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340624908292, 1111111111111111111, 1578702340683628546, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:menu:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:menu:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340624908293, 1111111111111111111, 1578702340683628546, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:menu:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:menu:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340633296898, 1111111111111111111, 1578702340662657026, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:dept:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dept:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340633296899, 1111111111111111111, 1578702340662657026, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:dept:create', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dept:create', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340641685505, 1111111111111111111, 1578702340654268418, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:role:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:role:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340641685506, 1111111111111111111, 1578702340654268418, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:role:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:role:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340650074114, 1111111111111111111, 1578702340654268418, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:role:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:role:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340650074115, 1111111111111111111, 1578702340662657027, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:dict:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dict:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340650074116, 1111111111111111111, 1578702340662657027, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:dict:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dict:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340650074117, 1111111111111111111, 1578702340662657027, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:dict:create', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dict:create', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340654268411, 1111111111111111111, 1578702340612325378, '清空表', NULL, 2, NULL, NULL, NULL,
-        'modules:log:truncate', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:log:truncate', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340654268412, 1111111111111111111, 1578702340666851329, '租户管理', 'tenant', 1, 'icon-zuhuguanli',
-        '/tenant', '/system/tenant/index', 'modules:tenant:list', 0, 0, 0, 10, NULL, NULL, NULL, NULL, NULL, NULL, 0,
+        '/tenant', '/system/tenant/index', 'sys:tenant:list', 0, 0, 0, 10, NULL, NULL, NULL, NULL, NULL, NULL, 0,
         NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340654268416, 1111111111111111111, 1578702340666851329, '岗位管理', 'post', 1, 'icon-gangweizu', '/post',
-        '/system/post/index', 'modules:post:list', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/system/post/index', 'sys:post:list', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340654268417, 1111111111111111111, 1578702340612325378, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:log:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:log:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340654268418, 1111111111111111111, 1578702340666851329, '角色管理', 'role', 1, 'icon-jiaoseguanli',
-        '/role', '/system/role/index', 'modules:role:list', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/role', '/system/role/index', 'sys:role:list', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340662657026, 1111111111111111111, 1578702340666851329, '部门管理', 'dept', 1, 'icon-bumenguanli',
-        '/dept', '/system/dept/index', 'modules:dept:list', 0, 0, 0, 9, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/dept', '/system/dept/index', 'sys:dept:list', 0, 0, 0, 9, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340662657027, 1111111111111111111, 1578702340666851329, '字典管理', 'dict', 1, 'icon-menu_zdgl', '/dict',
-        '/system/dict/index', 'modules:dict:list', 0, 0, 0, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/system/dict/index', 'sys:dict:list', 0, 0, 0, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340666851329, 1111111111111111111, 1111111111111111111, '权限管理', '', 0, 'icon-quanxianguanli',
         '/upms', '', '', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340671045634, 1111111111111111111, 1578702340666851329, '平台管理', 'platform', 1, 'icon-pingtaiguanli',
-        '/platform', '/system/platform/index', 'modules:platform:list', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL,
+        '/platform', '/system/platform/index', 'sys:platform:list', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL,
         0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340671045635, 1111111111111111111, 1578702340671045634, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:platform:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:platform:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340679434241, 1111111111111111111, 1578702340671045634, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:platform:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:platform:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340679434243, 1111111111111111111, 1578702340671045634, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:platform:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:platform:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340683628545, 1111111111111111111, 1578702340666851329, '用户管理', 'user', 1, 'icon-yonghuguanli',
-        '/user', '/system/user/index', 'modules:user:list', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/user', '/system/user/index', 'sys:user:list', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1578702340683628546, 1111111111111111111, 1578702340666851329, '菜单管理', 'menu', 1, 'icon-caidanguanli',
-        '/menu', '/system/menu/index', 'modules:menu:list', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/menu', '/system/menu/index', 'sys:menu:list', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1580357263003439106, 1111111111111111111, 1111111111111111111, '流程管理', NULL, 0, 'icon-bumenguanli', '/flow',
         NULL, NULL, 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
@@ -897,7 +893,7 @@ VALUES (1580357773622202370, 1111111111111111111, 1580357263003439106, '流程�
         NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1581843318345035778, 1111111111111111111, 1578702340662657026, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:dept:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:dept:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1581965904601088001, 1111111111111111111, 1581966349440581634, '测试KeepAive', 'testKeep', 1, 'icon-test',
         '/testKeep', '/test/testKeep/TestKeepView', 'keep:create', 0, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0,
@@ -926,103 +922,103 @@ VALUES (1582688861908611074, 1111111111111111111, 1581965904601088002, 'elementU
         'https://element.eleme.cn', NULL, NULL, 1, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1586717542633123841, 1111111111111111111, 1578702340683628545, '角色分配', 'userRole', 1, NULL, '/userRole',
-        '/system/user/role/index', 'modules:role:list', 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/system/user/role/index', 'sys:role:list', 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1586717542633123843, 1111111111111111111, 1578702340662657027, '字典项', 'dictItem', 1, NULL, '/dictItem',
-        '/system/dict/item/index', 'modules:item:list', 0, 0, 1, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/system/dict/item/index', 'sys:item:list', 0, 0, 1, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1587692336744742913, 1111111111111111111, 1578702340683628545, '详情', NULL, 2, NULL, NULL, NULL,
-        'modules:user:info', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:info', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230018781, 1111111111111111111, 9223372036854775119, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:msg:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:msg:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230018782, 1111111111111111111, 9223372036854775120, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:msgUser:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:msgUser:modify', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048172, 1111111111111111111, 9223372036854775119, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:msg:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:msg:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048178, 1111111111111111111, 9223372036854775120, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:msgUser:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:msgUser:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048770, 1111111111111111111, 1578702340654268416, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:post:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:post:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048771, 1111111111111111111, 1578702340654268416, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:post:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:post:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048772, 1111111111111111111, 1578702340654268416, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:post:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:post:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048778, 1111111111111111111, 1594135789623984129, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:file:delete', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:file:delete', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048781, 1111111111111111111, 1578702340654268412, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:tenant:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:tenant:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048782, 1111111111111111111, 1578702340654268412, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:tenant:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:tenant:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230048783, 1111111111111111111, 1578702340654268412, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:tenant:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:tenant:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589181822230049781, 1111111111111111111, 9223372036854775119, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:msg:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:msg:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1589789746153263106, 1111111111111111111, 9223372036854775807, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:permission:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:permission:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1594135789623184129, 1111111111111111111, 1637297406628823041, '任务管理', 'job', 1, 'icon-renwu', '/job',
-        '/quartz/job/index', 'modules:job:list', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/quartz/job/index', 'sys:job:list', 0, 0, 0, 5, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1594135789623984129, 1111111111111111111, 1637297406628823041, '文件管理', 'file', 1, 'icon-wenjianguanli',
-        '/file', '/system/file/index', 'modules:file:list', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/file', '/system/file/index', 'sys:file:list', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1594531945449451666, 1111111111111111111, 1594135789623984129, '预览', NULL, 2, NULL, NULL, NULL,
-        'modules:file:preview', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:file:preview', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1594532038764326666, 1111111111111111111, 1594135789623984129, '文件上传', NULL, 2, NULL, NULL, NULL,
-        'modules:file:upload', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:file:upload', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1594532038764326913, 1111111111111111111, 1594135789623984129, '下载', NULL, 2, NULL, NULL, NULL,
-        'modules:file:download', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:file:download', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1598222373868695553, 1111111111111111111, 9223372036854775807, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:permission:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:permission:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1598222575933485057, 1111111111111111111, 9223372036854775807, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:permission:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:permission:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1599935876379897858, 1111111111111111111, 1586717542633123841, '用户增加角色', NULL, 2, NULL, NULL, NULL,
-        'modules:user:setRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:setRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1599935889646481409, 1111111111111111111, 1, '用户增加角色', NULL, 2, NULL, NULL, NULL,
-        'modules:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1599935894306353153, 1111111111111111111, 1, '用户增加角色', NULL, 2, NULL, NULL, NULL,
-        'modules:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1599936079744921601, 1111111111111111111, 1, '用户增加角色', NULL, 2, NULL, NULL, NULL,
-        'modules:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:userSetRole', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1599936405688479746, 1111111111111111111, 1586717542633123841, '重置密码', NULL, 2, NULL, NULL, NULL,
-        'modules:user:reset', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:reset', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1601081152259891202, 1111111111111111111, 1578702340683628545, '导出', NULL, 2, NULL, NULL, NULL,
-        'modules:user:export', 0, 0, 0, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:user:export', 0, 0, 0, 6, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1601858203636092929, 1111111111111111111, 1578702340654268418, '数据权限', NULL, 2, NULL, NULL, NULL,
-        'modules:permission:edit', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:permission:edit', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459915239, 1111111111111111111, 1578702340612321378, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:jLog:delete', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:jLog:delete', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935231, 1111111111111111111, 1594135789623184129, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:job:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:job:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935232, 1111111111111111111, 1594135789623184129, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:job:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:job:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935233, 1111111111111111111, 1578702340620713986, '流程部署', NULL, 2, NULL, NULL, NULL,
         'flow:definition:deploy', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
@@ -1034,10 +1030,10 @@ VALUES (1632642093459935235, 1111111111111111111, 1580357773622202370, '删除',
         'flow:category:delete', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935236, 1111111111111111111, 1578702340612321378, '清空', NULL, 2, NULL, NULL, NULL,
-        'modules:jLog:truncate', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:jLog:truncate', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935239, 1111111111111111111, 1594135789623184129, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:job:modify', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:job:modify', 0, 0, 0, 4, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1632642093459935256, 1111111111111111111, 1580357773622202370, '修改', NULL, 2, NULL, NULL, NULL,
         'flow:category:modify', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
@@ -1075,23 +1071,23 @@ VALUES (1637297406628823041, 1111111111111111111, 1111111111111111111, '系统�
         '/system', NULL, NULL, 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1637647486464438273, 1111111111111111111, 1594135789623184129, '运行一次', NULL, 2, NULL, NULL, NULL,
-        'modules:job:run', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:job:run', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1648569698801393666, 1111111111111111111, 1637297406628823041, '客户端管理', 'client', 1, 'icon-yonghuguanli',
-        '/client', '/system/client/index', 'modules:client:list', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0,
+        '/client', '/system/client/index', 'sys:client:list', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0,
         NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1657464120406532098, 1111111111111111111, 1648569698801393666, '添加', NULL, 2, NULL, NULL, NULL,
-        'modules:client:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:client:create', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1657464313466150914, 1111111111111111111, 1648569698801393666, '修改', NULL, 2, NULL, NULL, NULL,
-        'modules:client:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:client:modify', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1657464432802488321, 1111111111111111111, 1648569698801393666, '删除', NULL, 2, NULL, NULL, NULL,
-        'modules:client:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:client:delete', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1658346521789206529, 1111111111111111111, 1648569698801393666, '重置密钥', NULL, 2, NULL, NULL, NULL,
-        'modules:client:resetClientSecret', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        'sys:client:resetClientSecret', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (1664159611618799618, 1111111111111111111, 1582554585967800321, 'springdoc', NULL, 1, 'icon-swagger',
         'http://localhost:9000/swagger-ui/index.html', NULL, NULL, 1, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0,
@@ -1101,10 +1097,10 @@ VALUES (1676117949968084994, 1111111111111111111, 1637297406628823041, '表单�
         '/gen', '/gen/index', '::', 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (9223372036854775119, 1111111111111111111, 1637297406628823041, '消息公告', 'msg', 1, 'icon-sey-gonggao-b',
-        '/msg', '/system/msg/index', 'modules:msg:list', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+        '/msg', '/system/msg/index', 'sys:msg:list', 0, 0, 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (9223372036854775120, 1111111111111111111, 1637297406628823041, '用户消息', 'userMsg', 1, 'icon-xiaoxi',
-        '/msgUser', '/system/msgUser/index', 'modules:msgUser:list', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0,
+        '/msgUser', '/system/msgUser/index', 'sys:msgUser:list', 0, 0, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, 0,
         NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (9223372036854775121, 1111111111111111111, 1580357263003439106, '流程定义', 'definition', 1,
@@ -1112,7 +1108,7 @@ VALUES (9223372036854775121, 1111111111111111111, 1580357263003439106, '流程�
         NULL, NULL, NULL, NULL, 0, NULL, 1);
 INSERT INTO `sys_menu`
 VALUES (9223372036854775807, 1111111111111111111, 1578702340666851329, '数据权限', 'permission', 1,
-        'icon-quanxianguanli', '/permission', '/system/permission/index', 'modules:permission:list', 0, 0, 0, 8, NULL,
+        'icon-quanxianguanli', '/permission', '/system/permission/index', 'sys:permission:list', 0, 0, 0, 8, NULL,
         NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
 
 -- ----------------------------

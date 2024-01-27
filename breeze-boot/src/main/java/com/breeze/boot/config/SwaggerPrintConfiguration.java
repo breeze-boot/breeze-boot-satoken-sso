@@ -18,7 +18,8 @@ public class SwaggerPrintConfiguration implements ApplicationListener<WebServerI
             String hostAddress = Inet4Address.getLocalHost().getHostAddress();
             //获取应用名
             String applicationName = event.getApplicationContext().getApplicationName();
-            log.info("项目启动启动成功！接口文档地址: \n http://" + hostAddress + ":" + event.getWebServer().getPort() + applicationName + "/swagger-ui.html");
+            log.info("swagger 接口文档地址: \n http://{}:{}{}/swagger-ui.html",hostAddress, event.getWebServer().getPort(), applicationName);
+            log.info("knife4j 接口文档地址: \n http://{}:{}{}/doc.html\n", hostAddress, event.getWebServer().getPort(), applicationName);
         } catch (UnknownHostException e) {
             e.printStackTrace();
             log.error("[获取地址失败]");

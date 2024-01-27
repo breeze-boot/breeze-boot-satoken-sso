@@ -70,7 +70,7 @@ public class SysUserController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:user:list')")
+    @PreAuthorize("hasAnyAuthority('auth:user:list')")
     public Result<IPage<SysUser>> list(UserQuery userQuery) {
         return Result.ok(this.sysUserService.listPage(userQuery));
     }
@@ -83,7 +83,7 @@ public class SysUserController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:user:create')")
+    @PreAuthorize("hasAnyAuthority('auth:user:create')")
     @BreezeSysLog(description = "用户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysUser sysUser) {
         return sysUserService.saveUser(sysUser);
@@ -97,7 +97,7 @@ public class SysUserController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:user:modify')")
     @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
@@ -111,7 +111,7 @@ public class SysUserController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{userId}")
-    @PreAuthorize("hasAnyAuthority('sys:user:info')")
+    @PreAuthorize("hasAnyAuthority('auth:user:info')")
     public Result<SysUser> info(@PathVariable("userId") Long userId) {
         return this.sysUserService.getUserById(userId);
     }
@@ -125,7 +125,7 @@ public class SysUserController {
      */
     @Operation(summary = "校验用户名是否重复")
     @GetMapping("/checkUsername")
-    @PreAuthorize("hasAnyAuthority('sys:user:list')")
+    @PreAuthorize("hasAnyAuthority('auth:user:list')")
     public Result<Boolean> checkUsername(@NotBlank(message = "用户名不能为空") @RequestParam("username") String username,
                                          @RequestParam(value = "userId", required = false) Long userId) {
         return Result.ok(Objects.isNull(this.sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
@@ -153,7 +153,7 @@ public class SysUserController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:user:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:user:delete')")
     @BreezeSysLog(description = "用户信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
         List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getId, ids));
@@ -185,7 +185,7 @@ public class SysUserController {
      */
     @Operation(summary = "重置密码")
     @PutMapping("/reset")
-    @PreAuthorize("hasAnyAuthority('sys:user:reset')")
+    @PreAuthorize("hasAnyAuthority('auth:user:reset')")
     @BreezeSysLog(description = "用户重置密码", type = LogType.EDIT)
     public Result<Boolean> reset(@Valid @RequestBody UserResetParam userResetParam) {
         return Result.ok(sysUserService.reset(userResetParam));
@@ -199,7 +199,7 @@ public class SysUserController {
      */
     @Operation(summary = "用户锁定开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:user:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:user:modify')")
     @BreezeSysLog(description = "用户锁定", type = LogType.EDIT)
     public Result<Boolean> open(@Valid @RequestBody UserOpenParam userOpenParam) {
         return Result.ok(sysUserService.open(userOpenParam));
@@ -214,7 +214,7 @@ public class SysUserController {
      */
     @Operation(summary = "用户分配角色")
     @PutMapping("/setRole")
-    @PreAuthorize("hasAnyAuthority('sys:user:setRole')")
+    @PreAuthorize("hasAnyAuthority('auth:user:setRole')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
     public Result<Boolean> setRole(@Valid @RequestBody UserRolesParam userRolesParam) {
         return sysUserService.setRole(userRolesParam);
@@ -226,7 +226,7 @@ public class SysUserController {
      * @return {@link String }
      */
     @Operation(summary = "查询用户信息")
-    @PreAuthorize("hasAnyAuthority('sys:user:info')")
+    @PreAuthorize("hasAnyAuthority('auth:user:info')")
     @GetMapping("/userInfo")
     public Result<BaseLoginUser> userInfo() {
         return Result.ok(SecurityUtils.getCurrentUser());

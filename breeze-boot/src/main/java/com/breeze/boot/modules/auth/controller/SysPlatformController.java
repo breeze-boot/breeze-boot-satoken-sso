@@ -72,7 +72,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:platform:list')")
+    @PreAuthorize("hasAnyAuthority('auth:platform:list')")
     public Result<Page<SysPlatform>> list(PlatformQuery platformQuery) {
         return Result.ok(this.sysPlatformService.listPage(platformQuery));
     }
@@ -86,7 +86,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "校验平台编码是否重复")
     @GetMapping("/checkPlatformCode")
-    @PreAuthorize("hasAnyAuthority('sys:platform:list')")
+    @PreAuthorize("hasAnyAuthority('auth:platform:list')")
     public Result<Boolean> checkPlatformCode(@NotBlank(message = "平台编码不能为空") @RequestParam("platformCode") String platformCode,
                                              @RequestParam(value = "platformId", required = false) Long platformId) {
         return Result.ok(Objects.isNull(this.sysPlatformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
@@ -102,7 +102,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:platform:create')")
+    @PreAuthorize("hasAnyAuthority('auth:platform:create')")
     @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysPlatform platform) {
         return Result.ok(this.sysPlatformService.save(platform));
@@ -116,7 +116,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:platform:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:platform:modify')")
     @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysPlatform sysPlatform) {
         return Result.ok(this.sysPlatformService.updateById(sysPlatform));
@@ -130,7 +130,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:platform:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:platform:delete')")
     @BreezeSysLog(description = "平台信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));

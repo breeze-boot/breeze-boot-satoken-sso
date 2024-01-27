@@ -69,7 +69,7 @@ public class SysPermissionController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:permission:list')")
+    @PreAuthorize("hasAnyAuthority('auth:permission:list')")
     public Result<Page<SysPermission>> list(DataPermissionQuery permissionQuery) {
         return Result.ok(this.sysPermissionService.listPage(permissionQuery));
     }
@@ -82,7 +82,7 @@ public class SysPermissionController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:permission:create')")
+    @PreAuthorize("hasAnyAuthority('auth:permission:create')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody DataPermissionParam permissionParam) {
         return this.sysPermissionService.savePermission(permissionParam);
@@ -96,7 +96,7 @@ public class SysPermissionController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:permission:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:permission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody DataPermissionParam permissionParam) {
         return this.sysPermissionService.modifyPermission(permissionParam);
@@ -110,7 +110,7 @@ public class SysPermissionController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:permission:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:permission:delete')")
     @BreezeSysLog(description = "数据权限信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysPermissionService.removePermissionByIds(Arrays.asList(ids));
@@ -124,7 +124,7 @@ public class SysPermissionController {
      */
     @Operation(summary = "编辑角色数据权限")
     @PostMapping("/editRolePermission")
-    @PreAuthorize("hasAnyAuthority('sys:permission:edit')")
+    @PreAuthorize("hasAnyAuthority('auth:permission:edit')")
     @BreezeSysLog(description = "编辑角色数据权限", type = LogType.EDIT)
     public Result<Boolean> editRolePermission(@RequestBody List<SysRolePermission> rolePermissionList) {
         return this.sysRolePermissionService.editRolePermission(rolePermissionList);

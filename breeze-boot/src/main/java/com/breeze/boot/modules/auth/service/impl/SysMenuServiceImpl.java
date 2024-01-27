@@ -75,17 +75,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 树菜单列表
      *
      * @param platformCode 平台代码
+     * @param i18n         国际化
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Override
-    public Result<List<Tree<Long>>> listTreeMenu(String platformCode) {
+    public Result<List<Tree<Long>>> listTreeMenu(String platformCode, String i18n) {
         BaseLoginUser currentBaseLoginUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentBaseLoginUser.getUserRoleIds())) {
             return Result.ok();
         }
 
         // 查询角色下的菜单信息
-        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
+        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode, i18n);
         return Result.ok(this.buildTrees(menuList, ROOT));
     }
 

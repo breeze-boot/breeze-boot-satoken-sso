@@ -16,7 +16,7 @@ RUN echo 'Asia/Shanghai' >/etc/timezone
 WORKDIR /usr/local/boot/breeze
 
 # 复制jar文件到路径
-COPY ./target/breeze.jar /usr/local/boot/breeze/breeze.jar
+COPY ./target/breeze-boot.jar /usr/local/boot/breeze/breeze-boot.jar
 
 # 启动应用
-ENTRYPOINT ["java","-jar","-Xms1024m","-Xmx1024m","-Duser.timezone=GMT+08","breeze.jar","--spring.profiles.active=dev"]
+ENTRYPOINT ["java","-jar","-Xms1024m","-Xmx1024m","-Duser.timezone=GMT+08","breeze-boot.jar","--spring.profiles.active=dev"]

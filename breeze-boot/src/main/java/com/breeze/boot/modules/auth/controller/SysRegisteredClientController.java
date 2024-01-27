@@ -64,7 +64,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:client:list')")
+    @PreAuthorize("hasAnyAuthority('auth:client:list')")
     public Result<Page<RegisteredClientVO>> list(RegisteredClientQuery registeredClientQuery) {
         return Result.ok(this.registeredClientService.listPage(registeredClientQuery));
     }
@@ -89,7 +89,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:client:create')")
+    @PreAuthorize("hasAnyAuthority('auth:client:create')")
     @BreezeSysLog(description = "客户端信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
         return this.registeredClientService.saveRegisteredClient(registeredClientParam);
@@ -103,7 +103,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:client:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:client:modify')")
     @BreezeSysLog(description = "客户端信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
         return Result.ok(this.registeredClientService.update(registeredClientParam));
@@ -117,7 +117,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:client:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:client:delete')")
     @BreezeSysLog(description = "客户端信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.registeredClientService.deleteById(Arrays.asList(ids));
@@ -131,7 +131,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "重置密钥")
     @PutMapping("/resetClientSecret")
-    @PreAuthorize("hasAnyAuthority('sys:client:resetClientSecret')")
+    @PreAuthorize("hasAnyAuthority('auth:client:resetClientSecret')")
     @BreezeSysLog(description = "重置密钥", type = LogType.EDIT)
     public Result<Boolean> resetClientSecret(@Valid @RequestBody ResetClientSecretParam resetClientSecretParam) {
         return Result.ok(this.registeredClientService.resetClientSecretParam(resetClientSecretParam));

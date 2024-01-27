@@ -63,7 +63,7 @@ public class SysDeptController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:dept:list')")
+    @PreAuthorize("hasAnyAuthority('auth:dept:list')")
     public Result<List<?>> list(DeptQuery deptQuery) {
         return Result.ok(this.sysDeptService.listDept(deptQuery));
     }
@@ -77,7 +77,7 @@ public class SysDeptController {
      */
     @Operation(summary = "校验部门编码是否重复")
     @GetMapping("/checkDeptCode")
-    @PreAuthorize("hasAnyAuthority('sys:dept:list')")
+    @PreAuthorize("hasAnyAuthority('auth:dept:list')")
     public Result<Boolean> checkDeptCode(@NotBlank(message = "部门编码不能为空") @RequestParam("deptCode") String deptCode,
                                          @RequestParam(value = "deptId", required = false) Long deptId) {
         return Result.ok(Objects.isNull(this.sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery()
@@ -93,7 +93,7 @@ public class SysDeptController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:dept:create')")
+    @PreAuthorize("hasAnyAuthority('auth:dept:create')")
     @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysDept sysDept) {
         return Result.ok(sysDeptService.save(sysDept));
@@ -107,7 +107,7 @@ public class SysDeptController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:dept:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:dept:modify')")
     @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysDept sysDept) {
         return Result.ok(this.sysDeptService.updateById(sysDept));
@@ -121,7 +121,7 @@ public class SysDeptController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:dept:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:dept:delete')")
     @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysDeptService.deleteById(id);

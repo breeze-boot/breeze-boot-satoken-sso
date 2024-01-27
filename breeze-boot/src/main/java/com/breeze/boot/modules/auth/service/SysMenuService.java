@@ -46,9 +46,10 @@ public interface SysMenuService extends IService<SysMenu> {
      * 树菜单列表
      *
      * @param platformCode 平台代码
+     * @param i18n         国际化
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
-    Result<List<Tree<Long>>> listTreeMenu(String platformCode);
+    Result<List<Tree<Long>>> listTreeMenu(String platformCode, String i18n);
 
     /**
      * 菜单列表

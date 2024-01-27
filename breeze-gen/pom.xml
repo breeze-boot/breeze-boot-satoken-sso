@@ -11,7 +11,7 @@
 
     <artifactId>breeze-gen</artifactId>
     <packaging>jar</packaging>
-    <description>代码生成模块</description>
+    <description>代码生成模块-未完成</description>
 
     <dependencies>
         <dependency>

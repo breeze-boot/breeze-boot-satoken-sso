@@ -64,7 +64,7 @@ public class SysTenantController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:list')")
     public Result<IPage<SysTenant>> list(TenantQuery tenantQuery) {
         return Result.ok(this.sysTenantService.listPage(tenantQuery));
     }
@@ -77,7 +77,7 @@ public class SysTenantController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:tenant:create')")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:create')")
     @BreezeSysLog(description = "租户信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody SysTenant tenant) {
         return Result.ok(this.sysTenantService.save(tenant));
@@ -92,7 +92,7 @@ public class SysTenantController {
      */
     @Operation(summary = "校验租户编码是否重复")
     @GetMapping("/checkTenantCode")
-    @PreAuthorize("hasAnyAuthority('sys:tenant:list')")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:list')")
     public Result<Boolean> checkTenantCode(@NotBlank(message = "租户编码不能为空") @RequestParam("tenantCode") String tenantCode,
                                            @RequestParam(value = "tenantId", required = false) Long tenantId) {
         return Result.ok(Objects.isNull(this.sysTenantService.getOne(Wrappers.<SysTenant>lambdaQuery()
@@ -108,7 +108,7 @@ public class SysTenantController {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("hasAnyAuthority('sys:tenant:modify')")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysTenant sysTenant) {
         return Result.ok(this.sysTenantService.updateById(sysTenant));
@@ -122,7 +122,7 @@ public class SysTenantController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:tenant:delete')")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:delete')")
     @BreezeSysLog(description = "租户信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
         return this.sysTenantService.removeTenantByIds(ids);

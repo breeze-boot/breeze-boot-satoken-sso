@@ -124,8 +124,8 @@ public class CommonServiceImpl implements CommonService {
                     if (Objects.equals(menu.getId(), id)) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
-                    leafMap.put("value", menu.getTitle());
-                    leafMap.put("key", menu.getId());
+                    leafMap.put("label", menu.getTitle());
+                    leafMap.put("value", menu.getId());
                     treeNode.setExtra(leafMap);
                     return treeNode;
                 }
@@ -143,8 +143,8 @@ public class CommonServiceImpl implements CommonService {
         List<SysPlatform> platformList = this.platformService.list();
         List<Map<String, Object>> collect = platformList.stream().map(sysPlatform -> {
             HashMap<String, Object> map = Maps.newHashMap();
-            map.put("key", sysPlatform.getId());
-            map.put("value", sysPlatform.getPlatformName());
+            map.put("value", sysPlatform.getId());
+            map.put("label", sysPlatform.getPlatformName());
             return map;
         }).collect(Collectors.toList());
         return Result.ok(collect);
@@ -182,8 +182,8 @@ public class CommonServiceImpl implements CommonService {
     public Result<List<Map<String, Object>>> selectRole() {
         return Result.ok(this.roleService.list().stream().map(sysRole -> {
             Map<@Nullable String, @Nullable Object> roleMap = Maps.newHashMap();
-            roleMap.put("key", sysRole.getId());
-            roleMap.put("value", sysRole.getRoleName());
+            roleMap.put("value", sysRole.getId());
+            roleMap.put("label", sysRole.getRoleName());
             return roleMap;
         }).collect(Collectors.toList()));
     }
@@ -197,8 +197,8 @@ public class CommonServiceImpl implements CommonService {
     public Result<List<Map<String, Object>>> selectTenant() {
         return Result.ok(this.tenantService.list().stream().map(tanent -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("key", tanent.getId());
-            tenantMap.put("value", tanent.getTenantName());
+            tenantMap.put("value", tanent.getId());
+            tenantMap.put("label", tanent.getTenantName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }
@@ -212,8 +212,8 @@ public class CommonServiceImpl implements CommonService {
     public Result<List<Map<String, Object>>> selectPost() {
         return Result.ok(this.postService.list().stream().map(post -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("key", post.getId());
-            tenantMap.put("value", post.getPostName());
+            tenantMap.put("value", post.getId());
+            tenantMap.put("label", post.getPostName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }
@@ -248,8 +248,8 @@ public class CommonServiceImpl implements CommonService {
     public Result<List<Map<String, Object>>> selectPermission() {
         return Result.ok(this.permissionService.list().stream().map(permission -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("key", permission.getId());
-            tenantMap.put("value", permission.getPermissionName());
+            tenantMap.put("value", permission.getId());
+            tenantMap.put("label", permission.getPermissionName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }

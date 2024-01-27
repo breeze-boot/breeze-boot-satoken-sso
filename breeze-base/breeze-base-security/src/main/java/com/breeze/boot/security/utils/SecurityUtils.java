@@ -19,6 +19,8 @@ package com.breeze.boot.security.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.SystemServiceException;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,7 +47,7 @@ public class SecurityUtils {
     public static BaseLoginUser getCurrentUser() {
         String name = getName();
         if (StrUtil.isAllBlank(name)) {
-            return null;
+            throw new SystemServiceException(ResultCode.INSUFFICIENT_AUTHENTICATION);
         }
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
         Cache cache = cacheManager.getCache(LOGIN_USER);

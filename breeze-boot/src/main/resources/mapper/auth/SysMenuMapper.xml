@@ -83,7 +83,8 @@
         b.hidden,
         b.href,
         b.permission,
-        b.sort
+        b.sort,
+        b.i18n
         FROM
         sys_role_menu AS a
         LEFT JOIN sys_menu AS b ON a.menu_id = b.id
@@ -100,6 +101,9 @@
             </foreach>
             AND b.is_delete = 0
             AND c.is_delete = 0
+            <if test="i18n != null and i18n != ''">
+                AND b.i18n = #{i18n}
+            </if>
         </where>
         ORDER BY b.sort
     </select>

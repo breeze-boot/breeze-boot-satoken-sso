@@ -56,8 +56,11 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
      *
      * @param roleIds      用户角色id
      * @param platformCode 平台编码
+     * @param i18n         国际化
      * @return {@link List}<{@link SysMenu}>
      */
-    List<SysMenu> selectMenusByRoleId(@Param("roleIds") Set<Long> roleIds, @Param("platformCode") String platformCode);
+    List<SysMenu> selectMenusByRoleId(@Param("roleIds") Set<Long> roleIds,
+                                      @Param("platformCode") String platformCode,
+                                      @Param("i18n") String i18n);
 
 }
