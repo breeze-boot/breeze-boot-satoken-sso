@@ -26,6 +26,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
+
+import static com.breeze.boot.core.enums.ResultCode.TOKEN_INVALID;
 
 /**
  * 自定义身份验证失败处理程序
@@ -48,6 +51,9 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         if (exception instanceof OAuth2AuthenticationException) {
             OAuth2Error errorMsg = ((OAuth2AuthenticationException) exception).getError();
             log.error("[校验 {}] ", errorMsg.getDescription(), exception);
+            if (Objects.equals(errorMsg.getErrorCode(), "invalid_grant")) {
+                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
+            }
             // 使用系统中的错误码
             ResponseUtil.response(response, ResultCode.exception(errorMsg.getDescription()));
         }

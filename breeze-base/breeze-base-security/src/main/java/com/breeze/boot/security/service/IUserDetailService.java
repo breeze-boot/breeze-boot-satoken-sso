@@ -118,12 +118,12 @@ public interface IUserDetailService extends UserDetailsService {
     default void getTenantId(ServletRequestAttributes requestAttributes) {
         assert requestAttributes != null;
         HttpServletRequest contextRequest = requestAttributes.getRequest();
-        String tenantIdHeader = contextRequest.getHeader("tenantId");
+        String tenantIdHeader = contextRequest.getHeader("X-TENANT-ID");
         if (StrUtil.isAllNotBlank(tenantIdHeader)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdHeader));
             return;
         }
-        String tenantIdParam = contextRequest.getParameter("tenantId");
+        String tenantIdParam = contextRequest.getParameter("X-TENANT-ID");
         if (StrUtil.isAllNotBlank(tenantIdParam)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdParam));
             return;
