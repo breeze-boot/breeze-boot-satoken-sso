@@ -16,7 +16,7 @@
 
 package com.breeze.boot.core.annotation;
 
-import com.breeze.boot.core.enums.SensitiveType;
+import com.breeze.boot.core.enums.SensitiveStrategy;
 import com.breeze.boot.core.jackson.SensitiveInfoSerialize;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,6 +35,6 @@ import java.lang.annotation.RetentionPolicy;
 @JsonSerialize(using = SensitiveInfoSerialize.class)// 该注解使用序列化的方式
 public @interface SensitiveInfo {
 
-    SensitiveType value();
+    SensitiveStrategy value();
 
 }

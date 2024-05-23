@@ -113,6 +113,11 @@ public class RedisConfiguration {
                 // new module, NOT JSR310Module;
                 .registerModule(new JavaTimeModule());
 
+        /*
+          PropertyAccessor.ALL表示设置所有属性访问器的可见性，包括字段和getter/setter方法。
+          JsonAutoDetect.Visibility.ANY是JsonAutoDetect枚举的一个值，它指示ObjectMapper在处理对象时应该自动检测所有属性，无论它们是通过字段还是getter/setter方法定义的。
+          这个设置通常用于简化JSON处理，使得Jackson可以自动处理对象中所有可读和可写属性的序列化和反序列化，而无需显式地标记哪些属性应该被处理。然而，这种设置也可能会导致非预期的属性被序列化，特别是当存在私有字段或不希望被外部访问的属性时，这可能带来潜在的安全风险。因此，在使用时需要谨慎评估并根据实际需求调整属性的可见性设置。
+         */
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         // 解决jackson2无法反序列化LocalDateTime的问题

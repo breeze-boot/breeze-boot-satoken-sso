@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.domain.SysUser" id="sysUserMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysUser" id="sysUserMap">
         <id property="id" column="id"/>
         <result property="userCode" column="user_code"/>
         <result property="username" column="username"/>
@@ -74,7 +74,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listUserByDeptId" resultType="com.breeze.boot.modules.auth.domain.SysUser">
+    <select id="listUserByDeptId" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
         SELECT
         a.id,
         a.dept_id,
@@ -109,7 +109,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listAllUser" resultType="com.breeze.boot.modules.auth.domain.SysUser">
+    <select id="listAllUser" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
         SELECT
         a.id,
         a.dept_id,
@@ -134,6 +134,39 @@
             a.is_delete = 0
             AND b.is_delete = 0
             AND c.is_delete = 0
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="listUserByRole" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
+        SELECT
+        a.id,
+        a.dept_id,
+        a.amount_name,
+        a.user_code,
+        a.username,
+        a.avatar,
+        a.phone,
+        a.sex,
+        a.id_card,
+        a.is_lock,
+        a.open_id,
+        a.email,
+        a.post_id,
+        c.post_name,
+        b.dept_name
+        FROM
+        sys_user AS a
+        <where>
+            a.is_delete = 0
+            AND a.id IN (SELECT
+            a.user_id
+            FROM
+            sys_user_role AS a
+            LEFT JOIN sys_role b ON a.role_id = b.id
+            WHERE
+            role_code = #{roleCode}
+            )
         </where>
         ORDER BY a.create_time DESC
     </select>

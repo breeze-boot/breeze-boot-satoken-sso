@@ -22,19 +22,23 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
-import com.breeze.boot.modules.system.domain.SysRolePermission;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.query.RoleQuery;
+import com.breeze.boot.modules.auth.model.entity.SysRole;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.entity.SysRoleRowPermission;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.params.RoleParam;
+import com.breeze.boot.modules.auth.model.query.RoleQuery;
 import com.breeze.boot.modules.auth.mapper.SysRoleMapper;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
-import com.breeze.boot.modules.auth.service.SysRolePermissionService;
+import com.breeze.boot.modules.auth.service.SysRoleRowPermissionService;
 import com.breeze.boot.modules.auth.service.SysRoleService;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,7 +60,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 数据权限服务系统作用
      */
-    private final SysRolePermissionService sysRolePermissionService;
+    private final SysRoleRowPermissionService sysRoleRowPermissionService;
+
+    /**
+     * 列表页面
+     *
+     * @param roleQuery 角色查询
+     * @return {@link Page}<{@link SysRole}>
+     */
+    @Override
+    public Page<SysRole> listPage(RoleQuery roleQuery) {
+        return this.baseMapper.listPage(new Page<>(roleQuery.getCurrent(), roleQuery.getSize()), roleQuery);
+    }
 
     /**
      * 用户角色列表
@@ -77,14 +92,47 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     /**
-     * 列表页面
+     * 修改角色
      *
-     * @param roleQuery 角色查询
-     * @return {@link Page}<{@link SysRole}>
+     * @param roleParam 角色参数
+     * @return {@link Boolean}
      */
     @Override
-    public Page<SysRole> listPage(RoleQuery roleQuery) {
-        return this.baseMapper.listPage(new Page<>(roleQuery.getCurrent(), roleQuery.getSize()), roleQuery);
+    public Result<Boolean> updateRoleById(RoleParam roleParam) {
+        SysRole sysRole = new SysRole();
+        BeanUtil.copyProperties(roleParam, sysRole);
+        boolean update = this.updateById(sysRole);
+        if (update) {
+            return Result.ok(this.saveRoleRowPermission(roleParam));
+        }
+        return Result.ok(Boolean.FALSE);
+    }
+
+    private Boolean saveRoleRowPermission(RoleParam roleParam) {
+        Set<Long> permissionIds = Optional.ofNullable(roleParam.getPermissionIds()).orElse(Sets.newHashSet());
+        Set<SysRoleRowPermission> sysRoleRowPermissionSet = permissionIds.stream().map(item ->
+                        SysRoleRowPermission.builder()
+                                .roleId(roleParam.getId())
+                                .permissionId(item)
+                                .build())
+                .collect(Collectors.toSet());
+        boolean remove = this.sysRoleRowPermissionService.remove(Wrappers.<SysRoleRowPermission>lambdaQuery()
+                .in(SysRoleRowPermission::getRoleId, roleParam.getId()));
+        if (remove) {
+            return this.sysRoleRowPermissionService.saveBatch(sysRoleRowPermissionSet);
+        }
+        return Boolean.FALSE;
+    }
+
+    @Override
+    public Result<Boolean> saveRole(RoleParam roleParam) {
+        SysRole sysRole = new SysRole();
+        BeanUtil.copyProperties(roleParam, sysRole);
+        boolean save = this.save(sysRole);
+        if (save) {
+            return Result.ok(this.saveRoleRowPermission(roleParam));
+        }
+        return Result.ok(Boolean.FALSE);
     }
 
     /**
@@ -94,6 +142,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysRole> roleEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(roleEntityList)) {
@@ -105,7 +154,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 删除用户角色关系
             this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().in(SysRoleMenu::getRoleId, collect));
             // 删除角色数据权限关系
-            this.sysRolePermissionService.remove(Wrappers.<SysRolePermission>lambdaQuery().in(SysRolePermission::getRoleId, collect));
+            this.sysRoleRowPermissionService.remove(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getRoleId, collect));
         }
         return Result.ok(Boolean.TRUE, "删除成功");
     }

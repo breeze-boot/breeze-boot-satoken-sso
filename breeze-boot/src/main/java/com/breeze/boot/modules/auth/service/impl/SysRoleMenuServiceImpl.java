@@ -19,12 +19,13 @@ package com.breeze.boot.modules.auth.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
-import com.breeze.boot.modules.auth.domain.params.MenuPermissionParam;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.params.MenuPermissionParam;
 import com.breeze.boot.modules.auth.mapper.SysRoleMenuMapper;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +47,8 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> modifyPermission(MenuPermissionParam menuPermissionParam) {
+    @Transactional(rollbackFor = Exception.class)
+    public Result<Boolean> modifyMenuPermission(MenuPermissionParam menuPermissionParam) {
         this.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, menuPermissionParam.getRoleId()));
         List<SysRoleMenu> sysRoleMenuList = menuPermissionParam.getPermissionIds().stream().map(menuId -> {
             SysRoleMenu sysRoleMenu = new SysRoleMenu();

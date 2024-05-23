@@ -20,9 +20,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
+import com.breeze.boot.quartz.domain.params.JobOpenParam;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.manager.QuartzManager;
 import com.breeze.boot.quartz.mapper.SysQuartzJobMapper;
-import com.breeze.boot.quartz.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -163,6 +164,16 @@ public class SysQuartzJobServiceImpl extends ServiceImpl<SysQuartzJobMapper, Sys
     public Result<Boolean> runJobNow(Long jobId) {
         SysQuartzJob quartzJob = this.getById(jobId);
         this.quartzManager.runJobNow(quartzJob.getId() + ":" + JOB_NAME, quartzJob.getJobGroupName());
+        return Result.ok(Boolean.TRUE);
+    }
+
+    @Override
+    public Result<Boolean> open(JobOpenParam jobOpenParam) {
+        try {
+            return Objects.equals(1, jobOpenParam.getStatus()) ? this.resumeJob(jobOpenParam.getId()) : this.pauseJob(jobOpenParam.getId());
+        } catch (Exception e) {
+            log.error("[任务状态修改失败]", e);
+        }
         return Result.ok(Boolean.TRUE);
     }
 

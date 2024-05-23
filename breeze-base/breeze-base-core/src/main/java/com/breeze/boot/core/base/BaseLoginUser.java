@@ -156,6 +156,33 @@ public class BaseLoginUser implements Serializable {
      * 数据权限
      */
     @Schema(description = "数据权限")
-    private String permissions;
+    private BasePermission permission;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode(callSuper = false)
+    public static class BasePermission {
+
+        /**
+         * 数据权限编码
+         */
+        @Schema(description = "数据权限编码")
+        private String permissionCode;
+
+        /**
+         * 数据权限 部门ID/UserId
+         */
+        @Schema(description = "数据权限 部门ID/用户ID")
+        private String permissions;
+
+        /**
+         * 需要排除的字段数据权限
+         */
+        @Schema(description = "需要排除的字段数据权限")
+        private Set<String> excludeColumn;
+
+    }
 
 }

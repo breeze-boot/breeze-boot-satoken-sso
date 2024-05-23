@@ -18,8 +18,8 @@ package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.system.domain.SysPlatform;
-import com.breeze.boot.modules.auth.domain.query.PlatformQuery;
+import com.breeze.boot.modules.system.model.entity.SysPlatform;
+import com.breeze.boot.modules.auth.model.query.PlatformQuery;
 
 import java.util.List;
 

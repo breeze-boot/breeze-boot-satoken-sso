@@ -4,10 +4,11 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.domain.SysRole" id="sysRoleMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysRole" id="sysRoleMap">
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
+        <result property="permissionCode" column="permission_code"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>
@@ -17,12 +18,13 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listRoleByUserId" resultType="com.breeze.boot.modules.auth.domain.SysRole">
+    <select id="listRoleByUserId" resultType="com.breeze.boot.modules.auth.model.entity.SysRole">
         SELECT role.id,
                role.role_code,
-               role.role_name
+               role.role_name,
+               role.permission_code
         FROM sys_role AS role
-                 LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
+            LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
         WHERE role.is_delete = 0
           AND ru.user_id = #{userId}
         ORDER BY role.create_time DESC
@@ -31,31 +33,31 @@
     <select id="listRoleIdsByUserId" resultType="java.lang.Long">
         SELECT role.id
         FROM sys_role AS role
-                 LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
+          LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
         WHERE role.is_delete = 0
           AND ru.user_id = #{userId}
         ORDER BY role.create_time DESC
     </select>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.auth.domain.SysRole">
+    <select id="listPage" resultType="com.breeze.boot.modules.auth.model.entity.SysRole">
         SELECT
-        a.id,
-        a.role_code,
-        a.role_name,
-        b.permission_name
+            a.id,
+            a.role_code,
+            a.role_name,
+            b.permission_name
         FROM
-        sys_role AS a
+            sys_role AS a
         LEFT JOIN (
-        SELECT
-        a.role_id,
-        GROUP_CONCAT( b.permission_name ) permission_name
-        FROM
-        sys_role_permission AS a
-        LEFT JOIN sys_permission AS b ON a.permission_id = b.id
-        WHERE
-        b.is_delete = 0
-        GROUP BY
-        a.role_id
+            SELECT
+                a.role_id,
+                GROUP_CONCAT( b.permission_name ) permission_name
+            FROM
+                sys_role_row_permission AS a
+            LEFT JOIN sys_row_permission AS b ON a.permission_id = b.id
+            WHERE
+                b.is_delete = 0
+            GROUP BY
+                a.role_id
         ) b ON a.id = b.role_id
         <where>
             AND a.is_delete = 0

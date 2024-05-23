@@ -19,14 +19,21 @@ package com.breeze.boot.modules.system.service.impl;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.system.domain.SysDb;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.modules.system.model.entity.SysDb;
+import com.breeze.boot.modules.system.model.query.DbQuery;
 import com.breeze.boot.modules.system.mapper.SysDbMapper;
 import com.breeze.boot.modules.system.service.SysDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 系统字典服务impl
@@ -42,6 +49,23 @@ public class SysDbServiceImpl extends ServiceImpl<SysDbMapper, SysDb> implements
 
     private final DataSource dataSource;
 
+    /**
+     * 分页
+     *
+     * @param dbQuery 数据源查询参数
+     * @return {@link IPage}<{@link SysDb}>
+     */
+    @Override
+    public IPage<SysDb> listPage(DbQuery dbQuery) {
+        return this.baseMapper.listPage(new Page<>(dbQuery.getCurrent(), dbQuery.getSize()));
+    }
+
+    /**
+     * 添加数据源
+     *
+     * @param sysDb 数据源
+     * @return {@link Boolean}
+     */
     @Override
     public Boolean saveDb(SysDb sysDb) {
         try {
@@ -58,4 +82,44 @@ public class SysDbServiceImpl extends ServiceImpl<SysDbMapper, SysDb> implements
         }
         return this.save(sysDb);
     }
+
+    /**
+     * 更新数据源
+     *
+     * @param sysDb 数据源
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean updateDbById(SysDb sysDb) {
+        SysDb checkSysDb = this.getById(sysDb.getId());
+        if (Objects.isNull(checkSysDb)) {
+            log.error("[更新数据源失败]");
+            throw new SystemServiceException(ResultCode.EXCEPTION);
+        }
+        DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
+        dynamicRoutingDataSource.removeDataSource(checkSysDb.getDbName());
+        this.saveDb(checkSysDb);
+        return Boolean.TRUE;
+    }
+
+    /**
+     * 删除数据源
+     *
+     * @param ids 数据源Ids
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean removeDbByIds(List<Long> ids) {
+        for (Long id : ids) {
+            SysDb sysDb = this.getById(id);
+            if (Objects.isNull(sysDb)) {
+                log.error("[删除数据源失败]");
+                throw new SystemServiceException(ResultCode.EXCEPTION);
+            }
+            DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
+            dynamicRoutingDataSource.removeDataSource(sysDb.getDbName());
+        }
+        return Boolean.TRUE;
+    }
+
 }

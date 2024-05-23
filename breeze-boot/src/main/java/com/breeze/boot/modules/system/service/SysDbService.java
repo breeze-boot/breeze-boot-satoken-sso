@@ -16,8 +16,12 @@
 
 package com.breeze.boot.modules.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.system.domain.SysDb;
+import com.breeze.boot.modules.system.model.entity.SysDb;
+import com.breeze.boot.modules.system.model.query.DbQuery;
+
+import java.util.List;
 
 /**
  * 系统数据源服务
@@ -27,6 +31,36 @@ import com.breeze.boot.modules.system.domain.SysDb;
  */
 public interface SysDbService extends IService<SysDb> {
 
+    /**
+     * 分页
+     *
+     * @param dbQuery 数据源查询参数
+     * @return {@link IPage}<{@link SysDb}>
+     */
+    IPage<SysDb> listPage(DbQuery dbQuery);
+
+    /**
+     * 添加数据源
+     *
+     * @param sysDb 数据源
+     * @return {@link Boolean}
+     */
     Boolean saveDb(SysDb sysDb);
+
+    /**
+     * 更新数据源
+     *
+     * @param sysDb 数据源
+     * @return {@link Boolean}
+     */
+    Boolean updateDbById(SysDb sysDb);
+
+    /**
+     * 删除数据源
+     *
+     * @param ids 数据源Ids
+     * @return {@link Boolean}
+     */
+    Boolean removeDbByIds(List<Long> ids);
 
 }

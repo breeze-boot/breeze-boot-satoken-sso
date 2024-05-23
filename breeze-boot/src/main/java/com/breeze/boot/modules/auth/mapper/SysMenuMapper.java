@@ -16,9 +16,9 @@
 
 package com.breeze.boot.modules.auth.mapper;
 
-import com.breeze.boot.modules.auth.domain.SysMenu;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.query.MenuQuery;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -52,15 +52,13 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
     List<SysMenu> listMenu(@Param("menuQuery") MenuQuery menuQuery);
 
     /**
-     * 选择菜单角色id
+     * 查询菜单
      *
      * @param roleIds      用户角色id
      * @param platformCode 平台编码
-     * @param i18n         国际化
      * @return {@link List}<{@link SysMenu}>
      */
     List<SysMenu> selectMenusByRoleId(@Param("roleIds") Set<Long> roleIds,
-                                      @Param("platformCode") String platformCode,
-                                      @Param("i18n") String i18n);
+                                      @Param("platformCode") String platformCode);
 
 }

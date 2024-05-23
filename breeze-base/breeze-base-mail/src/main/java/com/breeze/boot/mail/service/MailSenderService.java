@@ -17,14 +17,18 @@
 package com.breeze.boot.mail.service;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.breeze.boot.mail.config.MailProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -58,6 +62,11 @@ public class MailSenderService {
      * 邮件发送者
      */
     private final JavaMailSender javaMailSender;
+
+    /**
+     * 自动配置模版引擎
+     */
+    private final TemplateEngine templateEngine;
 
     /**
      * 发送纯文本邮件信息
@@ -219,6 +228,37 @@ public class MailSenderService {
             log.error("邮件消息发送失败", e);
         }
         return mimeBodyPart;
+    }
+
+    /**
+     * 发送模板邮件
+     */
+    public void sendThymeleafMail(String subject, String from, Map<String, Object> valueMap, String... toMails) {
+        MimeMessage mimeMessage;
+        if (ArrayUtils.isEmpty(toMails)) {
+            return;
+        }
+        try {
+            mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            // 设置发件人邮箱
+            helper.setFrom(from);
+            // 设置收件人邮箱
+            helper.setTo(toMails);
+            // 设置邮件标题
+            helper.setSubject(subject);
+            // 设置邮件正文
+            helper.setSubject(valueMap.get("content").toString());
+            // 添加正文（使用thymeleaf模板）
+            Context context = new Context();
+            context.setVariables(valueMap);
+            String content = this.templateEngine.process("mail", context);
+            helper.setText(content, true);
+            // 发送邮件
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("发送失败");
+        }
     }
 
 }

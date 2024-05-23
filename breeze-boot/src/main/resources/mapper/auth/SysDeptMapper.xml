@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysDeptMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.domain.SysDept" id="sysDeptMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysDept" id="sysDeptMap">
         <id property="id" column="id"/>
         <result property="deptName" column="dept_name"/>
         <result property="parentId" column="parent_id"/>
@@ -16,7 +16,7 @@
         <result property="isDelete" column="is_delete"/>
         <result property="deleteBy" column="delete_by"/>
         <collection property="sysDeptList" javaType="java.util.List"
-                    ofType="com.breeze.boot.modules.auth.domain.SysDept"
+                    ofType="com.breeze.boot.modules.auth.model.entity.SysDept"
                     column="{parentId=id}"
                     select="com.breeze.boot.modules.auth.mapper.SysDeptMapper.selectDeptByParentId">
         </collection>

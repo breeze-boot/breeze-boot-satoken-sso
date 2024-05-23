@@ -21,15 +21,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysDict;
-import com.breeze.boot.modules.system.domain.params.DictOpenParam;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDict;
+import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.query.DictQuery;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import com.breeze.boot.modules.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import liquibase.pro.packaged.G;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +77,19 @@ public class SysDictController {
     }
 
     /**
+     * 详情
+     *
+     * @param dictId 字典id
+     * @return {@link Result}<{@link SysDict}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{dictId}")
+    @PreAuthorize("hasAnyAuthority('auth:dict:info')")
+    public Result<SysDict> info(@PathVariable("dictId") Long dictId) {
+        return Result.ok(this.sysDictService.getById(dictId));
+    }
+
+    /**
      * 校验字典编码是否重复
      *
      * @param dictCode 字典编码
@@ -115,7 +127,6 @@ public class SysDictController {
      */
     @Operation(summary = "获取字典")
     @GetMapping("/v2/listDict/{dictCode}")
-    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
     public Result<List<Map<String, Object>>> listDict(@PathVariable("dictCode") String dictCode) {
         return this.sysDictItemService.listDictByCode(dictCode);
     }

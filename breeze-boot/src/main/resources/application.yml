@@ -1,0 +1,256 @@
+server:
+  port: 9000
+
+spring:
+  # json提交时 [Date Calendar] 的全局序列化和反序列化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: ${project.artifactId}
+  profiles:
+    active: ${profiles.active}
+  #thymeleaf模板配置
+  thymeleaf:
+    cache: false                   # 这个开发配置为false，避免改了模板还要重启服务器
+    prefix: classpath:/templates/  #模板文件视图前缀，默认是classpath:/templates/，可不用配置
+    suffix: .html                  #模板文件视图后缀，默认是.html，可不用配置
+    check-template-location: true  #检查模板位置，可不用配置
+    encoding: utf-8                #编码字符集，默认为utf-8，可不用配置
+    mode: HTML                     #模板的模式，默认为HTML，可不用配置
+    servlet:
+      content-type: text/html       #模板的内容类型，默认为text/html，可不用配置
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:9000
+          jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
+  servlet:
+    multipart:
+      # 单文件大小限制
+      max-file-size: 10MB
+      # 总上传大小限制
+      max-request-size: 10MB
+  boot:
+    admin:
+      client:
+        # Admin 服务端地址
+        url: http://127.0.0.1:8000
+        instance:
+          prefer-ip: true
+        # server 用户名
+        username: admin
+        # server 密码
+        password: admin
+  # spring-mail 相关配置
+  mail:
+    # 配置邮件服务器的地址
+    host: smtp.qq.com
+    # 配置邮件服务器的端口（465或587）
+    port: 587
+    # 配置用户的账号
+    username: 1900381390@qq.com
+    # 配置用户的密码（即上面我们申请到的授权码）
+    password: szjpgggfodojccah
+    # 配置默认编码
+    default-encoding: UTF-8
+    # SSL 连接配置
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        # 开启 debug，这样方便开发者查看邮件发送日志
+        debug: true
+    # 自定义发送人邮箱
+    from-address: 1900381390@qq.com
+
+# mybatis-plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    banner: true
+    db-config:
+      id-type: auto
+      insert-strategy: not_empty
+      update-strategy: not_empty
+      where-strategy: not_empty
+  configuration:
+    jdbc-type-for-null: null
+    call-setters-on-nulls: true
+    shrink-whitespaces-in-sql: true
+    # mybatis-plus配置控制台打印完整带参数SQL语句
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 搜索指定包别名
+  typeAliasesPackage: com.breeze.**.entity
+
+# 开放端点
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    info:
+      enabled: false
+    metrics:
+      enabled: true
+
+logging:
+  file:
+    name: ./logs/${spring.application.name}/${spring.application.name}.log
+  config: classpath:logback-spring.xml
+  level:
+    org:
+      flowable: debug
+
+breeze:
+  aesSecret: 1234567890123456
+  security:
+    ignore-urls:
+      # SpringDoc & Knife4j
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      - "/swagger-ui.html"
+      - "/webjars/**"
+      - "/doc.html"
+      - "/v2/api-docs-ext"
+      - "/swagger-resources"
+      - "/v2/api-docs"
+      - "/swagger-ui.html"
+      - "/swagger-resources/configuration/security"
+      # Websocket & Monitor
+      - "/ws/**"
+      - "/actuator/**"
+      # Captcha & Local file storage
+      - "/captcha/**"
+      - "/img/**"
+      # Static resources
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/*.html"
+      - "/**/*.html"
+      - "/*.ico"
+      - "/**/*.ico"
+      # Data sources & Report generation
+      - "/druid/**"
+      - "/ureport/**"
+  # 租户配置
+  tenant:
+    tables:
+      - "sys_permission"
+      - "sys_platform"
+      - "sys_user"
+      - "sys_dept"
+      - "sys_role"
+      - "sys_dict"
+      - "sys_dict_item"
+      - "sys_post"
+      - "sys_file"
+      - "sys_log"
+      - "sys_menu"
+      - "sys_msg"
+      - "sys_row_permission"
+  # xss过滤路径
+  xss:
+    ignore-urls:
+  # 日志拦截开关
+  log:
+    enable: true
+  # 本地硬盘存储配置
+  local:
+    nginx-host: http://localhost:9000/img/
+  # oss s3 配置
+  oss:
+    s3:
+      minio:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      cos:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      kodo:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+  wx:
+    app-id: wx269d15f14a5fc7e2
+    app-secret: 273950b557912864a8627ff5ff9db82b
+  sap:
+    sap-client-id: T800
+    sap-file-type: yml
+    sap-file-path: /sap/
+
+flowable:
+  async-executor-activate: false # 关闭定时任务JOB
+  database-schema-update: true   # 将databaseSchemaUpdate设置为true。当Flowable发现库与数据库表结构不一致时，会自动将数据库表结构升级至新版本。
+
+# ==================================验证码==============================================
+# 滑动验证，底图路径，不配置将使用默认图片
+aj:
+  captcha:
+    cache-type: redis
+    # local缓存的阈值,达到这个值，清除缓存
+    cache-number: 1000
+    # local定时清除过期缓存(单位秒),设置为0代表不执行
+    timing-clear: 180
+    # 验证码类型default两种都实例化。
+    type: default
+    # 汉字统一使用Unicode,保证程序通过@value读取到是中文，可通过这个在线转换;yml格式不需要转换
+    # https://tool.chinaz.com/tools/unicode.aspx 中文转Unicode
+    # 右下角水印文字(我的水印)
+    water-mark: "清风"
+    slip-offset: 5
+    # aes加密坐标开启或者禁用(true|false)
+    aes-status: true
+    # 滑动干扰项(0/1/2)
+    interference-options: 2
+    #点选字体样式 默认Font.BOLD
+    font-style: 1
+    #点选字体字体大小
+    font-size: 25
+    history-data-clear-enable: false
+    # 接口请求次数一分钟限制是否开启 true|false
+    req-frequency-limit-enable: false
+    # 验证失败5次，get接口锁定
+    req-get-lock-limit: 5
+    # 验证失败后，锁定时间间隔,s
+    req-get-lock-seconds: 360
+    # get接口一分钟内请求数限制
+    req-get-minute-limit: 30
+    # check接口一分钟内请求数限制
+    req-check-minute-limit: 60
+    # verify接口一分钟内请求数限制
+    req-verify-minute-limit: 60
+
+springdoc:
+  version: "1.0.0"
+  type: "password"
+  title: "RBAC权限管理平台 API 文档"
+  description: "RBAC权限管理平台 API 文档"
+  server-url: "http://127.0.0.1:9000"
+  external-documentation-description: "https://github.com/Memory1998/breeze-cloud.git"
+  external-documentation-description-url: "https://github.com/Memory1998/breeze-cloud.git"
+  swagger-ui:
+    oauth:
+      clientId: breeze
+      clientSecret: breeze
+      # Swagger UI上默认选中的scopes
+      scopes:
+        - user_info
+  # OAuth2端点（绝对路径）
+  oAuthFlow:
+    authorizationUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/authorize
+    tokenUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/token
+    # OIDC发现端点（绝对路径）
+    oidcUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/.well-known/openid-configuration

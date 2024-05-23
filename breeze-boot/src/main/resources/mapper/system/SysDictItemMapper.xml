@@ -6,12 +6,11 @@
 <mapper namespace="com.breeze.boot.modules.system.mapper.SysDictItemMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.system.domain.SysDictItem" id="sysDictItemMap">
+    <resultMap type="com.breeze.boot.modules.system.model.entity.SysDictItem" id="sysDictItemMap">
         <id property="id" column="id" javaType="java.lang.Long"/>
         <result property="dictId" column="dict_id" javaType="java.lang.Long"/>
         <result property="value" column="value"/>
         <result property="label" column="label"/>
-        <result property="sort" column="sort"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>
@@ -27,7 +26,7 @@
         a.`dict_id`,
         a.`value`,
         a.`label`,
-        a.sort
+        a.type
         FROM sys_dict_item AS a
         <where>
             a.is_delete = 0
@@ -45,7 +44,7 @@
         LEFT JOIN sys_dict AS b ON a.dict_id = b.id
         <where>
             a.is_delete = 0
-            AND b.is_open = 1
+            AND b.status = 1
             AND b.is_delete = 0
             AND b.dict_code IN
             <foreach collection="dictCodes" index="index" item="dictCode" open="(" close=")" separator=",">
@@ -59,12 +58,13 @@
         SELECT
         a.label,
         a.`value`,
+        a.`type`,
         b.dict_code as dictCode
         FROM sys_dict_item AS a
         LEFT JOIN sys_dict AS b ON a.dict_id = b.id
         <where>
             a.is_delete = 0
-            AND b.is_open = 1
+            AND b.status = 1
             AND b.is_delete = 0
             AND b.dict_code = #{dictCode}
         </where>

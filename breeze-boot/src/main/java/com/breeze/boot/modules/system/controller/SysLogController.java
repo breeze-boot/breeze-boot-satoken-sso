@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysLog;
-import com.breeze.boot.modules.system.domain.query.LogQuery;
+import com.breeze.boot.modules.system.model.entity.SysLog;
+import com.breeze.boot.modules.system.model.query.LogQuery;
 import com.breeze.boot.modules.system.service.SysLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -63,6 +63,18 @@ public class SysLogController {
         return Result.ok(this.sysLogService.listPage(logQuery));
     }
 
+    /**
+     * 详情
+     *
+     * @param logId 日志id
+     * @return {@link Result}<{@link SysLog}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{logId}")
+    @PreAuthorize("hasAnyAuthority('auth:log:info')")
+    public Result<SysLog> info(@PathVariable("logId") Long logId) {
+        return Result.ok(this.sysLogService.getById(logId));
+    }
 
     /**
      * 清空日志表

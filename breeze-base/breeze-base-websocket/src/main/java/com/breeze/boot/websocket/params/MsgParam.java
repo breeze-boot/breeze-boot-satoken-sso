@@ -46,6 +46,12 @@ public class MsgParam implements Serializable {
     private List<Long> userIds;
 
     /**
+     * 部门ID
+     */
+    @Schema(description = "部门ID")
+    private Long deptId;
+
+    /**
      * 消息ID
      */
     @Schema(description = "消息ID")

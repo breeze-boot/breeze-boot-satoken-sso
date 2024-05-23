@@ -24,8 +24,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysDept;
-import com.breeze.boot.modules.auth.domain.query.DeptQuery;
+import com.breeze.boot.modules.auth.model.entity.SysDept;
+import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.mapper.SysDeptMapper;
 import com.breeze.boot.modules.auth.service.SysDeptService;
 import com.google.common.collect.Maps;
@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,36 +106,27 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return Result.fail(Boolean.FALSE, "删除失败");
     }
 
-    /**
-     * 选择部门通过id
-     *
-     * @param permissions 权限
-     * @return {@link List}<{@link Long}>
-     */
     @Override
-    public List<Long> selectDeptById(String permissions) {
-        List<SysDept> sysDeptList = this.baseMapper.selectDeptById(Long.valueOf(permissions));
-        List<Long> idList = Lists.newArrayList();
-        for (SysDept sysDept : sysDeptList) {
-            idList.add(sysDept.getId());
-            this.filterDeptTree(idList, sysDept);
+    public List<Long> listDeptByParentId(Long deptId) {
+        List<SysDept> sysDeptList = this.baseMapper.selectDeptById(deptId);
+        if(CollUtil.isEmpty(sysDeptList)){
+            return Lists.newArrayList();
         }
-        return idList;
+        return this.findPropertyInTree(sysDeptList.get(0));
     }
 
-    /**
-     * 过滤器部门树
-     *
-     * @param idList  id列表
-     * @param sysDept 系统部门
-     */
-    public void filterDeptTree(List<Long> idList, SysDept sysDept) {
-        if (CollUtil.isEmpty(sysDept.getSysDeptList())) {
-            return;
+    public List<Long> findPropertyInTree(SysDept node) {
+        List<Long> result = new ArrayList<>();
+        if (node != null) {
+            result.add(node.getId()); // 将当前节点的属性值添加到结果中
+            if (node.getSysDeptList() != null) {
+                for (SysDept child : node.getSysDeptList()) {
+                    // 递归查询子节点的属性值并添加到结果中
+                    result.addAll(findPropertyInTree(child));
+                }
+            }
         }
-        for (SysDept dept : sysDept.getSysDeptList()) {
-            idList.add(dept.getId());
-        }
+        return result;
     }
 
 }

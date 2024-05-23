@@ -18,8 +18,8 @@ package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
-import com.breeze.boot.modules.auth.domain.params.MenuPermissionParam;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.params.MenuPermissionParam;
 
 /**
  * 系统菜单角色服务
@@ -35,7 +35,7 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
      * @param menuPermissionParam 菜单权限参数
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> modifyPermission(MenuPermissionParam menuPermissionParam);
+    Result<Boolean> modifyMenuPermission(MenuPermissionParam menuPermissionParam);
 
 }
 

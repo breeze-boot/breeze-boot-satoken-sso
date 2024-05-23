@@ -20,10 +20,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysDict;
-import com.breeze.boot.modules.system.domain.SysDictItem;
-import com.breeze.boot.modules.system.domain.params.DictOpenParam;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDict;
+import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.query.DictQuery;
 import com.breeze.boot.modules.system.mapper.SysDictMapper;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import com.breeze.boot.modules.system.service.SysDictService;
@@ -48,19 +48,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     private final SysDictItemService sysDictItemService;
 
     /**
-     * 开关
-     *
-     * @param dictOpenParam 字典开关参数
-     * @return {@link Boolean}
-     */
-    @Override
-    public Boolean open(DictOpenParam dictOpenParam) {
-        return this.update(Wrappers.<SysDict>lambdaUpdate()
-                .set(SysDict::getIsOpen, dictOpenParam.getIsOpen())
-                .eq(SysDict::getId, dictOpenParam.getId()));
-    }
-
-    /**
      * 字典分页
      *
      * @param dictQuery 字典查询
@@ -70,6 +57,20 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public Page<SysDict> listPage(DictQuery dictQuery) {
         return this.baseMapper.listPage(new Page<>(dictQuery.getCurrent(), dictQuery.getSize()), dictQuery);
     }
+
+    /**
+     * 开关
+     *
+     * @param dictOpenParam 字典开关参数
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean open(DictOpenParam dictOpenParam) {
+        return this.update(Wrappers.<SysDict>lambdaUpdate()
+                .set(SysDict::getStatus, dictOpenParam.getStatus())
+                .eq(SysDict::getId, dictOpenParam.getId()));
+    }
+
 
     /**
      * 删除字典通过IDS

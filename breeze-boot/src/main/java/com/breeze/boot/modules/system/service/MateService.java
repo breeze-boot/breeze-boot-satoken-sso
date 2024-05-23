@@ -40,6 +40,6 @@ public interface MateService {
      * @param tableName 表名
      * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
-    List<Map<String, Object>> selectColumn(String tableName);
+    List<Map<String, Object>> selectTableColumn(String tableName);
 
 }

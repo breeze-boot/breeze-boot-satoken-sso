@@ -18,8 +18,8 @@ package com.breeze.boot.modules.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.system.domain.params.FileParam;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.system.model.params.FileParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,11 +58,12 @@ public interface CommonService {
     Result<List<?>> selectDept(Long id);
 
     /**
-     * 用户下拉框
+     * 用户列表
      *
-     * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
+     * @param deptId 部门ID
+     * @return {@link Result}<{@link List}<{@link SysUser}>>
      */
-    Result<List<SysUser>> selectUser();
+    Result<List<SysUser>> listUser(Long deptId);
 
     /**
      * 角色下拉框
@@ -98,7 +99,7 @@ public interface CommonService {
      * @param tableName 表名
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
-    Result<List<Map<String, Object>>> selectColumn(String tableName);
+    Result<List<Map<String, Object>>> selectTableColumn(String tableName);
 
     /**
      * 数据权限下拉框
@@ -106,6 +107,13 @@ public interface CommonService {
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     Result<List<Map<String, Object>>> selectPermission();
+
+    /**
+     * 数据权限下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    Result<List<Map<String, Object>>> selectCustomizePermission();
 
     /**
      * 文件上传到minio
@@ -130,4 +138,13 @@ public interface CommonService {
     Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam,
                                                    HttpServletRequest request,
                                                    HttpServletResponse response);
+
+    /**
+     * 下载
+     *
+     * @param fileId     文件标识
+     * @param response   响应
+     */
+    void download(Long fileId,  HttpServletResponse response);
+
 }

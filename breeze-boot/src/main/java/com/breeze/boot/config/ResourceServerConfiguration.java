@@ -74,7 +74,7 @@ public class ResourceServerConfiguration {
     public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
         return new OpenAPI()
                 .components(new Components())
-                .info(new Info().title("Foo API").version(appVersion)
+                .info(new Info().title("").version(appVersion)
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
 }

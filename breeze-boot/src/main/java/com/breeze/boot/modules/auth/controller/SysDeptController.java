@@ -21,8 +21,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.auth.domain.SysDept;
-import com.breeze.boot.modules.auth.domain.query.DeptQuery;
+import com.breeze.boot.modules.auth.model.entity.SysDept;
+import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -66,6 +66,19 @@ public class SysDeptController {
     @PreAuthorize("hasAnyAuthority('auth:dept:list')")
     public Result<List<?>> list(DeptQuery deptQuery) {
         return Result.ok(this.sysDeptService.listDept(deptQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param deptId 部门ID
+     * @return {@link Result}<{@link SysDept}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{deptId}")
+    @PreAuthorize("hasAnyAuthority('auth:dept:info')")
+    public Result<SysDept> info(@PathVariable("deptId") Long deptId) {
+        return Result.ok(this.sysDeptService.getById(deptId));
     }
 
     /**

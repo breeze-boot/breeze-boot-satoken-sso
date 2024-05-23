@@ -16,9 +16,9 @@
 
 package com.breeze.boot.core.jackson;
 
-import cn.hutool.core.util.DesensitizedUtil;
+import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.annotation.SensitiveInfo;
-import com.breeze.boot.core.enums.SensitiveType;
+import com.breeze.boot.core.enums.SensitiveStrategy;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -43,7 +43,7 @@ public class SensitiveInfoSerialize extends JsonSerializer<String> implements Co
     /**
      * 敏感类型
      */
-    private SensitiveType sensitiveType;
+    private SensitiveStrategy sensitiveStrategy;
 
     /**
      * 序列化
@@ -55,28 +55,11 @@ public class SensitiveInfoSerialize extends JsonSerializer<String> implements Co
     @Override
     @SneakyThrows
     public void serialize(String str, JsonGenerator jsonGenerator, SerializerProvider provider) {
-        switch (this.sensitiveType) {
-            case REAL_NAME:
-                jsonGenerator.writeString(DesensitizedUtil.chineseName(str));
-                break;
-            case ID_CARD:
-                jsonGenerator.writeString(DesensitizedUtil.idCardNum(str, 6, 10));
-                break;
-            case PHONE:
-                jsonGenerator.writeString(DesensitizedUtil.fixedPhone(str));
-                break;
-            case ADDRESS:
-                jsonGenerator.writeString(DesensitizedUtil.address(str, 7));
-                break;
-            case EMAIL:
-                jsonGenerator.writeString(DesensitizedUtil.email(str));
-                break;
-            case BANK_CARD:
-                jsonGenerator.writeString(DesensitizedUtil.bankCard(str));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + this.sensitiveType);
+        if (StrUtil.isNotBlank(str)) {
+            jsonGenerator.writeString(this.sensitiveStrategy.getSensitiveStrategy().apply(str));
+            return;
         }
+        throw new IllegalStateException("Unexpected value: " + this.sensitiveStrategy);
     }
 
     /**

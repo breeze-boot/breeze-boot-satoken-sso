@@ -16,7 +16,7 @@
 
 package com.breeze.boot.modules.auth.mapper;
 
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

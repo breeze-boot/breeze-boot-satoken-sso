@@ -19,9 +19,9 @@ package com.breeze.boot.modules.auth.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysMenu;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.query.MenuQuery;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.query.MenuQuery;
 
 import java.util.List;
 import java.util.Set;

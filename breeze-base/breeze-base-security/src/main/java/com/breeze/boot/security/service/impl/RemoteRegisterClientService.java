@@ -16,7 +16,7 @@
 
 package com.breeze.boot.security.service.impl;
 
-import com.breeze.boot.security.domain.BaseSysRegisteredClient;
+import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
 import com.breeze.boot.security.exception.NotSupportException;
 import com.breeze.boot.security.service.ISysRegisteredClientService;
 import com.breeze.boot.security.utils.OAuth2EndpointUtils;

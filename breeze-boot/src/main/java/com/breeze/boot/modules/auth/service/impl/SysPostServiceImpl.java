@@ -22,8 +22,8 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysPost;
-import com.breeze.boot.modules.auth.domain.query.PostQuery;
+import com.breeze.boot.modules.system.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.query.PostQuery;
 import com.breeze.boot.modules.auth.mapper.SysPostMapper;
 import com.breeze.boot.modules.auth.service.SysPostService;
 import lombok.RequiredArgsConstructor;

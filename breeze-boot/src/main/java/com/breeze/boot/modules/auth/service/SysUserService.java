@@ -19,11 +19,11 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.auth.domain.params.UserOpenParam;
-import com.breeze.boot.modules.auth.domain.params.UserResetParam;
-import com.breeze.boot.modules.auth.domain.params.UserRolesParam;
-import com.breeze.boot.modules.auth.domain.query.UserQuery;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.params.UserOpenParam;
+import com.breeze.boot.modules.auth.model.params.UserResetParam;
+import com.breeze.boot.modules.auth.model.params.UserRolesParam;
+import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.security.service.ISysUserService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -124,5 +124,21 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
      * @param response 响应
      */
     void export(HttpServletResponse response);
+
+    /**
+     * 获取部门用户
+     *
+     * @param deptId 部门ID
+     * @return {@link List}<{@link SysUser}>
+     */
+    List<SysUser> listDeptsUser(Long deptId);
+
+    /**
+     * 获取用户通过角色
+     *
+     * @param roleCode 角色编码
+     * @return {@link List }<{@link SysUser }>
+     */
+    List<SysUser> listUserByRole(String roleCode);
 
 }

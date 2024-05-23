@@ -20,7 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.domain.UserPrincipal;
+import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.exception.NotSupportException;
 import com.google.common.collect.Lists;
 import org.springframework.security.core.GrantedAuthority;
@@ -101,15 +101,14 @@ public interface IUserDetailService extends UserDetailsService {
                 baseLoginUser.getAvatar(),
                 baseLoginUser.getPhone(),
                 baseLoginUser.getSex(),
-                baseLoginUser.getIdCard(),
                 baseLoginUser.getAmountType(),
                 baseLoginUser.getIsLock(),
-                baseLoginUser.getOpenId(),
                 baseLoginUser.getEmail(),
                 baseLoginUser.getUserRoleCodes(),
                 baseLoginUser.getUserRoleIds(),
                 baseLoginUser.getTenantId(),
-                baseLoginUser.getPermissions());
+                baseLoginUser.getPermission().getPermissions(),
+                baseLoginUser.getPermission().getExcludeColumn());
     }
 
     /**

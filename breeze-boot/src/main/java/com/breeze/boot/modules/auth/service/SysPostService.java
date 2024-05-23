@@ -19,8 +19,8 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysPost;
-import com.breeze.boot.modules.auth.domain.query.PostQuery;
+import com.breeze.boot.modules.system.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.query.PostQuery;
 
 import java.util.List;
 

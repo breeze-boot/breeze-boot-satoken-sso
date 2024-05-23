@@ -21,9 +21,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysPost;
-import com.breeze.boot.modules.auth.domain.query.PostQuery;
+import com.breeze.boot.modules.auth.model.query.PostQuery;
 import com.breeze.boot.modules.auth.service.SysPostService;
+import com.breeze.boot.modules.system.model.entity.SysPost;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,6 +66,19 @@ public class SysPostController {
     @PreAuthorize("hasAnyAuthority('auth:post:list')")
     public Result<IPage<SysPost>> list(PostQuery postQuery) {
         return Result.ok(this.sysPostService.listPage(postQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param postId 平台id
+     * @return {@link Result}<{@link SysPost}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{postId}")
+    @PreAuthorize("hasAnyAuthority('auth:post:info')")
+    public Result<SysPost> info(@PathVariable("postId") Long postId) {
+        return Result.ok(this.sysPostService.getById(postId));
     }
 
     /**

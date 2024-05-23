@@ -19,8 +19,8 @@ package com.breeze.boot.modules.system.controller;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysDictItem;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.query.DictItemQuery;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -55,14 +55,27 @@ public class SysDictItemController {
     /**
      * 列表
      *
-     * @param dictQuery 字典查询
+     * @param dictItemQuery 字典项查询
      * @return {@link Result}<{@link List}<{@link SysDictItem}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> list(DictQuery dictQuery) {
-        return Result.ok(this.sysDictItemService.listDictItem(dictQuery));
+    public Result<List<SysDictItem>> list(DictItemQuery dictItemQuery) {
+        return Result.ok(this.sysDictItemService.listDictItem(dictItemQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param dictItemId 字典项id
+     * @return {@link Result}<{@link SysDictItem}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{dictItemId}")
+    @PreAuthorize("hasAnyAuthority('auth:dict:info')")
+    public Result<SysDictItem> info(@PathVariable("dictItemId") Long dictItemId) {
+        return Result.ok(this.sysDictItemService.getById(dictItemId));
     }
 
     /**

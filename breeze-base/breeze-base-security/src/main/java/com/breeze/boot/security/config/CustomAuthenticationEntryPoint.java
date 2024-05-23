@@ -31,6 +31,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * 请求资源 不携带token或者token无效： 401
@@ -42,58 +43,73 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /**
-     * 开始
-     *
-     * @param request  请求
-     * @param response 响应
-     * @param e        身份验证异常
+     * 异常处理策略接口
      */
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-        if (response.isCommitted()) {
-            return;
-        }
-        if (e instanceof BadCredentialsException) {
-            ResponseUtil.response(response, ResultCode.exception(e.getMessage()));
-            return;
-        }
+    private interface ExceptionHandlerStrategy {
+        String handleException(Throwable e);
+    }
 
-        Throwable cause = e.getCause();
-        if (e instanceof InvalidBearerTokenException) {
+    /**
+     * 异常处理策略枚举
+     */
+    private enum ExceptionHandler {
+        BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()),
+        INVALID_BEARER_TOKEN(e -> {
+            Throwable cause = e.getCause();
             if (cause instanceof JwtValidationException) {
-                log.error("[JWT Token 过期]", cause);
-                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
-                return;
+                return "JWT Token 过期";
+            } else if (cause instanceof BadJwtException) {
+                return "登录已过期";
+            } else if (cause instanceof AccountExpiredException) {
+                return "账户已过期";
+            } else if (cause instanceof LockedException) {
+                return "账户已经锁定";
             }
-            if (cause instanceof BadJwtException) {
-                log.error("[登录已过期]", cause);
-                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
-                return;
-            }
-            if (cause instanceof AccountExpiredException) {
-                log.warn("[账户已过期]", cause);
-                ResponseUtil.response(response, ResultCode.ACCOUNT_EXPIRED);
-                return;
-            }
-            if (cause instanceof LockedException) {
-                log.warn("[账户已经锁定]", cause);
-                ResponseUtil.response(response, ResultCode.ACCOUNT_LOCKED);
-                return;
-            }
+            return "认证失败";
+        }),
+        INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage());
+
+        private final ExceptionHandlerStrategy strategy;
+
+        ExceptionHandler(ExceptionHandlerStrategy strategy) {
+            this.strategy = strategy;
         }
-        if (e instanceof InsufficientAuthenticationException) {
-            String message = e.getMessage();
-            if (message.contains("Invalid token does not contain resource id")) {
-                log.warn("[未经授权的服务器]", e);
-            } else if (message.contains("Full authentication is required to access this resource")) {
-                log.warn("[访问需要登录]", e);
-            }
-            ResponseUtil.response(response, ResultCode.INSUFFICIENT_AUTHENTICATION);
+
+        String handleException(Throwable e) {
+            return Objects.nonNull(e.getCause()) ? strategy.handleException(e.getCause()) : e.getMessage();
+        }
+    }
+
+
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
+        // 增加边界条件检查
+        if (request == null || response == null) {
+            throw new IllegalArgumentException("Request and response must not be null.");
+        }
+        if (response.isCommitted()) {
+            // 记录日志，说明响应已提交
+            log.info("Response already committed. Skipping authentication process.");
             return;
         }
 
-        String errMsg = "认证失败";
-        log.error("[验证异常]", cause);
-        ResponseUtil.response(response, ResultCode.exception(errMsg));
+        ExceptionHandler handler = null;
+        if (e instanceof BadCredentialsException) {
+            handler = ExceptionHandler.BAD_CREDENTIALS;
+        } else if (e instanceof InvalidBearerTokenException) {
+            handler = ExceptionHandler.INVALID_BEARER_TOKEN;
+        } else if (e instanceof InsufficientAuthenticationException) {
+            handler = ExceptionHandler.INSUFFICIENT_AUTHENTICATION;
+        }
+
+        if (handler != null) {
+            String errMsg = handler.handleException(e);
+            log.error(errMsg, e.getCause());
+            ResponseUtil.response(response, ResultCode.exception(errMsg));
+        } else {
+            // 处理未被识别的异常类型
+            log.error("认证失败", e);
+            ResponseUtil.response(response, ResultCode.exception("认证失败"));
+        }
     }
 }
+

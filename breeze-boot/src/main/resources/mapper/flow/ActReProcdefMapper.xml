@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.breeze.boot.modules.flow.mapper.ActReProcdefMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.flow.domain.ActReProcdef">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.flow.model.entity.ActReProcdef">
         <id property="id" column="ID_" jdbcType="VARCHAR"/>
         <result property="rev" column="REV_" jdbcType="INTEGER"/>
         <result property="category" column="CATEGORY_" jdbcType="VARCHAR"/>

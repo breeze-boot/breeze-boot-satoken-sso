@@ -18,7 +18,7 @@ package com.breeze.boot.config;
 
 import com.breeze.boot.log.bo.SysLogBO;
 import com.breeze.boot.log.events.LocalSysLogSaveEventListener;
-import com.breeze.boot.modules.msg.service.impl.SysMsgUserService;
+import com.breeze.boot.modules.system.service.SysMsgUserService;
 import com.breeze.boot.modules.system.service.SysLogService;
 import com.breeze.boot.websocket.dto.UserMsgDTO;
 import com.breeze.boot.websocket.events.MsgSaveEventListener;

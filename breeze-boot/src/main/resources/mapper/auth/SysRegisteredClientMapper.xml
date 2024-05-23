@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysRegisteredClientMapper">
 
     <select id="listPage"
-            resultType="com.breeze.boot.modules.auth.domain.vo.RegisteredClientVO">
+            resultType="com.breeze.boot.modules.auth.model.vo.RegisteredClientVO">
         SELECT
         id,
         client_id,
@@ -32,7 +32,7 @@
     </select>
 
     <select id="getRegisteredClientBy"
-            resultType="com.breeze.boot.modules.auth.domain.SysRegisteredClient">
+            resultType="com.breeze.boot.modules.auth.model.entity.SysRegisteredClient">
         SELECT
         id,
         client_id,

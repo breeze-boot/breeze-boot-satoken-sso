@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysPlatformMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.system.domain.SysPlatform" id="sysPlatformMap">
+    <resultMap type="com.breeze.boot.modules.system.model.entity.SysPlatform" id="sysPlatformMap">
         <id property="id" column="id"/>
         <result property="platformCode" column="platform_code"/>
         <result property="platformName" column="platform_name"/>

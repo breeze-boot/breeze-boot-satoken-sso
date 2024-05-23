@@ -17,8 +17,8 @@
 package com.breeze.boot.modules.system.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.system.domain.SysLog;
-import com.breeze.boot.modules.system.domain.query.LogQuery;
+import com.breeze.boot.modules.system.model.entity.SysLog;
+import com.breeze.boot.modules.system.model.query.LogQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -77,12 +77,13 @@ public class MateDataServiceImpl implements MateService {
             ResultSet rs = metaData.getTables(connection.getCatalog(), null, "%", new String[]{"table"});
             while (rs.next()) {
                 Map<String, Object> selectMap = Maps.newHashMap();
-                selectMap.put("key", rs.getString("TABLE_NAME"));
-                selectMap.put("value", rs.getString("TABLE_NAME"));
+                String tableName = rs.getString("TABLE_NAME");
+                selectMap.put("label", tableName);
+                selectMap.put("value", tableName);
                 tableList.add(selectMap);
             }
         } catch (SQLException e) {
-            log.error("SQL异常 ", e);
+            log.error("获取数据库连接失败", e);
         }
         return tableList;
     }
@@ -94,21 +95,22 @@ public class MateDataServiceImpl implements MateService {
      * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Override
-    public List<Map<String, Object>> selectColumn(String tableName) {
+    public List<Map<String, Object>> selectTableColumn(String tableName) {
         List<Map<String, Object>> columnList = new ArrayList<>();
         try {
             // 获取 字段
             ResultSet rs = metaData.getColumns(connection.getCatalog(), null, tableName, null);
             while (rs.next()) {
                 Map<String, Object> selectMap = Maps.newHashMap();
-                selectMap.put("key", rs.getString("COLUMN_NAME"));
-                selectMap.put("value", rs.getString("COLUMN_NAME"));
+                String columnName = rs.getString("COLUMN_NAME");
+                selectMap.put("label", columnName);
+                selectMap.put("value", columnName);
                 columnList.add(selectMap);
+                log.info("COLUMN_NAME:{}", columnName);
             }
         } catch (SQLException e) {
             log.error("SQL异常", e);
         }
         return columnList;
     }
-
 }

@@ -20,9 +20,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysFile;
-import com.breeze.boot.modules.system.domain.params.FileParam;
-import com.breeze.boot.modules.system.domain.query.FileQuery;
+import com.breeze.boot.modules.system.model.entity.SysFile;
+import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.query.FileQuery;
 import com.breeze.boot.modules.system.service.SysFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -67,6 +67,19 @@ public class SysFileController {
     @PreAuthorize("hasAnyAuthority('sys:file:list')")
     public Result<Page<SysFile>> list(FileQuery fileQuery) {
         return Result.ok(this.sysFileService.listPage(fileQuery));
+    }
+
+    /**
+     * 修改
+     *
+     * @param sysFile 文件实体
+     * @return {@link Result}<{@link Page}<{@link SysFile}>>
+     */
+    @Operation(summary = "修改")
+    @PutMapping
+    @PreAuthorize("hasAnyAuthority('sys:file:edit')")
+    public Result<Boolean> modify(@RequestBody SysFile sysFile) {
+        return Result.ok(this.sysFileService.updateById(sysFile));
     }
 
     /**

@@ -21,7 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
-import com.breeze.boot.quartz.query.JobQuery;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

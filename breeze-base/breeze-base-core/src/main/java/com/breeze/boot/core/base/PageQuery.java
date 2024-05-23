@@ -16,9 +16,21 @@
 
 package com.breeze.boot.core.base;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.SystemServiceException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 分页查询参数
@@ -26,6 +38,7 @@ import lombok.EqualsAndHashCode;
  * @author gaoweixuan
  * @since 2022-08-31
  */
+@Setter
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "分页查询参数", hidden = true)
 public class PageQuery {
@@ -37,8 +50,26 @@ public class PageQuery {
 
     /**
      * 大小
+     * -- SETTER --
+     * 设置分页大小
      */
     private Integer size;
+
+    /**
+     * 排序sql
+     * -- SETTER --
+     * 设置分页大小
+     */
+    private String sortSql;
+
+    /**
+     * 排序
+     * <p>
+     * 按照MybatisPlus的方式，顺序排序
+     * </p>
+     */
+    @Getter
+    private LinkedHashMap<String, String> sort;
 
     /**
      * 页面查询
@@ -59,13 +90,67 @@ public class PageQuery {
     }
 
     /**
-     * 设置当前页码
+     * 获取排序的列
      *
-     * @param current 当前
+     * @return {@link Integer}
      */
-    public void setCurrent(Integer current) {
-        this.current = current;
+    public LinkedHashMap<String, List<String>> getColumns() {
+        LinkedHashMap<String, List<String>> sortMap = Maps.newLinkedHashMap();
+        if (CollUtil.isEmpty(this.sort)) {
+            return sortMap;
+        }
+
+        this.sort.forEach((sort, column) -> {
+            if (StrUtil.isNotBlank(column)) {
+                String[] columns = column.split("\\|");
+                sortMap.putIfAbsent(sort.equals("ascending") ? "asc" : "desc", Arrays.asList(columns));
+            }
+        });
+
+        return sortMap;
     }
+
+    /**
+     * 获取是否排序
+     *
+     * @return {@link Integer}
+     */
+    public Boolean isSort() {
+        return CollUtil.isNotEmpty(this.sort);
+    }
+
+    /**
+     * 组装排序
+     *
+     * @param queryWrapper 查询包装器
+     * @return {@link Integer}
+     */
+    public QueryWrapper<?> getSortQueryWrapper(QueryWrapper<?> queryWrapper) {
+        this.getColumns().forEach((sort, columnList) -> queryWrapper.orderBy(this.isSort(), StrUtil.equals("asc", sort), columnList));
+        return queryWrapper;
+    }
+
+    /**
+     * 构建排序SQL语句
+     *
+     * @return 排序SQL语句 {@link String}
+     */
+    public String getSortSql() {
+        if (CollUtil.isEmpty(this.sort)) {
+            return "";
+        }
+
+        StringBuilder sortSqlBuilder = new StringBuilder("order by ");
+        this.sort.forEach((sort, column) -> sortSqlBuilder.append(column).append(" ").append(sort).append(", "));
+
+        // 移除最后一个逗号和空格
+        if (sortSqlBuilder.length() > 0) {
+            sortSqlBuilder.setLength(sortSqlBuilder.length() - 2);
+        }
+
+        return sortSqlBuilder.toString();
+    }
+
 
     /**
      * 获取当前页码
@@ -86,16 +171,10 @@ public class PageQuery {
         if (this.size == null) {
             return 10;
         }
+        if (this.size >= 1000) {
+            throw new SystemServiceException(ResultCode.PAGE_EXCEPTION);
+        }
         return size;
-    }
-
-    /**
-     * 设置分页大小
-     *
-     * @param size 大小
-     */
-    public void setSize(Integer size) {
-        this.size = size;
     }
 
     /**

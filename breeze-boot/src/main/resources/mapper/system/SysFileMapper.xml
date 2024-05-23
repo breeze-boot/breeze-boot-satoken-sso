@@ -4,12 +4,11 @@
 <mapper namespace="com.breeze.boot.modules.system.mapper.SysFileMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.system.domain.SysFile" id="sysFileMap">
+    <resultMap type="com.breeze.boot.modules.system.model.entity.SysFile" id="sysFileMap">
         <id property="id" column="id"/>
-        <result property="title" column="title"/>
-        <result property="fileName" column="file_name"/>
+        <result property="name" column="name"/>
         <result property="contentType" column="content_type"/>
-        <result property="fileFormat" column="file_format"/>
+        <result property="format" column="format"/>
         <result property="bucket" column="bucket"/>
         <result property="objectName" column="object_name"/>
         <result property="path" column="path"/>

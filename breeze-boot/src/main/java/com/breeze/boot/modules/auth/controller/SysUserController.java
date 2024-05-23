@@ -23,11 +23,12 @@ import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.auth.domain.params.UserOpenParam;
-import com.breeze.boot.modules.auth.domain.params.UserResetParam;
-import com.breeze.boot.modules.auth.domain.params.UserRolesParam;
-import com.breeze.boot.modules.auth.domain.query.UserQuery;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.params.UserAvatarParam;
+import com.breeze.boot.modules.auth.model.params.UserOpenParam;
+import com.breeze.boot.modules.auth.model.params.UserResetParam;
+import com.breeze.boot.modules.auth.model.params.UserRolesParam;
+import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.service.SysUserService;
 import com.breeze.boot.security.utils.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -101,6 +102,20 @@ public class SysUserController {
     @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Valid @RequestBody SysUser sysUser) {
         return Result.ok(sysUserService.updateUserById(sysUser));
+    }
+
+    /**
+     * 修改
+     *
+     * @param userAvatarParam 系统用户
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "修改头像")
+    @PutMapping("/modifyAvatar")
+    @PreAuthorize("hasAnyAuthority('auth:user:modify')")
+    @BreezeSysLog(description = "用户头像信息修改", type = LogType.EDIT)
+    public Result<Boolean> modifyAvatar(@Valid @RequestBody UserAvatarParam userAvatarParam) {
+        return Result.ok(sysUserService.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getAvatar, userAvatarParam.getAvatar()).set(SysUser::getAvatarFileId, userAvatarParam.getAvatarFileId()).eq(SysUser::getId, userAvatarParam.getId())));
     }
 
     /**
@@ -206,15 +221,16 @@ public class SysUserController {
     }
 
     /**
-     * 用户添加角色
      * 用户分配角色
+     * <p>
+     * /listUserRoles 不使用权限标识，直接使用这个
      *
      * @param userRolesParam 用户角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "用户分配角色")
     @PutMapping("/setRole")
-    @PreAuthorize("hasAnyAuthority('auth:user:setRole')")
+    @PreAuthorize("hasAnyAuthority('auth:user:set:role', 'ROLE_ADMIN')")
     @BreezeSysLog(description = "用户分配角色", type = LogType.EDIT)
     public Result<Boolean> setRole(@Valid @RequestBody UserRolesParam userRolesParam) {
         return sysUserService.setRole(userRolesParam);

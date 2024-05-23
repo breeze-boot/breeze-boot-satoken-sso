@@ -19,9 +19,9 @@ package com.breeze.boot.modules.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysFile;
-import com.breeze.boot.modules.system.domain.params.FileParam;
-import com.breeze.boot.modules.system.domain.query.FileQuery;
+import com.breeze.boot.modules.system.model.entity.SysFile;
+import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.query.FileQuery;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

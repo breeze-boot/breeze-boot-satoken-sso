@@ -17,8 +17,8 @@
 package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.query.RoleQuery;
+import com.breeze.boot.modules.auth.model.entity.SysRole;
+import com.breeze.boot.modules.auth.model.query.RoleQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

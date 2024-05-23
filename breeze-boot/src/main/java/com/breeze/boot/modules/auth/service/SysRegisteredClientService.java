@@ -19,12 +19,12 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysRegisteredClient;
-import com.breeze.boot.modules.auth.domain.params.RegisteredClientParam;
-import com.breeze.boot.modules.auth.domain.params.ResetClientSecretParam;
-import com.breeze.boot.modules.auth.domain.query.RegisteredClientQuery;
-import com.breeze.boot.modules.auth.domain.vo.RegisteredClientVO;
-import com.breeze.boot.security.domain.BaseSysRegisteredClient;
+import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
+import com.breeze.boot.modules.auth.model.params.RegisteredClientParam;
+import com.breeze.boot.modules.auth.model.params.ResetClientSecretParam;
+import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
+import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
+import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
 import com.breeze.boot.security.service.ISysRegisteredClientService;
 
 import java.util.List;

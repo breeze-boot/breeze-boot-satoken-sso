@@ -21,13 +21,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysPost;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
-import com.breeze.boot.modules.auth.domain.params.MenuPermissionParam;
-import com.breeze.boot.modules.auth.domain.query.RoleQuery;
+import com.breeze.boot.modules.auth.model.entity.SysRole;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.params.MenuPermissionParam;
+import com.breeze.boot.modules.auth.model.params.RoleParam;
+import com.breeze.boot.modules.auth.model.query.RoleQuery;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleService;
+import com.breeze.boot.modules.system.model.entity.SysPost;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -79,6 +80,19 @@ public class SysRoleController {
     }
 
     /**
+     * 详情
+     *
+     * @param roleId 角色id
+     * @return {@link Result}<{@link SysRole}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{roleId}")
+    @PreAuthorize("hasAnyAuthority('auth:role:info')")
+    public Result<SysRole> info(@PathVariable("roleId") Long roleId) {
+        return Result.ok(this.sysRoleService.getById(roleId));
+    }
+
+    /**
      * 校验角色编码是否重复
      *
      * @param roleCode 角色编码
@@ -96,73 +110,31 @@ public class SysRoleController {
     }
 
     /**
-     * 获取用户角色列表
-     *
-     * @param userId 用户Id
-     * @return {@link Result}<{@link List}<{@link Long}>>
-     */
-    @Operation(summary = "获取用户角色列表")
-    @GetMapping("/listUserRoles")
-    @PreAuthorize("hasAnyAuthority('auth:role:list')")
-    public Result<List<Long>> listUserRoles(@RequestParam("userId") Long userId) {
-        return Result.ok(this.sysRoleService.listUserRoles(userId));
-    }
-
-    /**
-     * 获取树形权限列表
-     * <p>
-     * 选中数据
-     *
-     * @param roleId 角色id
-     * @return {@link Result}<{@link List}<{@link SysRoleMenu}>>
-     */
-    @Operation(summary = "获取树形权限列表", description = "选中的行的回显")
-    @GetMapping("/listRolesPermission")
-    @PreAuthorize("hasAnyAuthority('auth:role:list')")
-    public Result<List<SysRoleMenu>> listRolesPermission(@RequestParam Long roleId) {
-        return Result.ok(this.sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, roleId)));
-    }
-
-    /**
-     * 修改权限
-     *
-     * @param menuPermissionParam 菜单权限参数
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Operation(summary = "编辑权限")
-    @PutMapping("/modifyPermission")
-    @PreAuthorize("hasAnyAuthority('auth:role:modify')")
-    @BreezeSysLog(description = "角色权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modifyPermission(@Valid @RequestBody MenuPermissionParam menuPermissionParam) {
-        return this.sysRoleMenuService.modifyPermission(menuPermissionParam);
-    }
-
-    /**
      * 创建
      *
-     * @param sysRole 角色实体
+     * @param roleParam  角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('auth:role:create')")
     @BreezeSysLog(description = "角色信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysRole sysRole) {
-        return Result.ok(sysRoleService.save(sysRole));
+    public Result<Boolean> save(@Valid @RequestBody RoleParam roleParam) {
+        return sysRoleService.saveRole(roleParam);
     }
 
     /**
      * 修改
      *
-     * @param sysRole 角色实体
+     * @param roleParam 角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping
     @PreAuthorize("hasAnyAuthority('auth:role:modify')")
     @BreezeSysLog(description = "角色信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysRole sysRole) {
-        return Result.ok(sysRoleService.updateById(sysRole));
+    public Result<Boolean> modify(@Valid @RequestBody RoleParam roleParam) {
+        return sysRoleService.updateRoleById(roleParam);
     }
 
     /**
@@ -179,4 +151,47 @@ public class SysRoleController {
         return sysRoleService.deleteByIds(Arrays.asList(ids));
     }
 
+    /**
+     * 获取用户角色列表回显
+     * <p>
+     * 不加权限标识
+     *
+     * @param id 用户Id
+     * @return {@link Result}<{@link List}<{@link Long}>>
+     */
+    @Operation(summary = "获取用户角色列表回显", description = "选中的用户角色列表回显")
+    @GetMapping("/listUserRoles")
+    public Result<List<Long>> listUserRoles(@RequestParam("id") Long id) {
+        return Result.ok(this.sysRoleService.listUserRoles(id));
+    }
+
+    /**
+     * 获取树菜单权限列表回显
+     * <p>
+     * 不加权限标识
+     *
+     * @param roleId 角色id
+     * @return {@link Result}<{@link List}<{@link SysRoleMenu}>>
+     */
+    @Operation(summary = "获取树菜单权限", description = "选中的菜单列表回显")
+    @GetMapping("/listRolesPermission")
+    public Result<List<SysRoleMenu>> listRolesPermission(@RequestParam Long roleId) {
+        return Result.ok(this.sysRoleMenuService.list(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, roleId)));
+    }
+
+    /**
+     * 编辑菜单权限
+     * <p>
+     * /listTreePermission /listRolesPermission 不使用权限标识，直接使用这个
+     *
+     * @param menuPermissionParam 菜单权限参数
+     * @return {@link Result}<{@link Boolean}>
+     */
+    @Operation(summary = "编辑菜单权限")
+    @PutMapping("/modifyPermission")
+    @PreAuthorize("hasAnyAuthority('auth:menu:permission:modify','ROLE_ADMIN')")
+    @BreezeSysLog(description = "编辑菜单权限", type = LogType.EDIT)
+    public Result<Boolean> modifyMenuPermission(@Valid @RequestBody MenuPermissionParam menuPermissionParam) {
+        return this.sysRoleMenuService.modifyMenuPermission(menuPermissionParam);
+    }
 }

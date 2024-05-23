@@ -17,7 +17,7 @@
 package com.breeze.boot.security.authentication.sms;
 
 import cn.hutool.core.util.StrUtil;
-import com.breeze.boot.security.domain.UserPrincipal;
+import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.impl.UserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

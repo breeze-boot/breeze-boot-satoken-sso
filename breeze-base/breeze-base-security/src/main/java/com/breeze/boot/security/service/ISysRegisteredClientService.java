@@ -16,7 +16,7 @@
 
 package com.breeze.boot.security.service;
 
-import com.breeze.boot.security.domain.BaseSysRegisteredClient;
+import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
 
 /**
  * 全局注册客户服务接口

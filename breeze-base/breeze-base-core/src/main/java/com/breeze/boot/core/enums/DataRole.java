@@ -28,8 +28,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum DataRole {
+
     DEPT_ID("dept_id"),
-    USER_ID("user_id");
+
+    USER_ID("user_id"),
+
+    CUSTOMIZE_USER_ID("user_id"),
+
+    CUSTOMIZE_DEPT_ID("dept_id");
 
     private final String column;
 

@@ -16,7 +16,9 @@
 
 package com.breeze.boot.modules.system.mapper;
 
-import com.breeze.boot.modules.system.domain.SysDb;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.modules.system.model.entity.SysDb;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -28,4 +30,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SysDbMapper extends BreezeBaseMapper<SysDb> {
+
+    IPage<SysDb> listPage(Page<Object> objectPage);
+
 }

@@ -24,9 +24,9 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysTenant;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.auth.domain.query.TenantQuery;
+import com.breeze.boot.modules.system.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.mapper.SysTenantMapper;
 import com.breeze.boot.modules.auth.service.SysTenantService;
 import com.breeze.boot.modules.auth.service.SysUserService;

@@ -21,7 +21,8 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
-import com.breeze.boot.quartz.query.JobQuery;
+import com.breeze.boot.quartz.domain.params.JobOpenParam;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Quartz任务控制器
@@ -60,6 +60,19 @@ public class QuartzJobController {
     @PreAuthorize("hasAnyAuthority('sys:job:list')")
     public Result<Page<SysQuartzJob>> listPage(JobQuery jobQuery) {
         return Result.ok(this.sysQuartzJobService.listPage(jobQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param jobId 任务Id
+     * @return {@link Result}<{@link SysQuartzJob}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{jobId}")
+    @PreAuthorize("hasAnyAuthority('sys:job:info')")
+    public Result<SysQuartzJob> info(@PathVariable("jobId") Long jobId) {
+        return Result.ok(this.sysQuartzJobService.getById(jobId));
     }
 
     /**
@@ -93,17 +106,15 @@ public class QuartzJobController {
     /**
      * 开启或关闭
      *
-     * @param jobId  任务id
-     * @param status 状态
+     * @param jobOpenParam 任务的开启关闭参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "开启或关闭")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:job:modify')")
     @BreezeSysLog(description = "开启或关闭任务", type = LogType.EDIT)
-    public Result<Boolean> open(@NotNull(message = "任务ID不能为空") @RequestParam("jobId") Long jobId,
-                                @NotNull(message = "状态不能为空") @RequestParam("status") Integer status) {
-        return Objects.equals(1, status) ? this.sysQuartzJobService.resumeJob(jobId) : this.sysQuartzJobService.pauseJob(jobId);
+    public Result<Boolean> open(@Valid @RequestBody JobOpenParam jobOpenParam) {
+        return this.sysQuartzJobService.open(jobOpenParam);
     }
 
     /**

@@ -21,7 +21,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.quartz.domain.SysQuartzJob;
-import com.breeze.boot.quartz.query.JobQuery;
+import com.breeze.boot.quartz.domain.params.JobOpenParam;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 
 import java.util.List;
 
@@ -88,5 +89,11 @@ public interface SysQuartzJobService extends IService<SysQuartzJob> {
      * @return {@link Boolean}
      */
     Result<Boolean> runJobNow(Long jobId);
+
+    /**
+     * @param jobOpenParam
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> open(JobOpenParam jobOpenParam);
 
 }

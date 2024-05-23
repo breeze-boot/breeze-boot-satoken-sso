@@ -3,7 +3,7 @@
 
 <mapper namespace="com.breeze.boot.modules.system.mapper.SysLogMapper">
 
-    <resultMap id="sysLogResultMap" type="com.breeze.boot.modules.system.domain.SysLog">
+    <resultMap id="sysLogResultMap" type="com.breeze.boot.modules.system.model.entity.SysLog">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="systemModule" column="system_module" jdbcType="VARCHAR"/>
         <result property="logTitle" column="log_title" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
         TRUNCATE TABLE sys_log;
     </update>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.system.domain.SysLog">
+    <select id="listPage" resultType="com.breeze.boot.modules.system.model.entity.SysLog">
         SELECT id,
         system_module,
         log_title,

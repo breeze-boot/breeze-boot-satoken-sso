@@ -18,8 +18,8 @@ package com.breeze.boot.modules.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysDictItem;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.query.DictItemQuery;
 import com.breeze.boot.modules.system.mapper.SysDictItemMapper;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +43,12 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     /**
      * 字典列表项
      *
-     * @param dictQuery 字典查询
+     * @param dictItemQuery 字典项查询
      * @return {@link List}<{@link SysDictItem}>
      */
     @Override
-    public List<SysDictItem> listDictItem(DictQuery dictQuery) {
-        return this.baseMapper.listDictDetailByDictId(dictQuery.getId());
+    public List<SysDictItem> listDictItem(DictItemQuery dictItemQuery) {
+        return this.baseMapper.listDictDetailByDictId(dictItemQuery.getDictId());
     }
 
     /**

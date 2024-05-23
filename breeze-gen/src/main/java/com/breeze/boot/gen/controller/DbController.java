@@ -16,18 +16,21 @@
 
 package com.breeze.boot.gen.controller;
 
-import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
-import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.breeze.boot.gen.dto.DataSourceDTO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.gen.domain.Table;
+import com.breeze.boot.gen.domain.param.TableParam;
+import com.breeze.boot.gen.service.DbService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.sql.DataSource;
-import java.util.Set;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * db控制器
@@ -39,18 +42,25 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class DbController {
 
-    private final DataSource dataSource;
+    private final DbService dbService;
 
-    private final DefaultDataSourceCreator defaultDataSourceCreator;
+    /**
+     * 列表
+     */
+    @Operation(summary = "列表")
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('auth:user:list')")
+    public Result<IPage<Table>> list(TableParam tableParam) {
+        return Result.ok(dbService.listPage(tableParam));
+    }
 
-    @PostMapping("/addSource")
-    public Set<String> addSource(@RequestBody DataSourceDTO dataSourceDTO) {
-        DataSourceProperty dataSourceProperty = new DataSourceProperty();
-        BeanUtils.copyProperties(dataSourceDTO, dataSourceProperty);
-        DynamicRoutingDataSource source = (DynamicRoutingDataSource) dataSource;
-        DataSource dataSource = defaultDataSourceCreator.createDataSource(dataSourceProperty);
-        source.addDataSource(dataSourceDTO.getPoolName(), dataSource);
-        return source.getDataSources().keySet();
+    /**
+     * /**
+     * 生成代码
+     */
+    @RequestMapping("/gen")
+    public void code(List<String> tables, HttpServletResponse response) throws IOException {
+        byte[] data = dbService.generatorCode(tables);
     }
 
 }

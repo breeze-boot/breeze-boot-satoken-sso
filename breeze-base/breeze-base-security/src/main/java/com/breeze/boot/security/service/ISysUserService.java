@@ -18,8 +18,8 @@ package com.breeze.boot.security.service;
 
 import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.params.AuthLoginParam;
-import com.breeze.boot.security.params.WxLoginParam;
+import com.breeze.boot.security.model.params.AuthLoginParam;
+import com.breeze.boot.security.model.params.WxLoginParam;
 
 /**
  * 系统用户服务

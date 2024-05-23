@@ -21,9 +21,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.domain.SysTenant;
-import com.breeze.boot.modules.auth.domain.query.TenantQuery;
+import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.service.SysTenantService;
+import com.breeze.boot.modules.system.model.entity.SysTenant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,6 +67,19 @@ public class SysTenantController {
     @PreAuthorize("hasAnyAuthority('auth:tenant:list')")
     public Result<IPage<SysTenant>> list(TenantQuery tenantQuery) {
         return Result.ok(this.sysTenantService.listPage(tenantQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param tenantId 租户id
+     * @return {@link Result}<{@link SysTenant}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{tenantId}")
+    @PreAuthorize("hasAnyAuthority('auth:tenant:info')")
+    public Result<SysTenant> info(@PathVariable("tenantId") Long tenantId) {
+        return Result.ok(this.sysTenantService.getById(tenantId));
     }
 
     /**

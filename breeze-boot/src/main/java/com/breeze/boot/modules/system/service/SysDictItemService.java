@@ -18,8 +18,8 @@ package com.breeze.boot.modules.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysDictItem;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.query.DictItemQuery;
 
 import java.util.List;
 import java.util.Map;
@@ -35,10 +35,10 @@ public interface SysDictItemService extends IService<SysDictItem> {
     /**
      * 字典列表项
      *
-     * @param dictQuery 字典查询
+     * @param dictItemQuery 字典项查询
      * @return {@link List}<{@link SysDictItem}>
      */
-    List<SysDictItem> listDictItem(DictQuery dictQuery);
+    List<SysDictItem> listDictItem(DictItemQuery dictItemQuery);
 
     /**
      * 查询字典通过类型代码

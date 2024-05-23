@@ -58,6 +58,12 @@ public class SysQuartzJobLog implements Serializable {
     private String jobName;
 
     /**
+     * 任务ID
+     */
+    @Schema(description = "任务DI")
+    private Long jobId;
+
+    /**
      * 任务组名
      */
     @Schema(description = "任务组名")
@@ -85,7 +91,7 @@ public class SysQuartzJobLog implements Serializable {
      * 执行结果 0 失败 1 成功
      */
     @Schema(description = "执行结果 0 失败 1 成功")
-    private Integer jobStatus;
+    private Integer jobResult;
 
     /**
      * 异常信息

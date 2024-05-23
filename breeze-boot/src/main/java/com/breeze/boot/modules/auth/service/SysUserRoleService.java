@@ -17,8 +17,8 @@
 package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.SysUserRole;
+import com.breeze.boot.modules.auth.model.entity.SysRole;
+import com.breeze.boot.modules.auth.model.entity.SysUserRole;
 
 import java.util.List;
 

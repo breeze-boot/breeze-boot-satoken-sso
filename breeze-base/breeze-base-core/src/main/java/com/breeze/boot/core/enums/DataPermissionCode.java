@@ -16,6 +16,8 @@
 
 package com.breeze.boot.core.enums;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -30,26 +32,57 @@ public enum DataPermissionCode {
     /**
      * 全部
      */
-    ALL("ALL", "全部"),
+    ALL("ALL", "全部", 1),
 
     /**
      * 本级部门
      */
-    DEPT_LEVEL("DEPT_LEVEL", "部门范围权限"),
+    DEPT_LEVEL("DEPT_LEVEL", "部门范围权限", 2),
+
+    /**
+     * 本级部门以及子部门
+     */
+    SUB_DEPT_LEVEL("SUB_DEPT_LEVEL", "本级部门以及子部门", 3),
 
     /**
      * 个人
      */
-    OWN("OWN", "个人");
+    OWN("OWN", "个人", 4),
+
+    /**
+     * 自定义
+     */
+    CUSTOMIZES("CUSTOMIZES", "自定义", 9999);
 
     /**
      * 编码
      */
+    @Getter
     private final String code;
 
     /**
      * 描述
      */
+    @Getter
     private final String desc;
 
+    /**
+     * 级别
+     */
+    @Getter
+    private final Integer level;
+
+
+    /**
+     * @param permissionCode 权限编码
+     * @return {@link Boolean}
+     */
+    public static Boolean checkInEnum(String permissionCode) {
+        for (DataPermissionCode value : DataPermissionCode.values()) {
+            if (StrUtil.equals(value.name(), permissionCode)) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
 }

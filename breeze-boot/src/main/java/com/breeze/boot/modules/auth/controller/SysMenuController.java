@@ -20,8 +20,8 @@ import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.auth.domain.SysMenu;
-import com.breeze.boot.modules.auth.domain.query.MenuQuery;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -81,12 +81,13 @@ public class SysMenuController {
 
     /**
      * 树形权限列表
+     * <p>
+     * 不加权限标识
      *
      * @return {@link Result}
      */
     @Operation(summary = "树形权限列表")
     @GetMapping("/listTreePermission")
-    @PreAuthorize("hasAnyAuthority('auth:menu:list')")
     public Result<List<Tree<Long>>> listTreePermission() {
         return this.sysMenuService.listTreePermission();
     }

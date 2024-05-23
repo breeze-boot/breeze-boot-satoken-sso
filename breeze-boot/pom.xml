@@ -179,6 +179,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-ureport</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

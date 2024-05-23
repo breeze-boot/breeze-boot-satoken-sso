@@ -20,9 +20,11 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.enums.DataPermissionCode;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.mybatis.annotation.BreezeDataPermission;
@@ -66,18 +68,19 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
-        if (name == null) {
+        if (Objects.isNull(name)) {
             log.error("[未登录，获取不到登录名]");
             throw new SystemServiceException(ResultCode.UN_LOGIN);
         }
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
         Cache cache = cacheManager.getCache(LOGIN_USER);
         if (Objects.isNull(cache)) {
+            log.error("[混村不存在用户信息:{}]", name);
             throw new AccessDeniedException("用户未登录");
         }
         BaseLoginUser currentUser = cache.get(name, BaseLoginUser.class);
-        if (currentUser == null) {
-            log.error("[登录名称对应的用户信息不存在]");
+        if (Objects.isNull(currentUser)) {
+            log.error("[登录名称对应的用户信息不存在:{}]", name);
             throw new SystemServiceException(ResultCode.UN_LOGIN);
         }
         return currentUser;
@@ -109,9 +112,9 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         String originalSql = boundSql.getSql();
 
         // 采用判断方法注解方式进行数据权限
-        Class<?> clazz = Class.forName(ms.getId().substring(0, ms.getId().lastIndexOf(".")));
+        Class<?> clazz = Class.forName(ms.getId().substring(0, ms.getId().lastIndexOf(StringPool.DOT)));
         // 获取方法名
-        String methodName = ms.getId().substring(ms.getId().lastIndexOf(".") + 1);
+        String methodName = ms.getId().substring(ms.getId().lastIndexOf(StringPool.DOT) + 1);
         Method[] methods = clazz.getMethods();
         // 遍历类的方法
         for (Method method : methods) {
@@ -147,16 +150,23 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             });
         }
         String column = String.join(", ", columns);
-        String permissions = currentUser.getPermissions();
-        if (StrUtil.isAllBlank(permissions)) {
-            // 无论注解设置什么，没有配置权限就不查询出任何数据
-            originalSql = String.format("SELECT %s FROM (%s) temp WHERE 1 = 2", column, originalSql);
-        } else if (StrUtil.isNotBlank(dataPer.own().getColumn())) {
+        // 获取当前用户的数据权限
+        String permissionCode = currentUser.getPermission().getPermissionCode();
+        if (StrUtil.equals(DataPermissionCode.ALL.getCode(), permissionCode)) {
+            // 所有
+            return originalSql;
+        } else if (StrUtil.equals(DataPermissionCode.DEPT_LEVEL.getCode(), permissionCode)) {
+            // 所在部门范围权限
+            originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s = %s", columns, originalSql, dataPer.dept().getColumn(), currentUser.getDeptId());
+        } else if (StrUtil.equals(DataPermissionCode.SUB_DEPT_LEVEL.getCode(), permissionCode)) {
+            // 本级部门以及子部门
+            originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s = %s", column, originalSql, dataPer.own().getColumn(), currentUser.getDeptId());
+        }  else if (StrUtil.equals(DataPermissionCode.OWN.getCode(), permissionCode)) {
             // 个人范围权限
             originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s = '%s'", column, originalSql, dataPer.own().getColumn(), currentUser.getId());
-        } else if (StrUtil.isNotBlank(dataPer.scope().getColumn())) {
-            // 部门范围权限
-            originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s IN (%s)", columns, originalSql, dataPer.scope().getColumn(), permissions);
+        } else if (StrUtil.equals(DataPermissionCode.CUSTOMIZES.getCode(), permissionCode)) {
+            // 自定义权限
+            originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s IN (%s)", column, originalSql, dataPer.Customize().getColumn(), permissionCode);
         }
         return originalSql;
     }

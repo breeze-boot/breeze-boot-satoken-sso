@@ -26,7 +26,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.breeze.boot.core.enums.ResultCode.TOKEN_INVALID;
 
@@ -39,6 +40,22 @@ import static com.breeze.boot.core.enums.ResultCode.TOKEN_INVALID;
 @Slf4j
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+    private static final Map<String, ResultCode> errorCodeMap = new HashMap<>();
+
+    static {
+        errorCodeMap.put("invalid_grant", ResultCode.exception(TOKEN_INVALID,"Invalid grant"));
+        errorCodeMap.put("invalid_request", ResultCode.exception(TOKEN_INVALID,"Invalid request"));
+        errorCodeMap.put("invalid_token", TOKEN_INVALID); // 假设TOKEN_INVALID是一个已经定义好的ResultCode
+        errorCodeMap.put("unauthorized_client", ResultCode.exception(TOKEN_INVALID,"Unauthorized client"));
+        errorCodeMap.put("unsupported_grant_type", ResultCode.exception(TOKEN_INVALID,"Unsupported grant type"));
+        errorCodeMap.put("invalid_scope", ResultCode.exception(TOKEN_INVALID,"Invalid scope"));
+        errorCodeMap.put("invalid_client", ResultCode.exception(TOKEN_INVALID,"Invalid client"));
+        errorCodeMap.put("access_denied", ResultCode.exception(TOKEN_INVALID,"Access denied"));
+        errorCodeMap.put("invalid_redirect_uri", ResultCode.exception(TOKEN_INVALID,"Invalid redirect URI"));
+        errorCodeMap.put("invalid_code", ResultCode.exception(TOKEN_INVALID,"Invalid code"));
+        errorCodeMap.put("invalid_refresh_token", ResultCode.exception(TOKEN_INVALID,"Invalid refresh token"));
+    }
+
     /**
      * 在身份验证失败
      *
@@ -50,13 +67,14 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
         if (exception instanceof OAuth2AuthenticationException) {
             OAuth2Error errorMsg = ((OAuth2AuthenticationException) exception).getError();
-            log.error("[校验 {}] ", errorMsg.getDescription(), exception);
-            if (Objects.equals(errorMsg.getErrorCode(), "invalid_grant")) {
-                ResponseUtil.response(response, ResultCode.TOKEN_INVALID);
-            }
-            // 使用系统中的错误码
-            ResponseUtil.response(response, ResultCode.exception(errorMsg.getDescription()));
+            // 完善日志记录，添加错误代码
+            log.error("[校验 {} - {}] ", errorMsg.getErrorCode(), errorMsg.getDescription(), exception);
+
+            // 使用映射关系来简化错误处理逻辑
+            ResultCode resultCode = errorCodeMap.getOrDefault(errorMsg.getErrorCode(), ResultCode.exception(errorMsg.getDescription()));
+            ResponseUtil.response(response, resultCode);
         }
     }
+
 
 }

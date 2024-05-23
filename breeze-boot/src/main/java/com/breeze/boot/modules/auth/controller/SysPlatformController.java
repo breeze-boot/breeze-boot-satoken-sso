@@ -22,11 +22,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.auth.domain.SysMenu;
-import com.breeze.boot.modules.system.domain.SysPlatform;
-import com.breeze.boot.modules.auth.domain.query.PlatformQuery;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.query.PlatformQuery;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysPlatformService;
+import com.breeze.boot.modules.system.model.entity.SysPlatform;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,6 +75,19 @@ public class SysPlatformController {
     @PreAuthorize("hasAnyAuthority('auth:platform:list')")
     public Result<Page<SysPlatform>> list(PlatformQuery platformQuery) {
         return Result.ok(this.sysPlatformService.listPage(platformQuery));
+    }
+
+    /**
+     * 详情
+     *
+     * @param platformId 平台id
+     * @return {@link Result}<{@link SysPlatform}>
+     */
+    @Operation(summary = "详情")
+    @GetMapping("/info/{platformId}")
+    @PreAuthorize("hasAnyAuthority('auth:platform:info')")
+    public Result<SysPlatform> info(@PathVariable("platformId") Long platformId) {
+        return Result.ok(this.sysPlatformService.getById(platformId));
     }
 
     /**

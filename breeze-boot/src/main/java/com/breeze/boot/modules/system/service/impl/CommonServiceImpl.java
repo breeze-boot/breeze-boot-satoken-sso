@@ -19,28 +19,27 @@ package com.breeze.boot.modules.system.service.impl;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.breeze.boot.core.enums.DataPermissionCode;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysMenu;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.system.domain.SysPlatform;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.system.domain.params.FileParam;
-import com.breeze.boot.modules.auth.domain.query.DeptQuery;
-import com.breeze.boot.modules.system.service.*;
+import com.breeze.boot.modules.system.model.entity.SysPlatform;
+import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.service.CommonService;
+import com.breeze.boot.modules.system.service.MateService;
+import com.breeze.boot.modules.system.service.SysFileService;
 import com.google.common.collect.Maps;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CoreConstants.ROOT;
@@ -98,7 +97,7 @@ public class CommonServiceImpl implements CommonService {
     /**
      * 数据权限服务
      */
-    private final SysPermissionService permissionService;
+    private final SysRowPermissionService permissionService;
 
     /**
      * 文件服务
@@ -162,15 +161,14 @@ public class CommonServiceImpl implements CommonService {
     }
 
     /**
-     * 用户下拉框
+     * 用户列表
      *
+     * @param deptId 部门ID
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Override
-    @Operation(summary = "用户下拉框", description = "下拉框接口")
-    @GetMapping("/selectUser")
-    public Result<List<SysUser>> selectUser() {
-        return Result.ok(this.userService.list());
+    public Result<List<SysUser>> listUser(Long deptId) {
+        return Result.ok(this.userService.list(Wrappers.<SysUser>lambdaQuery().eq(Objects.nonNull(deptId), SysUser::getDeptId, deptId)));
     }
 
     /**
@@ -211,10 +209,10 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Result<List<Map<String, Object>>> selectPost() {
         return Result.ok(this.postService.list().stream().map(post -> {
-            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", post.getId());
-            tenantMap.put("label", post.getPostName());
-            return tenantMap;
+            Map<@Nullable String, @Nullable Object> postMap = Maps.newHashMap();
+            postMap.put("value", post.getId());
+            postMap.put("label", post.getPostName());
+            return postMap;
         }).collect(Collectors.toList()));
     }
 
@@ -235,8 +233,8 @@ public class CommonServiceImpl implements CommonService {
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Override
-    public Result<List<Map<String, Object>>> selectColumn(String tableName) {
-        return Result.ok(this.mateService.selectColumn(tableName));
+    public Result<List<Map<String, Object>>> selectTableColumn(String tableName) {
+        return Result.ok(this.mateService.selectTableColumn(tableName));
     }
 
     /**
@@ -246,6 +244,24 @@ public class CommonServiceImpl implements CommonService {
      */
     @Override
     public Result<List<Map<String, Object>>> selectPermission() {
+        return Result.ok(Arrays.stream(DataPermissionCode.values()).map(permission -> {
+            Map<@Nullable String, @Nullable Object> permissionMap = Maps.newHashMap();
+            permissionMap.put("value", permission.getCode());
+            permissionMap.put("label", permission.getDesc());
+            if (StrUtil.equals(DataPermissionCode.CUSTOMIZES.getCode(), permission.getCode())) {
+                permissionMap.put("flag", Boolean.TRUE);
+            }
+            return permissionMap;
+        }).collect(Collectors.toList()));
+    }
+
+    /**
+     * 数据权限下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Override
+    public Result<List<Map<String, Object>>> selectCustomizePermission() {
         return Result.ok(this.permissionService.list().stream().map(permission -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
             tenantMap.put("value", permission.getId());
@@ -253,7 +269,6 @@ public class CommonServiceImpl implements CommonService {
             return tenantMap;
         }).collect(Collectors.toList()));
     }
-
     /**
      * 上传minio s3
      *
@@ -282,5 +297,10 @@ public class CommonServiceImpl implements CommonService {
                                                           HttpServletRequest request,
                                                           HttpServletResponse response) {
         return this.sysFileService.uploadLocalStorage(fileParam, request, response);
+    }
+
+    @Override
+    public void download(Long fileId, HttpServletResponse response) {
+        this.sysFileService.download(fileId, response);
     }
 }

@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.mapper.SysQuartzJobLogMapper;
-import com.breeze.boot.quartz.query.JobQuery;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import org.springframework.stereotype.Service;
 

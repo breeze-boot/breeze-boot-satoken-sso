@@ -19,9 +19,10 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.query.RoleQuery;
+import com.breeze.boot.modules.auth.model.entity.SysRole;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.params.RoleParam;
+import com.breeze.boot.modules.auth.model.query.RoleQuery;
 
 import java.util.List;
 import java.util.Set;
@@ -35,20 +36,20 @@ import java.util.Set;
 public interface SysRoleService extends IService<SysRole> {
 
     /**
-     * 用户角色列表
-     *
-     * @param userId 用户ID
-     * @return {@link List}<{@link SysRole}>
-     */
-    Set<UserRole> listRoleByUserId(Long userId);
-
-    /**
      * 列表页面
      *
      * @param roleQuery 角色查询
      * @return {@link Page}<{@link SysRole}>
      */
     Page<SysRole> listPage(RoleQuery roleQuery);
+
+    /**
+     * 用户角色列表
+     *
+     * @param userId 用户ID
+     * @return {@link List}<{@link SysRole}>
+     */
+    Set<UserRole> listRoleByUserId(Long userId);
 
     /**
      * 删除由ids
@@ -65,6 +66,22 @@ public interface SysRoleService extends IService<SysRole> {
      * @return {@link Result}<{@link List}<{@link Long}>>
      */
     List<Long> listUserRoles(Long userId);
+
+    /**
+     * 修改
+     *
+     * @param roleParam 角色参数
+     * @return {@link Boolean}
+     */
+    Result<Boolean> updateRoleById(RoleParam roleParam);
+
+    /**
+     * 保存
+     *
+     * @param roleParam 角色参数
+     * @return {@link Boolean}
+     */
+    Result<Boolean> saveRole(RoleParam roleParam);
 
 }
 

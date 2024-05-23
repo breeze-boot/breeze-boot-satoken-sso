@@ -40,11 +40,16 @@ public @interface BreezeDataPermission {
     /**
      * 范围权限字段名称
      */
-    DataRole scope() default DataRole.DEPT_ID;
+    DataRole dept() default DataRole.DEPT_ID;
 
     /**
      * 个人权限字段名称
      */
     DataRole own() default DataRole.USER_ID;
+
+    /**
+     * 自定义权限字段名称
+     */
+    DataRole Customize() default DataRole.CUSTOMIZE_USER_ID;
 
 }

@@ -17,13 +17,13 @@
 package com.breeze.boot.modules.auth.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.system.domain.SysPlatform;
-import com.breeze.boot.modules.auth.domain.query.PlatformQuery;
+import com.breeze.boot.modules.auth.model.query.PlatformQuery;
 import com.breeze.boot.modules.auth.mapper.SysPlatformMapper;
 import com.breeze.boot.modules.auth.service.SysPlatformService;
+import com.breeze.boot.modules.system.model.entity.SysPlatform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,10 +48,11 @@ public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPl
     @Override
     public Page<SysPlatform> listPage(PlatformQuery platformQuery) {
         Page<SysPlatform> platformEntityPage = new Page<>(platformQuery.getCurrent(), platformQuery.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
-                .like(StrUtil.isAllNotBlank(platformQuery.getPlatformName()), SysPlatform::getPlatformCode, platformQuery.getPlatformName())
-                .like(StrUtil.isAllNotBlank(platformQuery.getPlatformCode()), SysPlatform::getPlatformCode, platformQuery.getPlatformCode())
-                .page(platformEntityPage);
+        QueryWrapper<SysPlatform> queryWrapper = new QueryWrapper<>();
+        platformQuery.getSortQueryWrapper(queryWrapper);
+        queryWrapper.like(StrUtil.isAllNotBlank(platformQuery.getPlatformName()), "platform_name", platformQuery.getPlatformName())
+                .like(StrUtil.isAllNotBlank(platformQuery.getPlatformCode()), "platform_code", platformQuery.getPlatformCode());
+        return this.page(platformEntityPage, queryWrapper);
     }
 
     /**

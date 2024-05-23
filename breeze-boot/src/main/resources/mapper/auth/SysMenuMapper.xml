@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysMenuMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.domain.SysMenu" id="sysMenuMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysMenu" id="sysMenuMap">
         <id property="id" column="id"/>
         <result property="platformId" column="platform_id"/>
         <result property="title" column="title"/>
@@ -35,7 +35,7 @@
         </foreach>
     </select>
 
-    <select id="listMenu" resultType="com.breeze.boot.modules.auth.domain.SysMenu">
+    <select id="listMenu" resultType="com.breeze.boot.modules.auth.model.entity.SysMenu">
         SELECT
         a.id,
         a.name,
@@ -68,7 +68,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="selectMenusByRoleId" resultType="com.breeze.boot.modules.auth.domain.SysMenu">
+    <select id="selectMenusByRoleId" resultType="com.breeze.boot.modules.auth.model.entity.SysMenu">
         SELECT
         b.id,
         b.platform_id,
@@ -83,14 +83,13 @@
         b.hidden,
         b.href,
         b.permission,
-        b.sort,
-        b.i18n
+        b.sort
         FROM
         sys_role_menu AS a
         LEFT JOIN sys_menu AS b ON a.menu_id = b.id
         LEFT JOIN sys_platform AS c ON c.id = b.platform_id
         <where>
-            <if test="roleIds == null">
+            <if test="roleIds == null and roleIds.length == 0">
                 AND 1 != 1
             </if>
             AND c.platform_code = #{platformCode}
@@ -101,9 +100,6 @@
             </foreach>
             AND b.is_delete = 0
             AND c.is_delete = 0
-            <if test="i18n != null and i18n != ''">
-                AND b.i18n = #{i18n}
-            </if>
         </where>
         ORDER BY b.sort
     </select>

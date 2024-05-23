@@ -19,9 +19,9 @@ package com.breeze.boot.modules.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.domain.SysDict;
-import com.breeze.boot.modules.system.domain.params.DictOpenParam;
-import com.breeze.boot.modules.system.domain.query.DictQuery;
+import com.breeze.boot.modules.system.model.entity.SysDict;
+import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.query.DictQuery;
 
 import java.util.List;
 

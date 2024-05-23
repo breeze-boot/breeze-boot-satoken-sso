@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.breeze.boot.modules.flow.mapper.ActRuExecutionMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.flow.domain.ActRuExecution">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.flow.model.entity.ActRuExecution">
         <id property="id" column="ID_" jdbcType="VARCHAR"/>
         <result property="rev" column="REV_" jdbcType="INTEGER"/>
         <result property="procInstId" column="PROC_INST_ID_" jdbcType="VARCHAR"/>
@@ -46,7 +46,7 @@
         <result property="businessStatus" column="BUSINESS_STATUS_" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.flow.domain.vo.ProcessInstanceVO">
+    <select id="listPage" resultType="com.breeze.boot.modules.flow.model.vo.ProcessInstanceVO">
         SELECT RES.ID_              AS id,
                RES.PROC_INST_ID_    AS procInstId,
                RES.BUSINESS_KEY_    AS businessKey,

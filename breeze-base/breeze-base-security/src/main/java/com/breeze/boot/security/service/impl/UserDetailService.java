@@ -18,7 +18,7 @@ package com.breeze.boot.security.service.impl;
 
 import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.security.domain.UserPrincipal;
+import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.ISysUserService;
 import com.breeze.boot.security.service.IUserDetailService;
 import lombok.RequiredArgsConstructor;

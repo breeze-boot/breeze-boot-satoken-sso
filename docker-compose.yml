@@ -137,8 +137,8 @@ services:
       - "5672:5672" # 管理界面ui端口
       - "25672:25672" # server间内部通信口
     volumes:
-      - ./rabbitmq/data:/var/lib/rabbitmq
-      - ./rabbitmq/log:/var/log/rabbitmq/log
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/log:/var/log/rabbitmq/log
     #环境变量
     environment:
       RABBITMQ_DEFAULT_VHOST: /
@@ -152,4 +152,4 @@ services:
 networks:
   breeze-net:
     # 如果要创建外部隔离的覆盖网络，您可以将此internal选项设置为true
-    external: false
+    external: true

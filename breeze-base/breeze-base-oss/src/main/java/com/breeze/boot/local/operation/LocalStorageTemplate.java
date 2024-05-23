@@ -104,29 +104,38 @@ public class LocalStorageTemplate {
     }
 
     /**
-     * 下载
+     * 从服务器下载指定路径的文件。
      *
-     * @param path     路径
-     * @param fileName 文件名称
-     * @param response 响应
+     * @param path     文件在服务器上的绝对路径。
+     * @param fileName 下载时显示的文件名称。
+     * @param response HTTP响应对象，用于将文件内容发送至客户端并触发浏览器下载。
+     * @throws SystemServiceException 当指定路径的文件在服务器上不存在时抛出异常。
      */
     @SneakyThrows
     public void download(String path, String fileName, HttpServletResponse response) {
+        // 获取指定路径的文件对象
         File file = this.getFile(path);
+        // 检查文件是否存在，若不存在则抛出异常
         if (!file.exists()) {
             throw new SystemServiceException(ResultCode.FILE_NOT_FOUND);
         }
-        response.setCharacterEncoding("utf-8");
+
+        // 设置HTTP响应的相关属性以支持文件下载
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(ContentType.getContentType(fileName));
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
+
         try (FileInputStream fis = new FileInputStream(file)) {
+            // 获取HTTP响应的输出流
             OutputStream os = response.getOutputStream();
+            // 将文件内容复制到HTTP响应的输出流中，从而实现文件下载
             IoUtil.copy(fis, os);
         } catch (Exception e) {
-            log.error("[下载失败]", e);
+            // 记录下载过程中出现的异常信息
+            log.error("[文件下载失败]", e);
         }
     }
+
 
     /**
      * @param path 路径 + 名称

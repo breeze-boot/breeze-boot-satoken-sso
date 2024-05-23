@@ -47,7 +47,7 @@ public class SecurityUtils {
     public static BaseLoginUser getCurrentUser() {
         String name = getName();
         if (StrUtil.isAllBlank(name)) {
-            throw new SystemServiceException(ResultCode.INSUFFICIENT_AUTHENTICATION);
+            throw new SystemServiceException(ResultCode.UN_LOGIN);
         }
         CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
         Cache cache = cacheManager.getCache(LOGIN_USER);

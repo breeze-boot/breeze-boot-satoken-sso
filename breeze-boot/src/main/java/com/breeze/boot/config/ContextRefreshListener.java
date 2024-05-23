@@ -19,7 +19,7 @@ package com.breeze.boot.config;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.breeze.boot.modules.system.domain.SysDb;
+import com.breeze.boot.modules.system.model.entity.SysDb;
 import com.breeze.boot.modules.system.service.SysDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;

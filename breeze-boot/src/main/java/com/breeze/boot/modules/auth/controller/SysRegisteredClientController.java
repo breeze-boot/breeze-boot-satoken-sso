@@ -20,11 +20,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.auth.domain.SysRegisteredClient;
-import com.breeze.boot.modules.auth.domain.params.RegisteredClientParam;
-import com.breeze.boot.modules.auth.domain.params.ResetClientSecretParam;
-import com.breeze.boot.modules.auth.domain.query.RegisteredClientQuery;
-import com.breeze.boot.modules.auth.domain.vo.RegisteredClientVO;
+import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
+import com.breeze.boot.modules.auth.model.params.RegisteredClientParam;
+import com.breeze.boot.modules.auth.model.params.ResetClientSecretParam;
+import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
+import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -77,6 +77,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "通过clientId获取客户端")
     @GetMapping("/info/{clientId}")
+    @PreAuthorize("hasAnyAuthority('auth:client:info')")
     public Result<RegisteredClientVO> info(@PathVariable("clientId") Long clientId) {
         return Result.ok(this.registeredClientService.info(clientId));
     }

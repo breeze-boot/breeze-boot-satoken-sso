@@ -19,8 +19,8 @@ package com.breeze.boot.modules.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.log.bo.SysLogBO;
-import com.breeze.boot.modules.system.domain.SysLog;
-import com.breeze.boot.modules.system.domain.query.LogQuery;
+import com.breeze.boot.modules.system.model.entity.SysLog;
+import com.breeze.boot.modules.system.model.query.LogQuery;
 
 /**
  * 系统日志服务

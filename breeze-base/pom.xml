@@ -30,6 +30,7 @@
         <module>breeze-flowable-ui-bom</module>
         <module>breeze-base-sap-interface</module>
         <module>breeze-base-anji-captcha</module>
+        <module>breeze-base-ureport</module>
     </modules>
 
 </project>

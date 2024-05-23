@@ -18,9 +18,9 @@
 package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.auth.domain.SysRegisteredClient;
-import com.breeze.boot.modules.auth.domain.query.RegisteredClientQuery;
-import com.breeze.boot.modules.auth.domain.vo.RegisteredClientVO;
+import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
+import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
+import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

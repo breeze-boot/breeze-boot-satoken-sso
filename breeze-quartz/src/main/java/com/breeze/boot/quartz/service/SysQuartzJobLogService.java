@@ -19,7 +19,7 @@ package com.breeze.boot.quartz.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.quartz.domain.SysQuartzJobLog;
-import com.breeze.boot.quartz.query.JobQuery;
+import com.breeze.boot.quartz.domain.query.JobQuery;
 
 import java.util.List;
 

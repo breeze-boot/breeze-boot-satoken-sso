@@ -18,8 +18,8 @@ package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.auth.domain.query.UserQuery;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -58,5 +58,13 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      * @return {@link List}<{@link SysUser}>
      */
     List<SysUser> listAllUser();
+
+    /**
+     * 获取用户通过角色
+     *
+     * @param roleCode 角色编码
+     * @return {@link List }<{@link SysUser }>
+     */
+    List<SysUser> listUserByRole(String roleCode);
 
 }

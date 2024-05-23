@@ -18,8 +18,8 @@ package com.breeze.boot.modules.system.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.system.domain.params.FileParam;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.system.model.params.FileParam;
 import com.breeze.boot.modules.system.service.CommonService;
 import com.breeze.boot.security.annotation.JumpAuth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -92,14 +93,15 @@ public class CommonController {
     }
 
     /**
-     * 用户下拉框
+     * 用户列表
      *
-     * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
+     * @param deptId 部门ID
+     * @return {@link Result}<{@link List}<{@link SysUser}>>
      */
     @Operation(summary = "用户下拉框", description = "下拉框接口")
-    @GetMapping("/selectUser")
-    public Result<List<SysUser>> selectUser() {
-        return this.commonService.selectUser();
+    @GetMapping("/listUser")
+    public Result<List<SysUser>> listUser(@RequestParam(value = "deptId" ,required = false) Long deptId) {
+        return this.commonService.listUser(deptId);
     }
 
     /**
@@ -154,9 +156,9 @@ public class CommonController {
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Operation(summary = "字段下拉框", description = "下拉框接口")
-    @GetMapping("/selectColumn")
-    public Result<List<Map<String, Object>>> selectColumn(@RequestParam("tableName") String tableName) {
-        return this.commonService.selectColumn(tableName);
+    @GetMapping("/selectTableColumn")
+    public Result<List<Map<String, Object>>> selectTableColumn(@RequestParam("tableName") String tableName) {
+        return this.commonService.selectTableColumn(tableName);
     }
 
     /**
@@ -168,6 +170,17 @@ public class CommonController {
     @GetMapping("/selectPermission")
     public Result<List<Map<String, Object>>> selectPermission() {
         return this.commonService.selectPermission();
+    }
+
+    /**
+     * 数据权限下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Operation(summary = "数据权限下拉框", description = "下拉框接口")
+    @GetMapping("/selectCustomizePermission")
+    public Result<List<Map<String, Object>>> selectCustomizePermission() {
+        return this.commonService.selectCustomizePermission();
     }
 
     /**
@@ -201,4 +214,18 @@ public class CommonController {
                                         HttpServletResponse response) {
         return this.commonService.uploadLocalStorage(fileParam, request, response);
     }
+
+    /**
+     * 下载
+     *
+     * @param fileId     文件标识
+     * @param response   响应
+     */
+    @Operation(summary = "文件下载")
+    @GetMapping("/download")
+    public void download(@NotNull(message = "参数不能为空") Long fileId,
+                         HttpServletResponse response) {
+        this.commonService.download(fileId, response);
+    }
+
 }

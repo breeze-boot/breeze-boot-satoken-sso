@@ -19,5 +19,6 @@ package com.breeze.boot.modules;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BreezeBootApplicationTests {
+public class BreezeBootApplicationTests {
+
 }

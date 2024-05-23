@@ -19,31 +19,35 @@ package com.breeze.boot.modules.auth.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.enums.DataPermissionCode;
 import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.propertise.AesSecretProperties;
+import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysDept;
-import com.breeze.boot.modules.auth.domain.SysRole;
-import com.breeze.boot.modules.auth.domain.SysUser;
-import com.breeze.boot.modules.auth.domain.SysUserRole;
-import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.system.domain.*;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.params.UserOpenParam;
-import com.breeze.boot.modules.auth.domain.params.UserResetParam;
-import com.breeze.boot.modules.auth.domain.params.UserRolesParam;
-import com.breeze.boot.modules.auth.domain.query.UserQuery;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.entity.*;
+import com.breeze.boot.modules.auth.model.params.UserOpenParam;
+import com.breeze.boot.modules.auth.model.params.UserResetParam;
+import com.breeze.boot.modules.auth.model.params.UserRolesParam;
+import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
-import com.breeze.boot.modules.system.service.*;
+import com.breeze.boot.modules.auth.service.*;
+import com.breeze.boot.modules.system.model.entity.SysPost;
+import com.breeze.boot.modules.system.service.SysFileService;
 import com.breeze.boot.security.exception.AccessException;
-import com.breeze.boot.security.params.AuthLoginParam;
-import com.breeze.boot.security.params.WxLoginParam;
+import com.breeze.boot.security.model.params.AuthLoginParam;
+import com.breeze.boot.security.model.params.WxLoginParam;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,10 +55,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -108,7 +109,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 系统角色数据权限服务
      */
-    private final SysRolePermissionService sysRolePermissionService;
+    private final SysRoleRowPermissionService sysRoleRowPermissionService;
+
+    /**
+     * 系统角色字段级数据权限服务
+     */
+    private final SysRoleColumnPermissionService sysRoleColumnPermissionService;
 
     /**
      * 缓存
@@ -199,7 +205,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Boolean reset(UserResetParam userResetParam) {
-        userResetParam.setPassword(this.passwordEncoder.encode(userResetParam.getPassword()));
+        AesSecretProperties aesSecretProperties = SpringUtil.getBean(AesSecretProperties.class);
+        userResetParam.setPassword(this.passwordEncoder.encode(AesUtil.decryptStr(userResetParam.getPassword(), aesSecretProperties.getAesSecret())));
         return this.update(Wrappers.<SysUser>lambdaUpdate()
                 .set(SysUser::getPassword, userResetParam.getPassword()).eq(SysUser::getId, userResetParam.getId()));
     }
@@ -230,12 +237,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Result<Boolean> setRole(UserRolesParam userRolesParam) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userRolesParam.getUsername()));
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, userRolesParam.getUserId()));
         if (Objects.isNull(sysUser)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
-        List<SysUserRole> collect = userRolesParam.getRoleId().stream().map(roleId ->
+        List<SysUserRole> collect = userRolesParam.getRoleIds().stream().map(roleId ->
                 SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()
         ).collect(Collectors.toList());
         this.sysUserRoleService.saveBatch(collect);
@@ -259,7 +266,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
         sysUser.setDeptName(Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).orElseGet(SysDept::new).getDeptName());
         sysUser.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
-        sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
+        if (StrUtil.isBlank(sysUser.getAvatar())) {
+            sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
+        }
         sysUser.setSysRoles(roleList);
         return Result.ok(sysUser);
     }
@@ -313,8 +322,38 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         try {
             EasyExcelExport.export(response, "用户数据", "用户数据", userList, SysUser.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("导出用户数据失败", e);
         }
+    }
+
+    /**
+     * 查询部门用户
+     *
+     * @param deptId 部门ID
+     * @return {@link List}<{@link SysUser}>
+     */
+    @Override
+    public List<SysUser> listDeptsUser(Long deptId) {
+        List<Long> deptIdList = this.sysDeptService.listDeptByParentId(deptId);
+        if (CollUtil.isEmpty(deptIdList)) {
+            throw new SystemServiceException(ResultCode.EXCEPTION);
+        }
+        if (CollUtil.isNotEmpty(deptIdList)) {
+            return this.list(Wrappers.<SysUser>lambdaQuery()
+                    .in(SysUser::getDeptId, deptIdList));
+        }
+        return Lists.newArrayList();
+    }
+
+    /**
+     * 获取用户通过角色
+     *
+     * @param roleCode 角色编码
+     * @return {@link List }<{@link SysUser }>
+     */
+    @Override
+    public List<SysUser> listUserByRole(String roleCode) {
+        return this.baseMapper.listUserByRole(roleCode);
     }
 
     /**
@@ -409,28 +448,73 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link BaseLoginUser}
      */
     public BaseLoginUser buildLoginUserInfo(SysUser sysUser) {
-        BaseLoginUser baseLoginUser = new BaseLoginUser();
-        BeanUtil.copyProperties(sysUser, baseLoginUser);
-        // 获取部门名称
-        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> baseLoginUser.setDeptName(sysDept.getDeptName()));
-        // 查询 用户的角色
-        Set<UserRole> userRoleSet = this.sysRoleService.listRoleByUserId(sysUser.getId());
-        if (CollUtil.isNotEmpty(userRoleSet)) {
-            baseLoginUser.setAuthorities(this.sysMenuService.listUserMenuPermission(userRoleSet));
+        BaseLoginUser loginUser = new BaseLoginUser();
+        try {
+            BeanUtil.copyProperties(sysUser, loginUser);
+            // 获取部门名称
+            Optional.ofNullable(sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
+
+            // 查询用户的角色
+            Set<UserRole> userRoleSet = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId()))
+                    .orElse(Collections.emptySet());
+            if (CollUtil.isEmpty(userRoleSet)) {
+                throw new SystemServiceException(ResultCode.EXCEPTION);
+            }
+
+            loginUser.setAuthorities(sysMenuService.listUserMenuPermission(userRoleSet));
             // 角色CODE
-            baseLoginUser.setUserRoleCodes(userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet()));
+            loginUser.setUserRoleCodes(userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet()));
             // 角色ID
-            Set<Long> roleIdSet = userRoleSet.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
-            baseLoginUser.setUserRoleIds(roleIdSet);
+            Set<Long> roleIds = userRoleSet.stream().map(UserRole::getRoleId).filter(Objects::nonNull).collect(Collectors.toSet());
+            loginUser.setUserRoleIds(Optional.of(roleIds).orElse(Collections.emptySet()));
+
             // 用户的多个数据权限
-            List<SysPermission> permissionList = this.sysRolePermissionService.listRolePermissionByRoleIds(roleIdSet);
-            if (CollUtil.isNotEmpty(permissionList)) {
-                baseLoginUser.setPermissions(permissionList.stream().map(SysPermission::getPermissions).collect(Collectors.joining(", ")));
+            Set<Long> roleIdSet = userRoleSet.stream()
+                    .filter(permission -> StrUtil.equals(permission.getPermissionCode(), DataPermissionCode.CUSTOMIZES.getCode()))
+                    .map(UserRole::getRoleId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            String permissions = Optional.ofNullable(sysRoleRowPermissionService.listRowPermissionData(roleIdSet))
+                    .orElse(Collections.emptyList()).stream()
+                    .map(SysRowPermission::getPermissions)
+                    .flatMap(Collection::stream)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+
+            List<SysRoleColumnPermission> sysRoleColumnPermissions = Optional.ofNullable(sysRoleColumnPermissionService.listRoleColumnExcludeData(roleIdSet))
+                    .orElse(Collections.emptyList());
+            loginUser.setPermission(BaseLoginUser.BasePermission.builder()
+                    .permissionCode(getMaxPermissionScope(userRoleSet))
+                    .permissions(permissions)
+                    .excludeColumn(Optional.of(sysRoleColumnPermissions.stream().map(SysRoleColumnPermission::getColumnName).collect(Collectors.toSet())).orElse(Collections.emptySet()))
+                    .build());
+            // 异步保存至Redis
+            redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUser, 24L, TimeUnit.HOURS);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return loginUser;
+    }
+
+
+    private String getMaxPermissionScope(Set<UserRole> userRoleSet) {
+        Set<String> permissionCodes = userRoleSet.stream()
+                .map(UserRole::getPermissionCode)
+                // 确保过滤掉null值，避免NullPointerException
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        // 初始化resultSet，避免使用@Nullable注解
+        Set<DataPermissionCode> resultSet = Sets.newHashSet();
+        // 遍历DataPermissionCode枚举，匹配权限
+        for (DataPermissionCode value : DataPermissionCode.values()) {
+            if (permissionCodes.contains(value.getCode())) {
+                resultSet.add(value);
             }
         }
-        // 保存redis
-        this.redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), baseLoginUser, 24L, TimeUnit.HOURS);
-        return baseLoginUser;
+        return resultSet.stream().min(Comparator.comparingInt(DataPermissionCode::getLevel))
+                .map(DataPermissionCode::toString)
+                .orElse("");
     }
 }
 

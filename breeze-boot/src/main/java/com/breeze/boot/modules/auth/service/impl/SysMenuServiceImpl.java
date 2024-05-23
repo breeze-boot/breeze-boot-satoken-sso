@@ -25,10 +25,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.domain.SysMenu;
-import com.breeze.boot.modules.auth.domain.SysRoleMenu;
-import com.breeze.boot.modules.auth.domain.dto.UserRole;
-import com.breeze.boot.modules.auth.domain.query.MenuQuery;
+import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
+import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.modules.auth.mapper.SysMenuMapper;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
@@ -86,7 +86,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         // 查询角色下的菜单信息
-        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode, i18n);
+        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
         return Result.ok(this.buildTrees(menuList, ROOT));
     }
 
