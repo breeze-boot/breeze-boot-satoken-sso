@@ -42,7 +42,7 @@ import java.util.Arrays;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/log")
+@RequestMapping("/sys/v1/log")
 @Tag(name = "系统日志管理模块", description = "SysLogController")
 public class SysLogController {
 

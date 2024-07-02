@@ -44,7 +44,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/msgUser")
+@RequestMapping("/sys/v1/msgUser")
 @Tag(name = "系统用户消息管理模块", description = "SysUserMsgController")
 public class SysMsgUserController {
 

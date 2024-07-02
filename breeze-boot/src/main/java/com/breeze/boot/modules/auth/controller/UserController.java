@@ -36,7 +36,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    @RequestMapping("/userInfo")
+    @RequestMapping("/auth/v1/userInfo")
     @ResponseBody
     public List<Map<String, Object>> userInfo() {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());

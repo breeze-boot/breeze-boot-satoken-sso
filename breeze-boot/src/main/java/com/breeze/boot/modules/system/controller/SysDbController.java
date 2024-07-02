@@ -43,7 +43,7 @@ import java.util.Arrays;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/db")
+@RequestMapping("/sys/v1/db")
 @Tag(name = "", description = "SysDbController")
 public class SysDbController {
 

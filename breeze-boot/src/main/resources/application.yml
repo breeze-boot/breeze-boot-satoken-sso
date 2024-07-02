@@ -159,6 +159,7 @@ breeze:
   # xss过滤路径
   xss:
     ignore-urls:
+
   # 日志拦截开关
   log:
     enable: true

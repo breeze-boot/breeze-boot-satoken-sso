@@ -46,7 +46,7 @@
         <result property="businessStatus" column="BUSINESS_STATUS_" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.flow.model.vo.ProcessInstanceVO">
+    <select id="listPage" resultType="com.breeze.boot.modules.flow.model.vo.FlowInstanceVO">
         SELECT RES.ID_              AS id,
                RES.PROC_INST_ID_    AS procInstId,
                RES.BUSINESS_KEY_    AS businessKey,

@@ -50,7 +50,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/platform")
+@RequestMapping("/auth/v1/platform")
 @Tag(name = "系统平台管理模块", description = "SysPlatformController")
 public class SysPlatformController {
 

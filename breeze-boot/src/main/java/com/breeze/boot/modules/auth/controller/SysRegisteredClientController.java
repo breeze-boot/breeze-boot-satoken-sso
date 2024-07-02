@@ -47,7 +47,7 @@ import java.util.Arrays;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/client")
+@RequestMapping("/auth/v1/client")
 @Tag(name = "auth客户端注册模块", description = "AuthRegisteredClientController")
 public class SysRegisteredClientController {
 

@@ -19,10 +19,10 @@ package com.breeze.boot.modules.flow.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.flow.domain.ActRuExecution;
-import com.breeze.boot.modules.flow.domain.query.ProcessInstanceQuery;
-import com.breeze.boot.modules.flow.domain.vo.ProcessInstanceVO;
 import com.breeze.boot.modules.flow.mapper.ActRuExecutionMapper;
+import com.breeze.boot.modules.flow.model.entity.ActRuExecution;
+import com.breeze.boot.modules.flow.model.query.FlowInstanceQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowInstanceVO;
 import com.breeze.boot.modules.flow.service.ActRuExecutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,13 +40,13 @@ public class ActRuExecutionServiceImpl extends ServiceImpl<ActRuExecutionMapper,
     /**
      * 列表页面
      *
-     * @param processInstanceQuery 流程实例查询
-     * @return {@link Page}<{@link ProcessInstanceVO}>
+     * @param flowInstanceQuery 流程实例查询
+     * @return {@link Page}<{@link FlowInstanceVO}>
      */
     @DS("flowable")
     @Override
-    public Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery) {
-        return this.baseMapper.listPage(new Page<>(processInstanceQuery.getCurrent(), processInstanceQuery.getSize()), processInstanceQuery);
+    public Page<FlowInstanceVO> listPage(FlowInstanceQuery flowInstanceQuery) {
+        return this.baseMapper.listPage(new Page<>(flowInstanceQuery.getCurrent(), flowInstanceQuery.getSize()), flowInstanceQuery);
     }
 
 }

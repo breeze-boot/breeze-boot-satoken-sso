@@ -49,7 +49,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/permission")
+@RequestMapping("/auth/v1/permission")
 @Tag(name = "系统数据权限管理模块", description = "SysPermissionController")
 public class SysRowPermissionController {
 

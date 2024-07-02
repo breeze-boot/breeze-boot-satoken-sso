@@ -140,7 +140,7 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
         // refresh_token和authId的关系维护
         Optional.ofNullable(authorization.getRefreshToken()).ifPresent(token -> {
             String refresh2OAuthKey = REFRESH_OAUTH + token.getToken().getTokenValue();
-            redisOperations.opsForValue().set(refresh2OAuthKey, authorizationId, ttl.refreshTokenTtl.getSeconds(), TimeUnit.SECONDS);
+            redisOperations.opsForValue().set(refresh2OAuthKey, authorizationId, ttl.refreshTokenTtl.getSeconds() + 1000, TimeUnit.SECONDS);
             correlcationsHashSet.add(refresh2OAuthKey);
         });
         //

@@ -30,9 +30,8 @@ import java.lang.annotation.*;
 @BaseFilter
 @Inherited
 @Documented
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @ConditionalOnWebApplication
 public @interface JumpXss {
-
 }

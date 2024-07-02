@@ -17,8 +17,8 @@
 package com.breeze.boot.modules.flow.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.flow.domain.ActReProcdef;
 import com.breeze.boot.modules.flow.mapper.ActReProcdefMapper;
+import com.breeze.boot.modules.flow.model.entity.ActReProcdef;
 import com.breeze.boot.modules.flow.service.ActReProcdefService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

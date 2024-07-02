@@ -46,7 +46,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/post")
+@RequestMapping("/auth/v1/post")
 @Tag(name = "系统岗位管理模块", description = "SysPostController")
 public class SysPostController {
 

@@ -43,7 +43,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/menu")
+@RequestMapping("/auth/v1/menu")
 @Tag(name = "系统菜单管理模块", description = "SysMenuController")
 public class SysMenuController {
 

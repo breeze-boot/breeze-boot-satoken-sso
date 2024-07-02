@@ -41,7 +41,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/job")
+@RequestMapping("/sys/v1/job")
 public class QuartzJobController {
 
     /**

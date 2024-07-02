@@ -18,9 +18,9 @@ package com.breeze.boot.modules.flow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.flow.domain.ActRuExecution;
-import com.breeze.boot.modules.flow.domain.query.ProcessInstanceQuery;
-import com.breeze.boot.modules.flow.domain.vo.ProcessInstanceVO;
+import com.breeze.boot.modules.flow.model.entity.ActRuExecution;
+import com.breeze.boot.modules.flow.model.query.FlowInstanceQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowInstanceVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,9 +37,9 @@ public interface ActRuExecutionMapper extends BaseMapper<ActRuExecution> {
      * 列表页面
      *
      * @param page                 页面
-     * @param processInstanceQuery 流程实例查询
-     * @return {@link Page}<{@link ProcessInstanceVO}>
+     * @param flowInstanceQuery 流程实例查询
+     * @return {@link Page}<{@link FlowInstanceVO}>
      */
-    Page<ProcessInstanceVO> listPage(Page<ProcessInstanceVO> page, @Param("processInstanceQuery") ProcessInstanceQuery processInstanceQuery);
+    Page<FlowInstanceVO> listPage(Page<FlowInstanceVO> page, @Param("processInstanceQuery") FlowInstanceQuery flowInstanceQuery);
 
 }

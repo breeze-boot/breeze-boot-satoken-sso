@@ -19,10 +19,10 @@ package com.breeze.boot.modules.flow.service.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.flow.domain.ActReDeployment;
-import com.breeze.boot.modules.flow.domain.query.ProcessDeploymentQuery;
-import com.breeze.boot.modules.flow.domain.vo.DeploymentVO;
 import com.breeze.boot.modules.flow.mapper.ActReDeploymentMapper;
+import com.breeze.boot.modules.flow.model.entity.ActReDeployment;
+import com.breeze.boot.modules.flow.model.query.FlowDeploymentQuery;
+import com.breeze.boot.modules.flow.model.vo.DefinitionVO;
 import com.breeze.boot.modules.flow.service.ActReDeploymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,13 +40,18 @@ public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMappe
     /**
      * 列表页面
      *
-     * @param processDeploymentQuery 流程部署查询
-     * @return {@link Page}<{@link DeploymentVO}>
+     * @param flowDeploymentQuery 流程部署查询
+     * @return {@link Page}<{@link DefinitionVO}>
      */
     @DS("flowable")
     @Override
-    public Page<DeploymentVO> listPage(ProcessDeploymentQuery processDeploymentQuery) {
-        return this.baseMapper.listPage(new Page<>(processDeploymentQuery.getCurrent(), processDeploymentQuery.getSize()), processDeploymentQuery);
+    public Page<DefinitionVO> listPage(FlowDeploymentQuery flowDeploymentQuery) {
+        return this.baseMapper.listPage(new Page<>(flowDeploymentQuery.getCurrent(), flowDeploymentQuery.getSize()), flowDeploymentQuery);
+    }
+
+    @Override
+    public DefinitionVO getInfo(String definitionId) {
+        return this.baseMapper.getInfo(definitionId);
     }
 
 }

@@ -18,9 +18,9 @@ package com.breeze.boot.modules.flow.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.flow.domain.ActRuExecution;
-import com.breeze.boot.modules.flow.domain.query.ProcessInstanceQuery;
-import com.breeze.boot.modules.flow.domain.vo.ProcessInstanceVO;
+import com.breeze.boot.modules.flow.model.entity.ActRuExecution;
+import com.breeze.boot.modules.flow.model.query.FlowInstanceQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowInstanceVO;
 
 /**
  * 流程执行实例服务
@@ -33,9 +33,9 @@ public interface ActRuExecutionService extends IService<ActRuExecution> {
     /**
      * 列表页面
      *
-     * @param processInstanceQuery 流程实例查询
-     * @return {@link Page}<{@link ProcessInstanceVO}>
+     * @param flowInstanceQuery 流程实例查询
+     * @return {@link Page}<{@link FlowInstanceVO}>
      */
-    Page<ProcessInstanceVO> listPage(ProcessInstanceQuery processInstanceQuery);
+    Page<FlowInstanceVO> listPage(FlowInstanceQuery flowInstanceQuery);
 
 }

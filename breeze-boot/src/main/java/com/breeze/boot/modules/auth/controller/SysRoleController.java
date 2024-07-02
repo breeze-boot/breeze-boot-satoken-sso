@@ -52,7 +52,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/role")
+@RequestMapping("/auth/v1/role")
 @Tag(name = "系统角色管理模块", description = "SysRoleController")
 public class SysRoleController {
 

@@ -18,8 +18,8 @@ package com.breeze.boot.modules.flow.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.flow.domain.ProcessCategory;
-import com.breeze.boot.modules.flow.domain.query.ProcessCategoryQuery;
+import com.breeze.boot.modules.flow.model.entity.FlowCategory;
+import com.breeze.boot.modules.flow.model.query.FlowCategoryQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -31,15 +31,15 @@ import org.apache.ibatis.annotations.Param;
  * @since 2023-03-06
  */
 @Mapper
-public interface ProcessCategoryMapper extends BreezeBaseMapper<ProcessCategory> {
+public interface ProcessCategoryMapper extends BreezeBaseMapper<FlowCategory> {
 
     /**
      * 列表页面
      *
      * @param page     页面
      * @param category 类别
-     * @return {@link IPage}<{@link ProcessCategory}>
+     * @return {@link IPage}<{@link FlowCategory}>
      */
-    IPage<ProcessCategory> listPage(Page<ProcessCategory> page, @Param("category") ProcessCategoryQuery category);
+    IPage<FlowCategory> listPage(Page<FlowCategory> page, @Param("category") FlowCategoryQuery category);
 
 }

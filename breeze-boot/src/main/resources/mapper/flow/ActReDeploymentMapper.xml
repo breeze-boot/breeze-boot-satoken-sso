@@ -25,10 +25,10 @@
         ENGINE_VERSION_
     </sql>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.flow.model.vo.DeploymentVO">
+    <select id="listPage" resultType="com.breeze.boot.modules.flow.model.vo.DefinitionVO">
         SELECT RES.ID_                   AS id,
-               RES.NAME_                 AS name,
-               RES.KEY_                  AS `key`,
+               RES.NAME_                 AS definitionName,
+               RES.KEY_                  AS `definitionKey`,
                RES.TENANT_ID_            AS tenantId,
                RES.DEPLOY_TIME_          AS deploymentTime,
                RES.DERIVED_FROM_         AS derivedFrom,
@@ -39,10 +39,32 @@
                DEF.VERSION_              AS version,
                DEF.SUSPENSION_STATE_     AS suspended
         FROM act_re_deployment AS RES
-                 LEFT JOIN process_category AS cate
-                           ON RES.CATEGORY_ = cate.id
+                 LEFT JOIN flow_category AS cate ON RES.CATEGORY_ = cate.category_code
                  LEFT JOIN act_re_procdef AS DEF ON RES.ID_ = DEF.DEPLOYMENT_ID_
         WHERE DEF.VERSION_ = (SELECT max(VERSION_) FROM ACT_RE_PROCDEF WHERE KEY_ = RES.KEY_)
+        ORDER BY RES.ID_ ASC
+    </select>
+
+    <select id="getInfo" resultType="com.breeze.boot.modules.flow.model.vo.DefinitionVO">
+        SELECT RES.ID_                   AS id,
+               RES.NAME_                 AS definitionName,
+               RES.KEY_                  AS `definitionKey`,
+               RES.TENANT_ID_            AS tenantId,
+               RES.DEPLOY_TIME_          AS deploymentTime,
+               RES.DERIVED_FROM_         AS derivedFrom,
+               RES.DERIVED_FROM_ROOT_    AS derivedFromRoot,
+               RES.PARENT_DEPLOYMENT_ID_ AS parentDeploymentId,
+               RES.ENGINE_VERSION_       AS engineVersion,
+               cate.category_code        AS categoryCode,
+               cate.category_name        AS categoryName,
+               DEF.VERSION_              AS version,
+               DEF.SUSPENSION_STATE_     AS suspended
+        FROM act_re_deployment AS RES
+                 LEFT JOIN flow_category AS cate
+                           ON RES.CATEGORY_ = cate.category_code
+                 LEFT JOIN act_re_procdef AS DEF ON RES.ID_ = DEF.DEPLOYMENT_ID_
+        WHERE DEF.VERSION_ = (SELECT max(VERSION_) FROM ACT_RE_PROCDEF WHERE KEY_ = RES.KEY_)
+          AND RES.ID_ = #{definitionId}
         ORDER BY RES.ID_ ASC
     </select>
 

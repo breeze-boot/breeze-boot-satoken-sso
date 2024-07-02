@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.flow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.breeze.boot.modules.flow.domain.ActReProcdef;
+import com.breeze.boot.modules.flow.model.entity.ActReProcdef;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

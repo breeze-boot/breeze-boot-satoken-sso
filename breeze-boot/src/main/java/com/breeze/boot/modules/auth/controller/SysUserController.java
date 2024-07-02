@@ -54,7 +54,7 @@ import java.util.Objects;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/user")
+@RequestMapping("/auth/v1/user")
 @Tag(name = "系统用户管理模块", description = "SysUserController")
 public class SysUserController {
 

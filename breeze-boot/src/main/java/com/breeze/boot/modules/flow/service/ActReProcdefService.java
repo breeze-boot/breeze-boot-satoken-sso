@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.flow.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.flow.domain.ActReProcdef;
+import com.breeze.boot.modules.flow.model.entity.ActReProcdef;
 
 /**
  * 流程文件资源服务

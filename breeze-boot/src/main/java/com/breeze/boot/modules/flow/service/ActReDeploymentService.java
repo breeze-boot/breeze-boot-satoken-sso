@@ -18,9 +18,9 @@ package com.breeze.boot.modules.flow.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.flow.domain.ActReDeployment;
-import com.breeze.boot.modules.flow.domain.query.ProcessDeploymentQuery;
-import com.breeze.boot.modules.flow.domain.vo.DeploymentVO;
+import com.breeze.boot.modules.flow.model.entity.ActReDeployment;
+import com.breeze.boot.modules.flow.model.query.FlowDeploymentQuery;
+import com.breeze.boot.modules.flow.model.vo.DefinitionVO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,9 +35,17 @@ public interface ActReDeploymentService extends IService<ActReDeployment> {
     /**
      * 列表页面
      *
-     * @param processDeploymentQuery 流程部署查询
-     * @return {@link Page}<{@link DeploymentVO}>
+     * @param flowDeploymentQuery 流程部署查询
+     * @return {@link Page}<{@link DefinitionVO}>
      */
-    Page<DeploymentVO> listPage(ProcessDeploymentQuery processDeploymentQuery);
+    Page<DefinitionVO> listPage(FlowDeploymentQuery flowDeploymentQuery);
+
+    /**
+     * 详情
+     *
+     * @param definitionId 定义id
+     * @return {@link DefinitionVO }
+     */
+    DefinitionVO getInfo(String definitionId);
 
 }

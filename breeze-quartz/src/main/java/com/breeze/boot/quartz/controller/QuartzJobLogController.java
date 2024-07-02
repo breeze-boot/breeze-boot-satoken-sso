@@ -39,7 +39,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/jLog")
+@RequestMapping(value = "/sys/v1/jLog")
 public class QuartzJobLogController {
 
     /**

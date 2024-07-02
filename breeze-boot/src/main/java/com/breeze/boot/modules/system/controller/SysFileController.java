@@ -47,7 +47,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/file")
+@RequestMapping("/sys/v1/file")
 @Tag(name = "系统文件管理模块", description = "SysFileController")
 public class SysFileController {
 

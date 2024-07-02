@@ -18,9 +18,9 @@ package com.breeze.boot.modules.flow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.flow.domain.ActReDeployment;
-import com.breeze.boot.modules.flow.domain.query.ProcessDeploymentQuery;
-import com.breeze.boot.modules.flow.domain.vo.DeploymentVO;
+import com.breeze.boot.modules.flow.model.entity.ActReDeployment;
+import com.breeze.boot.modules.flow.model.query.FlowDeploymentQuery;
+import com.breeze.boot.modules.flow.model.vo.DefinitionVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,9 +37,17 @@ public interface ActReDeploymentMapper extends BaseMapper<ActReDeployment> {
      * 列表页面
      *
      * @param page                   页面
-     * @param processDeploymentQuery 流程部署查询
-     * @return {@link Page}<{@link DeploymentVO}>
+     * @param flowDeploymentQuery 流程部署查询
+     * @return {@link Page}<{@link DefinitionVO}>
      */
-    Page<DeploymentVO> listPage(Page<DeploymentVO> page, @Param("processDeploymentQuery") ProcessDeploymentQuery processDeploymentQuery);
+    Page<DefinitionVO> listPage(Page<DefinitionVO> page, @Param("processDeploymentQuery") FlowDeploymentQuery flowDeploymentQuery);
+
+    /**
+     * 详情
+     *
+     * @param definitionId 定义id
+     * @return {@link DefinitionVO }
+     */
+    DefinitionVO getInfo(String definitionId);
 
 }

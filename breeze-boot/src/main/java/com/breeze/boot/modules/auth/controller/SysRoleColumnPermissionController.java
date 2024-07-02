@@ -42,7 +42,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping("/columnPermission")
+@RequestMapping("/auth/v1/columnPermission")
 @Tag(name = "系统列字段权限管理模块", description = "SysColumnPermissionController")
 public class SysRoleColumnPermissionController {
 
