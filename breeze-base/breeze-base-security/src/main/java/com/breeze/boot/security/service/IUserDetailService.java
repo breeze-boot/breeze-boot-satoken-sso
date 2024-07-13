@@ -35,6 +35,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.breeze.boot.core.constants.CoreConstants.PARAM;
+
 /**
  * 用户服务接口
  *
@@ -117,12 +119,12 @@ public interface IUserDetailService extends UserDetailsService {
     default void getTenantId(ServletRequestAttributes requestAttributes) {
         assert requestAttributes != null;
         HttpServletRequest contextRequest = requestAttributes.getRequest();
-        String tenantIdHeader = contextRequest.getHeader("X-TENANT-ID");
+        String tenantIdHeader = contextRequest.getHeader(PARAM);
         if (StrUtil.isAllNotBlank(tenantIdHeader)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdHeader));
             return;
         }
-        String tenantIdParam = contextRequest.getParameter("X-TENANT-ID");
+        String tenantIdParam = contextRequest.getParameter(PARAM);
         if (StrUtil.isAllNotBlank(tenantIdParam)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdParam));
             return;

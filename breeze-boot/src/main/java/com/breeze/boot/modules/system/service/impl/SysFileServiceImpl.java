@@ -29,7 +29,7 @@ import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.local.operation.LocalStorageTemplate;
 import com.breeze.boot.modules.system.model.entity.SysFile;
-import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.model.query.FileQuery;
 import com.breeze.boot.modules.system.mapper.SysFileMapper;
 import com.breeze.boot.modules.system.service.SysFileService;
@@ -92,16 +92,16 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     /**
      * 将文件上传至Minio S3存储服务，并保存文件信息到数据库。
      *
-     * @param fileParam 包含待上传文件详细信息的对象，其中`file`字段为实际待上传的文件实体。
+     * @param fileForm 包含待上传文件详细信息的对象，其中`file`字段为实际待上传的文件实体。
      * @param request   HTTP请求对象，用于获取上传文件的MIME类型信息。
      * @param response  HTTP响应对象，本次方法调用中未使用。
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @SneakyThrows
     @Override
-    public Result<Map<String, Object>> uploadMinioS3(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Map<String, Object>> uploadMinioS3(FileForm fileForm, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = Maps.newHashMap();
-        MultipartFile file = fileParam.getFile();
+        MultipartFile file = fileForm.getFile();
         LocalDate now = LocalDate.now();
 
         // 获取并验证文件原始名称
@@ -128,8 +128,8 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                     .name(originalFilename)
                     .objectName(objectName)
                     .path(objectName)
-                    .bizId(fileParam.getBizId())
-                    .bizType(fileParam.getBizType())
+                    .bizId(fileForm.getBizId())
+                    .bizType(fileForm.getBizType())
                     .format(extractFileFormat(originalFilename))
                     .contentType(request.getContentType())
                     .bucket(SYSTEM_BUCKET_NAME)
@@ -155,15 +155,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     /**
      * 将本地存储的文件上传到服务器，并保存相关文件信息至数据库。
      *
-     * @param fileParam 包含待上传文件详细信息的对象，其中`file`字段为实际待上传的文件。
+     * @param fileForm 包含待上传文件详细信息的对象，其中`file`字段为实际待上传的文件。
      * @param request   HTTP请求对象，用于获取上传文件的MIME类型信息。
      * @param response  HTTP响应对象，本次方法调用中未使用。
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Override
-    public Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Map<String, Object>> uploadLocalStorage(FileForm fileForm, HttpServletRequest request, HttpServletResponse response) {
         // 获取上传文件的原始名称
-        String originalFilename = fileParam.getFile().getOriginalFilename();
+        String originalFilename = fileForm.getFile().getOriginalFilename();
         // 生成基于当前日期和UUID的独特文件存储路径
         LocalDate now = LocalDate.now();
         String objectName = String.valueOf(now.getYear()) + now.getMonthOfYear() + now.getDayOfMonth() + IdUtil.simpleUUID() + "/" + originalFilename;
@@ -171,15 +171,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         Assert.notNull(originalFilename, "文件名不能为空");
 
         // 执行文件上传至本地存储并获取服务器上的存储路径
-        String path = this.localStorageTemplate.uploadFile(fileParam.getFile(), objectName, originalFilename);
+        String path = this.localStorageTemplate.uploadFile(fileForm.getFile(), objectName, originalFilename);
         log.debug("[上传文件路径]：{}", path);
 
         // 创建SysFile实体以记录文件信息到数据库
         SysFile sysFile = SysFile.builder()
                 .name(originalFilename)
                 .objectName(objectName)
-                .bizId(fileParam.getBizId())
-                .bizType(fileParam.getBizType())
+                .bizId(fileForm.getBizId())
+                .bizType(fileForm.getBizType())
                 .format(extractFileFormat(originalFilename))
                 .contentType(request.getContentType())
                 .bucket(SYSTEM_BUCKET_NAME)

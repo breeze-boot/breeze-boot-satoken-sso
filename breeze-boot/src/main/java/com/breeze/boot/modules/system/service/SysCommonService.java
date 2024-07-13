@@ -19,7 +19,7 @@ package com.breeze.boot.modules.system.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
-import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.form.FileForm;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -118,24 +118,24 @@ public interface SysCommonService {
     /**
      * 文件上传到minio
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
-    Result<Map<String, Object>> uploadMinioS3(FileParam fileParam,
+    Result<Map<String, Object>> uploadMinioS3(FileForm fileForm,
                                               HttpServletRequest request,
                                               HttpServletResponse response);
 
     /**
      * 文件上传到本地存储
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link ?}>
      */
-    Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam,
+    Result<Map<String, Object>> uploadLocalStorage(FileForm fileForm,
                                                    HttpServletRequest request,
                                                    HttpServletResponse response);
 

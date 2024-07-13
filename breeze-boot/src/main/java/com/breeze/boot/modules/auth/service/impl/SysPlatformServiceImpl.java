@@ -20,14 +20,15 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.auth.model.query.PlatformQuery;
 import com.breeze.boot.modules.auth.mapper.SysPlatformMapper;
+import com.breeze.boot.modules.auth.model.entity.SysPlatform;
+import com.breeze.boot.modules.auth.model.form.PlatformForm;
+import com.breeze.boot.modules.auth.model.mappers.SysPlatformMapStruct;
+import com.breeze.boot.modules.auth.model.query.PlatformQuery;
+import com.breeze.boot.modules.auth.model.vo.PlatformVO;
 import com.breeze.boot.modules.auth.service.SysPlatformService;
-import com.breeze.boot.modules.system.model.entity.SysPlatform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 系统平台服务impl
@@ -39,31 +40,60 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SysPlatformServiceImpl extends ServiceImpl<SysPlatformMapper, SysPlatform> implements SysPlatformService {
 
+    private final SysPlatformMapStruct sysPlatformMapStruct;
+
     /**
      * 列表页面
      *
      * @param platformQuery 平台查询
-     * @return {@link Page}<{@link SysPlatform}>
+     * @return {@link Page}<{@link PlatformVO}>
      */
     @Override
-    public Page<SysPlatform> listPage(PlatformQuery platformQuery) {
+    public Page<PlatformVO> listPage(PlatformQuery platformQuery) {
         Page<SysPlatform> platformEntityPage = new Page<>(platformQuery.getCurrent(), platformQuery.getSize());
         QueryWrapper<SysPlatform> queryWrapper = new QueryWrapper<>();
         platformQuery.getSortQueryWrapper(queryWrapper);
         queryWrapper.like(StrUtil.isAllNotBlank(platformQuery.getPlatformName()), "platform_name", platformQuery.getPlatformName())
                 .like(StrUtil.isAllNotBlank(platformQuery.getPlatformCode()), "platform_code", platformQuery.getPlatformCode());
-        return this.page(platformEntityPage, queryWrapper);
+        Page<SysPlatform> page = this.page(platformEntityPage, queryWrapper);
+        return this.sysPlatformMapStruct.page2PageVO(page);
     }
 
     /**
-     * 批量保存
+     * 详情
      *
-     * @param platformQueryList 平台查询List
-     * @return {@link Boolean}
+     * @param platformId 平台id
+     * @return {@link PlatformVO }
      */
     @Override
-    public Boolean saveAllBatch(List<PlatformQuery> platformQueryList) {
-        return Boolean.TRUE;
+    public PlatformVO getInfoById(Long platformId) {
+        SysPlatform sysPlatform = this.getById(platformId);
+        return this.sysPlatformMapStruct.entity2VO(sysPlatform);
+    }
+
+    /**
+     * 保存平台
+     *
+     * @param platformForm 平台形式
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean savePlatform(PlatformForm platformForm) {
+        return this.save(sysPlatformMapStruct.form2Entity(platformForm));
+    }
+
+    /**
+     * 修改平台
+     *
+     * @param id           ID
+     * @param platformForm 平台形式
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyPlatform(Long id, PlatformForm platformForm) {
+        SysPlatform sysPlatform = sysPlatformMapStruct.form2Entity(platformForm);
+        sysPlatform.setId(id);
+        return this.updateById(sysPlatform);
     }
 
 }

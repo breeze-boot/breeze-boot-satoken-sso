@@ -21,12 +21,13 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
-import com.breeze.boot.modules.auth.model.params.RegisteredClientParam;
-import com.breeze.boot.modules.auth.model.params.ResetClientSecretParam;
+import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
+import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -78,36 +79,37 @@ public class SysRegisteredClientController {
     @Operation(summary = "通过clientId获取客户端")
     @GetMapping("/info/{clientId}")
     @PreAuthorize("hasAnyAuthority('auth:client:info')")
-    public Result<RegisteredClientVO> info(@PathVariable("clientId") Long clientId) {
+    public Result<RegisteredClientVO> info(@Parameter(description = "客户端ID") @PathVariable("clientId") Long clientId) {
         return Result.ok(this.registeredClientService.info(clientId));
     }
 
     /**
      * 保存
      *
-     * @param registeredClientParam 注册客户端参数
+     * @param registeredClientForm 注册客户端表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('auth:client:create')")
     @BreezeSysLog(description = "客户端信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
-        return this.registeredClientService.saveRegisteredClient(registeredClientParam);
+    public Result<Boolean> save(@Valid @RequestBody RegisteredClientForm registeredClientForm) {
+        return this.registeredClientService.saveRegisteredClient(registeredClientForm);
     }
 
     /**
      * 修改
      *
-     * @param registeredClientParam 注册客户端参数
+     * @param registeredClientForm 注册客户端参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('auth:client:modify')")
     @BreezeSysLog(description = "客户端信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody RegisteredClientParam registeredClientParam) {
-        return Result.ok(this.registeredClientService.update(registeredClientParam));
+    public Result<Boolean> modify(@Parameter(description = "客户端ID") @PathVariable Long id,
+                                  @Valid @RequestBody RegisteredClientForm registeredClientForm) {
+        return Result.ok(this.registeredClientService.modifyRegisteredClient(id, registeredClientForm));
     }
 
     /**
@@ -120,21 +122,22 @@ public class SysRegisteredClientController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('auth:client:delete')")
     @BreezeSysLog(description = "客户端信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        return this.registeredClientService.deleteById(Arrays.asList(ids));
+    public Result<Boolean> delete(@Parameter(description = "客户端IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+        return Result.ok(this.registeredClientService.removeBatchByIds(Arrays.asList(ids)));
     }
 
     /**
      * 重置密钥
      *
-     * @param resetClientSecretParam 重置客户端密钥
+     * @param resetClientSecretForm 重置客户端密钥
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "重置密钥")
     @PutMapping("/resetClientSecret")
     @PreAuthorize("hasAnyAuthority('auth:client:resetClientSecret')")
     @BreezeSysLog(description = "重置密钥", type = LogType.EDIT)
-    public Result<Boolean> resetClientSecret(@Valid @RequestBody ResetClientSecretParam resetClientSecretParam) {
-        return Result.ok(this.registeredClientService.resetClientSecretParam(resetClientSecretParam));
+    public Result<Boolean> resetClientSecret(@Valid @RequestBody ResetClientSecretForm resetClientSecretForm) {
+        return Result.ok(this.registeredClientService.resetClientSecret(resetClientSecretForm));
     }
+
 }

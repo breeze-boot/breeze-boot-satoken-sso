@@ -18,11 +18,10 @@ package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.form.PostForm;
 import com.breeze.boot.modules.auth.model.query.PostQuery;
-
-import java.util.List;
+import com.breeze.boot.modules.auth.model.vo.PostVO;
 
 /**
  * 系统岗位服务
@@ -36,16 +35,33 @@ public interface SysPostService extends IService<SysPost> {
      * 列表页面
      *
      * @param postQuery 岗位查询
-     * @return {@link IPage}<{@link SysPost}>
+     * @return {@link IPage}<{@link PostVO}>
      */
-    IPage<SysPost> listPage(PostQuery postQuery);
+    IPage<PostVO> listPage(PostQuery postQuery);
 
     /**
-     * 通过IDS删除
+     * 获取信息
      *
-     * @param ids IDS
-     * @return {@link Result}<{@link Boolean}>
+     * @param postId post-id
+     * @return {@link PostVO }
      */
-    Result<Boolean> removePostByIds(List<Long> ids);
+    PostVO getInfoById(Long postId);
+
+    /**
+     * 保存岗位
+     *
+     * @param postForm 岗位表单
+     * @return {@link Boolean }
+     */
+    Boolean savePost(PostForm postForm);
+
+    /**
+     * 修改岗位
+     *
+     * @param id       ID
+     * @param postForm 岗位表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyPost(Long id, PostForm postForm);
 
 }

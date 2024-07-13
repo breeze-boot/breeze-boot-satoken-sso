@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.mapper;
 
+import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
 import com.breeze.boot.modules.auth.model.entity.SysDept;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,21 +33,20 @@ import java.util.List;
 @Mapper
 public interface SysDeptMapper extends BreezeBaseMapper<SysDept> {
 
-
     /**
      * 查询部门
      *
      * @param id id
-     * @return {@link List}<{@link SysDept}>
+     * @return {@link List}<{@link SysDeptBO}>
      */
-    List<SysDept> selectDeptById(@Param("id") Long id);
+    List<SysDeptBO> selectDeptById(@Param("id") Long id);
 
     /**
      * 查询部门
      *
      * @param parentId 父id
-     * @return {@link List}<{@link SysDept}>
+     * @return {@link List}<{@link SysDeptBO}>
      */
-    List<SysDept> selectDeptByParentId(@Param("parentId") Long parentId);
+    List<SysDeptBO> selectDeptByParentId(@Param("parentId") Long parentId);
 
 }

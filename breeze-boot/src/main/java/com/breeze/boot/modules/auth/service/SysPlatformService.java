@@ -18,10 +18,10 @@ package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.system.model.entity.SysPlatform;
+import com.breeze.boot.modules.auth.model.entity.SysPlatform;
+import com.breeze.boot.modules.auth.model.form.PlatformForm;
 import com.breeze.boot.modules.auth.model.query.PlatformQuery;
-
-import java.util.List;
+import com.breeze.boot.modules.auth.model.vo.PlatformVO;
 
 /**
  * 系统平台服务
@@ -35,16 +35,33 @@ public interface SysPlatformService extends IService<SysPlatform> {
      * 列表页面
      *
      * @param platformQuery 平台查询
-     * @return {@link Page}<{@link SysPlatform}>
+     * @return {@link Page}<{@link PlatformVO}>
      */
-    Page<SysPlatform> listPage(PlatformQuery platformQuery);
+    Page<PlatformVO> listPage(PlatformQuery platformQuery);
 
     /**
-     * 批量保存
+     * 详情
      *
-     * @param platformSearchParamList 平台查询参数集合
-     * @return boolean
+     * @param platformId 平台id
+     * @return {@link PlatformVO }
      */
-    Boolean saveAllBatch(List<PlatformQuery> platformSearchParamList);
+    PlatformVO getInfoById(Long platformId);
+
+    /**
+     * 保存平台
+     *
+     * @param platformForm 平台形式
+     * @return {@link Boolean }
+     */
+    Boolean savePlatform(PlatformForm platformForm);
+
+    /**
+     * 修改平台
+     *
+     * @param id           ID
+     * @param platformForm 平台形式
+     * @return {@link Boolean }
+     */
+    Boolean modifyPlatform(Long id, PlatformForm platformForm);
 
 }

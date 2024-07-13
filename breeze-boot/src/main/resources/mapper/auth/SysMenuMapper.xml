@@ -35,7 +35,7 @@
         </foreach>
     </select>
 
-    <select id="listMenu" resultType="com.breeze.boot.modules.auth.model.entity.SysMenu">
+    <select id="listMenu" resultType="com.breeze.boot.modules.auth.model.bo.SysMenuBO">
         SELECT
         a.id,
         a.name,
@@ -68,7 +68,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="selectMenusByRoleId" resultType="com.breeze.boot.modules.auth.model.entity.SysMenu">
+    <select id="selectMenusByRoleId" resultType="com.breeze.boot.modules.auth.model.bo.SysMenuBO">
         SELECT
         b.id,
         b.platform_id,

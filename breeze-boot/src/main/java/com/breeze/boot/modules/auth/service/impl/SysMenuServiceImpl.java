@@ -25,11 +25,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.BaseLoginUser;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.mapper.SysMenuMapper;
+import com.breeze.boot.modules.auth.model.bo.SysMenuBO;
+import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
 import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
-import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.form.MenuForm;
+import com.breeze.boot.modules.auth.model.mappers.SysMenuMapStruct;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
-import com.breeze.boot.modules.auth.mapper.SysMenuMapper;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
 import com.breeze.boot.security.utils.SecurityUtils;
@@ -54,6 +57,8 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
 @RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
+    private final SysMenuMapStruct sysMenuMapStruct;
+
     /**
      * 系统角色菜单服务
      */
@@ -62,13 +67,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 用户菜单权限列表
      *
-     * @param userRoleList 用户角色列表
+     * @param userRoleDTOList 用户角色列表
      * @return {@link Set}<{@link String}>
      */
     @Override
-    public Set<String> listUserMenuPermission(Set<UserRole> userRoleList) {
-        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(userRoleList))
-                .orElseGet(HashSet::new);
+    public Set<String> listUserMenuPermission(Set<UserRoleDTO> userRoleDTOList) {
+        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(userRoleDTOList)).orElseGet(HashSet::new);
     }
 
     /**
@@ -86,8 +90,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         // 查询角色下的菜单信息
-        List<SysMenu> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
-        return Result.ok(this.buildTrees(menuList, ROOT));
+        List<SysMenuBO> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
+        return Result.ok(this.buildTrees(menuList));
     }
 
     /**
@@ -96,13 +100,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     private Result<List<Tree<Long>>> listTreeRolePermission() {
-        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery()
-                .in(SysMenu::getType, 0, 1, 2)
-                .orderByAsc(SysMenu::getSort));
+        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getType, 0, 1, 2).orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
-        return Result.ok(this.buildTrees(menuList, ROOT));
+        List<SysMenuBO> sysMenuBOList = this.sysMenuMapStruct.entity2BO(menuList);
+        return Result.ok(this.buildTrees(sysMenuBOList));
     }
 
     /**
@@ -113,11 +116,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<?> listMenu(MenuQuery menuQuery) {
-        List<SysMenu> entityList = this.baseMapper.listMenu(menuQuery);
+        List<SysMenuBO> sysMenuBOList = this.baseMapper.listMenu(menuQuery);
         if (StrUtil.isAllNotBlank(menuQuery.getName()) || StrUtil.isAllNotBlank(menuQuery.getTitle())) {
-            return Result.ok(entityList);
+            return Result.ok(sysMenuBOList);
         }
-        List<Tree<Long>> build = this.buildTrees(entityList, ROOT);
+        // 查询数据
+        List<Tree<Long>> build = this.buildTrees(sysMenuBOList);
         return Result.ok(build);
     }
 
@@ -159,37 +163,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 保存菜单
      *
-     * @param menuEntity 菜单实体
+     * @param menuForm 菜单表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> saveMenu(SysMenu menuEntity) {
-        SysMenu sysMenu = this.getById(menuEntity.getParentId());
-        if (!Objects.equals(ROOT, menuEntity.getParentId()) && Objects.isNull(sysMenu)) {
+    public Result<Boolean> saveMenu(MenuForm menuForm) {
+        SysMenu sysMenu = this.getById(menuForm.getParentId());
+        if (!Objects.equals(ROOT, menuForm.getParentId()) && Objects.isNull(sysMenu)) {
             return Result.fail("上一层组件不存在");
         }
-        return Result.ok(this.save(menuEntity));
+        return Result.ok(this.save(sysMenuMapStruct.form2Entity(menuForm)));
     }
 
     /**
-     * 更新菜单通过id
+     * 修改菜单
      *
-     * @param menuEntity 菜单实体
+     * @param id          id
+     * @param menuForm 菜单实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> updateMenuById(SysMenu menuEntity) {
-        return Result.ok(this.updateById(menuEntity));
+    public Result<Boolean> modifyMenu(Long id, MenuForm menuForm) {
+        SysMenu sysMenu = sysMenuMapStruct.form2Entity(menuForm);
+        sysMenu.setId(id);
+        return Result.ok(this.updateById(sysMenu));
     }
 
     /**
      * 获取树形数据
      *
      * @param menuEntityList 菜单实体列表
-     * @param id
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
-    private List<Tree<Long>> buildTrees(List<SysMenu> menuEntityList, Long id) {
+    private List<Tree<Long>> buildTrees(List<SysMenuBO> menuEntityList) {
         List<TreeNode<Long>> collect = menuEntityList.stream().map(menu -> {
             TreeNode<Long> node = new TreeNode<>();
             node.setId(menu.getId());
@@ -212,6 +218,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             node.setExtra(leafMap);
             return node;
         }).collect(Collectors.toList());
-        return TreeUtil.build(collect, id);
+        return TreeUtil.build(collect, com.breeze.boot.core.constants.CoreConstants.ROOT);
     }
 }

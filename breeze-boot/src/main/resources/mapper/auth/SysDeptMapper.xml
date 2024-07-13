@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysDeptMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysDept" id="sysDeptMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.bo.SysDeptBO" id="deptBOMap">
         <id property="id" column="id"/>
         <result property="deptName" column="dept_name"/>
         <result property="parentId" column="parent_id"/>
@@ -13,16 +13,14 @@
         <result property="createName" column="create_name"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="isDelete" column="is_delete"/>
-        <result property="deleteBy" column="delete_by"/>
-        <collection property="sysDeptList" javaType="java.util.List"
-                    ofType="com.breeze.boot.modules.auth.model.entity.SysDept"
+        <collection property="subDeptList" javaType="java.util.List"
+                    ofType="com.breeze.boot.modules.auth.model.bo.SysDeptBO"
                     column="{parentId=id}"
                     select="com.breeze.boot.modules.auth.mapper.SysDeptMapper.selectDeptByParentId">
         </collection>
     </resultMap>
 
-    <select id="selectDeptById" resultMap="sysDeptMap">
+    <select id="selectDeptById" resultMap="deptBOMap">
         SELECT a.id,
                a.dept_name
         FROM sys_dept AS a
@@ -31,7 +29,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="selectDeptByParentId" resultMap="sysDeptMap">
+    <select id="selectDeptByParentId" resultMap="deptBOMap">
         SELECT a.id,
                a.dept_name
         FROM sys_dept AS a

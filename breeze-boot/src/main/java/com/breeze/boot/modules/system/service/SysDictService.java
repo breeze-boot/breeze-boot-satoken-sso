@@ -20,8 +20,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysDict;
-import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.form.DictForm;
+import com.breeze.boot.modules.system.model.form.DictOpenForm;
 import com.breeze.boot.modules.system.model.query.DictQuery;
+import com.breeze.boot.modules.system.model.vo.DictVO;
 
 import java.util.List;
 
@@ -37,17 +39,42 @@ public interface SysDictService extends IService<SysDict> {
      * 列表页面
      *
      * @param dictQuery 字典查询
-     * @return {@link Page}<{@link SysDict}>
+     * @return {@link Page}<{@link DictVO}>
      */
-    Page<SysDict> listPage(DictQuery dictQuery);
+    Page<DictVO> listPage(DictQuery dictQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param dictId dict id
+     * @return {@link DictVO }
+     */
+    DictVO getInfoById(Long dictId);
+
+    /**
+     * 保存dict
+     *
+     * @param dictForm 字典表单
+     * @return {@link Boolean }
+     */
+    Boolean saveDict(DictForm dictForm);
+
+    /**
+     * 修改dict
+     *
+     * @param id       id
+     * @param dictForm 字典表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyDict(Long id, DictForm dictForm);
 
     /**
      * 开关
      *
-     * @param dictOpenParam 字典开关参数
+     * @param dictOpenForm 字典开关参数
      * @return {@link Boolean}
      */
-    Boolean open(DictOpenParam dictOpenParam);
+    Boolean open(DictOpenForm dictOpenForm);
 
     /**
      * 删除字典通过IDS
@@ -56,6 +83,7 @@ public interface SysDictService extends IService<SysDict> {
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> deleteByIds(List<Long> ids);
+
 
 }
 

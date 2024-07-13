@@ -24,15 +24,19 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.entity.SysDept;
-import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.mapper.SysDeptMapper;
+import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
+import com.breeze.boot.modules.auth.model.entity.SysDept;
+import com.breeze.boot.modules.auth.model.form.DeptForm;
+import com.breeze.boot.modules.auth.model.mappers.SysDeptMapStruct;
+import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.SysDeptService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,8 @@ import static com.breeze.boot.core.constants.CoreConstants.ROOT;
 @Service
 @RequiredArgsConstructor
 public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
+
+    private final SysDeptMapStruct sysDeptMapStruct;
 
     /**
      * 部门列表
@@ -87,6 +93,19 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return TreeUtil.build(treeNodeList, ROOT);
     }
 
+    @Override
+    public Boolean saveDept(DeptForm deptForm) {
+        SysDept sysDept = sysDeptMapStruct.form2Entity(deptForm);
+        return this.save(sysDept);
+    }
+
+    @Override
+    public Boolean modifyDept(@Valid Long id, DeptForm deptForm) {
+        SysDept sysDept = sysDeptMapStruct.form2Entity(deptForm);
+        sysDept.setId(id);
+        return this.updateById(sysDept);
+    }
+
     /**
      * 删除通过id
      *
@@ -108,19 +127,20 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 
     @Override
     public List<Long> listDeptByParentId(Long deptId) {
-        List<SysDept> sysDeptList = this.baseMapper.selectDeptById(deptId);
-        if(CollUtil.isEmpty(sysDeptList)){
+        List<SysDeptBO> deptBOList = this.baseMapper.selectDeptById(deptId);
+        if(CollUtil.isEmpty(deptBOList)){
             return Lists.newArrayList();
         }
-        return this.findPropertyInTree(sysDeptList.get(0));
+        return this.findPropertyInTree(deptBOList.get(0));
     }
 
-    public List<Long> findPropertyInTree(SysDept node) {
+
+    public List<Long> findPropertyInTree(SysDeptBO node) {
         List<Long> result = new ArrayList<>();
         if (node != null) {
             result.add(node.getId()); // 将当前节点的属性值添加到结果中
-            if (node.getSysDeptList() != null) {
-                for (SysDept child : node.getSysDeptList()) {
+            if (node.getSubDeptList() != null) {
+                for (SysDeptBO child : node.getSubDeptList()) {
                     // 递归查询子节点的属性值并添加到结果中
                     result.addAll(findPropertyInTree(child));
                 }

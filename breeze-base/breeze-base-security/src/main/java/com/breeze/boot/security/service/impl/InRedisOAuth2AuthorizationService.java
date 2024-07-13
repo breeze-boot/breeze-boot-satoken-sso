@@ -140,7 +140,7 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
         // refresh_token和authId的关系维护
         Optional.ofNullable(authorization.getRefreshToken()).ifPresent(token -> {
             String refresh2OAuthKey = REFRESH_OAUTH + token.getToken().getTokenValue();
-            redisOperations.opsForValue().set(refresh2OAuthKey, authorizationId, ttl.refreshTokenTtl.getSeconds() + 1000, TimeUnit.SECONDS);
+            redisOperations.opsForValue().set(refresh2OAuthKey, authorizationId, ttl.refreshTokenTtl.getSeconds(), TimeUnit.SECONDS);
             correlcationsHashSet.add(refresh2OAuthKey);
         });
         //
@@ -160,11 +160,11 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
      */
     private Ttl getTtl(OAuth2Authorization authorization, TokenSettings tokenSettings) {
         // code 过期时间
-        Duration codeTtl = tokenSettings.getAuthorizationCodeTimeToLive();
+        Duration codeTtl = tokenSettings.getAuthorizationCodeTimeToLive().plusMinutes(100);
         // access_token 过期时间
-        Duration accessTokenTtl = tokenSettings.getAccessTokenTimeToLive();
+        Duration accessTokenTtl = tokenSettings.getAccessTokenTimeToLive().plusMinutes(100);
         // refresh_token 过期时间
-        Duration refreshTokenTtl = tokenSettings.getRefreshTokenTimeToLive();
+        Duration refreshTokenTtl = tokenSettings.getRefreshTokenTimeToLive().plusMinutes(100);
         // 求三个时间的最大值
         Duration max = authorization.getRefreshToken() != null ? accessTokenTtl : Collections.max(Arrays.asList(accessTokenTtl, refreshTokenTtl));
         return new Ttl(codeTtl, accessTokenTtl, refreshTokenTtl, max);

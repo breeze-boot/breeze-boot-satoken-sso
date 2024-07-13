@@ -21,15 +21,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.model.entity.SysPost;
-import com.breeze.boot.modules.auth.model.query.PostQuery;
 import com.breeze.boot.modules.auth.mapper.SysPostMapper;
+import com.breeze.boot.modules.auth.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.form.PostForm;
+import com.breeze.boot.modules.auth.model.mappers.SysPostMapStruct;
+import com.breeze.boot.modules.auth.model.query.PostQuery;
+import com.breeze.boot.modules.auth.model.vo.PostVO;
 import com.breeze.boot.modules.auth.service.SysPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 系统岗服务impl
@@ -41,31 +41,59 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> implements SysPostService {
 
+    private final SysPostMapStruct sysPostMapStruct;
+
     /**
      * 列表页面
      *
      * @param postQuery 岗位查询
-     * @return {@link IPage}<{@link SysPost}>
+     * @return {@link IPage}<{@link PostVO}>
      */
     @Override
-    public IPage<SysPost> listPage(PostQuery postQuery) {
-        Page<SysPost> sysPostPage = new Page<>(postQuery.getCurrent(), postQuery.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
+    public IPage<PostVO> listPage(PostQuery postQuery) {
+        Page<SysPost> page = new LambdaQueryChainWrapper<>(this.getBaseMapper())
                 .like(StrUtil.isAllNotBlank(postQuery.getPostCode()), SysPost::getPostCode, postQuery.getPostCode())
                 .like(StrUtil.isAllNotBlank(postQuery.getPostName()), SysPost::getPostName, postQuery.getPostName())
                 .orderByDesc(SysPost::getCreateTime)
-                .page(sysPostPage);
+                .page(new Page<>(postQuery.getCurrent(), postQuery.getSize()));
+        return this.sysPostMapStruct.page2PageVO(page);
     }
 
     /**
-     * 通过IDS删除
+     * 获取信息
      *
-     * @param ids id
-     * @return {@link Result}<{@link Boolean}>
+     * @param postId post-id
+     * @return {@link PostVO }
      */
     @Override
-    public Result<Boolean> removePostByIds(List<Long> ids) {
-        return Result.ok(this.removeByIds(ids));
+    public PostVO getInfoById(Long postId) {
+        SysPost sysPost = this.getById(postId);
+        return this.sysPostMapStruct.entity2VO(sysPost);
+    }
+
+    /**
+     * 保存岗位
+     *
+     * @param postForm 岗位表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean savePost(PostForm postForm) {
+        return this.save(sysPostMapStruct.form2Entity(postForm));
+    }
+
+    /**
+     * 修改岗位
+     *
+     * @param id       ID
+     * @param postForm 岗位表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyPost(Long id, PostForm postForm) {
+        SysPost sysPost = sysPostMapStruct.form2Entity(postForm);
+        sysPost.setId(id);
+        return this.updateById(sysPost);
     }
 
 }

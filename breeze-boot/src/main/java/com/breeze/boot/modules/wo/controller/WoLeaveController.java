@@ -75,7 +75,7 @@ public class WoLeaveController {
     /**
      * 创建
      *
-     * @param leave 请假实体入参
+     * @param leave 请假表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")

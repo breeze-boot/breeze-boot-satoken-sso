@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
-import com.breeze.boot.modules.auth.model.params.MenuPermissionParam;
+import com.breeze.boot.modules.auth.model.form.MenuPermissionForm;
 import com.breeze.boot.modules.auth.mapper.SysRoleMenuMapper;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
 import lombok.RequiredArgsConstructor;
@@ -43,17 +43,17 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
     /**
      * 编辑权限
      *
-     * @param menuPermissionParam 菜单权限参数
+     * @param menuPermissionForm 菜单权限表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> modifyMenuPermission(MenuPermissionParam menuPermissionParam) {
-        this.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, menuPermissionParam.getRoleId()));
-        List<SysRoleMenu> sysRoleMenuList = menuPermissionParam.getPermissionIds().stream().map(menuId -> {
+    public Result<Boolean> modifyMenuPermission(MenuPermissionForm menuPermissionForm) {
+        this.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getRoleId, menuPermissionForm.getRoleId()));
+        List<SysRoleMenu> sysRoleMenuList = menuPermissionForm.getPermissionIds().stream().map(menuId -> {
             SysRoleMenu sysRoleMenu = new SysRoleMenu();
             sysRoleMenu.setMenuId(menuId);
-            sysRoleMenu.setRoleId(menuPermissionParam.getRoleId());
+            sysRoleMenu.setRoleId(menuPermissionForm.getRoleId());
             return sysRoleMenu;
         }).collect(Collectors.toList());
         boolean batch = this.saveBatch(sysRoleMenuList);

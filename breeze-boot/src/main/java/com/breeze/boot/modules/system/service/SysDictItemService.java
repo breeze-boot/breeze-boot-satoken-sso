@@ -19,7 +19,9 @@ package com.breeze.boot.modules.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.form.DictItemForm;
 import com.breeze.boot.modules.system.model.query.DictItemQuery;
+import com.breeze.boot.modules.system.model.vo.DictItemVO;
 
 import java.util.List;
 import java.util.Map;
@@ -36,9 +38,34 @@ public interface SysDictItemService extends IService<SysDictItem> {
      * 字典列表项
      *
      * @param dictItemQuery 字典项查询
-     * @return {@link List}<{@link SysDictItem}>
+     * @return {@link List}<{@link DictItemVO}>
      */
-    List<SysDictItem> listDictItem(DictItemQuery dictItemQuery);
+    List<DictItemVO> listDictItem(DictItemQuery dictItemQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param dictItemId 未知错误。dict项id
+     * @return {@link DictItemVO }
+     */
+    DictItemVO getInfoById(Long dictItemId);
+
+    /**
+     * 保存dict项目
+     *
+     * @param dictItemForm 字典项表单
+     * @return {@link Boolean }
+     */
+    Boolean saveDictItem(DictItemForm dictItemForm);
+
+    /**
+     * 修改dict项
+     *
+     * @param id           ID
+     * @param dictItemForm 字典项表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyDictItem(Long id, DictItemForm dictItemForm);
 
     /**
      * 查询字典通过类型代码
@@ -55,5 +82,6 @@ public interface SysDictItemService extends IService<SysDictItem> {
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     Result<List<Map<String, Object>>> listDictByCode(String dictCode);
+
 
 }

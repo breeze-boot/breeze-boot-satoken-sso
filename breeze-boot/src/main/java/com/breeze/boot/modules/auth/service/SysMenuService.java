@@ -19,8 +19,9 @@ package com.breeze.boot.modules.auth.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
-import com.breeze.boot.modules.auth.model.dto.UserRole;
+import com.breeze.boot.modules.auth.model.form.MenuForm;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
 
 import java.util.List;
@@ -37,10 +38,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 用户菜单权限列表
      *
-     * @param userRoleList 角色列表
+     * @param userRoleDTOList 角色列表
      * @return {@link Set}<{@link String}>
      */
-    Set<String> listUserMenuPermission(Set<UserRole> userRoleList);
+    Set<String> listUserMenuPermission(Set<UserRoleDTO> userRoleDTOList);
 
     /**
      * 树菜单列表
@@ -77,18 +78,19 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 保存菜单
      *
-     * @param menuEntity 菜单实体
+     * @param menuForm 菜单表单
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> saveMenu(SysMenu menuEntity);
+    Result<Boolean> saveMenu(MenuForm menuForm);
 
     /**
-     * 更新菜单通过ID
+     * 修改菜单
      *
-     * @param menuEntity 菜单实体
+     * @param id          id
+     * @param menuForm 菜单表单
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> updateMenuById(SysMenu menuEntity);
+    Result<Boolean> modifyMenu(Long id, MenuForm menuForm);
 
 }
 

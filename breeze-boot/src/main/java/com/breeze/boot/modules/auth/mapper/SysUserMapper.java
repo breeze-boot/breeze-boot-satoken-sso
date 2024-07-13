@@ -18,6 +18,7 @@ package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
@@ -40,9 +41,9 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      *
      * @param page      分页
      * @param userQuery 用户查询
-     * @return {@link IPage}<{@link SysUser}>
+     * @return {@link Page}<{@link UserBO}>
      */
-    IPage<SysUser> listPage(Page<SysUser> page, @Param("userQuery") UserQuery userQuery);
+    Page<UserBO> listPage(Page<SysUser> page, @Param("userQuery") UserQuery userQuery);
 
     /**
      * 用户通过部门id列表
@@ -50,7 +51,7 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
      * @param deptIds 部门id
      * @return {@link List}<{@link SysUser}>
      */
-    List<SysUser> listUserByDeptId(@Param("deptIds") List<Long> deptIds);
+    List<UserBO> listUserByDeptId(@Param("deptIds") List<Long> deptIds);
 
     /**
      * 查出所有用户

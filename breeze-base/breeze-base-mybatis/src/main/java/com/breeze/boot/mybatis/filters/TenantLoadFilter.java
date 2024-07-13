@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.breeze.boot.core.constants.CoreConstants.PARAM;
+
 /**
  * 系统租户加载过滤器
  *
@@ -37,10 +39,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RequiredArgsConstructor
-@EnableConfigurationProperties(TenantProperties.class)
 public class TenantLoadFilter extends OncePerRequestFilter {
-
-    private final TenantProperties tenantProperties;
 
     /**
      * 过滤器
@@ -55,10 +54,10 @@ public class TenantLoadFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             log.info("[当前进入的请求]： {}", request.getRequestURI());
-            String apiTenantId = request.getHeader(tenantProperties.getParam());
-            String webSocketTenantId = request.getParameter(tenantProperties.getParam());
+            String apiTenantId = request.getHeader(PARAM);
+            String webSocketTenantId = request.getParameter(PARAM);
             if (StrUtil.isAllBlank(apiTenantId) && StrUtil.isAllBlank(webSocketTenantId)) {
-                BreezeThreadLocal.set(1L);
+                // TODO 默认
             } else if (StrUtil.isAllNotBlank(apiTenantId)) {
                 BreezeThreadLocal.set(Long.parseLong(apiTenantId));
             } else if (StrUtil.isAllNotBlank(webSocketTenantId)) {

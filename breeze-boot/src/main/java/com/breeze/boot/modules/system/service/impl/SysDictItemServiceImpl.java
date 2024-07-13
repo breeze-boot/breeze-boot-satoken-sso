@@ -18,9 +18,12 @@ package com.breeze.boot.modules.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.model.entity.SysDictItem;
-import com.breeze.boot.modules.system.model.query.DictItemQuery;
 import com.breeze.boot.modules.system.mapper.SysDictItemMapper;
+import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.form.DictItemForm;
+import com.breeze.boot.modules.system.model.mappers.SysDictItemMapStruct;
+import com.breeze.boot.modules.system.model.query.DictItemQuery;
+import com.breeze.boot.modules.system.model.vo.DictItemVO;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -40,15 +43,55 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService, InitializingBean {
 
+    private final SysDictItemMapStruct sysDictItemMapStruct;
+
     /**
      * 字典列表项
      *
      * @param dictItemQuery 字典项查询
-     * @return {@link List}<{@link SysDictItem}>
+     * @return {@link List}<{@link DictItemVO}>
      */
     @Override
-    public List<SysDictItem> listDictItem(DictItemQuery dictItemQuery) {
-        return this.baseMapper.listDictDetailByDictId(dictItemQuery.getDictId());
+    public List<DictItemVO> listDictItem(DictItemQuery dictItemQuery) {
+        List<SysDictItem> sysDictItemList = this.baseMapper.listDictDetailByDictId(dictItemQuery.getDictId());
+        return sysDictItemMapStruct.entityList2VOList(sysDictItemList);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param dictItemId 字典项id
+     * @return {@link DictItemVO }
+     */
+    @Override
+    public DictItemVO getInfoById(Long dictItemId) {
+        return this.sysDictItemMapStruct.entity2VO(this.getById(dictItemId));
+    }
+
+    /**
+     * 保存dict项目
+     *
+     * @param dictItemForm 字典项表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean saveDictItem(DictItemForm dictItemForm) {
+        SysDictItem sysDictItem = this.sysDictItemMapStruct.form2Entity(dictItemForm);
+        return this.save(sysDictItem);
+    }
+
+    /**
+     * 修改dict项
+     *
+     * @param id           ID
+     * @param dictItemForm 字典项表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyDictItem(Long id, DictItemForm dictItemForm) {
+        SysDictItem sysDictItem = this.sysDictItemMapStruct.form2Entity(dictItemForm);
+        sysDictItem.setId(id);
+        return this.updateById(sysDictItem);
     }
 
     /**

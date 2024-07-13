@@ -22,11 +22,14 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.system.model.entity.SysDict;
-import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.form.DictForm;
+import com.breeze.boot.modules.system.model.form.DictOpenForm;
 import com.breeze.boot.modules.system.model.query.DictQuery;
+import com.breeze.boot.modules.system.model.vo.DictVO;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import com.breeze.boot.modules.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -67,12 +70,12 @@ public class SysDictController {
      * 列表
      *
      * @param dictQuery 字典查询
-     * @return {@link Result}<{@link Page}<{@link SysDict}>>
+     * @return {@link Result}<{@link Page}<{@link DictVO}>>
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Page<SysDict>> list(DictQuery dictQuery) {
+    public Result<Page<DictVO>> list(DictQuery dictQuery) {
         return Result.ok(this.sysDictService.listPage(dictQuery));
     }
 
@@ -80,13 +83,13 @@ public class SysDictController {
      * 详情
      *
      * @param dictId 字典id
-     * @return {@link Result}<{@link SysDict}>
+     * @return {@link Result}<{@link DictVO}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{dictId}")
     @PreAuthorize("hasAnyAuthority('auth:dict:info')")
-    public Result<SysDict> info(@PathVariable("dictId") Long dictId) {
-        return Result.ok(this.sysDictService.getById(dictId));
+    public Result<DictVO> info(@PathVariable("dictId") Long dictId) {
+        return Result.ok(this.sysDictService.getInfoById(dictId));
     }
 
     /**
@@ -94,13 +97,13 @@ public class SysDictController {
      *
      * @param dictCode 字典编码
      * @param dictId   字典ID
-     * @return {@link Result}<{@link SysDict}>
+     * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "校验字典编码是否重复")
     @GetMapping("/checkDictCode")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Boolean> checkDictCode(@RequestParam("dictCode") String dictCode,
-                                         @RequestParam(value = "dictId", required = false) Long dictId) {
+    public Result<Boolean> checkDictCode(@Parameter(description = "字典编码") @NotNull(message = "字典编码不能为空") @RequestParam("dictCode") String dictCode,
+                                         @Parameter(description = "字典ID") @RequestParam(value = "dictId", required = false) Long dictId) {
         return Result.ok(Objects.isNull(this.sysDictService.getOne(Wrappers.<SysDict>lambdaQuery()
                 .ne(Objects.nonNull(dictId), SysDict::getId, dictId)
                 .eq(SysDict::getDictCode, dictCode))));
@@ -115,7 +118,7 @@ public class SysDictController {
     @Operation(summary = "获取字典")
     @PostMapping("/v1/listDict")
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<Map<String, List<Map<String, Object>>>> listDicts(@RequestBody List<String> dictCodes) {
+    public Result<Map<String, List<Map<String, Object>>>> listDicts(@Parameter(description = "字典ID") @RequestBody List<String> dictCodes) {
         return this.sysDictItemService.listDictByCodes(dictCodes);
     }
 
@@ -127,50 +130,52 @@ public class SysDictController {
      */
     @Operation(summary = "获取字典")
     @GetMapping("/v2/listDict/{dictCode}")
-    public Result<List<Map<String, Object>>> listDict(@PathVariable("dictCode") String dictCode) {
+    public Result<List<Map<String, Object>>> listDict(@Parameter(description = "字典ID") @PathVariable("dictCode") String dictCode) {
         return this.sysDictItemService.listDictByCode(dictCode);
     }
 
     /**
      * 创建
      *
-     * @param sysDict 字典保存参数
+     * @param dictForm 字典表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysDict sysDict) {
-        return Result.ok(sysDictService.save(sysDict));
+    public Result<Boolean> save(@Valid @RequestBody DictForm dictForm) {
+        return Result.ok(sysDictService.saveDict(dictForm));
     }
 
     /**
      * 修改
      *
-     * @param sysDict 字典实体
+     * @param id       id
+     * @param dictForm 字典表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息修改", type = LogType.EDIT)
-    public Result<Boolean> update(@Valid @RequestBody SysDict sysDict) {
-        return Result.ok(this.sysDictService.updateById(sysDict));
+    public Result<Boolean> modify(@Parameter(description = "字典ID") @NotNull(message = "字典ID")@PathVariable Long id,
+                                  @Valid @RequestBody DictForm dictForm) {
+        return Result.ok(this.sysDictService.modifyDict(id, dictForm));
     }
 
     /**
      * 开关
      *
-     * @param dictOpenParam 字典开关参数
+     * @param dictOpenForm 字典开关参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "开关")
     @PutMapping("/open")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典信息开关", type = LogType.EDIT)
-    public Result<Boolean> open(@Valid @RequestBody DictOpenParam dictOpenParam) {
-        return Result.ok(this.sysDictService.open(dictOpenParam));
+    public Result<Boolean> open(@Valid @RequestBody DictOpenForm dictOpenForm) {
+        return Result.ok(this.sysDictService.open(dictOpenForm));
     }
 
     /**
@@ -183,7 +188,7 @@ public class SysDictController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
     @BreezeSysLog(description = "字典信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    public Result<Boolean> delete(@Parameter(description = "字典IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysDictService.deleteByIds(Arrays.asList(ids));
     }
 

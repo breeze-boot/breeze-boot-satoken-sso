@@ -27,8 +27,8 @@ import com.breeze.boot.modules.auth.model.entity.SysMenu;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.system.model.entity.SysPlatform;
-import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.auth.model.entity.SysPlatform;
+import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.service.SysCommonService;
 import com.breeze.boot.modules.system.service.MateService;
 import com.breeze.boot.modules.system.service.SysFileService;
@@ -272,31 +272,31 @@ public class SysCommonServiceImpl implements SysCommonService {
     /**
      * 上传minio s3
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Override
-    public Result<Map<String, Object>> uploadMinioS3(FileParam fileParam,
+    public Result<Map<String, Object>> uploadMinioS3(FileForm fileForm,
                                                      HttpServletRequest request,
                                                      HttpServletResponse response) {
-        return this.sysFileService.uploadMinioS3(fileParam, request, response);
+        return this.sysFileService.uploadMinioS3(fileForm, request, response);
     }
 
     /**
      * 文件上传到本地存储
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Override
-    public Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam,
+    public Result<Map<String, Object>> uploadLocalStorage(FileForm fileForm,
                                                           HttpServletRequest request,
                                                           HttpServletResponse response) {
-        return this.sysFileService.uploadLocalStorage(fileParam, request, response);
+        return this.sysFileService.uploadLocalStorage(fileForm, request, response);
     }
 
     @Override

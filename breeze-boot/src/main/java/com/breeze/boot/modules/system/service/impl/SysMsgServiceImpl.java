@@ -17,14 +17,16 @@
 package com.breeze.boot.modules.system.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.system.model.entity.SysMsg;
-import com.breeze.boot.modules.system.model.query.MsgQuery;
 import com.breeze.boot.modules.system.mapper.SysMsgMapper;
+import com.breeze.boot.modules.system.model.entity.SysMsg;
+import com.breeze.boot.modules.system.model.form.MsgForm;
+import com.breeze.boot.modules.system.model.mappers.SysMsgMapStruct;
+import com.breeze.boot.modules.system.model.query.MsgQuery;
 import com.breeze.boot.modules.system.service.SysMsgService;
+import com.breeze.boot.websocket.vo.MsgVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,19 +40,59 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SysMsgServiceImpl extends ServiceImpl<SysMsgMapper, SysMsg> implements SysMsgService {
 
+    private final SysMsgMapStruct sysMsgMapStruct;
+
     /**
      * 列表页面
      *
      * @param msgQuery 消息查询
-     * @return {@link IPage}<{@link SysMsg}>
+     * @return {@link Page}<{@link MsgVO}>
      */
     @Override
-    public IPage<SysMsg> listPage(MsgQuery msgQuery) {
+    public Page<MsgVO> listPage(MsgQuery msgQuery) {
         Page<SysMsg> msgPage = new Page<>(msgQuery.getCurrent(), msgQuery.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
+        Page<SysMsg> page = new LambdaQueryChainWrapper<>(this.getBaseMapper())
                 .like(StrUtil.isAllNotBlank(msgQuery.getTitle()), SysMsg::getTitle, msgQuery.getTitle())
                 .like(StrUtil.isAllNotBlank(msgQuery.getCode()), SysMsg::getCode, msgQuery.getCode())
                 .page(msgPage);
+        return this.sysMsgMapStruct.entityPage2VOPage(page);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param id ID
+     * @return {@link MsgVO }
+     */
+    @Override
+    public MsgVO getInfoById(Long id) {
+        return this.sysMsgMapStruct.entity2VO(this.getById(id));
+    }
+
+    /**
+     * 保存消息
+     *
+     * @param msgForm 消息表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean saveMsg(MsgForm msgForm) {
+        SysMsg sysMsg = this.sysMsgMapStruct.form2Entity(msgForm);
+        return this.save(sysMsg);
+    }
+
+    /**
+     * 修改消息
+     *
+     * @param id      ID
+     * @param msgForm 消息表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyMsg(Long id, MsgForm msgForm) {
+        SysMsg sysMsg = this.sysMsgMapStruct.form2Entity(msgForm);
+        sysMsg.setId(id);
+        return this.updateById(sysMsg);
     }
 
 }

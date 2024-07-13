@@ -73,27 +73,4 @@ public class GlobalExceptionHandler {
         return Result.fail(ex.getCode(), ex.getMsg());
     }
 
-    /**
-     * exception 异常
-     *
-     * @param ex 错误
-     * @return {@link Result}<{@link ?}>
-     */
-    @ExceptionHandler(Exception.class)
-    public Result<?> exceptionHandler(Exception ex) {
-        log.error("Exception 异常：", ex);
-        return Result.fail(ResultCode.EXCEPTION);
-    }
-
-    /**
-     * 运行时异常
-     *
-     * @param ex 错误
-     * @return {@link Result}<{@link ?}>
-     */
-    @ExceptionHandler(RuntimeException.class)
-    public Result<?> runtimeException(RuntimeException ex) {
-        log.error("RuntimeException 运行时异常：", ex);
-        return Result.fail(ResultCode.EXCEPTION);
-    }
 }

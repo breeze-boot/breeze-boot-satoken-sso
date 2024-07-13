@@ -31,9 +31,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
+
+import static com.breeze.boot.core.constants.CoreConstants.COLUMN;
 
 /**
  * mybatis +配置
@@ -43,6 +46,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RequiredArgsConstructor
+@EnableConfigurationProperties(TenantProperties.class)
 public class MybatisPlusConfiguration {
 
     private final TenantProperties tenantProperties;
@@ -91,7 +95,7 @@ public class MybatisPlusConfiguration {
 
             @Override
             public String getTenantIdColumn() {
-                return tenantProperties.getColumn();
+                return COLUMN;
             }
 
             /**

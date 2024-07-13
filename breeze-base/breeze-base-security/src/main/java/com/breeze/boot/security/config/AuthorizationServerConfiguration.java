@@ -68,7 +68,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ACCESS_TOKEN;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.*;
 import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
 
 /**
@@ -178,6 +178,13 @@ public class AuthorizationServerConfiguration {
                 claims.claim("scope", authorities);
             } else if (context.getTokenType().getValue().equals(ID_TOKEN)) {
                 // Customize headers/claims for id_token
+            }else  if (context.getTokenType().getValue().equals(REFRESH_TOKEN)) {
+                // Customize headers/claims for access_token
+                Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+                claims.claim("clientId", context.getRegisteredClient().getClientId());
+                Set<String> authorizedScopes = context.getAuthorizedScopes();
+                authorities.addAll(authorizedScopes);
+                claims.claim("scope", authorities);
             }
         };
     }

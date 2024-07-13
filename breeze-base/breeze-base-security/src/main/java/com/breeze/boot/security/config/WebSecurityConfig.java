@@ -63,8 +63,9 @@ public class WebSecurityConfig {
                 .antMatchers(whiteList).permitAll()
                 // 拦截所有
                 .anyRequest().authenticated();
-        http.exceptionHandling(exceptionConfigurer -> exceptionConfigurer
-                        .accessDeniedHandler(customAccessDeniedHandler)
+        http
+                .exceptionHandling(exceptionConfigurer -> exceptionConfigurer
+                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint))
                 // 配置oauth2 资源服务器
                 .oauth2ResourceServer()

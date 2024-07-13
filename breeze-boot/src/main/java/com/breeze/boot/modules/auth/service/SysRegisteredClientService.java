@@ -20,14 +20,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
-import com.breeze.boot.modules.auth.model.params.RegisteredClientParam;
-import com.breeze.boot.modules.auth.model.params.ResetClientSecretParam;
+import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
+import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
 import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
 import com.breeze.boot.security.service.ISysRegisteredClientService;
-
-import java.util.List;
 
 /**
  * 注册客户服务接口
@@ -66,34 +64,27 @@ public interface SysRegisteredClientService extends IService<SysRegisteredClient
     /**
      * 保存注册客户端
      *
-     * @param registeredClientParam 注册客户端参数
-     * @return {@link Boolean}
+     * @param registeredClientForm 注册客户端表单
+     * @return {@link Result }<{@link Boolean }>
      */
-    Result<Boolean> saveRegisteredClient(RegisteredClientParam registeredClientParam);
+    Result<Boolean> saveRegisteredClient(RegisteredClientForm registeredClientForm);
 
     /**
      * 更新
      *
-     * @param registeredClientParam 注册客户端参数
+     * @param id                   ID
+     * @param registeredClientForm 注册客户端表单
      * @return {@link Boolean}
      */
-    Boolean update(RegisteredClientParam registeredClientParam);
-
-    /**
-     * 删除通过id
-     *
-     * @param ids id集合
-     * @return {@link Result}<{@link Boolean}>
-     */
-    Result<Boolean> deleteById(List<Long> ids);
+    Boolean modifyRegisteredClient(Long id, RegisteredClientForm registeredClientForm);
 
     /**
      * 重置客户端密钥
      *
-     * @param resetClientSecretParam 重置客户端密钥
+     * @param resetClientSecretForm 重置客户端密钥
      * @return {@link Boolean}
      */
-    Boolean resetClientSecretParam(ResetClientSecretParam resetClientSecretParam);
+    Boolean resetClientSecret(ResetClientSecretForm resetClientSecretForm);
 
     /**
      * 信息

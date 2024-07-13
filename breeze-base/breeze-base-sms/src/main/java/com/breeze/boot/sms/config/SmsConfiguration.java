@@ -31,13 +31,13 @@ import org.springframework.context.annotation.Configuration;
  * @author gaoweixuan
  * @since 2023/05/31
  */
+@Getter
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(SmsProperties.class)
 public class SmsConfiguration {
 
-    @Getter
     private final SmsProperties smsProperties;
 
     @Bean

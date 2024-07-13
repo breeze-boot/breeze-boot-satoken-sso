@@ -19,9 +19,12 @@ package com.breeze.boot.modules.flow.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.flow.model.entity.FlowCategory;
-import com.breeze.boot.modules.flow.model.query.FlowCategoryQuery;
 import com.breeze.boot.modules.flow.mapper.ProcessCategoryMapper;
+import com.breeze.boot.modules.flow.model.entity.FlowCategory;
+import com.breeze.boot.modules.flow.model.form.FlowCategoryForm;
+import com.breeze.boot.modules.flow.model.mappers.FlowCategoryMapStruct;
+import com.breeze.boot.modules.flow.model.query.FlowCategoryQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowCategoryVO;
 import com.breeze.boot.modules.flow.service.IFlowCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FlowCategoryServiceImpl extends ServiceImpl<ProcessCategoryMapper, FlowCategory> implements IFlowCategoryService {
 
+    private final FlowCategoryMapStruct flowCategoryMapStruct;
+
     /**
      * 列表页面
      *
@@ -43,7 +48,45 @@ public class FlowCategoryServiceImpl extends ServiceImpl<ProcessCategoryMapper, 
      * @return {@link IPage}<{@link FlowCategory}>
      */
     @Override
-    public IPage<FlowCategory> listPage(FlowCategoryQuery processCategory) {
-        return this.baseMapper.listPage(new Page<>(processCategory.getCurrent(), processCategory.getSize()), processCategory);
+    public Page<FlowCategoryVO> listPage(FlowCategoryQuery processCategory) {
+        Page<FlowCategory> flowCategoryPage = this.baseMapper.listPage(new Page<>(processCategory.getCurrent(), processCategory.getSize()), processCategory);
+        return flowCategoryMapStruct.entityPage2VOPage(flowCategoryPage);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param categoryId 流程分类ID
+     * @return {@link FlowCategoryVO }
+     */
+    @Override
+    public FlowCategoryVO getInfoById(Long categoryId) {
+        return flowCategoryMapStruct.entity2VO(this.getById(categoryId));
+    }
+
+    /**
+     * 保存流类别
+     *
+     * @param flowCategoryForm 流程分类表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean saveFlowCategory(FlowCategoryForm flowCategoryForm) {
+        FlowCategory flowCategory = this.flowCategoryMapStruct.form2Entity(flowCategoryForm);
+        return this.save(flowCategory);
+    }
+
+    /**
+     * 修改流类别
+     *
+     * @param id               ID
+     * @param flowCategoryForm 流程分类表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyFlowCategory(Long id, FlowCategoryForm flowCategoryForm) {
+        FlowCategory flowCategory = this.flowCategoryMapStruct.form2Entity(flowCategoryForm);
+        flowCategory.setId(id);
+        return this.updateById(flowCategory);
     }
 }

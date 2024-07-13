@@ -19,7 +19,9 @@ package com.breeze.boot.modules.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.modules.system.model.entity.SysMsg;
+import com.breeze.boot.modules.system.model.form.MsgForm;
 import com.breeze.boot.modules.system.model.query.MsgQuery;
+import com.breeze.boot.websocket.vo.MsgVO;
 
 /**
  * 系统消息服务
@@ -33,8 +35,33 @@ public interface SysMsgService extends IService<SysMsg> {
      * 列表页面
      *
      * @param msgQuery 消息查询
-     * @return {@link IPage}<{@link SysMsg}>
+     * @return {@link IPage}<{@link MsgVO}>
      */
-    IPage<SysMsg> listPage(MsgQuery msgQuery);
+    IPage<MsgVO> listPage(MsgQuery msgQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param id ID
+     * @return {@link MsgVO }
+     */
+    MsgVO getInfoById(Long id);
+
+    /**
+     * 保存消息
+     *
+     * @param msgForm 消息表单
+     * @return {@link Boolean }
+     */
+    Boolean saveMsg(MsgForm msgForm);
+
+    /**
+     * 修改消息
+     *
+     * @param id      ID
+     * @param msgForm 消息表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyMsg(Long id, MsgForm msgForm);
 
 }

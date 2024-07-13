@@ -21,24 +21,28 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.mapper.SysRegisteredClientMapper;
 import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
-import com.breeze.boot.modules.auth.model.vo.TokenSettingsVO;
-import com.breeze.boot.modules.auth.model.params.RegisteredClientParam;
-import com.breeze.boot.modules.auth.model.params.ResetClientSecretParam;
+import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
+import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.ClientSettingsVO;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
-import com.breeze.boot.modules.auth.mapper.SysRegisteredClientMapper;
+import com.breeze.boot.modules.auth.model.vo.TokenSettingsVO;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,6 +54,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredClientMapper, SysRegisteredClient> implements SysRegisteredClientService {
 
     /**
@@ -59,9 +64,6 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public SysRegisteredClientServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
 
     /**
      * set 转换 string + [,]
@@ -87,45 +89,48 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     /**
      * 保存
      *
-     * @param client 注册客户端参数
+     * @param registeredClientForm 注册客户端表单
      */
     @SneakyThrows
     @Override
-    public Result<Boolean> saveRegisteredClient(RegisteredClientParam client) {
-        Assert.notNull(client, "registeredClient cannot be null");
+    public Result<Boolean> saveRegisteredClient(RegisteredClientForm registeredClientForm) {
+        Assert.notNull(registeredClientForm, "registeredClient cannot be null");
 
-        RegisteredClientParam.ClientSettings clientSettings = client.getClientSettings();
+        RegisteredClientForm.ClientSettings clientSettings = registeredClientForm.getClientSettings();
         Assert.notNull(clientSettings, "clientSettings cannot be null");
 
-        RegisteredClientParam.TokenSettings tokenSettings = client.getTokenSettings();
+        RegisteredClientForm.TokenSettings tokenSettings = registeredClientForm.getTokenSettings();
         Assert.notNull(tokenSettings, "tokenSettings cannot be null");
-        SysRegisteredClient byClientId = this.getByClientId(client.getClientId());
+        SysRegisteredClient byClientId = this.getByClientId(registeredClientForm.getClientId());
         if (Objects.nonNull(byClientId)) {
-            return Result.fail(Boolean.FALSE, "已经存在此客户端");
+            return Result.warning(Boolean.FALSE, "已经存在此客户端");
         }
-        this.insertRegisteredClient(client);
-        return Result.ok();
+        return Result.ok(this.save(this.buildClient(registeredClientForm)));
     }
 
     /**
      * 更新
      *
-     * @param client 注册客户端参数
+     * @param id     id
+     * @param client 注册客户端表单
      * @return {@link Boolean}
      */
     @Override
-    public Boolean update(RegisteredClientParam client) {
-        this.updateRegisteredClient(client);
-        return Boolean.TRUE;
-    }
-
-    /**
-     * 插入注册客户端
-     *
-     * @param client 注册客户端
-     */
-    private void insertRegisteredClient(RegisteredClientParam client) {
-        this.save(this.buildClient(client));
+    public Boolean modifyRegisteredClient(Long id, RegisteredClientForm client) {
+        SysRegisteredClient sysRegisteredClient = this.buildClient(client);
+        sysRegisteredClient.setId(id);
+        return this.update(Wrappers.<SysRegisteredClient>lambdaUpdate()
+                .set(SysRegisteredClient::getClientId, sysRegisteredClient.getClientId())
+                .set(SysRegisteredClient::getClientName, sysRegisteredClient.getClientName())
+                .set(SysRegisteredClient::getClientIdIssuedAt, sysRegisteredClient.getClientIdIssuedAt())
+                .set(SysRegisteredClient::getClientSecretExpiresAt, sysRegisteredClient.getClientSecretExpiresAt())
+                .set(SysRegisteredClient::getClientAuthenticationMethods, sysRegisteredClient.getClientAuthenticationMethods())
+                .set(SysRegisteredClient::getAuthorizationGrantTypes, sysRegisteredClient.getAuthorizationGrantTypes())
+                .set(SysRegisteredClient::getRedirectUris, sysRegisteredClient.getRedirectUris())
+                .set(SysRegisteredClient::getScopes, sysRegisteredClient.getScopes())
+                .set(SysRegisteredClient::getJsonClientSettings, sysRegisteredClient.getJsonClientSettings())
+                .set(SysRegisteredClient::getJsonTokenSettings, sysRegisteredClient.getJsonTokenSettings())
+                .eq(SysRegisteredClient::getId, id));
     }
 
     @SneakyThrows
@@ -141,7 +146,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     }
 
     @SneakyThrows
-    private SysRegisteredClient buildClient(RegisteredClientParam client) {
+    private SysRegisteredClient buildClient(RegisteredClientForm client) {
         // @formatter:off
         SysRegisteredClient registeredClient = SysRegisteredClient.builder()
                 .clientId(client.getClientId())
@@ -159,15 +164,6 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
         registeredClient.setId(client.getId());
         return registeredClient;
         // @formatter:on
-    }
-
-    /**
-     * 更新注册客户端
-     *
-     * @param client 注册客户端参数
-     */
-    private void updateRegisteredClient(RegisteredClientParam client) {
-        this.updateById(this.buildClient(client));
     }
 
     /**
@@ -193,28 +189,17 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     }
 
     /**
-     * 删除通过id
-     *
-     * @param ids id集合
-     * @return {@link Result}<{@link Boolean}>
-     */
-    @Override
-    public Result<Boolean> deleteById(List<Long> ids) {
-        return Result.ok(this.removeBatchByIds(ids));
-    }
-
-    /**
      * 重置客户端密钥
      *
-     * @param resetClientSecretParam 重置客户秘密参数
+     * @param resetClientSecretForm 重置客户秘密表单
      * @return {@link Boolean}
      */
     @Override
-    public Boolean resetClientSecretParam(ResetClientSecretParam resetClientSecretParam) {
-        resetClientSecretParam.setClientSecret(this.passwordEncoder.encode(resetClientSecretParam.getClientSecret()));
+    public Boolean resetClientSecret(ResetClientSecretForm resetClientSecretForm) {
+        resetClientSecretForm.setClientSecret(this.passwordEncoder.encode(resetClientSecretForm.getClientSecret()));
         return this.update(Wrappers.<SysRegisteredClient>lambdaUpdate()
-                .set(SysRegisteredClient::getClientSecret, resetClientSecretParam.getClientSecret())
-                .eq(SysRegisteredClient::getId, resetClientSecretParam.getId()));
+                .set(SysRegisteredClient::getClientSecret, resetClientSecretForm.getClientSecret())
+                .eq(SysRegisteredClient::getId, resetClientSecretForm.getId()));
     }
 
     /**

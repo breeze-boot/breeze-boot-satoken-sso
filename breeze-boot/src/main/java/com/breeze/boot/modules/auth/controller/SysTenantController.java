@@ -18,13 +18,17 @@ package com.breeze.boot.modules.auth.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
+import com.breeze.boot.modules.auth.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.form.TenantForm;
 import com.breeze.boot.modules.auth.model.query.TenantQuery;
+import com.breeze.boot.modules.auth.model.vo.TenantVO;
 import com.breeze.boot.modules.auth.service.SysTenantService;
-import com.breeze.boot.modules.system.model.entity.SysTenant;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -60,12 +64,12 @@ public class SysTenantController {
      * 列表
      *
      * @param tenantQuery 租户查询
-     * @return {@link Result}<{@link IPage}<{@link SysTenant}>>
+     * @return {@link Result}<{@link Page}<{@link TenantVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('auth:tenant:list')")
-    public Result<IPage<SysTenant>> list(TenantQuery tenantQuery) {
+    public Result<Page<TenantVO>> list(TenantQuery tenantQuery) {
         return Result.ok(this.sysTenantService.listPage(tenantQuery));
     }
 
@@ -73,19 +77,19 @@ public class SysTenantController {
      * 详情
      *
      * @param tenantId 租户id
-     * @return {@link Result}<{@link SysTenant}>
+     * @return {@link Result}<{@link TenantVO}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{tenantId}")
     @PreAuthorize("hasAnyAuthority('auth:tenant:info')")
-    public Result<SysTenant> info(@PathVariable("tenantId") Long tenantId) {
-        return Result.ok(this.sysTenantService.getById(tenantId));
+    public Result<TenantVO> info(@Parameter(description = "租户ID") @NotNull(message = "租户ID不能为空") @PathVariable("tenantId") Long tenantId) {
+        return Result.ok(this.sysTenantService.getInfoById(tenantId));
     }
 
     /**
      * 创建
      *
-     * @param tenant 平台实体入参
+     * @param tenant 平台表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
@@ -106,8 +110,8 @@ public class SysTenantController {
     @Operation(summary = "校验租户编码是否重复")
     @GetMapping("/checkTenantCode")
     @PreAuthorize("hasAnyAuthority('auth:tenant:list')")
-    public Result<Boolean> checkTenantCode(@NotBlank(message = "租户编码不能为空") @RequestParam("tenantCode") String tenantCode,
-                                           @RequestParam(value = "tenantId", required = false) Long tenantId) {
+    public Result<Boolean> checkTenantCode(@Parameter(description = "租户编码") @NotBlank(message = "租户编码不能为空") @RequestParam("tenantCode") String tenantCode,
+                                           @Parameter(description = "租户ID") @RequestParam(value = "tenantId", required = false) Long tenantId) {
         return Result.ok(Objects.isNull(this.sysTenantService.getOne(Wrappers.<SysTenant>lambdaQuery()
                 .ne(Objects.nonNull(tenantId), SysTenant::getId, tenantId)
                 .eq(SysTenant::getTenantCode, tenantCode))));
@@ -116,15 +120,17 @@ public class SysTenantController {
     /**
      * 修改
      *
-     * @param sysTenant 租户实体
+     * @param id         ID
+     * @param tenantForm 租户表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('auth:tenant:modify')")
     @BreezeSysLog(description = "租户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysTenant sysTenant) {
-        return Result.ok(this.sysTenantService.updateById(sysTenant));
+    public Result<Boolean> modify(@Parameter(description = "租户ID") @NotNull(message = "租户ID不能为空") @PathVariable Long id,
+                                  @Valid @RequestBody TenantForm tenantForm) {
+        return Result.ok(this.sysTenantService.modifyTenant(id,tenantForm));
     }
 
     /**
@@ -137,7 +143,7 @@ public class SysTenantController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('auth:tenant:delete')")
     @BreezeSysLog(description = "租户信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
+    public Result<Boolean> delete(@Parameter(description = "租户IDS") @NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
         return this.sysTenantService.removeTenantByIds(ids);
     }
 

@@ -16,12 +16,10 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,15 +31,18 @@ import com.breeze.boot.core.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.dto.UserRole;
-import com.breeze.boot.modules.auth.model.entity.*;
-import com.breeze.boot.modules.auth.model.params.UserOpenParam;
-import com.breeze.boot.modules.auth.model.params.UserResetParam;
-import com.breeze.boot.modules.auth.model.params.UserRolesParam;
-import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
+import com.breeze.boot.modules.auth.model.bo.UserBO;
+import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.entity.*;
+import com.breeze.boot.modules.auth.model.form.UserForm;
+import com.breeze.boot.modules.auth.model.form.UserOpenForm;
+import com.breeze.boot.modules.auth.model.form.UserResetForm;
+import com.breeze.boot.modules.auth.model.form.UserRolesForm;
+import com.breeze.boot.modules.auth.model.mappers.SysUserMapStruct;
+import com.breeze.boot.modules.auth.model.query.UserQuery;
+import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.system.model.entity.SysPost;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.breeze.boot.security.exception.AccessException;
 import com.breeze.boot.security.model.params.AuthLoginParam;
@@ -55,11 +56,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
+import static com.breeze.boot.core.enums.ResultCode.FAIL;
 
 /**
  * 系统用户服务impl
@@ -70,6 +73,8 @@ import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 @Service
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    private final SysUserMapStruct sysUserMapStruct;
 
     /**
      * 密码编码器
@@ -125,40 +130,65 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 列表页面
      *
      * @param userQuery 用户查询
-     * @return {@link IPage}<{@link SysUser}>
+     * @return {@link Page}<{@link UserVO}>
      */
     @Override
-    public IPage<SysUser> listPage(UserQuery userQuery) {
-        return this.baseMapper.listPage(new Page<>(userQuery.getCurrent(), userQuery.getSize()), userQuery);
+    public Page<UserVO> listPage(UserQuery userQuery) {
+        Page<UserBO> userBOPage = this.baseMapper.listPage(new Page<>(userQuery.getCurrent(), userQuery.getSize()), userQuery);
+        return this.sysUserMapStruct.pageBO2PageVO(userBOPage);
+    }
+
+    /**
+     * 通过ID查询用户
+     *
+     * @param id id
+     * @return {@link UserVO }
+     */
+    @Override
+    public UserVO getInfoById(Long id) {
+        SysUser sysUser = this.getById(id);
+        if (Objects.isNull(sysUser)) {
+            throw new SystemServiceException(FAIL);
+        }
+        List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
+        sysUser.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+        sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+        sysUser.setDeptName(Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).orElseGet(SysDept::new).getDeptName());
+        sysUser.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
+        if (StrUtil.isBlank(sysUser.getAvatar())) {
+            sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
+        }
+        sysUser.setSysRoles(roleList);
+        return this.sysUserMapStruct.entity2VO(sysUser);
     }
 
     /**
      * 保存用户
      *
-     * @param sysUser 系统用户
+     * @param userForm 系统用户
      * @return {@link Boolean}
      */
     @Override
-    public Result<Boolean> saveUser(SysUser sysUser) {
-        if (Objects.isNull(this.sysDeptService.getById(sysUser.getDeptId()))) {
+    public Result<Boolean> saveUser(@Valid UserForm userForm) {
+        if (Objects.isNull(this.sysDeptService.getById(userForm.getDeptId()))) {
             return Result.fail("部门不存在");
         }
-        sysUser.setPassword(this.passwordEncoder.encode(sysUser.getPassword()));
+        userForm.setPassword(this.passwordEncoder.encode(userForm.getPassword()));
+        SysUser sysUser = sysUserMapStruct.form2Entity(userForm);
         boolean save = this.save(sysUser);
-        if (save) {
-            this.saveUserRole(sysUser);
-        }
-        return Result.ok();
+        if (save) return Result.ok(this.saveUserRole(sysUser));
+        return Result.fail("创建失败");
     }
 
     /**
      * 通过Id更新用户
      *
-     * @param sysUser 系统用户
+     * @param userForm 用户表单
      * @return {@link Boolean}
      */
     @Override
-    public Boolean updateUserById(SysUser sysUser) {
+    public Boolean modifyUser(Long id, UserForm userForm) {
+        SysUser sysUser = sysUserMapStruct.form2Entity(userForm);
         boolean update = this.updateById(sysUser);
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
         if (update) {
@@ -171,8 +201,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 保存用户角色
      *
      * @param sysUser 系统用户
+     * @return boolean
      */
-    private void saveUserRole(SysUser sysUser) {
+    private boolean saveUserRole(SysUser sysUser) {
         List<SysUserRole> userRoleList = Optional.ofNullable(sysUser.getRoleIds())
                 .orElseGet(Lists::newArrayList).stream().map(id -> {
                     SysUserRole sysUserRole = new SysUserRole();
@@ -180,97 +211,82 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     sysUserRole.setRoleId(id);
                     return sysUserRole;
                 }).collect(Collectors.toList());
-        this.sysUserRoleService.saveBatch(userRoleList);
+        return this.sysUserRoleService.saveBatch(userRoleList);
     }
 
     /**
      * 开启关闭锁定
      *
-     * @param userOpenParam 用户打开参数
+     * @param userOpenForm 用户打开表单
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(UserOpenParam userOpenParam) {
-        boolean update = this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getIsLock, userOpenParam.getIsLock())
-                .eq(SysUser::getUsername, userOpenParam.getUsername()));
-        return update;
+    public Boolean open(UserOpenForm userOpenForm) {
+        return this.update(Wrappers.<SysUser>lambdaUpdate()
+                .set(SysUser::getIsLock, userOpenForm.getIsLock())
+                .eq(SysUser::getUsername, userOpenForm.getUsername()));
     }
 
     /**
      * 重置密码
      *
-     * @param userResetParam 用户重置密码参数
+     * @param userResetForm 用户重置密码表单
      * @return {@link Boolean}
      */
     @Override
-    public Boolean reset(UserResetParam userResetParam) {
+    public Boolean reset(UserResetForm userResetForm) {
         AesSecretProperties aesSecretProperties = SpringUtil.getBean(AesSecretProperties.class);
-        userResetParam.setPassword(this.passwordEncoder.encode(AesUtil.decryptStr(userResetParam.getPassword(), aesSecretProperties.getAesSecret())));
+        userResetForm.setPassword(this.passwordEncoder.encode(AesUtil.decryptStr(userResetForm.getPassword(), aesSecretProperties.getAesSecret())));
         return this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getPassword, userResetParam.getPassword()).eq(SysUser::getId, userResetParam.getId()));
+                .set(SysUser::getPassword, userResetForm.getPassword()).eq(SysUser::getId, userResetForm.getId()));
     }
 
     /**
      * 删除用户
      *
-     * @param sysUser 用户
+     * @param ids 用户
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    public Result<Boolean> removeUser(List<Long> ids) {
+        List<SysUser> sysUserList = this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getId, ids));
+        if (CollUtil.isEmpty(sysUserList)) {
+            return Result.fail(Boolean.FALSE, "用户不存在");
+        }
+        for (SysUser sysUser : sysUserList) {
+            this.removeUser(sysUser);
+        }
+        return Result.ok(Boolean.TRUE, "删除成功");
+    }
+
     @CacheEvict(cacheNames = LOGIN_USER, key = "#sysUser.username")
-    public Result<Boolean> removeUser(SysUser sysUser) {
+    public void removeUser(SysUser sysUser) {
         boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, sysUser.getId()));
         if (remove) {
             // 删除用户角色关系
             this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
                     .in(SysUserRole::getUserId, sysUser.getId()));
         }
-        return Result.ok(Boolean.TRUE, "删除成功");
     }
 
     /**
      * 用户添加角色
      *
-     * @param userRolesParam 用户角色参数
+     * @param userRolesForm 用户角色表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    public Result<Boolean> setRole(UserRolesParam userRolesParam) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, userRolesParam.getUserId()));
+    public Result<Boolean> setRole(UserRolesForm userRolesForm) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, userRolesForm.getUserId()));
         if (Objects.isNull(sysUser)) {
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
-        List<SysUserRole> collect = userRolesParam.getRoleIds().stream().map(roleId ->
+        List<SysUserRole> collect = userRolesForm.getRoleIds().stream().map(roleId ->
                 SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()
         ).collect(Collectors.toList());
         this.sysUserRoleService.saveBatch(collect);
         return Result.ok(Boolean.TRUE, "分配成功");
-    }
-
-    /**
-     * 通过ID查询用户
-     *
-     * @param id id
-     * @return {@link Result}<{@link SysUser}>
-     */
-    @Override
-    public Result<SysUser> getUserById(Long id) {
-        SysUser sysUser = this.getById(id);
-        if (Objects.isNull(sysUser)) {
-            return Result.fail("用户不存在");
-        }
-        List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
-        sysUser.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
-        sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
-        sysUser.setDeptName(Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).orElseGet(SysDept::new).getDeptName());
-        sysUser.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
-        if (StrUtil.isBlank(sysUser.getAvatar())) {
-            sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
-        }
-        sysUser.setSysRoles(roleList);
-        return Result.ok(sysUser);
     }
 
     /**
@@ -294,7 +310,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
         if (Objects.isNull(sysRole)) {
-            throw new AccessException(ResultCode.FORBIDDEN);
+            throw new AccessException(ResultCode.SC_FORBIDDEN);
         }
         this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
         return sysUser;
@@ -307,8 +323,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link List}<{@link SysUser}>
      */
     @Override
-    public List<SysUser> listUserByDeptId(List<Long> deptIds) {
-        return this.baseMapper.listUserByDeptId(deptIds);
+    public List<UserVO> listUserByDeptId(List<Long> deptIds) {
+        List<UserBO> userBOList = this.baseMapper.listUserByDeptId(deptIds);
+        return this.sysUserMapStruct.boList2VOList(userBOList);
     }
 
     /**
@@ -450,28 +467,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public BaseLoginUser buildLoginUserInfo(SysUser sysUser) {
         BaseLoginUser loginUser = new BaseLoginUser();
         try {
-            BeanUtil.copyProperties(sysUser, loginUser);
+            loginUser = sysUserMapStruct.entity2BaseLoginUser(sysUser);
             // 获取部门名称
-            Optional.ofNullable(sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> loginUser.setDeptName(sysDept.getDeptName()));
+            BaseLoginUser finalLoginUser = loginUser;
+            Optional.ofNullable(sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> finalLoginUser.setDeptName(sysDept.getDeptName()));
 
             // 查询用户的角色
-            Set<UserRole> userRoleSet = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId()))
+            Set<UserRoleDTO> userRoleDTOSet = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId()))
                     .orElse(Collections.emptySet());
-            if (CollUtil.isEmpty(userRoleSet)) {
+            if (CollUtil.isEmpty(userRoleDTOSet)) {
                 throw new SystemServiceException(ResultCode.EXCEPTION);
             }
 
-            loginUser.setAuthorities(sysMenuService.listUserMenuPermission(userRoleSet));
+            loginUser.setAuthorities(sysMenuService.listUserMenuPermission(userRoleDTOSet));
             // 角色CODE
-            loginUser.setUserRoleCodes(userRoleSet.stream().map(UserRole::getRoleCode).collect(Collectors.toSet()));
+            loginUser.setUserRoleCodes(userRoleDTOSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet()));
             // 角色ID
-            Set<Long> roleIds = userRoleSet.stream().map(UserRole::getRoleId).filter(Objects::nonNull).collect(Collectors.toSet());
+            Set<Long> roleIds = userRoleDTOSet.stream().map(UserRoleDTO::getRoleId).filter(Objects::nonNull).collect(Collectors.toSet());
             loginUser.setUserRoleIds(Optional.of(roleIds).orElse(Collections.emptySet()));
 
             // 用户的多个数据权限
-            Set<Long> roleIdSet = userRoleSet.stream()
+            Set<Long> roleIdSet = userRoleDTOSet.stream()
                     .filter(permission -> StrUtil.equals(permission.getPermissionCode(), DataPermissionCode.CUSTOMIZES.getCode()))
-                    .map(UserRole::getRoleId)
+                    .map(UserRoleDTO::getRoleId)
                     .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
@@ -485,7 +503,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             List<SysRoleColumnPermission> sysRoleColumnPermissions = Optional.ofNullable(sysRoleColumnPermissionService.listRoleColumnExcludeData(roleIdSet))
                     .orElse(Collections.emptyList());
             loginUser.setPermission(BaseLoginUser.BasePermission.builder()
-                    .permissionCode(getMaxPermissionScope(userRoleSet))
+                    .permissionCode(getMaxPermissionScope(userRoleDTOSet))
                     .permissions(permissions)
                     .excludeColumn(Optional.of(sysRoleColumnPermissions.stream().map(SysRoleColumnPermission::getColumnName).collect(Collectors.toSet())).orElse(Collections.emptySet()))
                     .build());
@@ -498,9 +516,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 
-    private String getMaxPermissionScope(Set<UserRole> userRoleSet) {
-        Set<String> permissionCodes = userRoleSet.stream()
-                .map(UserRole::getPermissionCode)
+    private String getMaxPermissionScope(Set<UserRoleDTO> userRoleDTOSet) {
+        Set<String> permissionCodes = userRoleDTOSet.stream()
+                .map(UserRoleDTO::getPermissionCode)
                 // 确保过滤掉null值，避免NullPointerException
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());

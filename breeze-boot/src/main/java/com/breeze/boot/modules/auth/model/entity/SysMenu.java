@@ -16,16 +16,12 @@
 
 package com.breeze.boot.modules.auth.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 系统菜单实体
@@ -48,28 +44,18 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
      * 平台ID
      */
     @Schema(description = "平台ID")
-    @NotNull(message = "平台ID不可为空")
     private Long platformId;
-
-    /**
-     * 平台名称
-     */
-    @Schema(description = "平台名称")
-    @TableField(exist = false)
-    private String platformName;
 
     /**
      * 上一级的菜单ID
      */
     @Schema(description = "上一级的菜单ID")
-    @NotNull(message = "上一级的菜单ID不可为空")
     private Long parentId;
 
     /**
      * 标题
      */
     @Schema(description = "标题")
-    @NotBlank(message = "标题不可为空")
     private String title;
 
     /**
@@ -133,10 +119,4 @@ public class SysMenu extends BaseModel<SysMenu> implements Serializable {
     @Schema(description = "顺序")
     private Integer sort;
 
-    /**
-     * 此菜单拥有的所有的权限
-     */
-    @Schema(description = "此菜单拥有的所有的权限")
-    @TableField(exist = false)
-    private List<String> permissions;
 }

@@ -22,9 +22,11 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.auth.model.entity.SysDept;
+import com.breeze.boot.modules.auth.model.form.DeptForm;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +79,7 @@ public class SysDeptController {
     @Operation(summary = "详情")
     @GetMapping("/info/{deptId}")
     @PreAuthorize("hasAnyAuthority('auth:dept:info')")
-    public Result<SysDept> info(@PathVariable("deptId") Long deptId) {
+    public Result<SysDept> info(@Parameter(description = "部门ID") @PathVariable("deptId") Long deptId) {
         return Result.ok(this.sysDeptService.getById(deptId));
     }
 
@@ -91,8 +93,8 @@ public class SysDeptController {
     @Operation(summary = "校验部门编码是否重复")
     @GetMapping("/checkDeptCode")
     @PreAuthorize("hasAnyAuthority('auth:dept:list')")
-    public Result<Boolean> checkDeptCode(@NotBlank(message = "部门编码不能为空") @RequestParam("deptCode") String deptCode,
-                                         @RequestParam(value = "deptId", required = false) Long deptId) {
+    public Result<Boolean> checkDeptCode(@Parameter(description = "部门编码") @NotBlank(message = "部门编码不能为空") @RequestParam("deptCode") String deptCode,
+                                         @Parameter(description = "部门ID") @RequestParam(value = "deptId", required = false) Long deptId) {
         return Result.ok(Objects.isNull(this.sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery()
                 .ne(Objects.nonNull(deptId), SysDept::getId, deptId)
                 .eq(SysDept::getDeptCode, deptCode))));
@@ -101,29 +103,30 @@ public class SysDeptController {
     /**
      * 创建
      *
-     * @param sysDept 部门实体
+     * @param deptForm 部门表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('auth:dept:create')")
     @BreezeSysLog(description = "部门信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysDept sysDept) {
-        return Result.ok(sysDeptService.save(sysDept));
+    public Result<Boolean> save(@Valid @RequestBody DeptForm deptForm) {
+        return Result.ok(sysDeptService.saveDept(deptForm));
     }
 
     /**
      * 修改
      *
-     * @param sysDept 部门实体
+     * @param deptForm 部门表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('auth:dept:modify')")
     @BreezeSysLog(description = "部门信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysDept sysDept) {
-        return Result.ok(this.sysDeptService.updateById(sysDept));
+    public Result<Boolean> modify(@Parameter(description = "部门ID") @NotNull(message = "部门ID不能为空") @PathVariable Long id,
+                                  @Valid @RequestBody DeptForm deptForm) {
+        return Result.ok(this.sysDeptService.modifyDept(id, deptForm));
     }
 
     /**
@@ -136,7 +139,7 @@ public class SysDeptController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('auth:dept:delete')")
     @BreezeSysLog(description = "部门信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long id) {
+    public Result<Boolean> delete(@Parameter(description = "部门ID") @NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysDeptService.deleteById(id);
     }
 

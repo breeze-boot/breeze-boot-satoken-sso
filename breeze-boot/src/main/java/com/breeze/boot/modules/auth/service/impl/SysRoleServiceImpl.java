@@ -16,19 +16,20 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.mapper.SysRoleMapper;
+import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
 import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
 import com.breeze.boot.modules.auth.model.entity.SysRoleRowPermission;
-import com.breeze.boot.modules.auth.model.dto.UserRole;
-import com.breeze.boot.modules.auth.model.params.RoleParam;
+import com.breeze.boot.modules.auth.model.form.RoleForm;
+import com.breeze.boot.modules.auth.model.mappers.SysRoleMapStruct;
 import com.breeze.boot.modules.auth.model.query.RoleQuery;
-import com.breeze.boot.modules.auth.mapper.SysRoleMapper;
+import com.breeze.boot.modules.auth.model.vo.RoleVO;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleRowPermissionService;
 import com.breeze.boot.modules.auth.service.SysRoleService;
@@ -52,6 +53,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
+    private final SysRoleMapStruct sysRoleMapStruct;
+
     /**
      * 系统角色菜单服务
      */
@@ -66,58 +69,68 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * 列表页面
      *
      * @param roleQuery 角色查询
-     * @return {@link Page}<{@link SysRole}>
+     * @return {@link Page}<{@link RoleVO}>
      */
     @Override
-    public Page<SysRole> listPage(RoleQuery roleQuery) {
-        return this.baseMapper.listPage(new Page<>(roleQuery.getCurrent(), roleQuery.getSize()), roleQuery);
+    public Page<RoleVO> listPage(RoleQuery roleQuery) {
+        Page<SysRole> sysRolePage = this.baseMapper.listPage(new Page<>(roleQuery.getCurrent(), roleQuery.getSize()), roleQuery);
+        return this.sysRoleMapStruct.page2VOPage(sysRolePage);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param roleId 角色id
+     * @return {@link RoleVO }
+     */
+    @Override
+    public RoleVO getInfoById(Long roleId) {
+        return this.sysRoleMapStruct.entity2VO(this.getById(roleId));
     }
 
     /**
      * 用户角色列表
      *
      * @param userId 用户id
-     * @return {@link Set}<{@link UserRole}>
+     * @return {@link Set}<{@link UserRoleDTO}>
      */
     @Override
-    public Set<UserRole> listRoleByUserId(Long userId) {
+    public Set<UserRoleDTO> listRoleByUserId(Long userId) {
         return this.baseMapper.listRoleByUserId(userId)
                 .stream()
                 .map(sysRoleEntity -> {
-                    UserRole userRole = new UserRole();
-                    BeanUtil.copyProperties(sysRoleEntity, userRole);
-                    userRole.setRoleId(sysRoleEntity.getId());
-                    return userRole;
+                    UserRoleDTO userRoleDTO = sysRoleMapStruct.entity2Dto(sysRoleEntity);
+                    userRoleDTO.setRoleId(sysRoleEntity.getId());
+                    return userRoleDTO;
                 }).collect(Collectors.toSet());
     }
 
     /**
      * 修改角色
      *
-     * @param roleParam 角色参数
+     * @param id ID
+     * @param roleForm 角色表单
      * @return {@link Boolean}
      */
     @Override
-    public Result<Boolean> updateRoleById(RoleParam roleParam) {
-        SysRole sysRole = new SysRole();
-        BeanUtil.copyProperties(roleParam, sysRole);
+    public Result<Boolean> modifyRole(Long id, RoleForm roleForm) {
+        SysRole sysRole = sysRoleMapStruct.form2Entity(roleForm);
+        sysRole.setId(id);
         boolean update = this.updateById(sysRole);
         if (update) {
-            return Result.ok(this.saveRoleRowPermission(roleParam));
+            return Result.ok(this.saveRoleRowPermission(roleForm));
         }
         return Result.ok(Boolean.FALSE);
     }
 
-    private Boolean saveRoleRowPermission(RoleParam roleParam) {
-        Set<Long> permissionIds = Optional.ofNullable(roleParam.getPermissionIds()).orElse(Sets.newHashSet());
+    private Boolean saveRoleRowPermission(RoleForm roleForm) {
+        Set<Long> permissionIds = Optional.ofNullable(roleForm.getPermissionIds()).orElse(Sets.newHashSet());
         Set<SysRoleRowPermission> sysRoleRowPermissionSet = permissionIds.stream().map(item ->
-                        SysRoleRowPermission.builder()
-                                .roleId(roleParam.getId())
+                        SysRoleRowPermission.builder().roleId(roleForm.getId())
                                 .permissionId(item)
                                 .build())
                 .collect(Collectors.toSet());
-        boolean remove = this.sysRoleRowPermissionService.remove(Wrappers.<SysRoleRowPermission>lambdaQuery()
-                .in(SysRoleRowPermission::getRoleId, roleParam.getId()));
+        boolean remove = this.sysRoleRowPermissionService.remove(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getRoleId, roleForm.getId()));
         if (remove) {
             return this.sysRoleRowPermissionService.saveBatch(sysRoleRowPermissionSet);
         }
@@ -125,12 +138,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public Result<Boolean> saveRole(RoleParam roleParam) {
-        SysRole sysRole = new SysRole();
-        BeanUtil.copyProperties(roleParam, sysRole);
+    public Result<Boolean> saveRole(RoleForm roleForm) {
+        SysRole sysRole = sysRoleMapStruct.form2Entity(roleForm);
         boolean save = this.save(sysRole);
         if (save) {
-            return Result.ok(this.saveRoleRowPermission(roleParam));
+            return Result.ok(this.saveRoleRowPermission(roleForm));
         }
         return Result.ok(Boolean.FALSE);
     }

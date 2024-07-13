@@ -6,5 +6,5 @@ __________                                    __________               __
  |______  /|__|   \___  \___  /_____ \\___  >  |______  /\____/ \____/|__|
         \/            \/    \/      \/    \/          \/
 
-        Spring Boot version: ${spring-boot.version}
-        Breeze Boot version: ${breeze.version}
+                                            Spring Boot version: ${spring-boot.version}
+                                            Breeze Boot version: ${project.version}

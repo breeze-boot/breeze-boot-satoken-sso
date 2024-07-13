@@ -19,7 +19,7 @@ package com.breeze.boot.modules.system.controller;
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
-import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.service.SysCommonService;
 import com.breeze.boot.security.annotation.JumpAuth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -186,33 +186,33 @@ public class SysCommonController {
     /**
      * 文件上传到minio
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Operation(summary = "文件上传到minio", description = "文件上传到minio")
     @GetMapping("/uploadMinioS3")
-    public Result<Map<String, Object>> uploadMinioS3(@Valid FileParam fileParam,
+    public Result<Map<String, Object>> uploadMinioS3(@Valid FileForm fileForm,
                                                      HttpServletRequest request,
                                                      HttpServletResponse response) {
-        return this.sysCommonService.uploadMinioS3(fileParam, request, response);
+        return this.sysCommonService.uploadMinioS3(fileForm, request, response);
     }
 
     /**
      * 文件上传到本地存储
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link ?}>
      */
     @Operation(summary = "文件上传到本地存储", description = "文件上传到本地存储")
     @GetMapping("/uploadLocalStorage")
-    public Result<?> uploadLocalStorage(@Valid FileParam fileParam,
+    public Result<?> uploadLocalStorage(@Valid FileForm fileForm,
                                         HttpServletRequest request,
                                         HttpServletResponse response) {
-        return this.sysCommonService.uploadLocalStorage(fileParam, request, response);
+        return this.sysCommonService.uploadLocalStorage(fileForm, request, response);
     }
 
     /**

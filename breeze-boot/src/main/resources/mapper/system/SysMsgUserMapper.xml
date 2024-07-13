@@ -19,7 +19,7 @@
         <result property="deleteBy" column="delete_by" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.system.model.vo.SysMsgUserVO">
+    <select id="listPage" resultType="com.breeze.boot.modules.system.model.vo.MsgUserVO">
         SELECT
         a.id,
         a.is_read,
@@ -55,7 +55,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listUsersMsg" resultType="com.breeze.boot.modules.system.model.vo.SysMsgUserVO">
+    <select id="listUsersMsg" resultType="com.breeze.boot.modules.system.model.vo.MsgUserVO">
         SELECT a.id,
                a.title,
                a.`code`,

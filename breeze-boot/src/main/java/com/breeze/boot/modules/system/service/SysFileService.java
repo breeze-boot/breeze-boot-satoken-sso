@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysFile;
-import com.breeze.boot.modules.system.model.params.FileParam;
+import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.model.query.FileQuery;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,22 +47,22 @@ public interface SysFileService extends IService<SysFile> {
     /**
      * 上传minio
      *
-     * @param fileParam 文件上传参数
+     * @param fileForm 文件上传参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
-    Result<Map<String, Object>> uploadMinioS3(FileParam fileParam, HttpServletRequest request, HttpServletResponse response);
+    Result<Map<String, Object>> uploadMinioS3(FileForm fileForm, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 上传本地存储
      *
-     * @param fileParam 文件参数
+     * @param fileForm 文件参数
      * @param request   请求
      * @param response  响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
-    Result<Map<String, Object>> uploadLocalStorage(FileParam fileParam, HttpServletRequest request, HttpServletResponse response);
+    Result<Map<String, Object>> uploadLocalStorage(FileForm fileForm, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 预览

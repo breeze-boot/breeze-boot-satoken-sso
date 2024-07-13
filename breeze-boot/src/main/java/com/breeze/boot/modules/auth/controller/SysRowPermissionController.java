@@ -22,12 +22,13 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.params.DataPermissionParam;
+import com.breeze.boot.modules.auth.model.form.RowPermissionForm;
 import com.breeze.boot.modules.auth.model.query.DataPermissionQuery;
-import com.breeze.boot.modules.auth.service.SysRoleRowPermissionService;
+import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import com.breeze.boot.modules.auth.service.SysRowPermissionService;
-import com.breeze.boot.modules.system.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.entity.SysTenant;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -59,20 +60,15 @@ public class SysRowPermissionController {
     private final SysRowPermissionService sysRowPermissionService;
 
     /**
-     * 系统角色数据权限服务
-     */
-    private final SysRoleRowPermissionService sysRoleRowPermissionService;
-
-    /**
      * 列表
      *
      * @param permissionQuery 数据权限查询
-     * @return {@link Result}<{@link Page}<{@link SysRowPermission}>>
+     * @return {@link Result}<{@link Page}<{@link RowPermissionVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('auth:permission:list')")
-    public Result<Page<SysRowPermission>> list(DataPermissionQuery permissionQuery) {
+    public Result<Page<RowPermissionVO>> list(DataPermissionQuery permissionQuery) {
         return Result.ok(this.sysRowPermissionService.listPage(permissionQuery));
     }
 
@@ -80,13 +76,13 @@ public class SysRowPermissionController {
      * 详情
      *
      * @param permissionId 权限ID
-     * @return {@link Result}<{@link SysRowPermission}>
+     * @return {@link Result}<{@link RowPermissionVO}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{permissionId}")
     @PreAuthorize("hasAnyAuthority('auth:permission:info')")
-    public Result<SysRowPermission> info(@PathVariable("permissionId") Long permissionId) {
-        return Result.ok(this.sysRowPermissionService.getById(permissionId));
+    public Result<RowPermissionVO> info(@Parameter(description = "权限ID") @NotNull(message = "参数不能为空") @PathVariable("permissionId") Long permissionId) {
+        return Result.ok(this.sysRowPermissionService.getInfoById(permissionId));
     }
 
 
@@ -100,8 +96,8 @@ public class SysRowPermissionController {
     @Operation(summary = "校验权限编码是否重复")
     @GetMapping("/checkPermissionCode")
     @PreAuthorize("hasAnyAuthority('auth:permission:list')")
-    public Result<Boolean> checkTenantCode(@NotBlank(message = "权限编码不能为空") @RequestParam("permissionCode") String permissionCode,
-                                           @RequestParam(value = "permissionId", required = false) Long permissionId) {
+    public Result<Boolean> checkTenantCode(@Parameter(description = "权限编码") @NotBlank(message = "权限编码不能为空") @RequestParam("permissionCode") String permissionCode,
+                                           @Parameter(description = "权限ID") @RequestParam(value = "permissionId", required = false) Long permissionId) {
         return Result.ok(Objects.isNull(this.sysRowPermissionService.getOne(Wrappers.<SysRowPermission>lambdaQuery()
                 .ne(Objects.nonNull(permissionId), SysRowPermission::getId, permissionId)
                 .eq(SysRowPermission::getPermissionCode, permissionCode))));
@@ -110,29 +106,31 @@ public class SysRowPermissionController {
     /**
      * 创建
      *
-     * @param permissionParam 数据权限参数
+     * @param permissionParam 行权限表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('auth:permission:create')")
     @BreezeSysLog(description = "数据权限信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody DataPermissionParam permissionParam) {
+    public Result<Boolean> save(@Valid @RequestBody RowPermissionForm permissionParam) {
         return this.sysRowPermissionService.saveRowPermission(permissionParam);
     }
 
     /**
      * 修改
      *
-     * @param permissionParam 数据权限参数
+     * @param id              ID
+     * @param permissionParam 数据权限表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
     @PutMapping
     @PreAuthorize("hasAnyAuthority('auth:permission:modify')")
     @BreezeSysLog(description = "数据权限信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody DataPermissionParam permissionParam) {
-        return this.sysRowPermissionService.modifyPermission(permissionParam);
+    public Result<Boolean> modify(@Parameter(description = "权限ID") @NotNull(message = "权限ID不能为空") Long id,
+                                  @Valid @RequestBody RowPermissionForm permissionParam) {
+        return this.sysRowPermissionService.modifyPermission(id, permissionParam);
     }
 
     /**
@@ -145,7 +143,7 @@ public class SysRowPermissionController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('auth:permission:delete')")
     @BreezeSysLog(description = "数据权限信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    public Result<Boolean> delete(@Parameter(description = "权限IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysRowPermissionService.removeRowPermissionByIds(Arrays.asList(ids));
     }
 

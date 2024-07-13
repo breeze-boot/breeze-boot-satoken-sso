@@ -40,6 +40,6 @@ public interface ProcessCategoryMapper extends BreezeBaseMapper<FlowCategory> {
      * @param category 类别
      * @return {@link IPage}<{@link FlowCategory}>
      */
-    IPage<FlowCategory> listPage(Page<FlowCategory> page, @Param("category") FlowCategoryQuery category);
+    Page<FlowCategory> listPage(Page<FlowCategory> page, @Param("category") FlowCategoryQuery category);
 
 }

@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.log.bo.SysLogBO;
 import com.breeze.boot.modules.system.model.entity.SysLog;
 import com.breeze.boot.modules.system.model.query.LogQuery;
+import com.breeze.boot.modules.system.model.vo.LogVO;
 
 /**
  * 系统日志服务
@@ -34,9 +35,17 @@ public interface SysLogService extends IService<SysLog> {
      * 日志列表
      *
      * @param logQuery 日志查询
-     * @return {@link Page}<{@link SysLog}>
+     * @return {@link Page}<{@link LogVO}>
      */
-    Page<SysLog> listPage(LogQuery logQuery);
+    Page<LogVO> listPage(LogQuery logQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param logId 日志id
+     * @return {@link LogVO }
+     */
+    LogVO getInfoById(Long logId);
 
     /**
      * 保存系统日志
@@ -49,6 +58,7 @@ public interface SysLogService extends IService<SysLog> {
      * 清空
      */
     void truncate();
+
 
 }
 

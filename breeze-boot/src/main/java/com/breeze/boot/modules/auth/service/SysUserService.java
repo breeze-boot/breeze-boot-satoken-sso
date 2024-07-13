@@ -16,14 +16,16 @@
 
 package com.breeze.boot.modules.auth.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
-import com.breeze.boot.modules.auth.model.params.UserOpenParam;
-import com.breeze.boot.modules.auth.model.params.UserResetParam;
-import com.breeze.boot.modules.auth.model.params.UserRolesParam;
+import com.breeze.boot.modules.auth.model.form.UserForm;
+import com.breeze.boot.modules.auth.model.form.UserOpenForm;
+import com.breeze.boot.modules.auth.model.form.UserResetForm;
+import com.breeze.boot.modules.auth.model.form.UserRolesForm;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
+import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.security.service.ISysUserService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,65 +43,65 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
      * 列表页面
      *
      * @param userQuery 用户查询
-     * @return {@link IPage}<{@link SysUser}>
+     * @return {@link Page}<{@link UserVO}>
      */
-    IPage<SysUser> listPage(UserQuery userQuery);
-
-    /**
-     * 保存用户
-     *
-     * @param sysUser 系统用户
-     * @return {@link Result}<{@link Boolean}>
-     */
-    Result<Boolean> saveUser(SysUser sysUser);
-
-    /**
-     * 通过id更新用户
-     *
-     * @param sysUser 系统用户
-     * @return {@link Boolean}
-     */
-    Boolean updateUserById(SysUser sysUser);
-
-    /**
-     * 开关
-     *
-     * @param userOpenParam 用户打开参数
-     * @return {@link Boolean}
-     */
-    Boolean open(UserOpenParam userOpenParam);
-
-    /**
-     * 重置密码
-     *
-     * @param userResetParam 用户重置密码参数
-     * @return {@link Boolean}
-     */
-    Boolean reset(UserResetParam userResetParam);
-
-    /**
-     * 删除用户
-     *
-     * @param sysUser 用户
-     * @return {@link Result}<{@link Boolean}>
-     */
-    Result<Boolean> removeUser(SysUser sysUser);
-
-    /**
-     * 用户分配角色
-     *
-     * @param userRolesParam 用户角色参数
-     * @return {@link Result}<{@link Boolean}>
-     */
-    Result<Boolean> setRole(UserRolesParam userRolesParam);
+    Page<UserVO> listPage(UserQuery userQuery);
 
     /**
      * 通过ID查询用户
      *
      * @param id id
-     * @return {@link Result}<{@link SysUser}>
+     * @return {@link UserVO }
      */
-    Result<SysUser> getUserById(Long id);
+    UserVO getInfoById(Long id);
+
+    /**
+     * 保存用户
+     *
+     * @param userForm 系统用户
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> saveUser(UserForm userForm);
+
+    /**
+     * 通过id更新用户
+     *
+     * @param userForm 用户表单
+     * @return {@link Boolean}
+     */
+    Boolean modifyUser(Long id, UserForm userForm);
+
+    /**
+     * 开关
+     *
+     * @param userOpenForm 用户打开表单
+     * @return {@link Boolean}
+     */
+    Boolean open(UserOpenForm userOpenForm);
+
+    /**
+     * 重置密码
+     *
+     * @param userResetForm 用户重置密码表单
+     * @return {@link Boolean}
+     */
+    Boolean reset(UserResetForm userResetForm);
+
+    /**
+     * 删除用户
+     *
+     * @param ids 用户ID
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> removeUser(List<Long> ids);
+
+    /**
+     * 用户分配角色
+     *
+     * @param userRolesForm 用户角色表单
+     * @return {@link Result}<{@link Boolean}>
+     */
+    Result<Boolean> setRole(UserRolesForm userRolesForm);
 
     /**
      * 注册用户
@@ -116,7 +118,7 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
      * @param deptIds 部门IDS
      * @return {@link List}<{@link SysUser}>
      */
-    List<SysUser> listUserByDeptId(List<Long> deptIds);
+    List<UserVO> listUserByDeptId(List<Long> deptIds);
 
     /**
      * 导出

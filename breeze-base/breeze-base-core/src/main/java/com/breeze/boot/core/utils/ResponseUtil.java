@@ -45,7 +45,6 @@ public class ResponseUtil {
         ServletOutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             out = response.getOutputStream();
             ObjectMapper objectMapper = new ObjectMapper();

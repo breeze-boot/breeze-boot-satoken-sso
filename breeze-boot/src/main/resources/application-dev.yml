@@ -92,3 +92,36 @@ spring:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
         session-stat-enable: true
         session-stat-max-count: 1000
+
+breeze:
+  # 日志拦截开关
+  log:
+    enable: true
+  # 本地硬盘存储配置
+  local:
+    nginx-host: http://localhost:9000/img/
+  # oss s3 配置
+  oss:
+    s3:
+      minio:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      cos:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+      kodo:
+        domain-url: http://localhost:9092/
+        endpoint: http://localhost:9092
+        access-key: admin
+        access-key-secret: 12345678
+  wx:
+    app-id: wx269d15f14a5fc7e2
+    app-secret: 273950b557912864a8627ff5ff9db82b
+  sap:
+    sap-client-id: T800
+    sap-file-type: yml
+    sap-file-path: /sap/

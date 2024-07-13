@@ -38,14 +38,4 @@ public class TenantProperties {
      */
     private List<String> tables;
 
-    /**
-     * 列
-     */
-    private String column = "tenant_id";
-
-    /**
-     * 参数
-     */
-    private String param = "tenantId";
-
 }

@@ -46,10 +46,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
      */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
-        log.info(response.getHeader("Authorization"));
         log.error("[携带了合法token,但权限不足以访问其请求的资源：403]", accessDeniedException);
         // 此处不再返回使用异常拦截进行处理
-        ResponseUtil.response(response, ResultCode.UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        ResponseUtil.response(response, ResultCode.SC_FORBIDDEN);
     }
 
 }

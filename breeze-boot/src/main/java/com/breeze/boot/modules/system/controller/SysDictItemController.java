@@ -19,10 +19,12 @@ package com.breeze.boot.modules.system.controller;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.model.entity.SysDictItem;
+import com.breeze.boot.modules.system.model.form.DictItemForm;
 import com.breeze.boot.modules.system.model.query.DictItemQuery;
+import com.breeze.boot.modules.system.model.vo.DictItemVO;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +58,12 @@ public class SysDictItemController {
      * 列表
      *
      * @param dictItemQuery 字典项查询
-     * @return {@link Result}<{@link List}<{@link SysDictItem}>>
+     * @return {@link Result}<{@link List}<{@link DictItemVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:list')")
-    public Result<List<SysDictItem>> list(DictItemQuery dictItemQuery) {
+    public Result<List<DictItemVO>> list(DictItemQuery dictItemQuery) {
         return Result.ok(this.sysDictItemService.listDictItem(dictItemQuery));
     }
 
@@ -69,41 +71,43 @@ public class SysDictItemController {
      * 详情
      *
      * @param dictItemId 字典项id
-     * @return {@link Result}<{@link SysDictItem}>
+     * @return {@link Result}<{@link DictItemVO}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{dictItemId}")
     @PreAuthorize("hasAnyAuthority('auth:dict:info')")
-    public Result<SysDictItem> info(@PathVariable("dictItemId") Long dictItemId) {
-        return Result.ok(this.sysDictItemService.getById(dictItemId));
+    public Result<DictItemVO> info(@Parameter(description = "字典项ID") @NotNull(message = "字典项ID") @PathVariable("dictItemId") Long dictItemId) {
+        return Result.ok(this.sysDictItemService.getInfoById(dictItemId));
     }
 
     /**
      * 创建
      *
-     * @param sysDictItem 字典项保存参数
+     * @param dictItemForm 字典项表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:create')")
     @BreezeSysLog(description = "字典项信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysDictItem sysDictItem) {
-        return Result.ok(sysDictItemService.save(sysDictItem));
+    public Result<Boolean> save(@Valid @RequestBody DictItemForm dictItemForm) {
+        return Result.ok(sysDictItemService.saveDictItem(dictItemForm));
     }
 
     /**
      * 修改
      *
-     * @param sysDictItem 字典项 实体
+     * @param id           ID
+     * @param dictItemForm 字典项表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
     @BreezeSysLog(description = "字典项信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysDictItem sysDictItem) {
-        return Result.ok(this.sysDictItemService.updateById(sysDictItem));
+    public Result<Boolean> modify(@Parameter(description = "字典项ID") @NotNull(message = "字典项ID") @PathVariable Long id,
+                                  @Valid @RequestBody DictItemForm dictItemForm) {
+        return Result.ok(this.sysDictItemService.modifyDictItem(id, dictItemForm));
     }
 
     /**
@@ -116,7 +120,7 @@ public class SysDictItemController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
     @BreezeSysLog(description = "字典项信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    public Result<Boolean> delete(@Parameter(description = "字典项ID") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysDictItemService.removeByIds(Arrays.asList(ids)));
     }
 

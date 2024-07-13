@@ -20,9 +20,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
-import com.breeze.boot.modules.system.model.vo.SysMsgUserVO;
+import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.modules.system.service.SysMsgUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -57,37 +56,24 @@ public class SysMsgUserController {
      * 列表
      *
      * @param userMsgQuery 用户消息查询
-     * @return {@link Result}<{@link IPage}<{@link SysMsgUserVO}>>
+     * @return {@link Result}<{@link IPage}<{@link MsgUserVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:msgUser:list')")
-    public Result<IPage<SysMsgUserVO>> list(UserMsgQuery userMsgQuery) {
+    public Result<IPage<MsgUserVO>> list(UserMsgQuery userMsgQuery) {
         return Result.ok(this.sysMsgUserService.listPage(userMsgQuery));
-    }
-
-    /**
-     * 详情
-     *
-     * @param msgUserId 用户消息id
-     * @return {@link Result}<{@link SysMsgUser}>
-     */
-    @Operation(summary = "详情")
-    @GetMapping("/info/{msgUserId}")
-    @PreAuthorize("hasAnyAuthority('auth:msgUser:info')")
-    public Result<SysMsgUser> info(@PathVariable("msgUserId") Long msgUserId) {
-        return Result.ok(this.sysMsgUserService.getById(msgUserId));
     }
 
     /**
      * 获取用户的消息
      *
      * @param username 用户名
-     * @return {@link Result}<{@link List}<{@link SysMsgUserVO}>>
+     * @return {@link Result}<{@link List}<{@link MsgUserVO}>>
      */
     @Operation(summary = "获取用户的消息")
     @GetMapping("/listUsersMsg")
-    public Result<List<SysMsgUserVO>> listUsersMsg(@RequestParam String username) {
+    public Result<List<MsgUserVO>> listUsersMsg(@RequestParam String username) {
         return Result.ok(this.sysMsgUserService.listUsersMsg(username));
     }
 

@@ -26,7 +26,7 @@ public enum ResultCode {
     /**
      * 令牌无效
      */
-    TOKEN_INVALID("A101", "令牌无效"),
+    SC_UNAUTHORIZED("A101", "令牌无效"),
     /**
      * 未登录
      */
@@ -34,7 +34,7 @@ public enum ResultCode {
     /**
      * 未授权资源，请联系管理员授权
      */
-    UNAUTHORIZED("A103", "未授权资源，请联系管理员授权"),
+    SC_FORBIDDEN("A103", "未授权资源，请联系管理员授权后重新登陆"),
     /**
      * 身份验证异常
      */
@@ -49,7 +49,6 @@ public enum ResultCode {
      * 文件不存在
      */
     FILE_NOT_FOUND("B002", "文件不存在"),
-
 
     /**
      * 系统异常

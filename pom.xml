@@ -41,7 +41,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <breeze-boot.version>1.0</breeze-boot.version>
         <spring-boot.version>2.7.10</spring-boot.version>
         <spring.version>5.3.26</spring.version>
 
@@ -50,7 +49,6 @@
         <swagger.version>2.2.9</swagger.version>
         <knife4j.version>4.1.0</knife4j.version>
 
-        <lombok.version>1.18.18</lombok.version>
         <hutool.version>5.8.9</hutool.version>
         <guava.version>31.1-jre</guava.version>
         <spring-boot-monitor.version>2.7.3</spring-boot-monitor.version>
@@ -66,6 +64,8 @@
         <dynamic-datasource.version>3.4.1</dynamic-datasource.version>
 
         <flowable.version>6.7.2</flowable.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <lombok.version>1.18.12</lombok.version>
 
         <docker.registry>127.0.0.1</docker.registry>
         <docker.host>http://127.0.0.1:2375</docker.host>
@@ -86,6 +86,34 @@
         <!-- maven.compiler.encoding表示maven编译时-->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+    </dependencies>
+
 
     <dependencyManagement>
         <dependencies>
@@ -111,6 +139,19 @@
                 <version>1.0</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+                <exclusions>
+                    <!--排除tomcat依赖-->
+                    <exclusion>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -212,6 +253,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
@@ -257,85 +304,91 @@
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-core</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-validator</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-doc</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-security</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-quartz</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-anji-captcha</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-sap-interface</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-log</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-xss</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-mail</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-websocket</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-oss</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-redis-cache</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.breeze</groupId>
                 <artifactId>breeze-base-mybatis</artifactId>
-                <version>${breeze-boot.version}</version>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.breeze</groupId>
+                <artifactId>breeze-base-ureport</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- flowable任务依赖 -->
@@ -347,27 +400,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <finalName>${project.name}</finalName>
@@ -385,14 +417,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                    <configuration>
-                        <excludes>
-                            <exclude>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                            </exclude>
-                        </excludes>
-                    </configuration>
                     <executions>
                         <execution>
                             <goals>
@@ -444,6 +468,18 @@
                     <source>${maven.compiler.source}</source>
                     <encoding>UTF-8</encoding>
                     <skip>true</skip>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <!--

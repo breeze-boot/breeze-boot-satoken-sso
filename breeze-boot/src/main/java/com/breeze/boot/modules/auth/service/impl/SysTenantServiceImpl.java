@@ -18,20 +18,23 @@ package com.breeze.boot.modules.auth.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.model.entity.SysTenant;
-import com.breeze.boot.modules.auth.model.entity.SysUser;
-import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.mapper.SysTenantMapper;
+import com.breeze.boot.modules.auth.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.form.TenantForm;
+import com.breeze.boot.modules.auth.model.mappers.SysTenantMapStruct;
+import com.breeze.boot.modules.auth.model.query.TenantQuery;
+import com.breeze.boot.modules.auth.model.vo.TenantVO;
 import com.breeze.boot.modules.auth.service.SysTenantService;
 import com.breeze.boot.modules.auth.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,19 +53,46 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
      */
     private final SysUserService sysUserService;
 
+    private final SysTenantMapStruct sysTenantMapStruct;
+
     /**
      * 列表页面
      *
      * @param tenantQuery 租户查询
-     * @return {@link IPage}<{@link SysTenant}>
+     * @return {@link Page}<{@link TenantVO}>
      */
     @Override
-    public IPage<SysTenant> listPage(TenantQuery tenantQuery) {
-        Page<SysTenant> logEntityPage = new Page<>(tenantQuery.getCurrent(), tenantQuery.getSize());
-        return new LambdaQueryChainWrapper<>(this.getBaseMapper())
+    public Page<TenantVO> listPage(TenantQuery tenantQuery) {
+        Page<SysTenant> page = new LambdaQueryChainWrapper<>(this.getBaseMapper())
                 .like(StrUtil.isAllNotBlank(tenantQuery.getTenantName()), SysTenant::getTenantName, tenantQuery.getTenantName())
                 .orderByDesc(SysTenant::getCreateTime)
-                .page(logEntityPage);
+                .page(new Page<>(tenantQuery.getCurrent(), tenantQuery.getSize()));
+        return sysTenantMapStruct.page2VOPage(page);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param tenantId 租户id
+     * @return {@link TenantVO }
+     */
+    @Override
+    public TenantVO getInfoById(Long tenantId) {
+        return this.sysTenantMapStruct.entity2VO(this.getById(tenantId));
+    }
+
+    /**
+     * 修改租户
+     *
+     * @param id         ID
+     * @param tenantForm 租户表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyTenant(Long id, TenantForm tenantForm) {
+        SysTenant sysTenant = this.sysTenantMapStruct.form2Entity(tenantForm);
+        sysTenant.setId(id);
+        return this.updateById(sysTenant);
     }
 
     /**
@@ -72,6 +102,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeTenantByIds(List<Long> ids) {
         List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getTenantId, ids));
         if (CollUtil.isNotEmpty(sysUserList)) {

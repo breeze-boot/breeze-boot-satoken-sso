@@ -4,7 +4,7 @@
 <mapper namespace="com.breeze.boot.modules.auth.mapper.SysUserMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.auth.model.entity.SysUser" id="sysUserMap">
+    <resultMap type="com.breeze.boot.modules.auth.model.bo.UserBO" id="userBOMap">
         <id property="id" column="id"/>
         <result property="userCode" column="user_code"/>
         <result property="username" column="username"/>
@@ -19,13 +19,6 @@
         <result property="sex" column="sex"/>
         <result property="idCard" column="id_card"/>
         <result property="isLock" column="is_lock"/>
-        <result property="createBy" column="create_by"/>
-        <result property="createTime" column="create_time"/>
-        <result property="createName" column="create_name"/>
-        <result property="updateBy" column="update_by"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="isDelete" column="is_delete"/>
-        <result property="deleteBy" column="delete_by"/>
         <collection property="roleIds" javaType="java.util.List"
                     ofType="java.lang.Long"
                     column="{userId=id}"
@@ -38,7 +31,7 @@
         </collection>
     </resultMap>
 
-    <select id="listPage" resultMap="sysUserMap">
+    <select id="listPage" resultMap="userBOMap">
         SELECT
         a.id,
         a.dept_id,
@@ -74,7 +67,7 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listUserByDeptId" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
+    <select id="listUserByDeptId" resultType="com.breeze.boot.modules.auth.model.bo.UserBO">
         SELECT
         a.id,
         a.dept_id,

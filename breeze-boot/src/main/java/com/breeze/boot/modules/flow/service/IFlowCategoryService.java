@@ -16,10 +16,14 @@
 
 package com.breeze.boot.modules.flow.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.modules.flow.model.entity.FlowCategory;
+import com.breeze.boot.modules.flow.model.form.FlowCategoryForm;
 import com.breeze.boot.modules.flow.model.query.FlowCategoryQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowCategoryVO;
+
+import javax.validation.Valid;
 
 /**
  * 流程分类服务
@@ -33,8 +37,33 @@ public interface IFlowCategoryService extends IService<FlowCategory> {
      * 列表页面
      *
      * @param processCategory 流程分类
-     * @return {@link IPage}<{@link FlowCategory}>
+     * @return {@link Page}<{@link FlowCategoryVO}>
      */
-    IPage<FlowCategory> listPage(FlowCategoryQuery processCategory);
+    Page<FlowCategoryVO> listPage(FlowCategoryQuery processCategory);
+
+    /**
+     * 按id获取信息
+     *
+     * @param categoryId 类别id
+     * @return {@link FlowCategory }
+     */
+    FlowCategoryVO getInfoById(Long categoryId);
+
+    /**
+     * 保存流类别
+     *
+     * @param flowCategoryForm 流程分类表单
+     * @return {@link Boolean }
+     */
+    Boolean saveFlowCategory(FlowCategoryForm flowCategoryForm);
+
+    /**
+     * 修改流类别
+     *
+     * @param id ID
+     * @param flowCategoryForm 流程分类表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyFlowCategory(Long id, @Valid FlowCategoryForm flowCategoryForm);
 
 }

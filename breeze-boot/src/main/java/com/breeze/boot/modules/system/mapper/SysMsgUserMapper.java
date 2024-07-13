@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
-import com.breeze.boot.modules.system.model.vo.SysMsgUserVO;
+import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.mybatis.annotation.BreezeDataPermission;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -41,17 +41,17 @@ public interface SysMsgUserMapper extends BreezeBaseMapper<SysMsgUser> {
      *
      * @param page         页面
      * @param userMsgQuery 用户消息查询
-     * @return {@link IPage}<{@link SysMsgUserVO}>
+     * @return {@link IPage}<{@link MsgUserVO}>
      */
     @BreezeDataPermission
-    IPage<SysMsgUserVO> listPage(Page<SysMsgUser> page, @Param("userMsgQuery") UserMsgQuery userMsgQuery);
+    IPage<MsgUserVO> listPage(Page<SysMsgUser> page, @Param("userMsgQuery") UserMsgQuery userMsgQuery);
 
     /**
      * 获取消息列表通过用户名
      *
      * @param username 用户名
-     * @return {@link List}<{@link SysMsgUserVO}>
+     * @return {@link List}<{@link MsgUserVO}>
      */
-    List<SysMsgUserVO> listUsersMsg(String username);
+    List<MsgUserVO> listUsersMsg(String username);
 
 }

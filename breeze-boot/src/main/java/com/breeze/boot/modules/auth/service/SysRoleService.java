@@ -19,10 +19,11 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
-import com.breeze.boot.modules.auth.model.dto.UserRole;
-import com.breeze.boot.modules.auth.model.params.RoleParam;
+import com.breeze.boot.modules.auth.model.form.RoleForm;
 import com.breeze.boot.modules.auth.model.query.RoleQuery;
+import com.breeze.boot.modules.auth.model.vo.RoleVO;
 
 import java.util.List;
 import java.util.Set;
@@ -39,9 +40,17 @@ public interface SysRoleService extends IService<SysRole> {
      * 列表页面
      *
      * @param roleQuery 角色查询
-     * @return {@link Page}<{@link SysRole}>
+     * @return {@link Page}<{@link RoleVO}>
      */
-    Page<SysRole> listPage(RoleQuery roleQuery);
+    Page<RoleVO> listPage(RoleQuery roleQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param roleId 角色id
+     * @return {@link RoleVO }
+     */
+    RoleVO getInfoById(Long roleId);
 
     /**
      * 用户角色列表
@@ -49,7 +58,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param userId 用户ID
      * @return {@link List}<{@link SysRole}>
      */
-    Set<UserRole> listRoleByUserId(Long userId);
+    Set<UserRoleDTO> listRoleByUserId(Long userId);
 
     /**
      * 删除由ids
@@ -70,18 +79,19 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 修改
      *
-     * @param roleParam 角色参数
+     * @param id       ID
+     * @param roleForm 角色表单
      * @return {@link Boolean}
      */
-    Result<Boolean> updateRoleById(RoleParam roleParam);
+    Result<Boolean> modifyRole(Long id, RoleForm roleForm);
 
     /**
      * 保存
      *
-     * @param roleParam 角色参数
+     * @param roleForm 角色表单
      * @return {@link Boolean}
      */
-    Result<Boolean> saveRole(RoleParam roleParam);
+    Result<Boolean> saveRole(RoleForm roleForm);
 
 }
 

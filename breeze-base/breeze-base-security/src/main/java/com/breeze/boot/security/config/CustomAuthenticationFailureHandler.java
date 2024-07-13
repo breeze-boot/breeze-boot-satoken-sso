@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.breeze.boot.core.enums.ResultCode.TOKEN_INVALID;
+import static com.breeze.boot.core.enums.ResultCode.SC_UNAUTHORIZED;
 
 /**
  * 自定义身份验证失败处理程序
@@ -43,17 +43,17 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     private static final Map<String, ResultCode> errorCodeMap = new HashMap<>();
 
     static {
-        errorCodeMap.put("invalid_grant", ResultCode.exception(TOKEN_INVALID,"Invalid grant"));
-        errorCodeMap.put("invalid_request", ResultCode.exception(TOKEN_INVALID,"Invalid request"));
-        errorCodeMap.put("invalid_token", TOKEN_INVALID); // 假设TOKEN_INVALID是一个已经定义好的ResultCode
-        errorCodeMap.put("unauthorized_client", ResultCode.exception(TOKEN_INVALID,"Unauthorized client"));
-        errorCodeMap.put("unsupported_grant_type", ResultCode.exception(TOKEN_INVALID,"Unsupported grant type"));
-        errorCodeMap.put("invalid_scope", ResultCode.exception(TOKEN_INVALID,"Invalid scope"));
-        errorCodeMap.put("invalid_client", ResultCode.exception(TOKEN_INVALID,"Invalid client"));
-        errorCodeMap.put("access_denied", ResultCode.exception(TOKEN_INVALID,"Access denied"));
-        errorCodeMap.put("invalid_redirect_uri", ResultCode.exception(TOKEN_INVALID,"Invalid redirect URI"));
-        errorCodeMap.put("invalid_code", ResultCode.exception(TOKEN_INVALID,"Invalid code"));
-        errorCodeMap.put("invalid_refresh_token", ResultCode.exception(TOKEN_INVALID,"Invalid refresh token"));
+        errorCodeMap.put("invalid_grant", ResultCode.exception(SC_UNAUTHORIZED,"Invalid grant"));
+        errorCodeMap.put("invalid_request", ResultCode.exception(SC_UNAUTHORIZED,"Invalid request"));
+        errorCodeMap.put("invalid_token", SC_UNAUTHORIZED); // 假设SC_UNAUTHORIZED是一个已经定义好的ResultCode
+        errorCodeMap.put("unauthorized_client", ResultCode.exception(SC_UNAUTHORIZED,"Unauthorized client"));
+        errorCodeMap.put("unsupported_grant_type", ResultCode.exception(SC_UNAUTHORIZED,"Unsupported grant type"));
+        errorCodeMap.put("invalid_scope", ResultCode.exception(SC_UNAUTHORIZED,"Invalid scope"));
+        errorCodeMap.put("invalid_client", ResultCode.exception(SC_UNAUTHORIZED,"Invalid client"));
+        errorCodeMap.put("access_denied", ResultCode.exception(SC_UNAUTHORIZED,"Access denied"));
+        errorCodeMap.put("invalid_redirect_uri", ResultCode.exception(SC_UNAUTHORIZED,"Invalid redirect URI"));
+        errorCodeMap.put("invalid_code", ResultCode.exception(SC_UNAUTHORIZED,"Invalid code"));
+        errorCodeMap.put("invalid_refresh_token", ResultCode.exception(SC_UNAUTHORIZED,"Invalid refresh token"));
     }
 
     /**

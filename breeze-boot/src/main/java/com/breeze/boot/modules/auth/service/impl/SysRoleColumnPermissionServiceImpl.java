@@ -24,9 +24,11 @@ import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.params.ColumnPermissionParam;
-import com.breeze.boot.modules.auth.model.params.DeleteColumnPermissionParam;
+import com.breeze.boot.modules.auth.model.mappers.SysRoleColumnPermissionMapStruct;
+import com.breeze.boot.modules.auth.model.form.ColumnPermissionForm;
+import com.breeze.boot.modules.auth.model.form.DeleteColumnPermissionForm;
 import com.breeze.boot.modules.auth.mapper.SysRoleColumnPermissionMapper;
+import com.breeze.boot.modules.auth.model.vo.RoleColumnPermissionVO;
 import com.breeze.boot.modules.auth.service.SysRoleColumnPermissionService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleColumnPermissionServiceImpl extends ServiceImpl<SysRoleColumnPermissionMapper, SysRoleColumnPermission> implements SysRoleColumnPermissionService {
 
+    private final SysRoleColumnPermissionMapStruct sysRoleColumnPermissionMapStruct;
+
     /**
      * 查询列字段级数据权限列表数据
      *
@@ -68,7 +72,7 @@ public class SysRoleColumnPermissionServiceImpl extends ServiceImpl<SysRoleColum
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> setColumnPermission(ColumnPermissionParam permissionParam) {
+    public Result<Boolean> setColumnPermission(ColumnPermissionForm permissionParam) {
         try {
             this.removeById(permissionParam.getRoleId());
             Map<String, List<String>> tableColumnNameMap = permissionParam.getTableColumnName();
@@ -101,17 +105,21 @@ public class SysRoleColumnPermissionServiceImpl extends ServiceImpl<SysRoleColum
      * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link SysRoleColumnPermission}>>>
      */
     @Override
-    public Result<Map<String, List<SysRoleColumnPermission>>> listSetColumnPermission(String roleId) {
+    public Result<Map<String, List<RoleColumnPermissionVO>>> listSetColumnPermission(String roleId) {
         List<SysRoleColumnPermission> roleColumnPermissionList = this.list(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, roleId));
         if (CollUtil.isEmpty(roleColumnPermissionList)) {
             return Result.ok(Maps.newHashMap());
         }
-        return Result.ok(roleColumnPermissionList.stream().collect(Collectors.groupingBy(SysRoleColumnPermission::getTableName, Collectors.toList())));
+        Map<String, List<RoleColumnPermissionVO>> resultMap = roleColumnPermissionList.stream()
+                .map(sysRoleColumnPermissionMapStruct::entity2VO)
+                .collect(Collectors.groupingBy(RoleColumnPermissionVO::getTableName, Collectors.toList()));
+
+        return Result.ok(resultMap);
     }
 
     @Override
-    public Result<Boolean> removeColumnPermission(DeleteColumnPermissionParam deleteColumnPermissionParam) {
-        return Result.ok(this.remove(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, deleteColumnPermissionParam.getRoleId())
-                .eq(SysRoleColumnPermission::getColumnName, deleteColumnPermissionParam.getColumnName())));
+    public Result<Boolean> removeColumnPermission(DeleteColumnPermissionForm deleteColumnPermissionForm) {
+        return Result.ok(this.remove(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, deleteColumnPermissionForm.getRoleId())
+                .eq(SysRoleColumnPermission::getColumnName, deleteColumnPermissionForm.getColumnName())));
     }
 }

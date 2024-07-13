@@ -22,8 +22,10 @@ import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.system.model.entity.SysLog;
 import com.breeze.boot.modules.system.model.query.LogQuery;
+import com.breeze.boot.modules.system.model.vo.LogVO;
 import com.breeze.boot.modules.system.service.SysLogService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -55,11 +57,11 @@ public class SysLogController {
      * 列表
      *
      * @param logQuery 日志查询
-     * @return {@link Result}<{@link Page}<{@link SysLog}>>
+     * @return {@link Result}<{@link Page}<{@link LogVO}>>
      */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:log:list')")
-    public Result<Page<SysLog>> list(LogQuery logQuery) {
+    public Result<Page<LogVO>> list(LogQuery logQuery) {
         return Result.ok(this.sysLogService.listPage(logQuery));
     }
 
@@ -67,13 +69,13 @@ public class SysLogController {
      * 详情
      *
      * @param logId 日志id
-     * @return {@link Result}<{@link SysLog}>
+     * @return {@link Result}<{@link LogVO}>
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{logId}")
     @PreAuthorize("hasAnyAuthority('auth:log:info')")
-    public Result<SysLog> info(@PathVariable("logId") Long logId) {
-        return Result.ok(this.sysLogService.getById(logId));
+    public Result<LogVO> info(@Parameter(description = "日志ID") @PathVariable("logId") Long logId) {
+        return Result.ok(this.sysLogService.getInfoById(logId));
     }
 
     /**
@@ -97,7 +99,7 @@ public class SysLogController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:log:delete')")
     @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    public Result<Boolean> delete(@Parameter(description = "日志ID") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));
     }
 

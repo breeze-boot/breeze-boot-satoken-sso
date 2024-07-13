@@ -24,6 +24,17 @@ package com.breeze.boot.core.constants;
  */
 public class CoreConstants {
 
+
+    /**
+     * 列
+     */
+    public static final String COLUMN = "tenant_id";
+
+    /**
+     * 参数
+     */
+    public static final String PARAM = "X-Tenant-Id";
+
     public static final Long ROOT = 1111111111111111111L;
 
     /**

@@ -1,1 +1,1 @@
-com.breeze.boot.mail.service.MailSenderService
+com.breeze.boot.mail.service.CustomJavaMailSender

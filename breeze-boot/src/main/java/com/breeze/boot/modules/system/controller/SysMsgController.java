@@ -21,9 +21,12 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.system.model.entity.SysMsg;
+import com.breeze.boot.modules.system.model.form.MsgForm;
 import com.breeze.boot.modules.system.model.query.MsgQuery;
 import com.breeze.boot.modules.system.service.SysMsgService;
+import com.breeze.boot.websocket.vo.MsgVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +59,12 @@ public class SysMsgController {
      * 列表
      *
      * @param msgQuery 消息查询
-     * @return {@link Result}<{@link IPage}<{@link SysMsg}>>
+     * @return {@link Result}<{@link IPage}<{@link MsgVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:list')")
-    public Result<IPage<SysMsg>> list(MsgQuery msgQuery) {
+    public Result<IPage<MsgVO>> list(MsgQuery msgQuery) {
         return Result.ok(this.sysMsgService.listPage(msgQuery));
     }
 
@@ -74,36 +77,38 @@ public class SysMsgController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:msg:info')")
-    public Result<SysMsg> info(@NotNull(message = "不能为空") @PathVariable("id") Long id) {
-        return Result.ok(this.sysMsgService.getById(id));
+    public Result<MsgVO> info(@NotNull(message = "不能为空") @PathVariable Long id) {
+        return Result.ok(this.sysMsgService.getInfoById(id));
     }
 
     /**
      * 创建
      *
-     * @param msg 消息
+     * @param msgForm 消息
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:create')")
     @BreezeSysLog(description = "消息信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysMsg msg) {
-        return Result.ok(this.sysMsgService.save(msg));
+    public Result<Boolean> save(@Valid @RequestBody MsgForm msgForm) {
+        return Result.ok(this.sysMsgService.saveMsg(msgForm));
     }
 
     /**
      * 修改
      *
-     * @param msg 信息
+     * @param id      ID
+     * @param msgForm 消息表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('sys:msg:modify')")
     @BreezeSysLog(description = "消息信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysMsg msg) {
-        return Result.ok(this.sysMsgService.updateById(msg));
+    public Result<Boolean> modify(@Parameter(description = "消息ID") @NotNull(message = "消息ID不能为空") @PathVariable Long id,
+                                  @Valid @RequestBody MsgForm msgForm) {
+        return Result.ok(this.sysMsgService.modifyMsg(id, msgForm));
     }
 
     /**
@@ -116,7 +121,7 @@ public class SysMsgController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('sys:msg:delete')")
     @BreezeSysLog(description = "消息信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
+    public Result<Boolean> delete(@Parameter(description = "消息IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysMsgService.removeByIds(Arrays.asList(ids)));
     }
 

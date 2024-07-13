@@ -62,8 +62,6 @@ spring:
           socketFactoryClass: javax.net.ssl.SSLSocketFactory
         # 开启 debug，这样方便开发者查看邮件发送日志
         debug: true
-    # 自定义发送人邮箱
-    from-address: 1900381390@qq.com
 
 # mybatis-plus 配置
 mybatis-plus:
@@ -73,8 +71,8 @@ mybatis-plus:
     db-config:
       id-type: auto
       insert-strategy: not_empty
-      update-strategy: not_empty
       where-strategy: not_empty
+      update-strategy: ignored
   configuration:
     jdbc-type-for-null: null
     call-setters-on-nulls: true
@@ -113,16 +111,10 @@ breeze:
   security:
     ignore-urls:
       # SpringDoc & Knife4j
-      - "/v3/api-docs/**"
-      - "/swagger-ui/**"
-      - "/swagger-ui.html"
       - "/webjars/**"
       - "/doc.html"
-      - "/v2/api-docs-ext"
-      - "/swagger-resources"
-      - "/v2/api-docs"
-      - "/swagger-ui.html"
-      - "/swagger-resources/configuration/security"
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
       # Websocket & Monitor
       - "/ws/**"
       - "/actuator/**"
@@ -159,38 +151,6 @@ breeze:
   # xss过滤路径
   xss:
     ignore-urls:
-
-  # 日志拦截开关
-  log:
-    enable: true
-  # 本地硬盘存储配置
-  local:
-    nginx-host: http://localhost:9000/img/
-  # oss s3 配置
-  oss:
-    s3:
-      minio:
-        domain-url: http://localhost:9092/
-        endpoint: http://localhost:9092
-        access-key: admin
-        access-key-secret: 12345678
-      cos:
-        domain-url: http://localhost:9092/
-        endpoint: http://localhost:9092
-        access-key: admin
-        access-key-secret: 12345678
-      kodo:
-        domain-url: http://localhost:9092/
-        endpoint: http://localhost:9092
-        access-key: admin
-        access-key-secret: 12345678
-  wx:
-    app-id: wx269d15f14a5fc7e2
-    app-secret: 273950b557912864a8627ff5ff9db82b
-  sap:
-    sap-client-id: T800
-    sap-file-type: yml
-    sap-file-path: /sap/
 
 flowable:
   async-executor-activate: false # 关闭定时任务JOB
@@ -251,7 +211,7 @@ springdoc:
         - user_info
   # OAuth2端点（绝对路径）
   oAuthFlow:
-    authorizationUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/authorize
-    tokenUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/token
+    authorizationUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/authorize?X-TENANT-ID=1
+    tokenUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/oauth2/token?X-TENANT-ID=1
     # OIDC发现端点（绝对路径）
-    oidcUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/.well-known/openid-configuration
+    oidcUrl: ${OAUTH2_SERVER:http://127.0.0.1:9000}/.well-known/openid-configuration?X-TENANT-ID=1

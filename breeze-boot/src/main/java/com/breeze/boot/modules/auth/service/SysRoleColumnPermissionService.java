@@ -21,8 +21,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.params.ColumnPermissionParam;
-import com.breeze.boot.modules.auth.model.params.DeleteColumnPermissionParam;
+import com.breeze.boot.modules.auth.model.form.ColumnPermissionForm;
+import com.breeze.boot.modules.auth.model.form.DeleteColumnPermissionForm;
+import com.breeze.boot.modules.auth.model.vo.RoleColumnPermissionVO;
 
 import java.util.List;
 import java.util.Map;
@@ -50,22 +51,22 @@ public interface SysRoleColumnPermissionService extends IService<SysRoleColumnPe
      * @param permissionParam 权限参数
      * @return {@link Page}<{@link SysRowPermission}>
      */
-    Result<Boolean> setColumnPermission(ColumnPermissionParam permissionParam);
+    Result<Boolean> setColumnPermission(ColumnPermissionForm permissionParam);
 
     /**
      * 获取列字段级数据权限列表
      *
      * @param roleId 角色ID
-     * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link SysRoleColumnPermission}>>>
+     * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link RoleColumnPermissionVO}>>>
      */
-    Result<Map<String, List<SysRoleColumnPermission>>> listSetColumnPermission(String roleId);
+    Result<Map<String, List<RoleColumnPermissionVO>>> listSetColumnPermission(String roleId);
 
     /**
      * 删除列字段级数据权限
      *
-     * @param deleteColumnPermissionParam 权限参数
+     * @param deleteColumnPermissionForm 权限参数
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> removeColumnPermission(DeleteColumnPermissionParam deleteColumnPermissionParam);
+    Result<Boolean> removeColumnPermission(DeleteColumnPermissionForm deleteColumnPermissionForm);
 
 }

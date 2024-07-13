@@ -27,7 +27,7 @@ import cn.hutool.core.util.StrUtil;
 public class JobInvokeUtils {
 
     /**
-     * 得到参数
+     * 获取参数
      *
      * @param clazzName clazz名字
      * @return {@link String}
@@ -69,7 +69,7 @@ public class JobInvokeUtils {
     }
 
     /**
-     * 得到参数
+     * 获取参数
      *
      * @param paramArray     参数数组
      * @param parameterTypes 参数类型

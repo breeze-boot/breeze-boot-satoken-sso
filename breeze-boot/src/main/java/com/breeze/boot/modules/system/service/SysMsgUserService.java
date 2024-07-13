@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
-import com.breeze.boot.modules.system.model.vo.SysMsgUserVO;
+import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.websocket.dto.UserMsgDTO;
 
 import java.util.List;
@@ -38,17 +38,17 @@ public interface SysMsgUserService extends IService<SysMsgUser> {
      * 列表页面
      *
      * @param userMsgQuery 用户消息查询
-     * @return {@link IPage}<{@link SysMsgUserVO}>
+     * @return {@link IPage}<{@link MsgUserVO}>
      */
-    IPage<SysMsgUserVO> listPage(UserMsgQuery userMsgQuery);
+    IPage<MsgUserVO> listPage(UserMsgQuery userMsgQuery);
 
     /**
      * 获取用户的消息
      *
      * @param username 用户名
-     * @return {@link List}<{@link SysMsgUserVO}>
+     * @return {@link List}<{@link MsgUserVO}>
      */
-    List<SysMsgUserVO> listUsersMsg(String username);
+    List<MsgUserVO> listUsersMsg(String username);
 
     /**
      * 保存用户的消息

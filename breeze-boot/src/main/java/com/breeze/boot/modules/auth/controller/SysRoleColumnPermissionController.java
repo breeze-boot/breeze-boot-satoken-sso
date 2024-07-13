@@ -20,16 +20,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.params.ColumnPermissionParam;
-import com.breeze.boot.modules.auth.model.params.DeleteColumnPermissionParam;
+import com.breeze.boot.modules.auth.model.form.ColumnPermissionForm;
+import com.breeze.boot.modules.auth.model.form.DeleteColumnPermissionForm;
+import com.breeze.boot.modules.auth.model.vo.RoleColumnPermissionVO;
 import com.breeze.boot.modules.auth.service.SysRoleColumnPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +62,9 @@ public class SysRoleColumnPermissionController {
      */
     @Operation(summary = "获取设置的角色列级权限")
     @GetMapping("/listSetColumnPermission")
-    public Result<Map<String, List<SysRoleColumnPermission>>>  listSetColumnPermission(@RequestParam String roleId) {
+    public Result<Map<String, List<RoleColumnPermissionVO>>> listSetColumnPermission(@Parameter(description = "角色ID")
+                                                                                     @NotNull(message = "角色ID不能为空")
+                                                                                     @RequestParam String roleId) {
         return this.sysRoleColumnPermissionService.listSetColumnPermission(roleId);
     }
 
@@ -72,22 +77,21 @@ public class SysRoleColumnPermissionController {
     @Operation(summary = "设置角色列级权限")
     @PostMapping("/setColumnPermission")
     @PreAuthorize("hasAnyAuthority('auth:role:column:permission:modify', 'ROLE_ADMIN')")
-    public Result<Boolean> setColumnPermission(@RequestBody ColumnPermissionParam permissionParam) {
+    public Result<Boolean> setColumnPermission(@RequestBody ColumnPermissionForm permissionParam) {
         return this.sysRoleColumnPermissionService.setColumnPermission(permissionParam);
     }
 
     /**
      * 删除设置的角色列级权限
      *
-     * @param deleteColumnPermissionParam 字段权限参数
+     * @param deleteColumnPermissionForm 字段权限参数
      * @return {@link Result}<{@link Page}<{@link SysRowPermission}>>
      */
     @Operation(summary = "删除设置的角色列级权限")
     @DeleteMapping("/removeColumnPermission")
     @PreAuthorize("hasAnyAuthority('auth:role:column:permission:remove', 'ROLE_ADMIN')")
-    public Result<Boolean> removeColumnPermission(@RequestBody DeleteColumnPermissionParam deleteColumnPermissionParam) {
-        return this.sysRoleColumnPermissionService.removeColumnPermission(deleteColumnPermissionParam);
+    public Result<Boolean> removeColumnPermission(@RequestBody DeleteColumnPermissionForm deleteColumnPermissionForm) {
+        return this.sysRoleColumnPermissionService.removeColumnPermission(deleteColumnPermissionForm);
     }
-
 
 }

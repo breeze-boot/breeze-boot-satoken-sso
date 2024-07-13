@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * 注册客户端实体类
+ * 注册客户端VO
  *
  * @author gaoweixuan
  * @since 2023/05/08
@@ -34,7 +34,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "注册客户端实体")
+@Schema(description = "注册客户端VO")
 public class RegisteredClientVO {
 
     /**

@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
-import com.breeze.boot.modules.system.model.vo.SysMsgUserVO;
+import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.modules.system.mapper.SysMsgUserMapper;
 import com.breeze.boot.modules.system.service.SysMsgUserService;
 import com.breeze.boot.security.utils.SecurityUtils;
@@ -49,10 +49,10 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
      * 列表页面
      *
      * @param userMsgQuery 用户消息查询
-     * @return {@link IPage}<{@link SysMsgUserVO}>
+     * @return {@link IPage}<{@link MsgUserVO}>
      */
     @Override
-    public IPage<SysMsgUserVO> listPage(UserMsgQuery userMsgQuery) {
+    public IPage<MsgUserVO> listPage(UserMsgQuery userMsgQuery) {
         return this.baseMapper.listPage(new Page<>(userMsgQuery.getCurrent(), userMsgQuery.getSize()), userMsgQuery);
     }
 
@@ -60,10 +60,10 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
      * 获取用户的消息
      *
      * @param username 用户名
-     * @return {@link List}<{@link SysMsgUserVO}>
+     * @return {@link List}<{@link MsgUserVO}>
      */
     @Override
-    public List<SysMsgUserVO> listUsersMsg(String username) {
+    public List<MsgUserVO> listUsersMsg(String username) {
         return this.baseMapper.listUsersMsg(username);
     }
 

@@ -20,6 +20,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysDept;
+import com.breeze.boot.modules.auth.model.form.DeptForm;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 
 import java.util.List;
@@ -39,6 +40,22 @@ public interface SysDeptService extends IService<SysDept> {
      * @return {@link List}<{@link Tree}<{@link Long}>>
      */
     List<?> listDept(DeptQuery deptQuery);
+
+    /**
+     * 保存dept
+     *
+     * @param deptForm dept表单
+     * @return {@link Boolean }
+     */
+    Boolean saveDept(DeptForm deptForm);
+
+    /**
+     * 按id更新部门
+     *
+     * @param deptForm dept表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyDept(Long id, DeptForm deptForm);
 
     /**
      * 删除通过id

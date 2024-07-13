@@ -21,10 +21,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
+import com.breeze.boot.modules.auth.model.entity.SysPost;
+import com.breeze.boot.modules.auth.model.form.PostForm;
 import com.breeze.boot.modules.auth.model.query.PostQuery;
+import com.breeze.boot.modules.auth.model.vo.PostVO;
 import com.breeze.boot.modules.auth.service.SysPostService;
-import com.breeze.boot.modules.system.model.entity.SysPost;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +62,12 @@ public class SysPostController {
      * 列表
      *
      * @param postQuery 岗位查询
-     * @return {@link Result}<{@link IPage}<{@link SysPost}>>
+     * @return {@link Result}<{@link IPage}<{@link PostVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('auth:post:list')")
-    public Result<IPage<SysPost>> list(PostQuery postQuery) {
+    public Result<IPage<PostVO>> list(PostQuery postQuery) {
         return Result.ok(this.sysPostService.listPage(postQuery));
     }
 
@@ -77,8 +80,8 @@ public class SysPostController {
     @Operation(summary = "详情")
     @GetMapping("/info/{postId}")
     @PreAuthorize("hasAnyAuthority('auth:post:info')")
-    public Result<SysPost> info(@PathVariable("postId") Long postId) {
-        return Result.ok(this.sysPostService.getById(postId));
+    public Result<PostVO> info(@Parameter(description = "岗位ID") @PathVariable("postId") Long postId) {
+        return Result.ok(this.sysPostService.getInfoById(postId));
     }
 
     /**
@@ -91,8 +94,8 @@ public class SysPostController {
     @Operation(summary = "校验岗位编码是否重复")
     @GetMapping("/checkPostCode")
     @PreAuthorize("hasAnyAuthority('auth:post:list')")
-    public Result<Boolean> checkPostCode(@NotBlank(message = "岗位编码不能为空") @RequestParam("postCode") String postCode,
-                                         @RequestParam(value = "postId", required = false) Long postId) {
+    public Result<Boolean> checkPostCode(@Parameter(description = "岗位编码") @NotBlank(message = "岗位编码不能为空") @RequestParam("postCode") String postCode,
+                                         @Parameter(description = "岗位ID") @RequestParam(value = "postId", required = false) Long postId) {
         return Result.ok(Objects.isNull(this.sysPostService.getOne(Wrappers.<SysPost>lambdaQuery()
                 .ne(Objects.nonNull(postId), SysPost::getId, postId)
                 .eq(SysPost::getPostCode, postCode))));
@@ -101,29 +104,30 @@ public class SysPostController {
     /**
      * 创建
      *
-     * @param post 平台实体入参
+     * @param postForm 岗位表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('auth:post:create')")
     @BreezeSysLog(description = "岗位信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody SysPost post) {
-        return Result.ok(this.sysPostService.save(post));
+    public Result<Boolean> save(@Valid @RequestBody PostForm postForm) {
+        return Result.ok(this.sysPostService.savePost(postForm));
     }
 
     /**
      * 修改
      *
-     * @param sysPost 平台实体
+     * @param postForm 平台实体
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('auth:post:modify')")
     @BreezeSysLog(description = "岗位信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody SysPost sysPost) {
-        return Result.ok(this.sysPostService.updateById(sysPost));
+    public Result<Boolean> modify(@Parameter(description = "岗位ID") @PathVariable Long id,
+                                  @Valid @RequestBody PostForm postForm) {
+        return Result.ok(this.sysPostService.modifyPost(id, postForm));
     }
 
     /**
@@ -136,8 +140,8 @@ public class SysPostController {
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('auth:post:delete')")
     @BreezeSysLog(description = "岗位信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
-        return this.sysPostService.removePostByIds(ids);
+    public Result<Boolean> delete(@Parameter(description = "岗位IDS") @NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
+        return Result.ok(this.sysPostService.removeByIds(ids));
     }
 
 }

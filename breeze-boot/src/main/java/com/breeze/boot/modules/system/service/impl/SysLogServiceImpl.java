@@ -16,14 +16,15 @@
 
 package com.breeze.boot.modules.system.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.log.bo.SysLogBO;
-import com.breeze.boot.modules.system.model.entity.SysLog;
-import com.breeze.boot.modules.system.model.query.LogQuery;
 import com.breeze.boot.modules.system.mapper.SysLogMapper;
+import com.breeze.boot.modules.system.model.entity.SysLog;
+import com.breeze.boot.modules.system.model.mappers.SysLogMapStruct;
+import com.breeze.boot.modules.system.model.query.LogQuery;
+import com.breeze.boot.modules.system.model.vo.LogVO;
 import com.breeze.boot.modules.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,15 +39,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
+    private final SysLogMapStruct sysLogMapStruct;
+
     /**
      * 日志列表
      *
      * @param logQuery 日志查询
-     * @return {@link Page}<{@link SysLog}>
+     * @return {@link Page}<{@link LogVO}>
      */
     @Override
-    public Page<SysLog> listPage(LogQuery logQuery) {
-        return this.baseMapper.listPage(new Page<>(logQuery.getCurrent(), logQuery.getLimit()), logQuery);
+    public Page<LogVO> listPage(LogQuery logQuery) {
+        Page<SysLog> sysLogPage = this.baseMapper.listPage(new Page<>(logQuery.getCurrent(), logQuery.getLimit()), logQuery);
+        return this.sysLogMapStruct.entityPage2VOPage(sysLogPage);
+    }
+
+    @Override
+    public LogVO getInfoById(Long logId) {
+        return this.sysLogMapStruct.entity2VO(this.getById(logId));
     }
 
     /**
@@ -57,8 +66,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @DS("master")
     @Override
     public void saveSysLog(SysLogBO sysLogBO) {
-        SysLog sysLog = new SysLog();
-        BeanUtil.copyProperties(sysLogBO, sysLog);
+        SysLog sysLog = this.sysLogMapStruct.bo2Entity(sysLogMapStruct);
         sysLog.setSystemModule("权限系统");
         this.save(sysLog);
     }

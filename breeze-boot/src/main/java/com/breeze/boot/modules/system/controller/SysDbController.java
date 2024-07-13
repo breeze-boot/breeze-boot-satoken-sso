@@ -74,7 +74,7 @@ public class SysDbController {
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAnyAuthority('sys:db:info')")
-    public Result<SysDb> info(@NotNull(message = "不能为空") @PathVariable("id") Long id) {
+    public Result<SysDb> info(@NotNull(message = "不能为空") @PathVariable Long id) {
         return Result.ok(this.sysDbService.getById(id));
     }
 

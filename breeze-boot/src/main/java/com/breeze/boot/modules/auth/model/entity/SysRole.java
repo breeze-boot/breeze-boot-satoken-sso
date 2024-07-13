@@ -21,7 +21,6 @@ import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -44,14 +43,12 @@ public class SysRole extends BaseModel<SysRole> implements Serializable {
     /**
      * 角色编码
      */
-    @NotBlank(message = "角色编码不可为空")
     @Schema(description = "角色编码")
     private String roleCode;
 
     /**
      * 角色名称
      */
-    @NotBlank(message = "角色名称不可为空")
     @Schema(description = "角色名称")
     private String roleName;
 

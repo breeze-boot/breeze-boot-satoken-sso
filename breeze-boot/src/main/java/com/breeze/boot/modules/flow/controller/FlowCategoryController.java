@@ -23,9 +23,12 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.flow.model.entity.FlowCategory;
+import com.breeze.boot.modules.flow.model.form.FlowCategoryForm;
 import com.breeze.boot.modules.flow.model.query.FlowCategoryQuery;
+import com.breeze.boot.modules.flow.model.vo.FlowCategoryVO;
 import com.breeze.boot.modules.flow.service.IFlowCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,28 +61,28 @@ public class FlowCategoryController {
      * 列表
      *
      * @param processCategory 流程类别
-     * @return {@link Result}<{@link IPage}<{@link FlowCategory}>>
+     * @return {@link Result}<{@link IPage}<{@link FlowCategoryVO}>>
      */
     @DS("flowable")
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('flow:category:list')")
-    public Result<IPage<FlowCategory>> list(FlowCategoryQuery processCategory) {
+    public Result<IPage<FlowCategoryVO>> list(FlowCategoryQuery processCategory) {
         return Result.ok(this.processCategoryService.listPage(processCategory));
     }
 
     /**
      * 详情
      *
-     * @param categoryId 流程分类id
+     * @param categoryId 流程分类ID
      * @return {@link Result}<{@link FlowCategory}>
      */
     @DS("flowable")
     @Operation(summary = "详情")
     @GetMapping("/info/{categoryId}")
     @PreAuthorize("hasAnyAuthority('auth:dict:info')")
-    public Result<FlowCategory> info(@PathVariable("categoryId") Long categoryId) {
-        return Result.ok(this.processCategoryService.getById(categoryId));
+    public Result<FlowCategoryVO> info(@Parameter(description = "流程分类ID") @NotNull(message = "流程分类ID不能为空") @PathVariable("categoryId") Long categoryId) {
+        return Result.ok(this.processCategoryService.getInfoById(categoryId));
     }
 
     /**
@@ -93,8 +96,8 @@ public class FlowCategoryController {
     @Operation(summary = "校验流程分类编码是否重复")
     @GetMapping("/checkCategoryCode")
     @PreAuthorize("hasAnyAuthority('flow:category:list')")
-    public Result<Boolean> checkFlowCategoryCode(@NotBlank(message = "编码不能为空") @RequestParam("categoryCode") String categoryCode,
-                                                 @NotNull(message = "ID不能为空") @RequestParam(value = "categoryId", required = false) Long categoryId) {
+    public Result<Boolean> checkFlowCategoryCode(@Parameter(description = "流程分类编码") @NotBlank(message = "流程分类编码不能为空") @RequestParam("categoryCode") String categoryCode,
+                                                 @Parameter(description = "流程分类ID") @RequestParam(value = "categoryId", required = false) Long categoryId) {
         return Result.ok(Objects.isNull(this.processCategoryService.getOne(Wrappers.<FlowCategory>lambdaQuery()
                 .ne(Objects.nonNull(categoryId), FlowCategory::getId, categoryId)
                 .eq(FlowCategory::getCategoryCode, categoryCode))));
@@ -103,7 +106,7 @@ public class FlowCategoryController {
     /**
      * 创建
      *
-     * @param flowCategory 流程分类实体入参
+     * @param flowCategoryForm 流程分类表单
      * @return {@link Result}<{@link Boolean}>
      */
     @DS("flowable")
@@ -111,14 +114,14 @@ public class FlowCategoryController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('flow:category:create')")
     @BreezeSysLog(description = "流程分类信息保存", type = LogType.SAVE)
-    public Result<Boolean> save(@Valid @RequestBody FlowCategory flowCategory) {
-        return Result.ok(this.processCategoryService.save(flowCategory));
+    public Result<Boolean> save(@Valid @RequestBody FlowCategoryForm flowCategoryForm) {
+        return Result.ok(this.processCategoryService.saveFlowCategory(flowCategoryForm));
     }
 
     /**
      * 修改
      *
-     * @param flowCategory 流程分类实体
+     * @param flowCategoryForm 流程分类表单
      * @return {@link Result}<{@link Boolean}>
      */
     @DS("flowable")
@@ -126,8 +129,9 @@ public class FlowCategoryController {
     @PutMapping
     @PreAuthorize("hasAnyAuthority('flow:category:modify')")
     @BreezeSysLog(description = "流程分类信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Valid @RequestBody FlowCategory flowCategory) {
-        return Result.ok(this.processCategoryService.updateById(flowCategory));
+    public Result<Boolean> modify(@Parameter(description = "流程分类ID") @NotNull(message = "流程分类ID不能为空") Long id,
+                                  @Valid @RequestBody FlowCategoryForm flowCategoryForm) {
+        return Result.ok(this.processCategoryService.modifyFlowCategory(id, flowCategoryForm));
     }
 
     /**

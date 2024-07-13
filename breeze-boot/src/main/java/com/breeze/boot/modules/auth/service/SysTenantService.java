@@ -17,10 +17,13 @@
 package com.breeze.boot.modules.auth.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.system.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.form.TenantForm;
 import com.breeze.boot.modules.auth.model.query.TenantQuery;
+import com.breeze.boot.modules.auth.model.vo.TenantVO;
 
 import java.util.List;
 
@@ -36,9 +39,26 @@ public interface SysTenantService extends IService<SysTenant> {
      * 列表页面
      *
      * @param tenantQuery 租户查询
-     * @return {@link IPage}<{@link SysTenant}>
+     * @return {@link Page}<{@link TenantVO}>
      */
-    IPage<SysTenant> listPage(TenantQuery tenantQuery);
+    Page<TenantVO> listPage(TenantQuery tenantQuery);
+
+    /**
+     * 按id获取信息
+     *
+     * @param tenantId 租户id
+     * @return {@link TenantVO }
+     */
+    TenantVO getInfoById(Long tenantId);
+
+    /**
+     * 修改租户
+     *
+     * @param id         ID
+     * @param tenantForm 租户表单
+     * @return {@link Boolean }
+     */
+    Boolean modifyTenant(Long id, TenantForm tenantForm);
 
     /**
      * 通过IDS删除租户
