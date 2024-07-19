@@ -16,7 +16,8 @@
 
 package com.breeze.boot.security.service.impl;
 
-import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.ISysUserService;
@@ -53,10 +54,14 @@ public class UserDetailService implements IUserDetailService {
      */
     @Override
     public UserPrincipal loadUserByUsername(String username) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        Assert.notNull(requestAttributes, "requestAttributes is null");
-        this.getTenantId(requestAttributes);
-        return this.getLoginUserInfo(this.userService.get().loadUserByUsername(username));
+        try {
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            Assert.notNull(requestAttributes, "requestAttributes is null");
+            this.getTenantId(requestAttributes);
+            return this.getLoginUserInfo(this.userService.get().loadUserByUsername(username));
+        } finally {
+            BreezeThreadLocal.remove();
+        }
     }
 
     /**
@@ -67,11 +72,15 @@ public class UserDetailService implements IUserDetailService {
      */
     @Override
     public UserPrincipal loadUserByPhone(String phone) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        Assert.notNull(requestAttributes, "requestAttributes is null");
-        this.getTenantId(requestAttributes);
-        Result<BaseLoginUser> loginUserResult = this.userService.get().loadUserByPhone(phone);
-        return this.getLoginUserInfo(loginUserResult);
+        try {
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            Assert.notNull(requestAttributes, "requestAttributes is null");
+            this.getTenantId(requestAttributes);
+            Result<UserInfoDTO> loginUserResult = this.userService.get().loadUserByPhone(phone);
+            return this.getLoginUserInfo(loginUserResult);
+        } finally {
+            BreezeThreadLocal.remove();
+        }
     }
 
     /**
@@ -82,11 +91,15 @@ public class UserDetailService implements IUserDetailService {
      */
     @Override
     public UserPrincipal loadUserByEmail(String email) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        Assert.notNull(requestAttributes, "requestAttributes is null");
-        this.getTenantId(requestAttributes);
-        Result<BaseLoginUser> loginUserResult = this.userService.get().loadUserByEmail(email);
-        return this.getLoginUserInfo(loginUserResult);
+        try {
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            Assert.notNull(requestAttributes, "requestAttributes is null");
+            this.getTenantId(requestAttributes);
+            Result<UserInfoDTO> loginUserResult = this.userService.get().loadUserByEmail(email);
+            return this.getLoginUserInfo(loginUserResult);
+        } finally {
+            BreezeThreadLocal.remove();
+        }
     }
 
 }

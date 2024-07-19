@@ -16,20 +16,21 @@
 
 package com.breeze.boot.security.utils;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import com.breeze.boot.core.base.BaseLoginUser;
+import cn.hutool.core.bean.BeanUtil;
+import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.security.access.AccessDeniedException;
+import com.nimbusds.jose.shaded.gson.internal.LinkedTreeMap;
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.nio.file.AccessDeniedException;
+import java.util.Map;
 import java.util.Objects;
-
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 安全工具
@@ -38,23 +39,50 @@ import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
  * @since 2022-08-31
  */
 public class SecurityUtils {
+    private static final String USER_PROPERTY_KEY = "userProperty";
 
     /**
-     * 获取当前jwt
+     * 获取当前JWT用户
      *
-     * @return {@link Jwt}
+     * @return {@link UserInfoDTO}
+     * @throws OAuth2AuthenticationException 如果用户未登录或JWT验证失败
      */
-    public static BaseLoginUser getCurrentUser() {
-        String name = getName();
-        if (StrUtil.isAllBlank(name)) {
-            throw new SystemServiceException(ResultCode.UN_LOGIN);
+    @SneakyThrows
+    public static UserInfoDTO getCurrentUser() throws OAuth2AuthenticationException {
+        Map<String, Object> claims = getClaims();
+
+        Object userPropertyObj = claims.get(USER_PROPERTY_KEY);
+        if(Objects.isNull(userPropertyObj)){
+            throw new SystemServiceException(ResultCode.exception("请重新登录"));
         }
-        CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
-        Cache cache = cacheManager.getCache(LOGIN_USER);
-        if (Objects.isNull(cache)) {
-            throw new AccessDeniedException("用户未登录");
+        if (!(userPropertyObj instanceof LinkedTreeMap)) {
+            throw new SystemServiceException(ResultCode.exception("请重新登录"));
         }
-        return cache.get(name, BaseLoginUser.class);
+
+        LinkedTreeMap<?, ?> map = (LinkedTreeMap<?, ?>) userPropertyObj;
+        UserInfoDTO user = new UserInfoDTO();
+        BeanUtil.fillBeanWithMap(map, user, true);
+        return user;
+    }
+
+    @NotNull
+    private static Map<String, Object> getClaims() throws AccessDeniedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SystemServiceException(ResultCode.exception("请重新登录"));
+        }
+
+        Object principalObj = authentication.getPrincipal();
+        if (!(principalObj instanceof Jwt)) {
+            throw new SystemServiceException(ResultCode.exception("请重新登录"));
+        }
+
+        Jwt jwt = (Jwt) principalObj;
+        Map<String, Object> claims = jwt.getClaims();
+        if (claims == null) {
+            throw new SystemServiceException(ResultCode.exception("请重新登录"));
+        }
+        return claims;
     }
 
     /**
@@ -64,19 +92,6 @@ public class SecurityUtils {
      */
     public static String getName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
-
-    /**
-     * 租户ID
-     *
-     * @return long
-     */
-    public static long getTenantId() {
-        BaseLoginUser loginUser = getCurrentUser();
-        if (Objects.isNull(loginUser)) {
-            throw new RuntimeException("JWT验证失败");
-        }
-        return loginUser.getTenantId();
     }
 
 }

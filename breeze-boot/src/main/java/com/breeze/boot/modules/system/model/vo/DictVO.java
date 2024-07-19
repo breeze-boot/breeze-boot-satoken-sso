@@ -16,7 +16,6 @@
 
 package com.breeze.boot.modules.system.model.vo;
 
-import com.breeze.boot.core.base.BaseModel;
 import com.breeze.boot.modules.system.model.entity.SysDictItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -36,7 +35,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "系统字典VO")
-public class DictVO extends BaseModel<DictVO> implements Serializable {
+public class DictVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

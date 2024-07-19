@@ -32,11 +32,11 @@
         sys_row_permission AS a
         <where>
             a.is_delete = 0
-            <if test="permissionQuery.permissionName != null and permissionQuery.permissionName != ''">
-                AND a.permission_name LIKE CONCAT('%' , #{permissionQuery.permissionName}, '%')
+            <if test="rowPermissionQuery.permissionName != null and rowPermissionQuery.permissionName != ''">
+                AND a.permission_name LIKE CONCAT('%' , #{rowPermissionQuery.permissionName}, '%')
             </if>
-            <if test="permissionQuery.permissionCode != null and permissionQuery.permissionCode != ''">
-                AND a.permission_code LIKE CONCAT('%' , #{permissionQuery.permissionCode}, '%')
+            <if test="rowPermissionQuery.permissionCode != null and rowPermissionQuery.permissionCode != ''">
+                AND a.permission_code LIKE CONCAT('%' , #{rowPermissionQuery.permissionCode}, '%')
             </if>
         </where>
         ORDER BY a.create_time DESC

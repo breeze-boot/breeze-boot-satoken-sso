@@ -19,7 +19,7 @@ package com.breeze.boot.modules.auth.controller;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
@@ -241,8 +241,7 @@ public class SysUserController {
     @Operation(summary = "查询用户信息")
     @PreAuthorize("hasAnyAuthority('auth:user:info')")
     @GetMapping("/userInfo")
-    public Result<BaseLoginUser> userInfo() {
-        log.info("{}", JSONUtil.parse(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
+    public Result<UserInfoDTO> userInfo() {
         log.info("{}", JSONUtil.parse(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
         return Result.ok(SecurityUtils.getCurrentUser());
     }

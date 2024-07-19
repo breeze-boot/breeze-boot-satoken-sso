@@ -21,16 +21,16 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.breeze.boot.core.enums.DataPermissionCode;
+import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
+import com.breeze.boot.modules.auth.model.entity.SysPlatform;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.auth.model.entity.SysPlatform;
 import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.service.SysCommonService;
-import com.breeze.boot.modules.system.service.MateService;
+import com.breeze.boot.modules.dev.service.SysDbMateService;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -92,12 +92,17 @@ public class SysCommonServiceImpl implements SysCommonService {
     /**
      * 元数据服务
      */
-    private final MateService mateService;
+    private final SysDbMateService sysMateService;
 
     /**
-     * 数据权限服务
+     * 行数据权限服务
      */
-    private final SysRowPermissionService permissionService;
+    private final SysRowPermissionService sysRowPermissionService;
+
+    /**
+     * 列数据权服务
+     */
+    private final SysMenuColumnService sysMenuColumnService;
 
     /**
      * 文件服务
@@ -223,7 +228,7 @@ public class SysCommonServiceImpl implements SysCommonService {
      */
     @Override
     public Result<List<Map<String, Object>>> selectTable() {
-        return Result.ok(this.mateService.selectTable());
+        return Result.ok(this.sysMateService.selectTable());
     }
 
     /**
@@ -234,21 +239,21 @@ public class SysCommonServiceImpl implements SysCommonService {
      */
     @Override
     public Result<List<Map<String, Object>>> selectTableColumn(String tableName) {
-        return Result.ok(this.mateService.selectTableColumn(tableName));
+        return Result.ok(this.sysMateService.selectTableColumn(tableName));
     }
 
     /**
-     * 数据权限下拉框
+     * 数据权限类型下拉框
      *
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
     @Override
-    public Result<List<Map<String, Object>>> selectPermission() {
-        return Result.ok(Arrays.stream(DataPermissionCode.values()).map(permission -> {
+    public Result<List<Map<String, Object>>> selectPermissionType() {
+        return Result.ok(Arrays.stream(DataPermissionType.values()).map(permission -> {
             Map<@Nullable String, @Nullable Object> permissionMap = Maps.newHashMap();
-            permissionMap.put("value", permission.getCode());
+            permissionMap.put("value", permission.getType());
             permissionMap.put("label", permission.getDesc());
-            if (StrUtil.equals(DataPermissionCode.CUSTOMIZES.getCode(), permission.getCode())) {
+            if (StrUtil.equals(DataPermissionType.CUSTOMIZES.getType(), permission.getType())) {
                 permissionMap.put("flag", Boolean.TRUE);
             }
             return permissionMap;
@@ -262,11 +267,11 @@ public class SysCommonServiceImpl implements SysCommonService {
      */
     @Override
     public Result<List<Map<String, Object>>> selectCustomizePermission() {
-        return Result.ok(this.permissionService.list().stream().map(permission -> {
-            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", permission.getId());
-            tenantMap.put("label", permission.getPermissionName());
-            return tenantMap;
+        return Result.ok(this.sysRowPermissionService.list().stream().map(permission -> {
+            Map<@Nullable String, @Nullable Object> customizePermissionMap = Maps.newHashMap();
+            customizePermissionMap.put("value", permission.getId());
+            customizePermissionMap.put("label", permission.getPermissionName());
+            return customizePermissionMap;
         }).collect(Collectors.toList()));
     }
     /**
@@ -299,8 +304,15 @@ public class SysCommonServiceImpl implements SysCommonService {
         return this.sysFileService.uploadLocalStorage(fileForm, request, response);
     }
 
+    /**
+     * 下载
+     *
+     * @param fileId   文件id
+     * @param response 响应
+     */
     @Override
     public void download(Long fileId, HttpServletResponse response) {
         this.sysFileService.download(fileId, response);
     }
+
 }

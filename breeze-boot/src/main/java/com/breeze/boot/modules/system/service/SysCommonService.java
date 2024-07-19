@@ -102,11 +102,11 @@ public interface SysCommonService {
     Result<List<Map<String, Object>>> selectTableColumn(String tableName);
 
     /**
-     * 数据权限下拉框
+     * 数据权限类型下拉框
      *
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
-    Result<List<Map<String, Object>>> selectPermission();
+    Result<List<Map<String, Object>>> selectPermissionType();
 
     /**
      * 数据权限下拉框

@@ -18,9 +18,11 @@ package com.breeze.boot.security.config;
 
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.ResponseUtil;
+import com.breeze.boot.security.exception.TenantNotSupportException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -49,8 +51,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
      * 异常处理策略枚举
      */
     private enum ExceptionHandler {
-        BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()), INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage());
-
+        BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()), INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage()),
+        INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(e -> {
+            if (e instanceof TenantNotSupportException) {
+                return "租户参数未获取到";
+            }
+            return "认证失败";
+        });
         private final ExceptionHandlerStrategy strategy;
 
         ExceptionHandler(ExceptionHandlerStrategy strategy) {
@@ -75,21 +82,27 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             return;
         }
 
-        ExceptionHandler handler = null;
-        if (e instanceof BadCredentialsException) {
-            handler = ExceptionHandler.BAD_CREDENTIALS;
-        } else if (e instanceof InvalidBearerTokenException) {
+        ExceptionHandler handler;
+        if (e instanceof BadCredentialsException || e instanceof InvalidBearerTokenException || e instanceof InsufficientAuthenticationException) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        } else if (e instanceof InsufficientAuthenticationException) {
-            handler = ExceptionHandler.INSUFFICIENT_AUTHENTICATION;
+            ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
+            return;
+        }
+        if (e instanceof InternalAuthenticationServiceException) {
+            handler = ExceptionHandler.INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION;
+            if (e.getCause() instanceof TenantNotSupportException) {
+                responseMsg(response, e, handler, ResultCode.TENANT_NOT_FOUND);
+                return;
+            }
         }
 
-        if (handler != null) {
-            String errMsg = handler.handleException(e);
-            log.error(errMsg, e.getCause());
-            log.error("认证失败", e);
-        }
         ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
+    }
+
+    private static void responseMsg(HttpServletResponse response, AuthenticationException e, ExceptionHandler handler, ResultCode resultCode) {
+        String errMsg = handler.handleException(e);
+        log.error(errMsg, e.getCause());
+        ResponseUtil.response(response, resultCode);
     }
 }
 

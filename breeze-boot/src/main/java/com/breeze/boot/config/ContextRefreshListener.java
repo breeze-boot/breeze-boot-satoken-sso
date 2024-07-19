@@ -19,8 +19,8 @@ package com.breeze.boot.config;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.breeze.boot.modules.system.model.entity.SysDb;
-import com.breeze.boot.modules.system.service.SysDbService;
+import com.breeze.boot.modules.system.model.entity.SysDbResource;
+import com.breeze.boot.modules.system.service.SysDbResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -43,18 +43,18 @@ public class ContextRefreshListener implements ApplicationListener<ContextRefres
 
     private final DataSource dataSource;
 
-    private final SysDbService sysDbService;
+    private final SysDbResourceService sysDbResourceService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
-        List<SysDb> selected = sysDbService.list();
-        for (SysDb sysDb : selected) {
+        List<SysDbResource> selected = sysDbResourceService.list();
+        for (SysDbResource sysDbResource : selected) {
             DataSourceProperty sourceProperty = new DataSourceProperty();
-            sourceProperty.setPoolName(sysDb.getDbName());
-            sourceProperty.setDriverClassName(sysDb.getDriver());
-            sourceProperty.setUsername(sysDb.getUsername());
-            sourceProperty.setPassword(sysDb.getPassword());
+            sourceProperty.setPoolName(sysDbResource.getDbName());
+            sourceProperty.setDriverClassName(sysDbResource.getDriver());
+            sourceProperty.setUsername(sysDbResource.getUsername());
+            sourceProperty.setPassword(sysDbResource.getPassword());
             DataSource creatorDataSource = defaultDataSourceCreator.createDataSource(sourceProperty);
             dynamicRoutingDataSource.addDataSource(sourceProperty.getPoolName(), creatorDataSource);
         }

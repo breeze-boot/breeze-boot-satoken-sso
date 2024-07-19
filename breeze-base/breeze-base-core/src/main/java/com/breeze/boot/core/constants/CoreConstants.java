@@ -28,12 +28,12 @@ public class CoreConstants {
     /**
      * 列
      */
-    public static final String COLUMN = "tenant_id";
+    public static final String TENANT_ID_COLUMN = "tenant_id";
 
     /**
      * 参数
      */
-    public static final String PARAM = "X-Tenant-Id";
+    public static final String X_TENANT_ID = "X-Tenant-Id";
 
     public static final Long ROOT = 1111111111111111111L;
 

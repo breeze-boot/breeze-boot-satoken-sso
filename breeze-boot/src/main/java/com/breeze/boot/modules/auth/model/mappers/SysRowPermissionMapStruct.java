@@ -17,10 +17,13 @@
 package com.breeze.boot.modules.auth.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.base.CustomizePermission;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
 import com.breeze.boot.modules.auth.model.form.RowPermissionForm;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 /**
  * 行权限转换器
@@ -36,5 +39,10 @@ public interface SysRowPermissionMapStruct {
     SysRowPermission form2Entity(RowPermissionForm rowPermissionForm);
 
     RowPermissionVO entity2VO(SysRowPermission sysRowPermission);
+
+    @Mappings({
+            @Mapping(target = "permissions", ignore = true)
+    })
+    CustomizePermission entity2Cache(SysRowPermission rowPermission);
 
 }

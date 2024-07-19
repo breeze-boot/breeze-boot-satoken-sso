@@ -17,6 +17,7 @@
 package com.breeze.boot.security.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,7 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * 登录用户的扩展类
+ * 用户信息扩展（返回前端）
  *
  * @author gaoweixuan
  * @since 2021/10/1
@@ -36,7 +37,8 @@ import java.util.Set;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "登录的用户信息封装返回前端的实体")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@Schema(description = "用户信息扩展（返回前端）")
 public class UserPrincipal extends User implements UserDetails {
 
     private static final long serialVersionUID = -4085833706868746460L;
@@ -126,16 +128,16 @@ public class UserPrincipal extends User implements UserDetails {
     private Long tenantId;
 
     /**
-     * 数据权限
+     * 数据权限编码
      */
-    @Schema(description = "数据权限")
-    private String permissions;
+    @Schema(description = "行数据权限编码")
+    private Set<String> rowPermissionCode;
 
     /**
-     * 需要排除的字段数据权限
+     * 数据权限规则
      */
-    @Schema(description = "需要排除的字段数据权限")
-    private Set<String> excludeColumn;
+    @Schema(description = "数据权限规则")
+    private String permissionType;
 
     // @formatter:off
     /**
@@ -160,10 +162,8 @@ public class UserPrincipal extends User implements UserDetails {
      * @param isLock                是否锁定
      * @param email                 电子邮件
      * @param userRoleCodes         用户角色代码
-     * @param userRoleIds           用户角色Id
      * @param tenantId              租户Id
-     * @param permissions           数据权限
-     * @param excludeColumn         需要排除的字段数据权限
+     * @param rowPermissionCode     行数据权限
      */
     public UserPrincipal(String username,
                          String password,
@@ -186,8 +186,8 @@ public class UserPrincipal extends User implements UserDetails {
                          Set<String> userRoleCodes,
                          Set<Long> userRoleIds,
                          Long tenantId,
-                         String permissions,
-                         Set<String> excludeColumn) {
+                         String permissionType,
+                         Set<String> rowPermissionCode) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
         this.deptId = deptId;
@@ -203,8 +203,8 @@ public class UserPrincipal extends User implements UserDetails {
         this.userRoleCodes = userRoleCodes;
         this.userRoleIds = userRoleIds;
         this.tenantId = tenantId;
-        this.permissions = permissions;
-        this.excludeColumn = excludeColumn;
+        this.permissionType = permissionType;
+        this.rowPermissionCode = rowPermissionCode;
     }
 
     /**

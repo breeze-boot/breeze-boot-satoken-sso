@@ -33,7 +33,7 @@ import com.breeze.boot.modules.system.model.form.MSubjectOpenForm;
 import com.breeze.boot.modules.system.model.form.MSubjectSetUserForm;
 import com.breeze.boot.modules.system.model.mappers.SysMSubjectMapStruct;
 import com.breeze.boot.modules.system.model.query.MSubjectQuery;
-import com.breeze.boot.modules.system.model.vo.EmailVO;
+import com.breeze.boot.modules.system.model.vo.EmailConfigVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectEmailVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectVO;
 import com.breeze.boot.modules.system.service.SysMSubjectService;
@@ -80,7 +80,7 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
      * 按id获取信息
      *
      * @param subjectId subjectId
-     * @return {@link EmailVO }
+     * @return {@link EmailConfigVO }
      */
     @Override
     public MSubjectVO getInfoById(Long subjectId) {
@@ -121,7 +121,7 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
     /**
      * 邮寄
      *
-     * @param id 身份证件
+     * @param id ID
      * @return {@link Boolean }
      */
     @Override
@@ -157,7 +157,7 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
     /**
      * 设置电子邮件用户
      *
-     * @param id                  身份证件
+     * @param id                  ID
      * @param mSubjectSetUserForm m主题集用户表单
      * @return {@link Boolean }
      */

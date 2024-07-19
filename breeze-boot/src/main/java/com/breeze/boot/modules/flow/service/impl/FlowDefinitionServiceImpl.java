@@ -82,7 +82,7 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
      */
     @Override
     public Result<String> deploy(FlowDesignXmlStringParam param) {
-        Long currentUserId = SecurityUtils.getCurrentUser().getId();
+        Long currentUserId = SecurityUtils.getCurrentUser().getUserId();
         try {
             Authentication.setAuthenticatedUserId(String.valueOf(currentUserId));
             // 构造文件名
@@ -188,7 +188,7 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
     @Override
     public Boolean isSuspended(String processDefinitionId, String tenantId) {
         try {
-            Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getId()));
+            Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getUserId()));
             ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).processDefinitionTenantId(tenantId).singleResult();
 
             if (Objects.isNull(processDefinition)) {

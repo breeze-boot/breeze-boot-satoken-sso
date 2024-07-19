@@ -19,14 +19,14 @@ package com.breeze.boot.modules.auth.model.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统角色VO
  *
  * @author gaoweixuan
- * @since 2021-12-06 22:03:39
+ * @since 2024-07-14
  */
 @Data
 @Builder
@@ -44,21 +44,31 @@ public class RoleVO implements Serializable {
     /**
      * 角色编码
      */
-    @NotBlank(message = "角色编码不可为空")
     @Schema(description = "角色编码")
     private String roleCode;
 
     /**
      * 角色名称
      */
-    @NotBlank(message = "角色名称不可为空")
     @Schema(description = "角色名称")
     private String roleName;
 
     /**
-     * 数据权限编码
+     * 行数据权限名称
      */
-    @Schema(description = "数据权限编码")
-    private String permissionCode;
+    @Schema(description = "行数据权限名称")
+    private String rowPermissionName;
+
+    /**
+     * 行数据权限类型
+     */
+    @Schema(description = "行数据权限类型")
+    private String rowPermissionType;
+
+    /**
+     * 行数据权限IDS
+     */
+    @Schema(description = "行数据权限IDS")
+    private List<Long> rowPermissionIds;
 
 }

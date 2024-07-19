@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.auth.mapper;
 
 import com.breeze.boot.modules.auth.model.bo.SysMenuBO;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
@@ -40,9 +40,9 @@ public interface SysMenuMapper extends BreezeBaseMapper<SysMenu> {
      * 用户菜单权限列表
      *
      * @param userRoleList 角色列表
-     * @return {@link Set}<{@link String}>
+     * @return {@link List}<{@link String}>
      */
-    Set<String> listUserMenuPermission(@Param("userRoleList") Set<UserRoleDTO> userRoleList);
+    Set<String> listUserMenuPermission(@Param("userRoleList") List<UserRoleBO> userRoleList);
 
     /**
      * 菜单列表

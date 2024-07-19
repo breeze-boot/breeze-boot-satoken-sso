@@ -6,7 +6,7 @@
 <mapper namespace="com.breeze.boot.modules.system.mapper.SysDbMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.breeze.boot.modules.system.model.entity.SysDb" id="sysDbMap">
+    <resultMap type="com.breeze.boot.modules.system.model.entity.SysDbResource" id="sysDbMap">
         <id property="id" column="id" javaType="java.lang.Long"/>
         <result property="dbCode" column="db_code"/>
         <result property="dbName" column="db_name"/>
@@ -20,19 +20,19 @@
         <result property="createName" column="create_name"/>
     </resultMap>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.system.model.entity.SysDb">
+    <select id="listPage" resultType="com.breeze.boot.modules.system.model.entity.SysDbResource">
         SELECT
-        id,
-        db_code,
-        db_name,
-        driver,
-        url,
-        username,
-        password,
-        tenant_id,
-        create_by,
-        create_time,
-        create_name
+            id,
+            db_code,
+            db_name,
+            driver,
+            url,
+            username,
+            password,
+            tenant_id,
+            create_by,
+            create_time,
+            create_name
         FROM sys_db
         <where>
             <if test="dbCode != null and dbCode != ''">
@@ -48,7 +48,7 @@
                 AND tenant_id = #{tenantId}
             </if>
         </where>
-        ORDER BY id DESC
+        ORDER BY create_time DESC
     </select>
 
 </mapper>

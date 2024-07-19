@@ -160,11 +160,11 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
      */
     private Ttl getTtl(OAuth2Authorization authorization, TokenSettings tokenSettings) {
         // code 过期时间
-        Duration codeTtl = tokenSettings.getAuthorizationCodeTimeToLive().plusMinutes(100);
+        Duration codeTtl = tokenSettings.getAuthorizationCodeTimeToLive().plusMinutes(10);
         // access_token 过期时间
-        Duration accessTokenTtl = tokenSettings.getAccessTokenTimeToLive().plusMinutes(100);
+        Duration accessTokenTtl = tokenSettings.getAccessTokenTimeToLive().plusMinutes(10);
         // refresh_token 过期时间
-        Duration refreshTokenTtl = tokenSettings.getRefreshTokenTimeToLive().plusMinutes(100);
+        Duration refreshTokenTtl = tokenSettings.getRefreshTokenTimeToLive().plusMinutes(10);
         // 求三个时间的最大值
         Duration max = authorization.getRefreshToken() != null ? accessTokenTtl : Collections.max(Arrays.asList(accessTokenTtl, refreshTokenTtl));
         return new Ttl(codeTtl, accessTokenTtl, refreshTokenTtl, max);
@@ -230,12 +230,12 @@ public class InRedisOAuth2AuthorizationService implements OAuth2AuthorizationSer
      * @return {@link OAuth2Authorization}
      */
     private OAuth2Authorization findBy(String token) {
-        ArrayList<OAuth2Authorization> objects = Lists.newArrayList();
-        objects.add(Optional.ofNullable(this.getAuthId(STATE_OAUTH + token)).map(this::findById).orElse(null));
-        objects.add(Optional.ofNullable(this.getAuthId(CODE_OAUTH + token)).map(this::findById).orElse(null));
-        objects.add(Optional.ofNullable(this.getAuthId(ACCESS_OAUTH + token)).map(this::findById).orElse(null));
-        objects.add(Optional.ofNullable(this.getAuthId(REFRESH_OAUTH + token)).map(this::findById).orElse(null));
-        List<OAuth2Authorization> result = objects.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        List<OAuth2Authorization> authorizationList = Lists.newArrayList();
+        authorizationList.add(Optional.ofNullable(this.getAuthId(STATE_OAUTH + token)).map(this::findById).orElse(null));
+        authorizationList.add(Optional.ofNullable(this.getAuthId(CODE_OAUTH + token)).map(this::findById).orElse(null));
+        authorizationList.add(Optional.ofNullable(this.getAuthId(ACCESS_OAUTH + token)).map(this::findById).orElse(null));
+        authorizationList.add(Optional.ofNullable(this.getAuthId(REFRESH_OAUTH + token)).map(this::findById).orElse(null));
+        List<OAuth2Authorization> result = authorizationList.stream().filter(Objects::nonNull).collect(Collectors.toList());
         return !result.isEmpty() ? result.get(0) : null;
     }
 

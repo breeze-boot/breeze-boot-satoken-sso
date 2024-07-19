@@ -43,7 +43,7 @@ import java.util.*;
 @Slf4j
 public class BreezeSqlLogInnerInterceptor implements InnerInterceptor {
 
-    static String line = "=========================================================================================================================================================================";
+    static String line = "=================================================================================================================================================================================================";
 
     @Override
     public void beforePrepare(StatementHandler sh, Connection connection, Integer transactionTimeout) {

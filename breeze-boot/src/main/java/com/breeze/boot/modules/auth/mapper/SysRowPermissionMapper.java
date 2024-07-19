@@ -18,13 +18,14 @@ package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.query.DataPermissionQuery;
+import com.breeze.boot.modules.auth.model.query.MenuColumnQuery;
+import com.breeze.boot.modules.auth.model.query.RowPermissionQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 系统行级数据权限映射器
+ * 系统行数据权限映射器
  *
  * @author gaoweixuan
  * @since 2022-10-30
@@ -35,10 +36,10 @@ public interface SysRowPermissionMapper extends BreezeBaseMapper<SysRowPermissio
     /**
      * 列表分页
      *
-     * @param permissionQuery 数据权限查询
+     * @param rowPermissionQuery 数据权限查询
      * @param page            页面
      * @return {@link Page}<{@link SysRowPermission}>
      */
-    Page<SysRowPermission> listPage(Page<SysRowPermission> page, @Param("permissionQuery") DataPermissionQuery permissionQuery);
+    Page<SysRowPermission> listPage(Page<SysRowPermission> page, @Param("rowPermissionQuery") RowPermissionQuery rowPermissionQuery);
 
 }

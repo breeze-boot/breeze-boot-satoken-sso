@@ -37,12 +37,6 @@ import java.util.Set;
 public class RoleForm {
 
     /**
-     * 角色ID
-     */
-    @Schema(description = "角色ID")
-    private Long id;
-
-    /**
      * 角色编码
      */
     @NotBlank(message = "角色编码不可为空")
@@ -57,15 +51,21 @@ public class RoleForm {
     private String roleName;
 
     /**
-     * 数据权限编码
+     * 行数据权限类型
      */
-    @Schema(description = "数据权限编码")
-    private String permissionCode;
+    @Schema(description = "行数据权限类型")
+    private String rowPermissionType;
 
     /**
-     * 数据权限IDs
+     * 行数据权限IDs
      */
-    @Schema(description = "数据权限IDs")
-    private Set<Long> permissionIds;
+    @Schema(description = "行数据权限IDs")
+    private Set<Long> rowPermissionIds;
+
+    /**
+     * 列数据权限IDs
+     */
+    @Schema(description = "列数据权限IDs")
+    private Set<Long> columnPermissionIds;
 
 }

@@ -20,15 +20,19 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.system.mapper.SysDictMapper;
 import com.breeze.boot.modules.system.model.entity.SysDict;
 import com.breeze.boot.modules.system.model.entity.SysDictItem;
-import com.breeze.boot.modules.system.model.params.DictOpenParam;
+import com.breeze.boot.modules.system.model.form.DictForm;
+import com.breeze.boot.modules.system.model.form.DictOpenForm;
+import com.breeze.boot.modules.system.model.mappers.SysDictMapStruct;
 import com.breeze.boot.modules.system.model.query.DictQuery;
-import com.breeze.boot.modules.system.mapper.SysDictMapper;
+import com.breeze.boot.modules.system.model.vo.DictVO;
 import com.breeze.boot.modules.system.service.SysDictItemService;
 import com.breeze.boot.modules.system.service.SysDictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,7 +40,7 @@ import java.util.List;
  * 系统字典服务impl
  *
  * @author gaoweixuan
- * @since 2021-12-06 22:03:39
+  * @since 2024-07-13
  */
 @Service
 @RequiredArgsConstructor
@@ -47,30 +51,69 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     private final SysDictItemService sysDictItemService;
 
+    private final SysDictMapStruct sysDictMapStruct;
+
     /**
      * 字典分页
      *
      * @param dictQuery 字典查询
-     * @return {@link Page}<{@link SysDict}>
+     * @return {@link Page}<{@link DictVO}>
      */
     @Override
-    public Page<SysDict> listPage(DictQuery dictQuery) {
-        return this.baseMapper.listPage(new Page<>(dictQuery.getCurrent(), dictQuery.getSize()), dictQuery);
+    public Page<DictVO> listPage(DictQuery dictQuery) {
+        Page<SysDict> sysDictPage = this.baseMapper.listPage(new Page<>(dictQuery.getCurrent(), dictQuery.getSize()), dictQuery);
+        return this.sysDictMapStruct.entityPage2VOPage(sysDictPage);
+    }
+
+    /**
+     * 按id获取信息
+     *
+     * @param dictId dict id
+     * @return {@link DictVO }
+     */
+    @Override
+    public DictVO getInfoById(Long dictId) {
+        return this.sysDictMapStruct.entity2VO(this.getById(dictId));
+    }
+
+    /**
+     * 保存dict
+     *
+     * @param dictForm 字典表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean saveDict(DictForm dictForm) {
+        SysDict sysDict = this.sysDictMapStruct.form2Entity(dictForm);
+        return this.save(sysDict);
+    }
+
+    /**
+     * 修改dict
+     *
+     * @param id       ID
+     * @param dictForm 字典表单
+     * @return {@link Boolean }
+     */
+    @Override
+    public Boolean modifyDict(Long id, DictForm dictForm) {
+        SysDict sysDict = this.sysDictMapStruct.form2Entity(dictForm);
+        sysDict.setId(id);
+        return this.updateById(sysDict);
     }
 
     /**
      * 开关
      *
-     * @param dictOpenParam 字典开关参数
+     * @param dictOpenForm 字典开关参数
      * @return {@link Boolean}
      */
     @Override
-    public Boolean open(DictOpenParam dictOpenParam) {
+    public Boolean open(DictOpenForm dictOpenForm) {
         return this.update(Wrappers.<SysDict>lambdaUpdate()
-                .set(SysDict::getStatus, dictOpenParam.getStatus())
-                .eq(SysDict::getId, dictOpenParam.getId()));
+                .set(SysDict::getStatus, dictOpenForm.getStatus())
+                .eq(SysDict::getId, dictOpenForm.getId()));
     }
-
 
     /**
      * 删除字典通过IDS
@@ -79,6 +122,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> deleteByIds(List<Long> ids) {
         this.sysDictItemService.remove(Wrappers.<SysDictItem>lambdaQuery().in(SysDictItem::getDictId, ids));
         this.removeByIds(ids);

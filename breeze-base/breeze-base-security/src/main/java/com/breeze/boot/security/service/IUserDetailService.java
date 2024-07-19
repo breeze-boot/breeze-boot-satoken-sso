@@ -17,11 +17,11 @@
 package com.breeze.boot.security.service;
 
 import cn.hutool.core.util.StrUtil;
-import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.model.entity.UserPrincipal;
-import com.breeze.boot.security.exception.NotSupportException;
+import com.breeze.boot.security.exception.TenantNotSupportException;
 import com.google.common.collect.Lists;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.breeze.boot.core.constants.CoreConstants.PARAM;
+import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
 /**
  * 用户服务接口
@@ -64,53 +64,53 @@ public interface IUserDetailService extends UserDetailsService {
     /**
      * 获取登录用户信息
      *
-     * @param loginUserResult 登录用户结果
+     * @param userResultData 登录用户结果
      * @return {@link UserPrincipal}
      */
-    default UserPrincipal getLoginUserInfo(Result<BaseLoginUser> loginUserResult) {
-        BaseLoginUser baseLoginUser = loginUserResult.getData();
-        if (baseLoginUser == null) {
+    default UserPrincipal getLoginUserInfo(Result<UserInfoDTO> userResultData) {
+        UserInfoDTO userInfoDTO = userResultData.getData();
+        if (userInfoDTO == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
-        return this.convertResponseUserData(baseLoginUser);
+        return this.convertResponseUserData(userInfoDTO);
     }
 
     /**
      * 获取登录用户
      *
-     * @param baseLoginUser 登录用户
+     * @param userInfo 登录用户
      * @return {@link UserPrincipal}
      */
-    default UserPrincipal convertResponseUserData(BaseLoginUser baseLoginUser) {
+    default UserPrincipal convertResponseUserData(UserInfoDTO userInfo) {
         List<GrantedAuthority> authorities = Lists.newArrayList();
         // 保存权限信息
-        Optional.ofNullable(baseLoginUser.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
+        Optional.ofNullable(userInfo.getAuthorities()).ifPresent(auth -> getAuthorityList(auth, authorities));
         // 保存角色信息
-        Optional.ofNullable(baseLoginUser.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));
+        Optional.ofNullable(userInfo.getUserRoleCodes()).ifPresent(roleCode -> getAuthorityList(roleCode, authorities));
         return new UserPrincipal(
-                baseLoginUser.getUsername(),
-                baseLoginUser.getPassword(),
-                Objects.equals(baseLoginUser.getIsLock(), 0),
+                userInfo.getUsername(),
+                userInfo.getPassword(),
+                Objects.equals(userInfo.getIsLock(), 0),
                 true,
                 true,
-                Objects.equals(baseLoginUser.getIsLock(), 0),
+                Objects.equals(userInfo.getIsLock(), 0),
                 authorities,
-                baseLoginUser.getId(),
-                baseLoginUser.getDeptId(),
-                baseLoginUser.getDeptName(),
-                baseLoginUser.getUserCode(),
-                baseLoginUser.getAmountName(),
-                baseLoginUser.getAvatar(),
-                baseLoginUser.getPhone(),
-                baseLoginUser.getSex(),
-                baseLoginUser.getAmountType(),
-                baseLoginUser.getIsLock(),
-                baseLoginUser.getEmail(),
-                baseLoginUser.getUserRoleCodes(),
-                baseLoginUser.getUserRoleIds(),
-                baseLoginUser.getTenantId(),
-                baseLoginUser.getPermission().getPermissions(),
-                baseLoginUser.getPermission().getExcludeColumn());
+                userInfo.getUserId(),
+                userInfo.getDeptId(),
+                userInfo.getDeptName(),
+                userInfo.getUserCode(),
+                userInfo.getAmountName(),
+                userInfo.getAvatar(),
+                userInfo.getPhone(),
+                userInfo.getSex(),
+                userInfo.getAmountType(),
+                userInfo.getIsLock(),
+                userInfo.getEmail(),
+                userInfo.getUserRoleCodes(),
+                userInfo.getUserRoleIds(),
+                userInfo.getTenantId(),
+                userInfo.getPermissionType(),
+                userInfo.getRowPermissionCode());
     }
 
     /**
@@ -119,17 +119,17 @@ public interface IUserDetailService extends UserDetailsService {
     default void getTenantId(ServletRequestAttributes requestAttributes) {
         assert requestAttributes != null;
         HttpServletRequest contextRequest = requestAttributes.getRequest();
-        String tenantIdHeader = contextRequest.getHeader(PARAM);
+        String tenantIdHeader = contextRequest.getHeader(X_TENANT_ID);
         if (StrUtil.isAllNotBlank(tenantIdHeader)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdHeader));
             return;
         }
-        String tenantIdParam = contextRequest.getParameter(PARAM);
+        String tenantIdParam = contextRequest.getParameter(X_TENANT_ID);
         if (StrUtil.isAllNotBlank(tenantIdParam)) {
             BreezeThreadLocal.set(Long.valueOf(tenantIdParam));
             return;
         }
-        throw new NotSupportException("tenantId Not Found");
+        throw new TenantNotSupportException("tenantId Not Found");
     }
 
     /**

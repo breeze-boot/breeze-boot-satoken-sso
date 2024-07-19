@@ -23,8 +23,8 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.base.BaseLoginUser;
-import com.breeze.boot.core.enums.DataPermissionCode;
+import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.core.propertise.AesSecretProperties;
@@ -33,7 +33,7 @@ import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.*;
 import com.breeze.boot.modules.auth.model.form.UserForm;
 import com.breeze.boot.modules.auth.model.form.UserOpenForm;
@@ -49,19 +49,16 @@ import com.breeze.boot.security.model.params.AuthLoginParam;
 import com.breeze.boot.security.model.params.WxLoginParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 import static com.breeze.boot.core.enums.ResultCode.FAIL;
 
 /**
@@ -112,19 +109,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysMenuService sysMenuService;
 
     /**
-     * 系统角色数据权限服务
+     * 系统角色行数据权限服务
      */
     private final SysRoleRowPermissionService sysRoleRowPermissionService;
 
     /**
-     * 系统角色字段级数据权限服务
+     * 系统角色字段数据权限服务
      */
     private final SysRoleColumnPermissionService sysRoleColumnPermissionService;
-
-    /**
-     * 缓存
-     */
-    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 列表页面
@@ -147,19 +139,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserVO getInfoById(Long id) {
         SysUser sysUser = this.getById(id);
+        UserVO userVO = this.sysUserMapStruct.entity2VO(sysUser);
         if (Objects.isNull(sysUser)) {
             throw new SystemServiceException(FAIL);
         }
         List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
-        sysUser.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
-        sysUser.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
-        sysUser.setDeptName(Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).orElseGet(SysDept::new).getDeptName());
-        sysUser.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
+        userVO.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+        userVO.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+        userVO.setDeptName(Optional.ofNullable(this.sysDeptService.getById(userVO.getDeptId())).orElseGet(SysDept::new).getDeptName());
+        userVO.setPostName(Optional.ofNullable(this.sysPostService.getById(sysUser.getPostId())).orElseGet(SysPost::new).getPostName());
         if (StrUtil.isBlank(sysUser.getAvatar())) {
-            sysUser.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
+            userVO.setAvatar(this.sysFileService.preview(sysUser.getAvatarFileId()));
         }
-        sysUser.setSysRoles(roleList);
-        return this.sysUserMapStruct.entity2VO(sysUser);
+        userVO.setSysRoles(roleList);
+        return userVO;
     }
 
     /**
@@ -169,14 +162,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return {@link Boolean}
      */
     @Override
-    public Result<Boolean> saveUser(@Valid UserForm userForm) {
+    public Result<Boolean> saveUser(UserForm userForm) {
         if (Objects.isNull(this.sysDeptService.getById(userForm.getDeptId()))) {
             return Result.fail("部门不存在");
         }
         userForm.setPassword(this.passwordEncoder.encode(userForm.getPassword()));
         SysUser sysUser = sysUserMapStruct.form2Entity(userForm);
         boolean save = this.save(sysUser);
-        if (save) return Result.ok(this.saveUserRole(sysUser));
+        if (save) return Result.ok(this.saveUserRole(userForm, sysUser.getId()));
         return Result.fail("创建失败");
     }
 
@@ -192,7 +185,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean update = this.updateById(sysUser);
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
         if (update) {
-            this.saveUserRole(sysUser);
+            this.saveUserRole(userForm, id);
         }
         return update;
     }
@@ -200,17 +193,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 保存用户角色
      *
-     * @param sysUser 系统用户
+     * @param userForm 用户表单
+     * @param id       userId
      * @return boolean
      */
-    private boolean saveUserRole(SysUser sysUser) {
-        List<SysUserRole> userRoleList = Optional.ofNullable(sysUser.getRoleIds())
-                .orElseGet(Lists::newArrayList).stream().map(id -> {
-                    SysUserRole sysUserRole = new SysUserRole();
-                    sysUserRole.setUserId(sysUser.getId());
-                    sysUserRole.setRoleId(id);
-                    return sysUserRole;
-                }).collect(Collectors.toList());
+    private boolean saveUserRole(UserForm userForm, Long id) {
+        List<SysUserRole> userRoleList = Optional.ofNullable(userForm.getRoleIds()).orElseGet(Lists::newArrayList).stream().map(roleId -> {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setUserId(id);
+            sysUserRole.setRoleId(roleId);
+            return sysUserRole;
+        }).collect(Collectors.toList());
         return this.sysUserRoleService.saveBatch(userRoleList);
     }
 
@@ -222,9 +215,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Boolean open(UserOpenForm userOpenForm) {
-        return this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getIsLock, userOpenForm.getIsLock())
-                .eq(SysUser::getUsername, userOpenForm.getUsername()));
+        return this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getIsLock, userOpenForm.getIsLock()).eq(SysUser::getUsername, userOpenForm.getUsername()));
     }
 
     /**
@@ -237,8 +228,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Boolean reset(UserResetForm userResetForm) {
         AesSecretProperties aesSecretProperties = SpringUtil.getBean(AesSecretProperties.class);
         userResetForm.setPassword(this.passwordEncoder.encode(AesUtil.decryptStr(userResetForm.getPassword(), aesSecretProperties.getAesSecret())));
-        return this.update(Wrappers.<SysUser>lambdaUpdate()
-                .set(SysUser::getPassword, userResetForm.getPassword()).eq(SysUser::getId, userResetForm.getId()));
+        return this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userResetForm.getPassword()).eq(SysUser::getId, userResetForm.getId()));
     }
 
     /**
@@ -259,13 +249,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 
-    @CacheEvict(cacheNames = LOGIN_USER, key = "#sysUser.username")
     public void removeUser(SysUser sysUser) {
         boolean remove = this.remove(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getId, sysUser.getId()));
         if (remove) {
             // 删除用户角色关系
-            this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery()
-                    .in(SysUserRole::getUserId, sysUser.getId()));
+            this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().in(SysUserRole::getUserId, sysUser.getId()));
         }
     }
 
@@ -282,9 +270,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return Result.fail(Boolean.FALSE, "用户不存在");
         }
         this.sysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
-        List<SysUserRole> collect = userRolesForm.getRoleIds().stream().map(roleId ->
-                SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()
-        ).collect(Collectors.toList());
+        List<SysUserRole> collect = userRolesForm.getRoleIds().stream().map(roleId -> SysUserRole.builder().roleId(roleId).userId(sysUser.getId()).build()).collect(Collectors.toList());
         this.sysUserRoleService.saveBatch(collect);
         return Result.ok(Boolean.TRUE, "分配成功");
     }
@@ -298,14 +284,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser registerUser(SysUser registerUser, String roleCode) {
-        SysUser sysUser = SysUser.builder()
-                .username(registerUser.getUsername())
-                .amountName(registerUser.getUsername())
-                .password(this.passwordEncoder.encode("123456"))
-                .openId(registerUser.getOpenId())
-                .phone(registerUser.getPhone())
-                .tenantId(registerUser.getTenantId())
-                .deptId(1L).build();
+        SysUser sysUser = SysUser.builder().username(registerUser.getUsername()).amountName(registerUser.getUsername()).password(this.passwordEncoder.encode("123456")).openId(registerUser.getOpenId()).phone(registerUser.getPhone()).tenantId(registerUser.getTenantId()).deptId(1L).build();
         this.save(sysUser);
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
@@ -356,8 +335,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new SystemServiceException(ResultCode.EXCEPTION);
         }
         if (CollUtil.isNotEmpty(deptIdList)) {
-            return this.list(Wrappers.<SysUser>lambdaQuery()
-                    .in(SysUser::getDeptId, deptIdList));
+            return this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, deptIdList));
         }
         return Lists.newArrayList();
     }
@@ -377,10 +355,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 加载用户通过用户名
      *
      * @param username 用户名
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
     @Override
-    public Result<BaseLoginUser> loadUserByUsername(String username) {
+    public Result<UserInfoDTO> loadUserByUsername(String username) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
         if (Objects.isNull(sysUser)) {
             return Result.fail("未获取到用户");
@@ -392,10 +370,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 加载用户通过电话
      *
      * @param phone 电话
-     * @return {@link BaseLoginUser}
+     * @return {@link UserInfoDTO}
      */
     @Override
-    public Result<BaseLoginUser> loadUserByPhone(String phone) {
+    public Result<UserInfoDTO> loadUserByPhone(String phone) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
         if (Objects.isNull(sysUser)) {
             return Result.fail("未获取到用户");
@@ -408,10 +386,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 加载用户通过电子邮件
      *
      * @param email 电子邮件
-     * @return {@link BaseLoginUser}
+     * @return {@link UserInfoDTO}
      */
     @Override
-    public Result<BaseLoginUser> loadUserByEmail(String email) {
+    public Result<UserInfoDTO> loadUserByEmail(String email) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
         if (Objects.isNull(sysUser)) {
             return Result.fail("未获取到用户");
@@ -420,17 +398,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Result<BaseLoginUser> loadRegisterUserByOpenId(WxLoginParam wxLoginParam) {
+    public Result<UserInfoDTO> loadRegisterUserByOpenId(WxLoginParam wxLoginParam) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, wxLoginParam.getOpenId()));
         if (Objects.isNull(sysUser)) {
-            this.registerUser(SysUser.builder()
-                    .phone(wxLoginParam.getPhone())
-                    .amountName(wxLoginParam.getNickName() + RandomUtil.randomString(6))
-                    .sex(wxLoginParam.getSex())
-                    .email(wxLoginParam.getEmail())
-                    .tenantId(wxLoginParam.getTenantId())
-                    .username(wxLoginParam.getOpenId())
-                    .deptId(1L).build(), "ROLE_MINI");
+            this.registerUser(SysUser.builder().phone(wxLoginParam.getPhone()).amountName(wxLoginParam.getNickName() + RandomUtil.randomString(6)).sex(wxLoginParam.getSex()).email(wxLoginParam.getEmail()).tenantId(wxLoginParam.getTenantId()).username(wxLoginParam.getOpenId()).deptId(1L).build(), "ROLE_MINI");
         }
         return Result.ok(this.buildLoginUserInfo(sysUser));
     }
@@ -439,21 +410,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 加载用户通过电话
      *
      * @param authLoginParam auth三方登录消息体
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
     @Override
-    public Result<BaseLoginUser> loadRegisterUserByPhone(AuthLoginParam authLoginParam) {
+    public Result<UserInfoDTO> loadRegisterUserByPhone(AuthLoginParam authLoginParam) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, authLoginParam.getPhone()));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
-            sysUser = this.registerUser(SysUser.builder()
-                    .phone(authLoginParam.getPhone())
-                    .amountName(authLoginParam.getAppUserName())
-                    .sex(authLoginParam.getSex())
-                    .email(authLoginParam.getEmail())
-                    .tenantId(authLoginParam.getTenantId())
-                    .username(authLoginParam.getAppUserName() + RandomUtil.randomString(5))
-                    .deptId(1L).build(), "ROLE_AUTH");
+            sysUser = this.registerUser(SysUser.builder().phone(authLoginParam.getPhone()).amountName(authLoginParam.getAppUserName()).sex(authLoginParam.getSex()).email(authLoginParam.getEmail()).tenantId(authLoginParam.getTenantId()).username(authLoginParam.getAppUserName() + RandomUtil.randomString(5)).deptId(1L).build(), "ROLE_AUTH");
         }
         return Result.ok(this.buildLoginUserInfo(sysUser));
     }
@@ -462,77 +426,81 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 加载登录用户
      *
      * @param sysUser 系统用户实体
-     * @return {@link BaseLoginUser}
+     * @return {@link UserInfoDTO}
      */
-    public BaseLoginUser buildLoginUserInfo(SysUser sysUser) {
-        BaseLoginUser loginUser = new BaseLoginUser();
+    public UserInfoDTO buildLoginUserInfo(SysUser sysUser) {
+        UserInfoDTO userInfo = sysUserMapStruct.entity2BaseLoginUser(sysUser);
+
         try {
-            loginUser = sysUserMapStruct.entity2BaseLoginUser(sysUser);
-            // 获取部门名称
-            BaseLoginUser finalLoginUser = loginUser;
-            Optional.ofNullable(sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> finalLoginUser.setDeptName(sysDept.getDeptName()));
-
             // 查询用户的角色
-            Set<UserRoleDTO> userRoleDTOSet = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId()))
-                    .orElse(Collections.emptySet());
-            if (CollUtil.isEmpty(userRoleDTOSet)) {
-                throw new SystemServiceException(ResultCode.EXCEPTION);
+            List<UserRoleBO> userRoleBOList = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId())).orElse(Collections.emptyList());
+            if (CollUtil.isEmpty(userRoleBOList)) {
+                throw new SystemServiceException(ResultCode.exception("用户需要初始角色"));
             }
-
-            loginUser.setAuthorities(sysMenuService.listUserMenuPermission(userRoleDTOSet));
+            // 获取部门名称
+            this.setDeptName(sysUser, userInfo);
+            // 权限
+            this.setAuthorities(userRoleBOList, userInfo);
             // 角色CODE
-            loginUser.setUserRoleCodes(userRoleDTOSet.stream().map(UserRoleDTO::getRoleCode).collect(Collectors.toSet()));
-            // 角色ID
-            Set<Long> roleIds = userRoleDTOSet.stream().map(UserRoleDTO::getRoleId).filter(Objects::nonNull).collect(Collectors.toSet());
-            loginUser.setUserRoleIds(Optional.of(roleIds).orElse(Collections.emptySet()));
-
-            // 用户的多个数据权限
-            Set<Long> roleIdSet = userRoleDTOSet.stream()
-                    .filter(permission -> StrUtil.equals(permission.getPermissionCode(), DataPermissionCode.CUSTOMIZES.getCode()))
-                    .map(UserRoleDTO::getRoleId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            String permissions = Optional.ofNullable(sysRoleRowPermissionService.listRowPermissionData(roleIdSet))
-                    .orElse(Collections.emptyList()).stream()
-                    .map(SysRowPermission::getPermissions)
-                    .flatMap(Collection::stream)
-                    .map(Object::toString)
-                    .collect(Collectors.joining(", "));
-
-            List<SysRoleColumnPermission> sysRoleColumnPermissions = Optional.ofNullable(sysRoleColumnPermissionService.listRoleColumnExcludeData(roleIdSet))
-                    .orElse(Collections.emptyList());
-            loginUser.setPermission(BaseLoginUser.BasePermission.builder()
-                    .permissionCode(getMaxPermissionScope(userRoleDTOSet))
-                    .permissions(permissions)
-                    .excludeColumn(Optional.of(sysRoleColumnPermissions.stream().map(SysRoleColumnPermission::getColumnName).collect(Collectors.toSet())).orElse(Collections.emptySet()))
-                    .build());
-            // 异步保存至Redis
-            redisTemplate.opsForValue().set(LOGIN_USER + sysUser.getUsername(), loginUser, 24L, TimeUnit.HOURS);
+            this.setRoleCode(userRoleBOList, userInfo);
+            // 用户的角色ID
+            this.setUsersRoleId(userRoleBOList, userInfo);
+            // 用户的角色的行数据权限
+            this.setRowPermission(userRoleBOList, userInfo);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return loginUser;
+        return userInfo;
     }
 
+    private void setAuthorities(List<UserRoleBO> userRoleBOList, UserInfoDTO userInfo) {
+        userInfo.setAuthorities(this.sysMenuService.listUserMenuPermission(userRoleBOList));
+    }
 
-    private String getMaxPermissionScope(Set<UserRoleDTO> userRoleDTOSet) {
-        Set<String> permissionCodes = userRoleDTOSet.stream()
-                .map(UserRoleDTO::getPermissionCode)
-                // 确保过滤掉null值，避免NullPointerException
+    private void setDeptName(SysUser sysUser, UserInfoDTO userInfo) {
+        Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> userInfo.setDeptName(sysDept.getDeptName()));
+    }
+
+    @NotNull
+    private Set<Long> getHasNormalPermissionRoleId(List<UserRoleBO> userRoleBOList) {
+        // @formatter:off
+        return userRoleBOList.stream()
+                .filter(permission -> StrUtil.equals(permission.getRowPermissionType(), DataPermissionType.CUSTOMIZES.getType()))
+                .map(UserRoleBO::getRoleId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
-        // 初始化resultSet，避免使用@Nullable注解
-        Set<DataPermissionCode> resultSet = Sets.newHashSet();
+        // @formatter:on
+    }
+
+    private void setRowPermission(List<UserRoleBO> userRoleBOList, UserInfoDTO userInfo) {
+        userInfo.setPermissionType(this.getMaxPermissionScope(userRoleBOList));
+        Set<Long> roleIdSet = this.getHasNormalPermissionRoleId(userRoleBOList);
+        Set<String> permissionCodeSet = this.sysRoleRowPermissionService.listRowPermission(roleIdSet);
+        userInfo.setRowPermissionCode(permissionCodeSet);
+    }
+
+    private void setRoleCode(List<UserRoleBO> userRoleBOList, UserInfoDTO userInfo) {
+        userInfo.setUserRoleCodes(userRoleBOList.stream().map(UserRoleBO::getRoleCode).collect(Collectors.toSet()));
+    }
+
+    private void setUsersRoleId(List<UserRoleBO> userRoleBOList, UserInfoDTO userInfo) {
+        Set<Long> roleIds = userRoleBOList.stream().map(UserRoleBO::getRoleId).filter(Objects::nonNull).collect(Collectors.toSet());
+        userInfo.setUserRoleIds(roleIds);
+    }
+
+    private String getMaxPermissionScope(List<UserRoleBO> userRoleBOList) {
+        Set<String> permissionCodeSet = userRoleBOList.stream().map(UserRoleBO::getRowPermissionType)
+                // 确保过滤掉null值，避免NullPointerException
+                .filter(Objects::nonNull).collect(Collectors.toSet());
+        // 初始化resultSet
+        Set<DataPermissionType> resultSet = Sets.newHashSet();
         // 遍历DataPermissionCode枚举，匹配权限
-        for (DataPermissionCode value : DataPermissionCode.values()) {
-            if (permissionCodes.contains(value.getCode())) {
+        for (DataPermissionType value : DataPermissionType.values()) {
+            if (permissionCodeSet.contains(value.getType())) {
                 resultSet.add(value);
             }
         }
-        return resultSet.stream().min(Comparator.comparingInt(DataPermissionCode::getLevel))
-                .map(DataPermissionCode::toString)
-                .orElse("");
+        return resultSet.stream().min(Comparator.comparingInt(DataPermissionType::getLevel)).map(DataPermissionType::toString).orElse("");
     }
 }
 

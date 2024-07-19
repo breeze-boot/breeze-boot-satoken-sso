@@ -148,6 +148,7 @@ breeze:
       - "sys_menu"
       - "sys_msg"
       - "sys_row_permission"
+      - "sys_column_permission"
   # xss过滤路径
   xss:
     ignore-urls:

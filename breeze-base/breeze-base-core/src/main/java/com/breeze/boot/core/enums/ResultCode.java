@@ -40,6 +40,8 @@ public enum ResultCode {
      */
     FORBIDDEN("A104", "身份验证异常"),
 
+    TENANT_NOT_FOUND("A105", "租户未获取到"),
+
     /**
      * http消息转换异常
      */

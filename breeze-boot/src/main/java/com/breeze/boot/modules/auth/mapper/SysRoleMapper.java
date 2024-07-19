@@ -17,6 +17,8 @@
 package com.breeze.boot.modules.auth.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.modules.auth.model.bo.RoleBO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
 import com.breeze.boot.modules.auth.model.query.RoleQuery;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
@@ -35,12 +37,21 @@ import java.util.List;
 public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
 
     /**
+     * 列表页面
+     *
+     * @param page      页面
+     * @param roleQuery 角色查询
+     * @return {@link Page}<{@link SysRole}>
+     */
+    Page<RoleBO> listPage(Page<SysRole> page, @Param("roleQuery") RoleQuery roleQuery);
+
+    /**
      * 用户角色列表
      *
      * @param userId 用户id
      * @return {@link List}<{@link SysRole}>
      */
-    List<SysRole> listRoleByUserId(@Param("userId") Long userId);
+    List<UserRoleBO> listRoleByUserId(@Param("userId") Long userId);
 
     /**
      * 用户角色ids列表
@@ -57,15 +68,6 @@ public interface SysRoleMapper extends BreezeBaseMapper<SysRole> {
      * @return {@link List}<{@link Long}>
      */
     List<String> listRoleNamesByUserId(@Param("userId") Long userId);
-
-    /**
-     * 列表页面
-     *
-     * @param page      页面
-     * @param roleQuery 角色查询
-     * @return {@link Page}<{@link SysRole}>
-     */
-    Page<SysRole> listPage(Page<SysRole> page, @Param("roleQuery") RoleQuery roleQuery);
 
     /**
      * 获取用户角色列表

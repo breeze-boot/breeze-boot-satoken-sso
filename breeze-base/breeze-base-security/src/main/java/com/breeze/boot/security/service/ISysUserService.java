@@ -16,7 +16,7 @@
 
 package com.breeze.boot.security.service;
 
-import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.model.params.AuthLoginParam;
 import com.breeze.boot.security.model.params.WxLoginParam;
@@ -33,40 +33,40 @@ public interface ISysUserService {
      * 加载用户通过用户名
      *
      * @param username 用户名
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
-    Result<BaseLoginUser> loadUserByUsername(String username);
+    Result<UserInfoDTO> loadUserByUsername(String username);
 
     /**
      * 加载用户通过电话
      *
      * @param phone 电话
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
-    Result<BaseLoginUser> loadUserByPhone(String phone);
+    Result<UserInfoDTO> loadUserByPhone(String phone);
 
     /**
      * 加载用户通过电子邮件
      *
      * @param email 电子邮件
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
-    Result<BaseLoginUser> loadUserByEmail(String email);
+    Result<UserInfoDTO> loadUserByEmail(String email);
 
     /**
      * 加载注册用户通过开放id
      *
      * @param wxLoginParam wx登录参数
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
-    Result<BaseLoginUser> loadRegisterUserByOpenId(WxLoginParam wxLoginParam);
+    Result<UserInfoDTO> loadRegisterUserByOpenId(WxLoginParam wxLoginParam);
 
     /**
      * 加载注册用户通过电话
      *
      * @param authLoginParam 身份验证登录参数
-     * @return {@link Result}<{@link BaseLoginUser}>
+     * @return {@link Result}<{@link UserInfoDTO}>
      */
-    Result<BaseLoginUser> loadRegisterUserByPhone(AuthLoginParam authLoginParam);
+    Result<UserInfoDTO> loadRegisterUserByPhone(AuthLoginParam authLoginParam);
 
 }

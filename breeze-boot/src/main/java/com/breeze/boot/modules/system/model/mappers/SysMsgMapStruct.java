@@ -34,7 +34,7 @@ public interface SysMsgMapStruct {
 
     Page<MsgVO> entityPage2VOPage(Page<SysMsg> page);
 
-    MsgVO entity2VO(SysMsg byId);
+    MsgVO entity2VO(SysMsg sysMsg);
 
     SysMsg form2Entity(MsgForm msgForm);
 

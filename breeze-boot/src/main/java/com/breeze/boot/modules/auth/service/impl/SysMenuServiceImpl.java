@@ -23,11 +23,11 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.base.BaseLoginUser;
+import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysMenuMapper;
 import com.breeze.boot.modules.auth.model.bo.SysMenuBO;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
 import com.breeze.boot.modules.auth.model.entity.SysRoleMenu;
 import com.breeze.boot.modules.auth.model.form.MenuForm;
@@ -67,12 +67,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 用户菜单权限列表
      *
-     * @param userRoleDTOList 用户角色列表
-     * @return {@link Set}<{@link String}>
+     * @param userRoleBOList 用户角色列表
+     * @return {@link List}<{@link String}>
      */
     @Override
-    public Set<String> listUserMenuPermission(Set<UserRoleDTO> userRoleDTOList) {
-        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(userRoleDTOList)).orElseGet(HashSet::new);
+    public Set<String> listUserMenuPermission(List<UserRoleBO> userRoleBOList) {
+        return Optional.ofNullable(this.baseMapper.listUserMenuPermission(userRoleBOList)).orElseGet(HashSet::new);
     }
 
     /**
@@ -84,13 +84,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode, String i18n) {
-        BaseLoginUser currentBaseLoginUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentBaseLoginUser.getUserRoleIds())) {
+        UserInfoDTO currentUser = SecurityUtils.getCurrentUser();
+        if (CollUtil.isEmpty(currentUser.getUserRoleIds())) {
             return Result.ok();
         }
 
         // 查询角色下的菜单信息
-        List<SysMenuBO> menuList = this.baseMapper.selectMenusByRoleId(currentBaseLoginUser.getUserRoleIds(), platformCode);
+        List<SysMenuBO> menuList = this.baseMapper.selectMenusByRoleId(currentUser.getUserRoleIds(), platformCode);
         return Result.ok(this.buildTrees(menuList));
     }
 
@@ -132,8 +132,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreePermission() {
-        BaseLoginUser currentBaseLoginUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentBaseLoginUser.getUserRoleIds())) {
+        UserInfoDTO currentUser = SecurityUtils.getCurrentUser();
+        if (CollUtil.isEmpty(currentUser.getUserRoleCodes())) {
             return Result.ok();
         }
         return this.listTreeRolePermission();

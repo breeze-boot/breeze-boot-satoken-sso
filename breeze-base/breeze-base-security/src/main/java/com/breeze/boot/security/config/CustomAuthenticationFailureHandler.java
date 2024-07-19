@@ -26,10 +26,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.breeze.boot.core.enums.ResultCode.SC_UNAUTHORIZED;
+import static com.breeze.boot.core.enums.ResultCode.FORBIDDEN;
 
 /**
  * 自定义身份验证失败处理程序
@@ -39,22 +37,6 @@ import static com.breeze.boot.core.enums.ResultCode.SC_UNAUTHORIZED;
  */
 @Slf4j
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
-
-    private static final Map<String, ResultCode> errorCodeMap = new HashMap<>();
-
-    static {
-        errorCodeMap.put("invalid_grant", ResultCode.exception(SC_UNAUTHORIZED,"Invalid grant"));
-        errorCodeMap.put("invalid_request", ResultCode.exception(SC_UNAUTHORIZED,"Invalid request"));
-        errorCodeMap.put("invalid_token", SC_UNAUTHORIZED); // 假设SC_UNAUTHORIZED是一个已经定义好的ResultCode
-        errorCodeMap.put("unauthorized_client", ResultCode.exception(SC_UNAUTHORIZED,"Unauthorized client"));
-        errorCodeMap.put("unsupported_grant_type", ResultCode.exception(SC_UNAUTHORIZED,"Unsupported grant type"));
-        errorCodeMap.put("invalid_scope", ResultCode.exception(SC_UNAUTHORIZED,"Invalid scope"));
-        errorCodeMap.put("invalid_client", ResultCode.exception(SC_UNAUTHORIZED,"Invalid client"));
-        errorCodeMap.put("access_denied", ResultCode.exception(SC_UNAUTHORIZED,"Access denied"));
-        errorCodeMap.put("invalid_redirect_uri", ResultCode.exception(SC_UNAUTHORIZED,"Invalid redirect URI"));
-        errorCodeMap.put("invalid_code", ResultCode.exception(SC_UNAUTHORIZED,"Invalid code"));
-        errorCodeMap.put("invalid_refresh_token", ResultCode.exception(SC_UNAUTHORIZED,"Invalid refresh token"));
-    }
 
     /**
      * 在身份验证失败
@@ -71,7 +53,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             log.error("[校验 {} - {}] ", errorMsg.getErrorCode(), errorMsg.getDescription(), exception);
 
             // 使用映射关系来简化错误处理逻辑
-            ResultCode resultCode = errorCodeMap.getOrDefault(errorMsg.getErrorCode(), ResultCode.exception(errorMsg.getDescription()));
+            ResultCode resultCode = ResultCode.exception(FORBIDDEN,errorMsg.getDescription());
             ResponseUtil.response(response, resultCode);
         }
     }

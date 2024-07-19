@@ -16,6 +16,7 @@
 
 package com.breeze.boot.security.authentication;
 
+import lombok.Getter;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,8 +39,22 @@ public class OAuth2ResourceOwnerAuthenticationToken extends AbstractAuthenticati
 
     private final Authentication clientPrincipal;
 
+    /**
+     * -- GETTER --
+     *  获取认证范围
+     *
+     * @return {@link Set}<{@link String}>  如果没有就返回空的set
+     */
+    @Getter
     private final Set<String> scopes;
 
+    /**
+     * -- GETTER --
+     *  获取额外参数
+     *
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Getter
     private final Map<String, Object> additionalParameters;
 
     /**
@@ -90,24 +105,6 @@ public class OAuth2ResourceOwnerAuthenticationToken extends AbstractAuthenticati
     @Override
     public Object getCredentials() {
         return "";
-    }
-
-    /**
-     * 获取认证范围
-     *
-     * @return {@link Set}<{@link String}>  如果没有就返回空的set
-     */
-    public Set<String> getScopes() {
-        return this.scopes;
-    }
-
-    /**
-     * 获取额外参数
-     *
-     * @return {@link Map}<{@link String}, {@link Object}>
-     */
-    public Map<String, Object> getAdditionalParameters() {
-        return this.additionalParameters;
     }
 
 }

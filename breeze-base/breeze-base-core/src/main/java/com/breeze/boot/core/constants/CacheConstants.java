@@ -25,11 +25,6 @@ package com.breeze.boot.core.constants;
 public class CacheConstants {
 
     /**
-     * 登录用户
-     */
-    public static final String LOGIN_USER = "sys:login_user:";
-
-    /**
      * 验证电话号码
      */
     public static final String VALIDATE_PHONE_CODE = "auth:validate_phone_code:";
@@ -39,11 +34,6 @@ public class CacheConstants {
      * 验证电子邮件代码
      */
     public static final String VALIDATE_EMAIL_CODE = "auth:validate_email_code:";
-
-    /**
-     * 黑名单jwt
-     */
-    public static final String BLACK_JWT = "sys:black:jwt:";
 
     /**
      * auth 缓存前缀
@@ -91,4 +81,12 @@ public class CacheConstants {
      * 授权同意信息
      */
     public static final String CONSENT = prefix + "consent:";
+
+    /**
+     * 行权限缓存
+     */
+    public static final String ROW_PERMISSION = "row:permission:";
+    public static final String COLUMN_PERMISSION = "column:permission:";
+
+
 }

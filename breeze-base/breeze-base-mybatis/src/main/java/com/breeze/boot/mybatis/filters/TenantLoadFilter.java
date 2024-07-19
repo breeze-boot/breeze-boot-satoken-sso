@@ -20,7 +20,6 @@ import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -29,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.breeze.boot.core.constants.CoreConstants.PARAM;
+import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
 /**
  * 系统租户加载过滤器
@@ -54,8 +53,8 @@ public class TenantLoadFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             log.info("[当前进入的请求]： {}", request.getRequestURI());
-            String apiTenantId = request.getHeader(PARAM);
-            String webSocketTenantId = request.getParameter(PARAM);
+            String apiTenantId = request.getHeader(X_TENANT_ID);
+            String webSocketTenantId = request.getParameter(X_TENANT_ID);
             if (StrUtil.isAllBlank(apiTenantId) && StrUtil.isAllBlank(webSocketTenantId)) {
                 // TODO 默认
             } else if (StrUtil.isAllNotBlank(apiTenantId)) {

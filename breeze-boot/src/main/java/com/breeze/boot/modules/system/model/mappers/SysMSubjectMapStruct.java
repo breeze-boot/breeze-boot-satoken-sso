@@ -18,7 +18,7 @@ package com.breeze.boot.modules.system.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.mail.dto.MailDTO;
-import com.breeze.boot.modules.system.model.entity.SysEmail;
+import com.breeze.boot.modules.system.model.entity.SysEmailConfig;
 import com.breeze.boot.modules.system.model.entity.SysEmailSubject;
 import com.breeze.boot.modules.system.model.form.MSubjectForm;
 import com.breeze.boot.modules.system.model.vo.MSubjectVO;
@@ -35,7 +35,7 @@ public interface SysMSubjectMapStruct {
 
     Page<MSubjectVO> page2PageVO(Page<SysEmailSubject> page);
 
-    MailDTO entity2DTO(SysEmail sysEmail);
+    MailDTO entity2DTO(SysEmailConfig sysEmailConfig);
 
     MSubjectVO entity2VO(SysEmailSubject sysEmailSubject);
 

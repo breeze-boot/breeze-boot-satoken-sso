@@ -18,9 +18,9 @@ package com.breeze.boot.modules.system.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.mail.dto.MailDTO;
-import com.breeze.boot.modules.system.model.entity.SysEmail;
-import com.breeze.boot.modules.system.model.form.EmailForm;
-import com.breeze.boot.modules.system.model.vo.EmailVO;
+import com.breeze.boot.modules.system.model.entity.SysEmailConfig;
+import com.breeze.boot.modules.system.model.form.EmailConfigForm;
+import com.breeze.boot.modules.system.model.vo.EmailConfigVO;
 import org.mapstruct.Mapper;
 
 /**
@@ -32,12 +32,12 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SysEmailMapStruct {
 
-    Page<EmailVO> page2PageVO(Page<SysEmail> page);
+    Page<EmailConfigVO> page2PageVO(Page<SysEmailConfig> page);
 
-    MailDTO entity2DTO(SysEmail sysEmail);
+    MailDTO entity2DTO(SysEmailConfig sysEmailConfig);
 
-    EmailVO entity2VO(SysEmail sysEmail);
+    EmailConfigVO entity2VO(SysEmailConfig sysEmailConfig);
 
-    SysEmail form2Entity(EmailForm emailForm);
+    SysEmailConfig form2Entity(EmailConfigForm emailConfigForm);
 
 }

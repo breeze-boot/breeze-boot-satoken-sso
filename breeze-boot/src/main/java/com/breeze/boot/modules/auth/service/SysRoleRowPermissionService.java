@@ -35,8 +35,8 @@ public interface SysRoleRowPermissionService extends IService<SysRoleRowPermissi
      * 角色数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link List}<{@link SysRowPermission}>
+     * @return {@link Set}<{@link SysRowPermission}>
      */
-    List<SysRowPermission> listRowPermissionData(Set<Long> roleIdSet);
+    Set<String> listRowPermission(Set<Long> roleIdSet);
 
 }

@@ -13,11 +13,9 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="listRowPermissionData" resultMap="com.breeze.boot.modules.auth.mapper.SysRowPermissionMapper.BaseResultMap">
+    <select id="listRowPermission" resultType="java.lang.String">
         SELECT
-        a.permission_name,
-        a.permission_code,
-        a.permissions
+        a.permission_code
         FROM
         sys_row_permission AS a
         LEFT JOIN sys_role_row_permission AS b ON a.id = b.permission_id

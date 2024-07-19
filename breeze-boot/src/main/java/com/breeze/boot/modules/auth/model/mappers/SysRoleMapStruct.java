@@ -17,7 +17,8 @@
 package com.breeze.boot.modules.auth.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.RoleBO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
 import com.breeze.boot.modules.auth.model.form.RoleForm;
 import com.breeze.boot.modules.auth.model.vo.RoleVO;
@@ -32,12 +33,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SysRoleMapStruct {
 
-    Page<RoleVO> page2VOPage(Page<SysRole> sysRolePage);
-
     SysRole form2Entity(RoleForm roleForm);
 
     RoleVO entity2VO(SysRole byId);
 
-    UserRoleDTO entity2Dto(SysRole sysRoleEntity);
+    Page<RoleVO> bo2VOPage(Page<RoleBO> sysRolePage);
 
 }

@@ -162,14 +162,14 @@ public class SysCommonController {
     }
 
     /**
-     * 数据权限下拉框
+     * 行数据权限类型下拉框
      *
      * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
      */
-    @Operation(summary = "数据权限下拉框", description = "下拉框接口")
-    @GetMapping("/selectPermission")
-    public Result<List<Map<String, Object>>> selectPermission() {
-        return this.sysCommonService.selectPermission();
+    @Operation(summary = "行数据权限类型下拉框", description = "下拉框接口")
+    @GetMapping("/selectPermissionType")
+    public Result<List<Map<String, Object>>> selectPermissionType() {
+        return this.sysCommonService.selectPermissionType();
     }
 
     /**

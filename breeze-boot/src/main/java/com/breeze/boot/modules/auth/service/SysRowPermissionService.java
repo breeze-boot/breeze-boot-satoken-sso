@@ -21,10 +21,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
 import com.breeze.boot.modules.auth.model.form.RowPermissionForm;
-import com.breeze.boot.modules.auth.model.query.DataPermissionQuery;
+import com.breeze.boot.modules.auth.model.query.RowPermissionQuery;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -35,13 +34,15 @@ import java.util.List;
  */
 public interface SysRowPermissionService extends IService<SysRowPermission> {
 
+    void init();
+
     /**
      * 列表页面
      *
-     * @param dataPermissionQuery 权限查询
+     * @param rowPermissionQuery 权限查询
      * @return {@link Page}<{@link RowPermissionVO}>
      */
-    Page<RowPermissionVO> listPage(DataPermissionQuery dataPermissionQuery);
+    Page<RowPermissionVO> listPage(RowPermissionQuery rowPermissionQuery);
 
     /**
      * 按id获取信息
@@ -74,6 +75,6 @@ public interface SysRowPermissionService extends IService<SysRowPermission> {
      * @param rowPermissionForm 数据权限表单
      * @return {@link Result}<{@link Boolean}>
      */
-    Result<Boolean> modifyPermission(Long id, RowPermissionForm rowPermissionForm);
+    Result<Boolean> modifyRowPermission(Long id, RowPermissionForm rowPermissionForm);
 
 }

@@ -16,16 +16,12 @@
 
 package com.breeze.boot.security.jackson2;
 
-import cn.hutool.core.collection.CollUtil;
-import com.breeze.boot.core.base.BaseLoginUser;
-import com.breeze.boot.security.utils.SecurityUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * 字段数据权限进行序列化
@@ -38,12 +34,6 @@ public class SecuredFieldSerialize extends JsonSerializer<Object> {
 
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        BaseLoginUser currentUser = SecurityUtils.getCurrentUser();
-        if (Objects.isNull(currentUser) || CollUtil.isEmpty(currentUser.getPermission().getExcludeColumn())) {
-            // 其他类型按照默认方式序列化
-            serializers.defaultSerializeValue(value, gen);
-            return;
-        }
         gen.writeString("NAN");
     }
 

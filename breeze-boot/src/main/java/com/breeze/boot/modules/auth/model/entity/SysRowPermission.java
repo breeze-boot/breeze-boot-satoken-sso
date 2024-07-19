@@ -27,7 +27,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 系统行级数据权限规则实体
+ * 系统行数据权限规则实体
  *
  * @author gaoweixuan
  * @since 2022-10-30
@@ -38,7 +38,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_row_permission", autoResultMap = true)
-@Schema(description = "系统行级数据权限规则实体")
+@Schema(description = "系统行数据权限规则实体")
 public class SysRowPermission extends BaseModel<SysRowPermission> implements Serializable {
 
     private static final long serialVersionUID = 1L;

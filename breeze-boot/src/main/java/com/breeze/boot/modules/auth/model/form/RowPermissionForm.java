@@ -39,12 +39,6 @@ public class RowPermissionForm implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 权限ID
-     */
-    @Schema(description = "权限ID")
-    private Long id;
-
-    /**
      * 权限名称
      */
     @Schema(description = "权限名称")

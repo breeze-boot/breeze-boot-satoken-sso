@@ -8,7 +8,7 @@
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
-        <result property="permissionCode" column="permission_code"/>
+        <result property="rowPermissionType" column="row_permission_type"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="createName" column="create_name"/>
@@ -18,11 +18,11 @@
         <result property="deleteBy" column="delete_by"/>
     </resultMap>
 
-    <select id="listRoleByUserId" resultType="com.breeze.boot.modules.auth.model.entity.SysRole">
-        SELECT role.id,
+    <select id="listRoleByUserId" resultType="com.breeze.boot.modules.auth.model.bo.UserRoleBO">
+        SELECT role.id as role_id,
                role.role_code,
                role.role_name,
-               role.permission_code
+               role.row_permission_type
         FROM sys_role AS role
             LEFT JOIN sys_user_role AS ru ON ru.role_id = role.id
         WHERE role.is_delete = 0
@@ -39,12 +39,13 @@
         ORDER BY role.create_time DESC
     </select>
 
-    <select id="listPage" resultType="com.breeze.boot.modules.auth.model.entity.SysRole">
+    <select id="listPage" resultType="com.breeze.boot.modules.auth.model.bo.RoleBO">
         SELECT
             a.id,
             a.role_code,
             a.role_name,
-            b.permission_name
+            a.row_permission_type,
+            IF ( a.row_permission_type = 'CUSTOMIZES', b.permission_name, a.row_permission_type ) AS row_permission_name
         FROM
             sys_role AS a
         LEFT JOIN (

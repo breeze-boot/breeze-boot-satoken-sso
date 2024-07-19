@@ -29,14 +29,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum DataRole {
 
-    DEPT_ID("dept_id"),
+    DEPT_ID("dept_id", "DEPT"),
 
-    USER_ID("user_id"),
+    USER_ID("user_id", "USER");
 
-    CUSTOMIZE_USER_ID("user_id"),
-
-    CUSTOMIZE_DEPT_ID("dept_id");
+    public static DataRole getDataRoleByType(String type) {
+        for (DataRole dataRole : DataRole.values()) {
+            if (dataRole.getType().equals(type)) {
+                return dataRole;
+            }
+        }
+        return null;
+    }
 
     private final String column;
+    private final String type;
 
 }

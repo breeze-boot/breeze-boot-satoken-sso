@@ -41,11 +41,11 @@ public class SysRoleRowPermissionServiceImpl extends ServiceImpl<SysRoleRowPermi
      * 角色数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link SysRowPermission}
+     * @return {@link Set }<{@link String }>
      */
     @Override
-    public List<SysRowPermission> listRowPermissionData(Set<Long> roleIdSet) {
-        return this.baseMapper.listRowPermissionData(roleIdSet);
+    public Set<String> listRowPermission(Set<Long> roleIdSet) {
+        return this.baseMapper.listRowPermission(roleIdSet);
     }
 
 }

@@ -16,11 +16,7 @@
 
 package com.breeze.boot.modules.auth.model.form;
 
-import com.breeze.boot.core.annotation.SensitiveInfo;
 import com.breeze.boot.core.base.BaseModel;
-import com.breeze.boot.core.enums.SensitiveStrategy;
-import com.breeze.boot.modules.auth.model.entity.SysRole;
-import com.breeze.boot.security.annotation.SecuredField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -40,15 +36,9 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "系统用户表单")
-public class UserForm extends BaseModel<UserForm> implements Serializable {
+public class UserForm implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 主键ID
-     */
-    @Schema(description = "主键")
-    private Long id;
 
     /**
      * 用户名
@@ -94,23 +84,10 @@ public class UserForm extends BaseModel<UserForm> implements Serializable {
     private Long postId;
 
     /**
-     * 岗位名称
-     */
-    @Schema(description = "岗位名称")
-    private String postName;
-
-    /**
      * 部门ID
      */
     @Schema(description = "部门ID")
     private Long deptId;
-
-    /**
-     * 部门名称
-     */
-    @Schema(description = "部门名称")
-    private String deptName;
-
 
     /**
      * 性别 0 女性 1 男性
@@ -122,15 +99,12 @@ public class UserForm extends BaseModel<UserForm> implements Serializable {
      * 身份证号
      */
     @Schema(description = "身份证号")
-    @SensitiveInfo(SensitiveStrategy.ID_CARD)
-    @SecuredField(column = "id_card")
     private String idCard;
 
     /**
      * 手机号
      */
     @Schema(description = "手机号")
-    @SensitiveInfo(SensitiveStrategy.PHONE)
     private String phone;
 
     /**
@@ -143,7 +117,6 @@ public class UserForm extends BaseModel<UserForm> implements Serializable {
      * 邮件
      */
     @Schema(description = "邮件")
-    @SensitiveInfo(SensitiveStrategy.EMAIL)
     private String email;
 
     /**
@@ -159,27 +132,11 @@ public class UserForm extends BaseModel<UserForm> implements Serializable {
     private Long tenantId;
 
     /**
-     * 用户角色
-     * <p>
-     * 查询用户详情返回使用
-     */
-    @Schema(description = "用户角色")
-    private List<SysRole> sysRoles;
-
-    /**
      * 用户角色ID
      * <p>
      * 查询用户详情返回使用
      */
     @Schema(description = "用户角色ID")
     private List<Long> roleIds;
-
-    /**
-     * 用户角色名称
-     * <p>
-     * 查询用户详情返回使用
-     */
-    @Schema(description = "用户角色名称")
-    private List<String> roleNames;
 
 }

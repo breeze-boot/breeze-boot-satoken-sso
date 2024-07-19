@@ -24,7 +24,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 系统行级数据权限规则VO
+ * 系统行数据权限规则VO
  *
  * @author gaoweixuan
  * @since 2024-07-14
@@ -34,8 +34,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_row_permission", autoResultMap = true)
-@Schema(description = "系统行级数据权限规则VO")
+@Schema(description = "系统行数据权限规则VO")
 public class RowPermissionVO implements Serializable {
 
     private static final long serialVersionUID = 1L;

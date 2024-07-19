@@ -47,9 +47,4 @@ public @interface BreezeDataPermission {
      */
     DataRole own() default DataRole.USER_ID;
 
-    /**
-     * 自定义权限字段名称
-     */
-    DataRole Customize() default DataRole.CUSTOMIZE_USER_ID;
-
 }

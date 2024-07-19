@@ -19,7 +19,7 @@ package com.breeze.boot.modules.auth.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysMenu;
 import com.breeze.boot.modules.auth.model.form.MenuForm;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
@@ -38,10 +38,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 用户菜单权限列表
      *
-     * @param userRoleDTOList 角色列表
-     * @return {@link Set}<{@link String}>
+     * @param userRoleBOList 角色列表
+     * @return {@link List}<{@link String}>
      */
-    Set<String> listUserMenuPermission(Set<UserRoleDTO> userRoleDTOList);
+    Set<String> listUserMenuPermission(List<UserRoleBO> userRoleBOList);
 
     /**
      * 树菜单列表

@@ -20,6 +20,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.converters.localdatetime.LocalDateTimeStringConverter;
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -28,10 +29,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 系统角色数据权限实体
+ * 系统角色行数据权限实体
  *
  * @author gaoweixuan
- * @since 2021-12-06 22:03:39
+ * @since 2024-07-17
  */
 @Data
 @Builder
@@ -39,8 +40,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_role_row_permission")
-@Schema(description = "角色权限实体")
-public class SysRoleRowPermission implements Serializable {
+@Schema(description = "角色行权限实体")
+public class SysRoleRowPermission extends Model<SysRoleRowPermission> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

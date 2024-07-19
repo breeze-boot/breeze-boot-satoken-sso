@@ -53,9 +53,9 @@ public class SysRole extends BaseModel<SysRole> implements Serializable {
     private String roleName;
 
     /**
-     * 数据权限编码
+     * 行数据权限类型
      */
-    @Schema(description = "数据权限编码")
-    private String permissionCode;
+    @Schema(description = "行数据权限类型")
+    private String rowPermissionType;
 
 }

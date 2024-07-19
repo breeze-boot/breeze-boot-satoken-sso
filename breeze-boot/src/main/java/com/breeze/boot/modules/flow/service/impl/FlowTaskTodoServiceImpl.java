@@ -71,9 +71,9 @@ public class FlowTaskTodoServiceImpl implements IFlowTaskTodoService {
     public List<UserTaskVO> getUserTaskList(Map<String, String> map) {
         List<UserTaskVO> result = new ArrayList<>();
         // 已签收的任务
-        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getCurrentUser().getId()), MapUtil.getStr(map, "title", ""), true));
+        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getCurrentUser().getUserId()), MapUtil.getStr(map, "title", ""), true));
         // 待签收的任务
-        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getCurrentUser().getId()), MapUtil.getStr(map, "title", ""), false));
+        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getCurrentUser().getUserId()), MapUtil.getStr(map, "title", ""), false));
         // 按照任务时间倒序排列
         result.sort((o1, o2) -> o1.getCreatTime().compareTo(o2.getCreatTime()) * -1);
         return result;

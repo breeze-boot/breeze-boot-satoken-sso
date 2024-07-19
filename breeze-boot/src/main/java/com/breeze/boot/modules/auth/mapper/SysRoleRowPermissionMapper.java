@@ -16,17 +16,15 @@
 
 package com.breeze.boot.modules.auth.mapper;
 
-import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
 import com.breeze.boot.modules.auth.model.entity.SysRoleRowPermission;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 import java.util.Set;
 
 /**
- * 系统角色行级权限映射器
+ * 系统角色行权限映射器
  *
  * @author gaoweixuan
  * @since 2022-10-30
@@ -35,11 +33,11 @@ import java.util.Set;
 public interface SysRoleRowPermissionMapper extends BreezeBaseMapper<SysRoleRowPermission> {
 
     /**
-     * 查询角色的行级数据权限列表
+     * 查询角色的行数据权限列表
      *
      * @param roleIdSet 角色ID Set
-     * @return {@link SysRowPermission}
+     * @return {@link Set }<{@link String }>
      */
-    List<SysRowPermission> listRowPermissionData(@Param("roleIdSet") Set<Long> roleIdSet);
+    Set<String> listRowPermission(@Param("roleIdSet") Set<Long> roleIdSet);
 
 }

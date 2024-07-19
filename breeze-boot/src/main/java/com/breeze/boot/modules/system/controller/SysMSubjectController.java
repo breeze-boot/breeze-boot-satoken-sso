@@ -24,7 +24,7 @@ import com.breeze.boot.modules.system.model.form.MSubjectForm;
 import com.breeze.boot.modules.system.model.form.MSubjectOpenForm;
 import com.breeze.boot.modules.system.model.form.MSubjectSetUserForm;
 import com.breeze.boot.modules.system.model.query.MSubjectQuery;
-import com.breeze.boot.modules.system.model.vo.EmailVO;
+import com.breeze.boot.modules.system.model.vo.EmailConfigVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectEmailVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectVO;
 import com.breeze.boot.modules.system.service.SysMSubjectService;
@@ -64,7 +64,7 @@ public class SysMSubjectController {
      * 列表
      *
      * @param mSubjectQuery 邮箱主题查询
-     * @return {@link Result}<{@link Page}<{@link EmailVO}>>
+     * @return {@link Result}<{@link Page}<{@link EmailConfigVO}>>
      */
     @Operation(summary = "列表")
     @GetMapping

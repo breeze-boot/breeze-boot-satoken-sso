@@ -16,33 +16,15 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
-import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
-import com.breeze.boot.modules.auth.model.mappers.SysRoleColumnPermissionMapStruct;
-import com.breeze.boot.modules.auth.model.form.ColumnPermissionForm;
-import com.breeze.boot.modules.auth.model.form.DeleteColumnPermissionForm;
 import com.breeze.boot.modules.auth.mapper.SysRoleColumnPermissionMapper;
-import com.breeze.boot.modules.auth.model.vo.RoleColumnPermissionVO;
+import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
 import com.breeze.boot.modules.auth.service.SysRoleColumnPermissionService;
-import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
- * 系统列字段级数据权限服务 impl
+ * 系统角色菜单字段数据权限服务 impl
  *
  * @author gaoweixuan
  * @since 2022-10-30
@@ -51,75 +33,4 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleColumnPermissionServiceImpl extends ServiceImpl<SysRoleColumnPermissionMapper, SysRoleColumnPermission> implements SysRoleColumnPermissionService {
 
-    private final SysRoleColumnPermissionMapStruct sysRoleColumnPermissionMapStruct;
-
-    /**
-     * 查询列字段级数据权限列表数据
-     *
-     * @param roleIdSet 角色ID Set
-     * @return {@link SysRowPermission}
-     */
-    @Override
-    public List<SysRoleColumnPermission> listRoleColumnExcludeData(Set<Long> roleIdSet) {
-        return this.baseMapper.listRoleColumnExcludeData(roleIdSet);
-    }
-
-    /**
-     * 修改列字段级数据权限
-     *
-     * @param permissionParam 权限参数
-     * @return {@link Page}<{@link SysRowPermission}>
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> setColumnPermission(ColumnPermissionForm permissionParam) {
-        try {
-            this.removeById(permissionParam.getRoleId());
-            Map<String, List<String>> tableColumnNameMap = permissionParam.getTableColumnName();
-            tableColumnNameMap.forEach((k, v) -> {
-                if (CollUtil.isNotEmpty(v)) {
-                    v.forEach(c -> {
-                        SysRoleColumnPermission sysRoleColumnPermission = new SysRoleColumnPermission();
-                        sysRoleColumnPermission.setTableName(k);
-                        sysRoleColumnPermission.setColumnName(c);
-                        sysRoleColumnPermission.setRoleId(permissionParam.getRoleId());
-                        SysRoleColumnPermission roleColumnPermission = this.getOne(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, permissionParam.getRoleId()).eq(SysRoleColumnPermission::getColumnName, c));
-                        if(Objects.nonNull(roleColumnPermission)){
-                            roleColumnPermission.deleteById();
-                        }
-                        this.save(sysRoleColumnPermission);
-                    });
-                }
-            });
-            return Result.ok(Boolean.TRUE);
-        } catch (Exception e) {
-            log.error("[设列级别数据权限失败]", e);
-            return Result.fail(ResultCode.FAIL);
-        }
-    }
-
-    /**
-     * 查询列字段级数据权限列表数据
-     *
-     * @param roleId 角色ID
-     * @return {@link Result}<{@link Map}<{@link String}, {@link List}<{@link SysRoleColumnPermission}>>>
-     */
-    @Override
-    public Result<Map<String, List<RoleColumnPermissionVO>>> listSetColumnPermission(String roleId) {
-        List<SysRoleColumnPermission> roleColumnPermissionList = this.list(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, roleId));
-        if (CollUtil.isEmpty(roleColumnPermissionList)) {
-            return Result.ok(Maps.newHashMap());
-        }
-        Map<String, List<RoleColumnPermissionVO>> resultMap = roleColumnPermissionList.stream()
-                .map(sysRoleColumnPermissionMapStruct::entity2VO)
-                .collect(Collectors.groupingBy(RoleColumnPermissionVO::getTableName, Collectors.toList()));
-
-        return Result.ok(resultMap);
-    }
-
-    @Override
-    public Result<Boolean> removeColumnPermission(DeleteColumnPermissionForm deleteColumnPermissionForm) {
-        return Result.ok(this.remove(Wrappers.<SysRoleColumnPermission>lambdaQuery().eq(SysRoleColumnPermission::getRoleId, deleteColumnPermissionForm.getRoleId())
-                .eq(SysRoleColumnPermission::getColumnName, deleteColumnPermissionForm.getColumnName())));
-    }
 }

@@ -19,14 +19,13 @@ package com.breeze.boot.modules.auth.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.dto.UserRoleDTO;
+import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
 import com.breeze.boot.modules.auth.model.form.RoleForm;
 import com.breeze.boot.modules.auth.model.query.RoleQuery;
 import com.breeze.boot.modules.auth.model.vo.RoleVO;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 系统角色服务
@@ -56,9 +55,9 @@ public interface SysRoleService extends IService<SysRole> {
      * 用户角色列表
      *
      * @param userId 用户ID
-     * @return {@link List}<{@link SysRole}>
+     * @return {@link List}<{@link UserRoleBO}>
      */
-    Set<UserRoleDTO> listRoleByUserId(Long userId);
+    List<UserRoleBO> listRoleByUserId(Long userId);
 
     /**
      * 删除由ids

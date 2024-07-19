@@ -21,7 +21,6 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.converters.localdatetime.LocalDateTimeStringConverter;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.breeze.boot.core.base.BaseModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -34,9 +33,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_role_column_permission")
-@Schema(description = "系统角色字段数据权限")
-public class SysRoleColumnPermission extends Model<BaseModel<SysRoleColumnPermission>> implements Serializable {
+@TableName(value = "sys_role_column")
+@Schema(description = "系统角色菜单字段数据权限")
+public class SysRoleColumnPermission extends Model<SysRoleColumnPermission> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,23 +48,16 @@ public class SysRoleColumnPermission extends Model<BaseModel<SysRoleColumnPermis
     private Long id;
 
     /**
-     * 表名
-     */
-    @Schema(description = "表名")
-    private String tableName;
-
-
-    /**
      * 角色id
      */
     @Schema(description = "角色ID")
     private Long roleId;
 
     /**
-     * 字段名
+     * 菜单
      */
-    @Schema(description = "字段名")
-    private String columnName;
+    @Schema(description = "菜单")
+    private String menu;
 
     /**
      * 创建人

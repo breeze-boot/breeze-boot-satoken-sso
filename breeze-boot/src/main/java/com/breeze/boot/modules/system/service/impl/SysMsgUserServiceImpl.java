@@ -97,7 +97,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsClose, 1)
                 .eq(SysMsgUser::getMsgId, msgId)
                 .eq(SysMsgUser::getIsClose, 0)
-                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getId())));
+                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
     }
 
     /**
@@ -111,7 +111,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsRead, 1)
                 .eq(SysMsgUser::getMsgId, msgId)
                 .eq(SysMsgUser::getIsRead, 0)
-                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getId())));
+                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
 
     }
 

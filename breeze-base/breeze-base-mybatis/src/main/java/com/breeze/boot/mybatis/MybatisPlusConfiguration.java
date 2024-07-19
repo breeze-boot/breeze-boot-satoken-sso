@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
 
-import static com.breeze.boot.core.constants.CoreConstants.COLUMN;
+import static com.breeze.boot.core.constants.CoreConstants.TENANT_ID_COLUMN;
 
 /**
  * mybatis +配置
@@ -95,7 +95,7 @@ public class MybatisPlusConfiguration {
 
             @Override
             public String getTenantIdColumn() {
-                return COLUMN;
+                return TENANT_ID_COLUMN;
             }
 
             /**
