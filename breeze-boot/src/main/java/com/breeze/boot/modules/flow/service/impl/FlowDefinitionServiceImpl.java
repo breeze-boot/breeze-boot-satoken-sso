@@ -34,7 +34,6 @@ import com.breeze.boot.modules.flow.model.vo.FlowDefinitionVO;
 import com.breeze.boot.modules.flow.service.ActReDeploymentService;
 import com.breeze.boot.modules.flow.service.IFlowDefinitionService;
 import com.breeze.boot.security.utils.SecurityUtils;
-import liquibase.pro.packaged.U;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -181,24 +180,27 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
     /**
      * 挂起/激活
      *
-     * @param processDefinitionId 流程定义ID
-     * @param tenantId            租户ID
+     * @param definitionId 流程定义ID
      * @return {@link Boolean}
      */
     @Override
-    public Boolean isSuspended(String processDefinitionId, String tenantId) {
+    public Boolean isSuspended(String definitionId) {
+        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
         try {
             Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getUserId()));
-            ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).processDefinitionTenantId(tenantId).singleResult();
+            ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(definitionId)
+                    .processDefinitionTenantId(String.valueOf(tenantId))
+                    .singleResult();
 
             if (Objects.isNull(processDefinition)) {
-                log.error("未找到流程定义: {}", processDefinitionId);
+                log.error("未找到流程定义: {}", definitionId);
                 throw new SystemServiceException(ResultCode.exception("未找到指定的流程定义"));
             }
 
             log.info("状态: {}", processDefinition.isSuspended());
             // 调用单独的方法来处理挂起和激活
-            handleProcessDefinitionStatus(processDefinitionId, processDefinition.isSuspended());
+            handleProcessDefinitionStatus(definitionId, processDefinition.isSuspended());
             return Boolean.TRUE;
         } catch (Exception e) {
             log.error("处理流程定义状态时发生错误", e);
@@ -210,16 +212,15 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
      * 获取流程定义xml
      *
      * @param definitionKey 流程KEY
-     * @param tenantId      租户ID
      * @return {@link String}
      */
     @Override
-    public String getProcessDefinitionXml(String definitionKey, String tenantId) {
-        ProcessDefinition processDefinition = this.getProcessDefinition(definitionKey, tenantId);
+    public String getProcessDefinitionXml(String definitionKey) {
+        ProcessDefinition processDefinition = this.getProcessDefinition(definitionKey);
         try (InputStream resourceAsStream = this.repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getResourceName())) {
             return IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            log.error("获取流程定义资源失败，Process Key: {}, Tenant ID: {}", definitionKey, tenantId, e);
+            log.error("获取流程定义资源失败，Process Key: {}", definitionKey, e);
             throw new SystemServiceException(ResultCode.exception("获取资源失败"));
         }
     }
@@ -367,7 +368,7 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
      */
     @Override
     public Result<?> getHistoryProcessDefinitionXml(FlowHistoryDefinitionQuery flowHistoryDefinitionQuery) {
-        ProcessDefinition processDefinition = getDefinition(flowHistoryDefinitionQuery.getDefinitionId(), flowHistoryDefinitionQuery.getTenantId());
+        ProcessDefinition processDefinition = getDefinition(flowHistoryDefinitionQuery.getDefinitionId());
         try (InputStream resourceAsStream = this.repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getResourceName())) {
             return Result.ok(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         } catch (Exception e) {
@@ -384,7 +385,10 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
     @Override
     public Boolean delete(List<FlowDefinitionDeleteParam> flowDefinitionDeleteParamList) {
         for (FlowDefinitionDeleteParam flowDefinitionDeleteParam : flowDefinitionDeleteParamList) {
-            this.repositoryService.deleteDeployment(flowDefinitionDeleteParam.getDeploymentId(), flowDefinitionDeleteParam.getCascade());
+            List<ProcessDefinition> definitionList = repositoryService.createProcessDefinitionQuery().processDefinitionKey(flowDefinitionDeleteParam.getDefinitionKey()).list();
+            for (ProcessDefinition processDefinition : definitionList) {
+                this.repositoryService.deleteDeployment(processDefinition.getDeploymentId(), flowDefinitionDeleteParam.getCascade());
+            }
         }
         return Boolean.TRUE;
     }
@@ -393,7 +397,7 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
     @DS("flowable")
     public DefinitionVO getInfo(String definitionId) {
         DefinitionVO info = this.actReDeploymentService.getInfo(definitionId);
-        info.setXml(this.getProcessDefinitionXml(info.getDefinitionKey(), info.getTenantId()));
+        info.setXml(this.getProcessDefinitionXml(info.getDefinitionKey()));
         return info;
     }
 
@@ -401,22 +405,22 @@ public class FlowDefinitionServiceImpl implements IFlowDefinitionService {
      * 获取流程定义
      *
      * @param definitionId 流程定义id
-     * @param tenantId     租户ID
      * @return {@link ProcessDefinition}
      */
-    private ProcessDefinition getDefinition(String definitionId, String tenantId) {
-        return this.repositoryService.createProcessDefinitionQuery().processDefinitionId(definitionId).processDefinitionTenantId(tenantId).singleResult();
+    private ProcessDefinition getDefinition(String definitionId) {
+        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+        return this.repositoryService.createProcessDefinitionQuery().processDefinitionId(definitionId).processDefinitionTenantId(String.valueOf(tenantId)).singleResult();
     }
 
     /**
      * 获取流程定义
      *
      * @param processKey 过程关键
-     * @param tenantId   租户ID
      * @return {@link ProcessDefinition}
      */
-    private ProcessDefinition getProcessDefinition(String processKey, String tenantId) {
-        return this.repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).processDefinitionTenantId(tenantId).latestVersion().singleResult();
+    private ProcessDefinition getProcessDefinition(String processKey) {
+        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+        return this.repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).processDefinitionTenantId(String.valueOf(tenantId)).latestVersion().singleResult();
     }
 
 }

@@ -33,9 +33,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "sys_role_column")
+@TableName(value = "sys_role_menu_column")
 @Schema(description = "系统角色菜单字段数据权限")
-public class SysRoleColumnPermission extends Model<SysRoleColumnPermission> implements Serializable {
+public class SysRoleMenuColumn extends Model<SysRoleMenuColumn> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

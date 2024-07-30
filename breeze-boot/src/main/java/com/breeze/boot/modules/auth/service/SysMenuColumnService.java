@@ -22,8 +22,8 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysMenuColumn;
 import com.breeze.boot.modules.auth.model.form.MenuColumnForm;
 import com.breeze.boot.modules.auth.model.query.MenuColumnQuery;
-import com.breeze.boot.modules.auth.model.vo.RolesMenuColumnVO;
 import com.breeze.boot.modules.auth.model.vo.MenuColumnVO;
+import com.breeze.boot.modules.auth.model.vo.RolesMenuColumnVO;
 
 import java.util.List;
 
@@ -55,12 +55,19 @@ public interface SysMenuColumnService extends IService<SysMenuColumn> {
     MenuColumnVO getInfoById(Long menuColumnId);
 
     /**
+     * 保存
+     *
+     * @param menuColumnForm 菜单栏形式
+     * @return {@link Result }<{@link Boolean }>
+     */
+    Result<Boolean> saveMenuColumn(MenuColumnForm menuColumnForm);
+
+    /**
      * 删除数据权限通过IDS
      *
      * @param ids ids
      * @return {@link Result}<{@link Boolean}>
      */
     Result<Boolean> removeMenuColumnByIds(List<Long> ids);
-
 
 }

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
  *
@@ -17,17 +16,22 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysMenuColumnMapper;
 import com.breeze.boot.modules.auth.model.entity.SysMenuColumn;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn;
+import com.breeze.boot.modules.auth.model.form.MenuColumnForm;
 import com.breeze.boot.modules.auth.model.mappers.SysMenuColumnMapStruct;
 import com.breeze.boot.modules.auth.model.query.MenuColumnQuery;
 import com.breeze.boot.modules.auth.model.vo.MenuColumnVO;
 import com.breeze.boot.modules.auth.model.vo.RolesMenuColumnVO;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import com.breeze.boot.modules.auth.service.SysMenuColumnService;
+import com.breeze.boot.modules.auth.service.SysRoleMenuColumnService;
 import com.breeze.boot.security.utils.SecurityUtils;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 
 /**
  * 系统列数据权限服务 impl
@@ -50,6 +53,8 @@ import java.util.stream.Collectors;
 public class SysMenuColumnServiceImpl extends ServiceImpl<SysMenuColumnMapper, SysMenuColumn> implements SysMenuColumnService {
 
     private final SysMenuColumnMapStruct sysMenuColumnMapStruct;
+
+    private final SysRoleMenuColumnService sysRoleMenuColumnService;
 
     /**
      * 获取所有列权限
@@ -93,6 +98,32 @@ public class SysMenuColumnServiceImpl extends ServiceImpl<SysMenuColumnMapper, S
     public MenuColumnVO getInfoById(Long menuColumnId) {
         SysMenuColumn sysMenuColumn = this.getById(menuColumnId);
         return this.sysMenuColumnMapStruct.entity2VO(sysMenuColumn);
+    }
+
+    /**
+     * 保存
+     *
+     * @param menuColumnForm 菜单栏表单
+     * @return {@link Result }<{@link Boolean }>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result<Boolean> saveMenuColumn(MenuColumnForm menuColumnForm) {
+        for (String column : menuColumnForm.getColumns()) {
+            SysMenuColumn sysMenuColumn = new SysMenuColumn();
+            sysMenuColumn.setMenu(menuColumnForm.getMenu());
+            sysMenuColumn.setColumn(column);
+            if (menuColumnForm.getVisible()) {
+                List<SysMenuColumn> sysMenuColumnList = list(Wrappers.<SysMenuColumn>lambdaQuery().eq(SysMenuColumn::getColumn, column).eq(SysMenuColumn::getMenu, menuColumnForm.getMenu()));
+                if (CollUtil.isNotEmpty(sysMenuColumnList) && sysMenuColumnList.size() == 1) {
+                    this.sysRoleMenuColumnService.remove(Wrappers.<SysRoleMenuColumn>lambdaQuery().eq(SysRoleMenuColumn::getMenu, menuColumnForm.getMenu()));
+                }
+                this.remove(Wrappers.<SysMenuColumn>lambdaQuery().eq(SysMenuColumn::getColumn, column).eq(SysMenuColumn::getMenu, menuColumnForm.getMenu()));
+            } else {
+                this.save(sysMenuColumn);
+            }
+        }
+        return Result.ok(Boolean.TRUE);
     }
 
     /**

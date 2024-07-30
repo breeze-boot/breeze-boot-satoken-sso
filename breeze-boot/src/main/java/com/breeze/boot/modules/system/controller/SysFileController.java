@@ -21,6 +21,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.system.model.entity.SysFile;
+import com.breeze.boot.modules.system.model.form.FileBizForm;
 import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.model.query.FileQuery;
 import com.breeze.boot.modules.system.service.SysFileService;
@@ -73,14 +74,16 @@ public class SysFileController {
     /**
      * 修改
      *
-     * @param sysFile 文件实体
+     * @param fileId   文件id
+     * @param fileBizForm 文件表单
      * @return {@link Result}<{@link Page}<{@link SysFile}>>
      */
     @Operation(summary = "修改")
-    @PutMapping
+    @PutMapping("/{fileId}")
     @PreAuthorize("hasAnyAuthority('sys:file:edit')")
-    public Result<Boolean> modify(@RequestBody SysFile sysFile) {
-        return Result.ok(this.sysFileService.updateById(sysFile));
+    public Result<Boolean> modify(@Parameter(description = "文件ID") @NotNull(message = "文件ID不能为空") @PathVariable Long fileId,
+                                  @Valid @RequestBody FileBizForm fileBizForm) {
+        return Result.ok(this.sysFileService.updateFileById(fileId, fileBizForm));
     }
 
     /**
@@ -105,7 +108,7 @@ public class SysFileController {
     @Operation(summary = "文件下载")
     @GetMapping("/download")
     @PreAuthorize("hasAnyAuthority('sys:file:download')")
-    public void download(@Parameter(description = "文件ID")  @NotNull(message = "参数不能为空") Long fileId,
+    public void download(@Parameter(description = "文件ID") @NotNull(message = "参数不能为空") Long fileId,
                          HttpServletResponse response) {
         this.sysFileService.download(fileId, response);
     }
@@ -114,8 +117,8 @@ public class SysFileController {
      * 上传
      *
      * @param fileForm 文件上传参数
-     * @param request   请求
-     * @param response  响应
+     * @param request  请求
+     * @param response 响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "文件上传")
@@ -131,8 +134,8 @@ public class SysFileController {
      * 上传
      *
      * @param fileForm 文件上传参数
-     * @param request   请求
-     * @param response  响应
+     * @param request  请求
+     * @param response 响应
      * @return {@link Result}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "文件上传")

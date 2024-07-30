@@ -28,10 +28,11 @@ import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.SystemServiceException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.local.operation.LocalStorageTemplate;
+import com.breeze.boot.modules.system.mapper.SysFileMapper;
 import com.breeze.boot.modules.system.model.entity.SysFile;
+import com.breeze.boot.modules.system.model.form.FileBizForm;
 import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.model.query.FileQuery;
-import com.breeze.boot.modules.system.mapper.SysFileMapper;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.breeze.boot.oss.operation.MinioOssTemplate;
 import com.google.common.collect.Maps;
@@ -87,6 +88,16 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                 .like(StrUtil.isAllNotBlank(fileQuery.getBizType()), SysFile::getBizType, fileQuery.getBizType())
                 .like(StrUtil.isAllNotBlank(fileQuery.getCreateName()), SysFile::getCreateName, fileQuery.getCreateName())
                 .page(logEntityPage);
+    }
+
+    @Override
+    public Boolean updateFileById(Long fileId, FileBizForm fileBizForm) {
+        SysFile sysFile = this.getById(fileId);
+        if (Objects.nonNull(sysFile)) {
+            sysFile.setBizId(fileBizForm.getBizId());
+            sysFile.updateById();
+        }
+        return Boolean.FALSE;
     }
 
     /**

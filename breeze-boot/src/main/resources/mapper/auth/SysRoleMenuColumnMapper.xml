@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.breeze.boot.modules.auth.mapper.SysRoleColumnPermissionMapper">
+<mapper namespace="com.breeze.boot.modules.auth.mapper.SysRoleMenuColumnMapper">
 
-    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission">
+    <resultMap id="BaseResultMap" type="com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="roleId" column="role_id" jdbcType="BIGINT"/>
         <result property="menu" column="menu" jdbcType="VARCHAR"/>

@@ -184,13 +184,13 @@ public class FlowTaskTodoServiceImpl implements IFlowTaskTodoService {
      * 获取流程定义
      *
      * @param processDefinitionId 流程定义id
-     * @param tenantId            租户ID
      * @return {@link ProcessDefinition}
      */
-    private ProcessDefinition getDefinition(String processDefinitionId, String tenantId) {
+    private ProcessDefinition getDefinition(String processDefinitionId) {
+        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
         return this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionId(processDefinitionId)
-                .processDefinitionTenantId(tenantId)
+                .processDefinitionTenantId(String.valueOf(tenantId))
                 .singleResult();
     }
 
@@ -198,13 +198,13 @@ public class FlowTaskTodoServiceImpl implements IFlowTaskTodoService {
      * 获取流程定义
      *
      * @param processKey 过程关键
-     * @param tenantId   租户ID
      * @return {@link ProcessDefinition}
      */
-    private ProcessDefinition getProcessDefinition(String processKey, String tenantId) {
+    private ProcessDefinition getProcessDefinition(String processKey) {
+        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
         return this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(processKey)
-                .processDefinitionTenantId(tenantId)
+                .processDefinitionTenantId(String.valueOf(tenantId))
                 .latestVersion()
                 .singleResult();
     }

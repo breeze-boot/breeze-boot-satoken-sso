@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.flow.model.params;
+package com.breeze.boot.modules.auth.model.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * 流程资源参数
+ * 角色菜单字段权限表单
  *
  * @author gaoweixuan
- * @since 2023-03-01
+ * @since 2024-07-17
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "流程发布启动使用参数")
-public class FlowDefinitionDeleteParam {
+@Schema(description = "角色菜单字段权限表单")
+public class RoleMenuColumnForm implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    /**
+     * 菜单名
+     */
+    @Schema(description = "菜单名")
+    private List<String> menu;
 
     /**
-     * 流程部署Key
+     * 角色ID
      */
-    @NotBlank(message = "流程部署Key不能为空")
-    @Schema(description = "流程部署Key")
-    private String definitionKey;
-
-    /**
-     * 递归删除
-     */
-    @Schema(description = "递归删除")
-    private Boolean cascade;
+    @Schema(description = "角色ID")
+    private Long roleId;
 
 }

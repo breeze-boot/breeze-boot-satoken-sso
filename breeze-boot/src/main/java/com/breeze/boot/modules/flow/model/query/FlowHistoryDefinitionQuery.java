@@ -43,8 +43,4 @@ public class FlowHistoryDefinitionQuery {
     @Schema(description = "业务Key")
     private String businessKey;
 
-    @NotBlank(message = "租户ID不能为空")
-    @Schema(description = "租户ID")
-    private String tenantId;
-
 }

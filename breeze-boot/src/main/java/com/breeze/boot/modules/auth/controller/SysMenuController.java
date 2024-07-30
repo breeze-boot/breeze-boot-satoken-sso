@@ -84,15 +84,17 @@ public class SysMenuController {
 
     /**
      * 树形权限列表
+     *
      * <p>
      * 不加权限标识
      *
+     * @param type 类型
      * @return {@link Result}
      */
     @Operation(summary = "树形权限列表")
-    @GetMapping("/listTreePermission")
-    public Result<List<Tree<Long>>> listTreePermission() {
-        return this.sysMenuService.listTreePermission();
+    @PostMapping("/listTreePermission")
+    public Result<List<Tree<Long>>> listTreePermission(@RequestBody List<Integer> type) {
+        return this.sysMenuService.listTreePermission(type);
     }
 
     /**

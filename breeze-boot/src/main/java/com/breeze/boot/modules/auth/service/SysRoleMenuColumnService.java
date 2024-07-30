@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.auth.mapper;
+package com.breeze.boot.modules.auth.service;
 
-import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
-import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn;
+import com.breeze.boot.modules.auth.model.form.RoleMenuColumnForm;
 
 /**
- * 系统角色菜单字段数据权限映射器
+ * 系统角色菜单字段数据权限服务
  *
  * @author gaoweixuan
- * @since 2022-10-30
+ * @since 2024-02-18
  */
-@Mapper
-public interface SysRoleColumnPermissionMapper extends BreezeBaseMapper<SysRoleColumnPermission> {
+public interface SysRoleMenuColumnService extends IService<SysRoleMenuColumn> {
+
+    /**
+     * 保存角色列权限
+     *
+     * @param roleMenuColumnForm 角色菜单栏表单
+     * @return {@link Result }<{@link Boolean }>
+     */
+    Result<Boolean> saveRoleMenuColumn(RoleMenuColumnForm roleMenuColumnForm);
 
 }

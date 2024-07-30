@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.auth.service.impl;
+package com.breeze.boot.modules.auth.mapper;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.modules.auth.mapper.SysRoleColumnPermissionMapper;
-import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
-import com.breeze.boot.modules.auth.service.SysRoleColumnPermissionService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn;
+import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 系统角色菜单字段数据权限服务 impl
+ * 系统角色菜单字段数据权限映射器
  *
  * @author gaoweixuan
  * @since 2022-10-30
  */
-@Service
-@RequiredArgsConstructor
-public class SysRoleColumnPermissionServiceImpl extends ServiceImpl<SysRoleColumnPermissionMapper, SysRoleColumnPermission> implements SysRoleColumnPermissionService {
+@Mapper
+public interface SysRoleMenuColumnMapper extends BreezeBaseMapper<SysRoleMenuColumn> {
 
 }

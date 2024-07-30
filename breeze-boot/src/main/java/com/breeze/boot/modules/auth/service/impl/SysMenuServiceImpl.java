@@ -97,10 +97,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 权限数据列表树选中数据
      *
+     * @param type 类型
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
-    private Result<List<Tree<Long>>> listTreeRolePermission() {
-        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getType, 0, 1, 2).orderByAsc(SysMenu::getSort));
+    private Result<List<Tree<Long>>> listTreeRolePermission(List<Integer> type) {
+        List<SysMenu> menuList = this.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getType, type).orderByAsc(SysMenu::getSort));
         if (CollUtil.isEmpty(menuList)) {
             return Result.ok();
         }
@@ -128,15 +129,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 树形权限列表
      *
+     * @param type 类型
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
     @Override
-    public Result<List<Tree<Long>>> listTreePermission() {
+    public Result<List<Tree<Long>>> listTreePermission(List<Integer> type) {
         UserInfoDTO currentUser = SecurityUtils.getCurrentUser();
         if (CollUtil.isEmpty(currentUser.getUserRoleCodes())) {
             return Result.ok();
         }
-        return this.listTreeRolePermission();
+        return this.listTreeRolePermission(type);
     }
 
     /**

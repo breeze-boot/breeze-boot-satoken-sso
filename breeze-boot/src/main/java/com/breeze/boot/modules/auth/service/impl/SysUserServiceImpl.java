@@ -49,7 +49,6 @@ import com.breeze.boot.security.model.params.AuthLoginParam;
 import com.breeze.boot.security.model.params.WxLoginParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -116,7 +115,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 系统角色字段数据权限服务
      */
-    private final SysRoleColumnPermissionService sysRoleColumnPermissionService;
+    private final SysRoleMenuColumnService sysRoleMenuColumnService;
 
     /**
      * 列表页面

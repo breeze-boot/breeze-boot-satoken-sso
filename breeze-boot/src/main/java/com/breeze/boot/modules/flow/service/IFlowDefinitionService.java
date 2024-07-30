@@ -65,20 +65,18 @@ public interface IFlowDefinitionService {
     /**
      * 挂起/激活
      *
-     * @param processDefinitionId 流程定义ID
-     * @param tenantId            租户ID
+     * @param definitionId 流程定义ID
      * @return {@link Boolean}
      */
-    Boolean isSuspended(String processDefinitionId, String tenantId);
+    Boolean isSuspended(String definitionId);
 
     /**
      * 获取流程定义xml
      *
      * @param definitionKey 流程KEY
-     * @param tenantId      租户ID
      * @return {@link String}
      */
-    String getProcessDefinitionXml(String definitionKey, String tenantId);
+    String getProcessDefinitionXml(String definitionKey);
 
 
     /**

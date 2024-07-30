@@ -16,7 +16,7 @@
 
 package com.breeze.boot.modules.auth.model.mappers;
 
-import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
+import com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn;
 import com.breeze.boot.modules.auth.model.vo.RoleColumnPermissionVO;
 import org.mapstruct.Mapper;
 
@@ -29,6 +29,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SysRoleColumnPermissionMapStruct {
 
-    RoleColumnPermissionVO entity2VO(SysRoleColumnPermission sysRoleColumnPermission);
+    RoleColumnPermissionVO entity2VO(SysRoleMenuColumn sysRoleMenuColumn);
 
 }

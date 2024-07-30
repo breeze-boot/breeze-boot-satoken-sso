@@ -125,14 +125,13 @@ public class FlowDefinitionController {
      * 获取流程定义xml
      *
      * @param definitionKey 流程Key
-     * @param tenantId      租户ID
      * @return {@link Result}<{@link String}>
      */
     @Operation(summary = "获取流程定义xml")
     @GetMapping("/getProcessDefinitionXml")
     @PreAuthorize("hasAnyAuthority('flow:definition:info')")
-    public Result<String> getProcessDefinitionXml(@NotBlank(message = "流程定义Key不能为空") @Schema(description = "流程定义Key") @RequestParam String definitionKey, @NotBlank(message = "租户ID不能为空") @Schema(description = "租户ID") @RequestParam String tenantId) {
-        return Result.ok(this.flowDefinitionService.getProcessDefinitionXml(definitionKey, tenantId));
+    public Result<String> getProcessDefinitionXml(@NotBlank(message = "流程定义Key不能为空") @Schema(description = "流程定义Key") @RequestParam String definitionKey) {
+        return Result.ok(this.flowDefinitionService.getProcessDefinitionXml(definitionKey));
     }
 
     /**
@@ -178,14 +177,13 @@ public class FlowDefinitionController {
      * 挂起/激活
      *
      * @param definitionId 流程定义ID
-     * @param tenantId     租户ID
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "挂起/激活")
     @PutMapping("/isSuspended")
     @PreAuthorize("hasAnyAuthority('flow:definition:suspended')")
-    public Result<Boolean> isSuspended(@NotBlank(message = "流程定义ID不能为空") @Schema(description = "流程定义ID") @RequestParam String definitionId, @NotBlank(message = "租户ID不能为空") @Schema(description = "租户ID") @RequestParam String tenantId) {
-        return Result.ok(this.flowDefinitionService.isSuspended(definitionId, tenantId));
+    public Result<Boolean> isSuspended(@NotBlank(message = "流程定义ID不能为空") @Schema(description = "流程定义ID") @RequestParam(name = "id") String definitionId) {
+        return Result.ok(this.flowDefinitionService.isSuspended(definitionId));
     }
 
     /**

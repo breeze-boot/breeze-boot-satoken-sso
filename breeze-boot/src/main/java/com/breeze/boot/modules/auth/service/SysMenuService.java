@@ -63,9 +63,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 树形权限列表
      *
+     * @param type 类型
      * @return {@link Result}<{@link List}<{@link Tree}<{@link Long}>>>
      */
-    Result<List<Tree<Long>>> listTreePermission();
+    Result<List<Tree<Long>>> listTreePermission(List<Integer> type);
 
     /**
      * 删除通过id

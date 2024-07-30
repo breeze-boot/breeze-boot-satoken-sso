@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 字段权限表单
@@ -43,9 +44,15 @@ public class MenuColumnForm implements Serializable {
     private String menu;
 
     /**
+     * 增加/删除
+     */
+    @Schema(description = "增加/删除")
+    private Boolean visible;
+
+    /**
      * 字段名称
      */
     @Schema(description = "字段名称")
-    private String column;
+    private List<String> columns;
 
 }

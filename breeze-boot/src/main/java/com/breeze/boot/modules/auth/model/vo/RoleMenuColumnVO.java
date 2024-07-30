@@ -14,17 +14,39 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.auth.service;
+package com.breeze.boot.modules.auth.model.vo;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.auth.model.entity.SysRoleColumnPermission;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
- * 系统角色菜单字段数据权限服务
+ * 角色菜单列VO
  *
  * @author gaoweixuan
- * @since 2024-02-18
+ * @since 2024-07-14
  */
-public interface SysRoleColumnPermissionService extends IService<SysRoleColumnPermission> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "角色菜单列VO`")
+public class RoleMenuColumnVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 角色id
+     */
+    @Schema(description = "角色ID")
+    private Long roleId;
+
+    /**
+     * 菜单
+     */
+    @Schema(description = "菜单")
+    private String menu;
 
 }

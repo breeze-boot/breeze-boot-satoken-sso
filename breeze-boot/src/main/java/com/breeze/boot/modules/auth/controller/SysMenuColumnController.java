@@ -56,6 +56,11 @@ public class SysMenuColumnController {
      */
     private final SysMenuColumnService sysMenuColumnService;
 
+    /**
+     * 获取当前用户角色下菜单列  初始化使用
+     *
+     * @return {@link Result }<{@link List }<{@link RolesMenuColumnVO }>>
+     */
     @Operation(summary = "获取当前用户角色下菜单列")
     @GetMapping("/getRolesMenuColumns")
     public Result<List<RolesMenuColumnVO>> getRolesMenuColumns() {
@@ -86,6 +91,17 @@ public class SysMenuColumnController {
     @PreAuthorize("hasAnyAuthority('auth:menuColumn:info')")
     public Result<MenuColumnVO> info(@Parameter(description = "权限ID") @NotNull(message = "参数不能为空") @PathVariable("menuColumnId") Long menuColumnId) {
         return Result.ok(this.sysMenuColumnService.getInfoById(menuColumnId));
+    }
+
+    /**
+     * 创建
+     */
+    @Operation(summary = "保存")
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority('auth:menu:create')")
+    @BreezeSysLog(description = "菜单列保存", type = LogType.SAVE)
+    public Result<Boolean> save(@Valid @RequestBody MenuColumnForm menuColumnForm) {
+        return this.sysMenuColumnService.saveMenuColumn(menuColumnForm);
     }
 
     /**

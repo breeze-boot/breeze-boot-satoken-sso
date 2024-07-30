@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysFile;
+import com.breeze.boot.modules.system.model.form.FileBizForm;
 import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.model.query.FileQuery;
 
@@ -43,6 +44,8 @@ public interface SysFileService extends IService<SysFile> {
      * @return {@link Page}<{@link SysFile}>
      */
     Page<SysFile> listPage(FileQuery fileQuery);
+
+    Boolean updateFileById(Long fileId, FileBizForm fileBizForm);
 
     /**
      * 上传minio
