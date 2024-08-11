@@ -1,0 +1,21 @@
+springdoc:
+  version: "1.0.0"
+  type: "password"
+  title: "RBAC权限管理平台 API 文档"
+  description: "RBAC权限管理平台 API 文档"
+  server-url: "http://127.0.0.1:9000"
+  external-documentation-description: "https://github.com/Memory1998/breeze-cloud.git"
+  external-documentation-description-url: "https://github.com/Memory1998/breeze-cloud.git"
+  swagger-ui:
+    oauth:
+      clientId: breeze
+      clientSecret: breeze
+      # Swagger UI上默认选中的scopes
+      scopes:
+        - user_info
+  # OAuth2端点（绝对路径）
+  oAuthFlow:
+    authorizationUrl: http://127.0.0.1:9000/oauth2/authorize?X-TENANT-ID=1
+    tokenUrl: http://127.0.0.1:9000/oauth2/token?X-TENANT-ID=1
+    # OIDC发现端点（绝对路径）
+    oidcUrl: http://127.0.0.1:9000/.well-known/openid-configuration?X-TENANT-ID=1

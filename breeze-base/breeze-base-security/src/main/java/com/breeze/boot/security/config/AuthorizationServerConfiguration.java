@@ -16,7 +16,6 @@
 
 package com.breeze.boot.security.config;
 
-import com.breeze.boot.core.base.JwtExtensionProperty;
 import com.breeze.boot.security.authentication.email.EmailAuthenticationProvider;
 import com.breeze.boot.security.authentication.email.OAuth2ResourceOwnerEmailAuthenticationConverter;
 import com.breeze.boot.security.authentication.email.OAuth2ResourceOwnerEmailAuthenticationProvider;
@@ -26,7 +25,6 @@ import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthent
 import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthenticationProvider;
 import com.breeze.boot.security.authentication.sms.SmsAuthenticationProvider;
 import com.breeze.boot.security.jose.Jwks;
-import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationService;
 import com.breeze.boot.security.service.impl.UserDetailService;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -172,10 +170,6 @@ public class AuthorizationServerConfiguration {
             JwtClaimsSet.Builder claims = context.getClaims();
             Authentication principal = context.getPrincipal();
             if (context.getTokenType().getValue().equals(ACCESS_TOKEN)) {
-                Object obj = context.getPrincipal().getPrincipal();
-                if (obj instanceof UserPrincipal) {
-                    setUserClaims(context, claims);
-                }
                 // Customize headers/claims for access_token
                 Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
                 claims.claim("clientId", context.getRegisteredClient().getClientId());
@@ -186,24 +180,6 @@ public class AuthorizationServerConfiguration {
                 // Customize headers/claims for id_token
             }
         };
-    }
-
-    private static void setUserClaims(JwtEncodingContext context, JwtClaimsSet.Builder claims) {
-        UserPrincipal userPrinacipal = (UserPrincipal) context.getPrincipal().getPrincipal();
-        JwtExtensionProperty jwtExtensionProperty = new JwtExtensionProperty();
-        jwtExtensionProperty.setUserId(userPrinacipal.getId());
-        jwtExtensionProperty.setUsername(userPrinacipal.getUsername());
-        jwtExtensionProperty.setUserCode(userPrinacipal.getUserCode());
-        jwtExtensionProperty.setTenantId(userPrinacipal.getTenantId());
-        jwtExtensionProperty.setDeptId(userPrinacipal.getDeptId());
-        jwtExtensionProperty.setDeptName(userPrinacipal.getDeptName());
-        jwtExtensionProperty.setAmountName(userPrinacipal.getAmountName());
-        jwtExtensionProperty.setAmountType(userPrinacipal.getAmountType());
-        jwtExtensionProperty.setUserRoleCodes(userPrinacipal.getUserRoleCodes());
-        jwtExtensionProperty.setUserRoleIds(userPrinacipal.getUserRoleIds());
-        jwtExtensionProperty.setPermissionType(userPrinacipal.getPermissionType());
-        jwtExtensionProperty.setRowPermissionCode(userPrinacipal.getRowPermissionCode());
-        claims.claim("userProperty", jwtExtensionProperty);
     }
 
     /**

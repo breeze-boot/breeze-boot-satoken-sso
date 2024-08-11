@@ -16,12 +16,12 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./docker/mysql/conf/my.ini:/etc/mysql/my.ini
+      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
       - ./docker/mysql/data/:/var/lib/mysql
       - ./docker/mysql/logs:/var/log/mysql
       - /etc/localtime:/etc/localtime:ro
     command:
-      # 可以配置在mysql的 my.ini 中
+      # 可以配置在mysql的 my.cnf 中
       --default-authentication-plugin=mysql_native_password
     privileged: true
     networks:
@@ -47,6 +47,29 @@ services:
     command:
       redis-server /etc/redis/redis.conf
     privileged: true
+    networks:
+      - breeze-net
+
+  # rabbitMq服务
+  breeze-rabbitmq:
+    image: rabbitmq:3.9.13-management
+    container_name: breeze-rabbitmq
+    hostname: breeze-rabbitmq
+    ports:
+      - "4369:4369"
+      - "15672:15672" # client端通信口
+      - "5672:5672" # 管理界面ui端口
+      - "25672:25672" # server间内部通信口
+    volumes:
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/log:/var/log/rabbitmq/log
+    #环境变量
+    environment:
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 123456
+    privileged: true
+    restart: always
     networks:
       - breeze-net
 
@@ -123,29 +146,6 @@ services:
       - "18080:8080"
     restart: on-failure
     privileged: true
-    networks:
-      - breeze-net
-
-  # rabbitMq服务
-  breeze-rabbitmq:
-    image: rabbitmq:3.9.13-management
-    container_name: breeze-rabbitmq
-    hostname: breeze-rabbitmq
-    ports:
-      - "4369:4369"
-      - "15672:15672" # client端通信口
-      - "5672:5672" # 管理界面ui端口
-      - "25672:25672" # server间内部通信口
-    volumes:
-      - ./docker/rabbitmq/data:/var/lib/rabbitmq
-      - ./docker/rabbitmq/log:/var/log/rabbitmq/log
-    #环境变量
-    environment:
-      RABBITMQ_DEFAULT_VHOST: /
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: 123456
-    privileged: true
-    restart: always
     networks:
       - breeze-net
 

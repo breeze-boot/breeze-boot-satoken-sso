@@ -18,18 +18,21 @@ package com.breeze.boot.security.service.impl;
 
 import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
-import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.ISysUserService;
 import com.breeze.boot.security.service.IUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Objects;
 import java.util.function.Supplier;
+
+import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 用户主体服务
@@ -46,6 +49,8 @@ public class UserDetailService implements IUserDetailService {
      */
     private final Supplier<ISysUserService> userService;
 
+    private final CacheManager cacheManager;
+
     /**
      * 加载用户用户名
      *
@@ -58,7 +63,10 @@ public class UserDetailService implements IUserDetailService {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             Assert.notNull(requestAttributes, "requestAttributes is null");
             this.getTenantId(requestAttributes);
-            return this.getLoginUserInfo(this.userService.get().loadUserByUsername(username));
+
+            UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByUsername(username));
+            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();
         }
@@ -76,8 +84,10 @@ public class UserDetailService implements IUserDetailService {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             Assert.notNull(requestAttributes, "requestAttributes is null");
             this.getTenantId(requestAttributes);
-            Result<UserInfoDTO> loginUserResult = this.userService.get().loadUserByPhone(phone);
-            return this.getLoginUserInfo(loginUserResult);
+
+            UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByPhone(phone));
+            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();
         }
@@ -95,8 +105,10 @@ public class UserDetailService implements IUserDetailService {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             Assert.notNull(requestAttributes, "requestAttributes is null");
             this.getTenantId(requestAttributes);
-            Result<UserInfoDTO> loginUserResult = this.userService.get().loadUserByEmail(email);
-            return this.getLoginUserInfo(loginUserResult);
+
+            UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByEmail(email));
+            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();
         }

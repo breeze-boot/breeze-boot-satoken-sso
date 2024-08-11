@@ -17,7 +17,7 @@
 package com.breeze.boot.exception;
 
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -67,8 +67,8 @@ public class GlobalExceptionHandler {
      * @param ex 错误
      * @return {@link Result}<{@link ?}>
      */
-    @ExceptionHandler(SystemServiceException.class)
-    public Result<?> systemExceptionHandler(SystemServiceException ex) {
+    @ExceptionHandler(BreezeBizException.class)
+    public Result<?> systemExceptionHandler(BreezeBizException ex) {
         log.error("SystemServiceException 自定义的系统异常：", ex);
         return Result.fail(ex.getCode(), ex.getMsg());
     }

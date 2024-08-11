@@ -22,7 +22,7 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourcePrope
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.modules.system.mapper.SysDbMapper;
 import com.breeze.boot.modules.system.model.entity.SysDbResource;
 import com.breeze.boot.modules.system.model.form.DbResourceForm;
@@ -121,7 +121,7 @@ public class SysDbResourceServiceImpl extends ServiceImpl<SysDbMapper, SysDbReso
         SysDbResource sysDbResource = this.getById(id);
         if (Objects.isNull(sysDbResource)) {
             log.error("[更新数据源失败]");
-            throw new SystemServiceException(ResultCode.EXCEPTION);
+            throw new BreezeBizException(ResultCode.EXCEPTION);
         }
         DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
         dynamicRoutingDataSource.removeDataSource(sysDbResource.getDbName());
@@ -141,7 +141,7 @@ public class SysDbResourceServiceImpl extends ServiceImpl<SysDbMapper, SysDbReso
             SysDbResource sysDbResource = this.getById(id);
             if (Objects.isNull(sysDbResource)) {
                 log.error("[删除数据源失败]");
-                throw new SystemServiceException(ResultCode.EXCEPTION);
+                throw new BreezeBizException(ResultCode.EXCEPTION);
             }
             DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
             dynamicRoutingDataSource.removeDataSource(sysDbResource.getDbName());

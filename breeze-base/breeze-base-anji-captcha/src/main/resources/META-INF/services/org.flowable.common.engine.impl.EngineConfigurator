@@ -1,1 +1,1 @@
-com.breeze.boot.modules.flow.config.ChangeDbEngineConfigurator
+com.breeze.boot.modules.bpm.config.ChangeDbEngineConfigurator

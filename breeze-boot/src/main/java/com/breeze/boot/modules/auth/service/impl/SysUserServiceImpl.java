@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
@@ -140,7 +140,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.getById(id);
         UserVO userVO = this.sysUserMapStruct.entity2VO(sysUser);
         if (Objects.isNull(sysUser)) {
-            throw new SystemServiceException(FAIL);
+            throw new BreezeBizException(FAIL);
         }
         List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
         userVO.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
@@ -331,7 +331,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<SysUser> listDeptsUser(Long deptId) {
         List<Long> deptIdList = this.sysDeptService.listDeptByParentId(deptId);
         if (CollUtil.isEmpty(deptIdList)) {
-            throw new SystemServiceException(ResultCode.EXCEPTION);
+            throw new BreezeBizException(ResultCode.EXCEPTION);
         }
         if (CollUtil.isNotEmpty(deptIdList)) {
             return this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, deptIdList));
@@ -434,7 +434,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             // 查询用户的角色
             List<UserRoleBO> userRoleBOList = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId())).orElse(Collections.emptyList());
             if (CollUtil.isEmpty(userRoleBOList)) {
-                throw new SystemServiceException(ResultCode.exception("用户需要初始角色"));
+                throw new BreezeBizException(ResultCode.exception("用户需要初始角色"));
             }
             // 获取部门名称
             this.setDeptName(sysUser, userInfo);

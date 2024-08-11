@@ -1,0 +1,4 @@
+# xss过滤路径
+breeze:
+  xss:
+    ignore-urls:

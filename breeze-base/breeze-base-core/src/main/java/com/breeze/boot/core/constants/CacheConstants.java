@@ -25,6 +25,11 @@ package com.breeze.boot.core.constants;
 public class CacheConstants {
 
     /**
+     * 登录用户
+     */
+    public static final String LOGIN_USER = "auth:user_info:";
+
+    /**
      * 验证电话号码
      */
     public static final String VALIDATE_PHONE_CODE = "auth:validate_phone_code:";
@@ -85,8 +90,6 @@ public class CacheConstants {
     /**
      * 行权限缓存
      */
-    public static final String ROW_PERMISSION = "row:permission:";
-    public static final String COLUMN_PERMISSION = "column:permission:";
-
+    public static final String ROW_PERMISSION = "auth:row:permission:";
 
 }

@@ -1,0 +1,34 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:9000
+          jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
+
+breeze:
+  aesSecret: 1234567890123456
+  security:
+    ignore-urls:
+      # SpringDoc & Knife4j
+      - "/webjars/**"
+      - "/doc.html"
+      - "/v3/api-docs/**"
+      - "/swagger-ui/**"
+      # Websocket & Monitor
+      - "/ws/**"
+      - "/actuator/**"
+      # Captcha & Local file storage
+      - "/captcha/**"
+      - "/img/**"
+      # Static resources
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/*.html"
+      - "/**/*.html"
+      - "/*.ico"
+      - "/**/*.ico"
+      # Data sources & Report generation
+      - "/druid/**"
+      - "/ureport/**"

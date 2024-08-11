@@ -16,21 +16,13 @@
 
 package com.breeze.boot.security.utils;
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.breeze.boot.core.base.UserInfoDTO;
-import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
-import com.nimbusds.jose.shaded.gson.internal.LinkedTreeMap;
+import com.breeze.boot.core.constants.CacheConstants;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.security.core.Authentication;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.jwt.Jwt;
-
-import java.nio.file.AccessDeniedException;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * 安全工具
@@ -39,58 +31,38 @@ import java.util.Objects;
  * @since 2022-08-31
  */
 public class SecurityUtils {
-    private static final String USER_PROPERTY_KEY = "userProperty";
 
     /**
-     * 获取当前JWT用户
+     * 获取当前用户
      *
      * @return {@link UserInfoDTO}
      * @throws OAuth2AuthenticationException 如果用户未登录或JWT验证失败
      */
     @SneakyThrows
     public static UserInfoDTO getCurrentUser() throws OAuth2AuthenticationException {
-        Map<String, Object> claims = getClaims();
-
-        Object userPropertyObj = claims.get(USER_PROPERTY_KEY);
-        if(Objects.isNull(userPropertyObj)){
-            throw new SystemServiceException(ResultCode.exception("请重新登录"));
-        }
-        if (!(userPropertyObj instanceof LinkedTreeMap)) {
-            throw new SystemServiceException(ResultCode.exception("请重新登录"));
-        }
-
-        LinkedTreeMap<?, ?> map = (LinkedTreeMap<?, ?>) userPropertyObj;
-        UserInfoDTO user = new UserInfoDTO();
-        BeanUtil.fillBeanWithMap(map, user, true);
-        return user;
+        CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
+        return (UserInfoDTO) cacheManager.getCache(CacheConstants.LOGIN_USER).get(getUsername()).get();
     }
 
-    @NotNull
-    private static Map<String, Object> getClaims() throws AccessDeniedException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SystemServiceException(ResultCode.exception("请重新登录"));
-        }
-
-        Object principalObj = authentication.getPrincipal();
-        if (!(principalObj instanceof Jwt)) {
-            throw new SystemServiceException(ResultCode.exception("请重新登录"));
-        }
-
-        Jwt jwt = (Jwt) principalObj;
-        Map<String, Object> claims = jwt.getClaims();
-        if (claims == null) {
-            throw new SystemServiceException(ResultCode.exception("请重新登录"));
-        }
-        return claims;
+    /**
+     * 获取当前用户是否是管理员
+     *
+     * @return {@link UserInfoDTO}
+     * @throws OAuth2AuthenticationException 如果用户未登录或JWT验证失败
+     */
+    @SneakyThrows
+    public static Boolean isAdmin() throws OAuth2AuthenticationException {
+        CacheManager cacheManager = SpringUtil.getBean(CacheManager.class);
+        return ((UserInfoDTO) cacheManager.getCache(CacheConstants.LOGIN_USER).get(getUsername()).get()).getUserRoleCodes().contains("ROLE_ADMIN");
     }
+
 
     /**
      * 获取用户名
      *
      * @return {@link String}
      */
-    public static String getName() {
+    public static String getUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 

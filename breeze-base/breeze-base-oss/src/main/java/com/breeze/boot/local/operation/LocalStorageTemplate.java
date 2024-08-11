@@ -21,7 +21,7 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.enums.ContentType;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.local.config.LocalProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -109,7 +109,7 @@ public class LocalStorageTemplate {
      * @param path     文件在服务器上的绝对路径。
      * @param fileName 下载时显示的文件名称。
      * @param response HTTP响应对象，用于将文件内容发送至客户端并触发浏览器下载。
-     * @throws SystemServiceException 当指定路径的文件在服务器上不存在时抛出异常。
+     * @throws BreezeBizException 当指定路径的文件在服务器上不存在时抛出异常。
      */
     @SneakyThrows
     public void download(String path, String fileName, HttpServletResponse response) {
@@ -117,7 +117,7 @@ public class LocalStorageTemplate {
         File file = this.getFile(path);
         // 检查文件是否存在，若不存在则抛出异常
         if (!file.exists()) {
-            throw new SystemServiceException(ResultCode.FILE_NOT_FOUND);
+            throw new BreezeBizException(ResultCode.FILE_NOT_FOUND);
         }
 
         // 设置HTTP响应的相关属性以支持文件下载

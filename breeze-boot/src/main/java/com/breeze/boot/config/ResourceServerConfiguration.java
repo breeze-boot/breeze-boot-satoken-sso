@@ -26,6 +26,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -44,6 +45,8 @@ public class ResourceServerConfiguration {
      * 用户令牌服务
      */
     private final ISysRegisteredClientService registeredClientService;
+
+    private final CacheManager cacheManager;
 
     /**
      * 用户服务
@@ -67,7 +70,7 @@ public class ResourceServerConfiguration {
      */
     @Bean
     public UserDetailService userDetailService() {
-        return new UserDetailService(() -> userService);
+        return new UserDetailService(() -> userService, cacheManager);
     }
 
     @Bean

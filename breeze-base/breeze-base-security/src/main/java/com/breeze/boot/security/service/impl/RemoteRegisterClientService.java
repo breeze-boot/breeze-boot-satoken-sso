@@ -17,7 +17,7 @@
 package com.breeze.boot.security.service.impl;
 
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
 import com.breeze.boot.security.service.ISysRegisteredClientService;
 import com.breeze.boot.security.utils.OAuth2EndpointUtils;
@@ -79,7 +79,7 @@ public class RemoteRegisterClientService implements RegisteredClientRepository {
      */
     @Override
     public void save(RegisteredClient registeredClient) {
-        throw new SystemServiceException(ResultCode.exception("保存服务在system服务提供"));
+        throw new BreezeBizException(ResultCode.exception("保存服务在system服务提供"));
     }
 
     /**

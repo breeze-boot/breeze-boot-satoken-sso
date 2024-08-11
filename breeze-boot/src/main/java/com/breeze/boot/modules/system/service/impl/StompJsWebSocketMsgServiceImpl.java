@@ -18,7 +18,7 @@ package com.breeze.boot.modules.system.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
@@ -166,7 +166,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
-            throw new SystemServiceException(ResultCode.exception("未发现此消息"));
+            throw new BreezeBizException(ResultCode.exception("未发现此消息"));
         }
         MsgVO msgVO = MsgVO.builder()
                 .id(sysMsg.getId())
@@ -187,7 +187,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getCode, msgParam.getMsgCode()));
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgCode());
-            throw new SystemServiceException(ResultCode.exception("未发现此消息"));
+            throw new BreezeBizException(ResultCode.exception("未发现此消息"));
         }
         MsgVO msgVO = MsgVO.builder()
                 .id(sysMsg.getId())

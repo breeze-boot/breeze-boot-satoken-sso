@@ -28,7 +28,7 @@ import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.DataRole;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.SystemServiceException;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.mybatis.annotation.BreezeDataPermission;
 import com.breeze.boot.security.utils.SecurityUtils;
 import lombok.SneakyThrows;
@@ -156,12 +156,12 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         StringBuilder originalSqlBuilder = new StringBuilder();
         originalSqlBuilder.append(String.format("SELECT %s FROM (%s) temp WHERE 1 = 1 ", column, originalSql));
         if (cache == null) {
-            throw new SystemServiceException(ResultCode.exception("自定义权限缓存未开启"));
+            throw new BreezeBizException(ResultCode.exception("自定义权限缓存未开启"));
         }
         for (String rowPermissionCode : rowPermissionCodeSet) {
             CustomizePermission sysCustomizePermission = cache.get(rowPermissionCode, CustomizePermission.class);
             if (sysCustomizePermission == null) {
-                throw new SystemServiceException(ResultCode.exception("自定义权限缓存未开启"));
+                throw new BreezeBizException(ResultCode.exception("自定义权限缓存未开启"));
             }
             DataRole dataRole = getDataRoleByType(sysCustomizePermission.getCustomizesType());
             if (dataRole != null) {

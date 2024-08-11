@@ -67,12 +67,12 @@ public interface IUserDetailService extends UserDetailsService {
      * @param userResultData 登录用户结果
      * @return {@link UserPrincipal}
      */
-    default UserPrincipal getLoginUserInfo(Result<UserInfoDTO> userResultData) {
+    default UserInfoDTO getUserPrincipal(Result<UserInfoDTO> userResultData) {
         UserInfoDTO userInfoDTO = userResultData.getData();
         if (userInfoDTO == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
-        return this.convertResponseUserData(userInfoDTO);
+        return userInfoDTO;
     }
 
     /**

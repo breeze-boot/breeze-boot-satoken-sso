@@ -60,7 +60,11 @@ public enum ResultCode {
     /**
      * 分页过大
      */
-    PAGE_EXCEPTION("SYSTEM_ERROR_0002", "分页过大");
+    PAGE_EXCEPTION("SYSTEM_ERROR_0002", "分页过大"),
+
+    PROCESS_NOT_FOUND("SYSTEM_ERROR_0003", "未获取到流程实例"),
+
+    TASK_NOT_FOUND("SYSTEM_ERROR_0004", "未获取到任务实例");
 
     private final String code;
 

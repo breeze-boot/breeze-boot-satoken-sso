@@ -1,0 +1,5 @@
+breeze:
+  sap:
+    sap-client-id: T800
+    sap-file-type: yml
+    sap-file-path: /sap/
