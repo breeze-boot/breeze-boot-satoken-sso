@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.bpm.service;
+package com.breeze.boot.modules.bpm.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.bpm.model.entity.ActRuExecution;
-import com.breeze.boot.modules.bpm.model.query.BpmInstanceQuery;
-import com.breeze.boot.modules.bpm.model.vo.BpmInstanceVO;
+import com.breeze.boot.modules.bpm.model.entity.User;
+import com.breeze.boot.modules.bpm.model.vo.BpmUserVO;
+import org.mapstruct.Mapper;
 
 /**
- * 流程执行实例服务
+ * 流程用户转换器
  *
  * @author gaoweixuan
- * @since 2023-03-08
+ * @since 2024-07-14
  */
-public interface ActRuExecutionService extends IService<ActRuExecution> {
+@Mapper(componentModel = "spring")
+public interface BpmUserMapStruct {
 
-    /**
-     * 列表页面
-     *
-     * @param bpmInstanceQuery 流程实例查询
-     * @return {@link Page}<{@link BpmInstanceVO}>
-     */
-    Page<BpmInstanceVO> listPage(BpmInstanceQuery bpmInstanceQuery);
+    Page<BpmUserVO> entityPage2PageVO(Page<User> page);
 
 }

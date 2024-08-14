@@ -99,7 +99,7 @@ public interface IUserDetailService extends UserDetailsService {
                 userInfo.getDeptId(),
                 userInfo.getDeptName(),
                 userInfo.getUserCode(),
-                userInfo.getAmountName(),
+                userInfo.getDisplayName(),
                 userInfo.getAvatar(),
                 userInfo.getPhone(),
                 userInfo.getSex(),

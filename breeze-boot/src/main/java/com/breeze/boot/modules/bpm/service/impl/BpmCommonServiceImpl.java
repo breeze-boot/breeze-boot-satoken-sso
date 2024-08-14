@@ -36,13 +36,13 @@ import java.util.stream.Collectors;
  * @since 2022-10-08
  */
 @Service
+@DS("flowable")
 @RequiredArgsConstructor
 public class BpmCommonServiceImpl implements IBpmCommonService {
 
     private final IBpmCategoryService bpmCategoryService;
 
     @Override
-    @DS("flowable")
     public Result<List<Map<String, Object>>> selectCategory() {
         List<BpmCategory> bpmCategoryList = bpmCategoryService.list();
         return Result.ok(bpmCategoryList.stream().map(item -> {

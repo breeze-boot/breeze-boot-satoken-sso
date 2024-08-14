@@ -68,7 +68,7 @@ public class UserInfoDTO implements Serializable {
      * 登录后显示的账户名称
      */
     @Schema(description = "登录显示的用户账户名")
-    private String amountName;
+    private String displayName;
 
     /**
      * 用户名

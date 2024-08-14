@@ -29,17 +29,14 @@ import com.breeze.boot.modules.bpm.model.form.BpmDesignXmlStringForm;
 import com.breeze.boot.modules.bpm.model.query.BpmDefinitionQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmDefinitionVO;
 import com.breeze.boot.modules.bpm.model.vo.XmlVO;
-import com.breeze.boot.modules.bpm.service.ActReDeploymentService;
+import com.breeze.boot.modules.bpm.service.IActReDeploymentService;
 import com.breeze.boot.modules.bpm.service.IBpmDefinitionService;
 import com.breeze.boot.security.utils.SecurityUtils;
-import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.FlowElement;
-import org.flowable.bpmn.model.SequenceFlow;
 import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RepositoryService;
@@ -57,7 +54,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * 流程资源管理服务impl
@@ -76,7 +72,7 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
 
     private final RuntimeService runtimeService;
 
-    private final ActReDeploymentService actReDeploymentService;
+    private final IActReDeploymentService actReDeploymentService;
 
     /**
      * 部署
@@ -157,7 +153,6 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
     }
 
     @Override
-    @DS("flowable")
     public BpmDefinitionVO getInfo(String procDefId) {
         BpmDefinitionVO info = this.actReDeploymentService.getInfo(procDefId);
         info.setXml(this.getXmlStr(info.getProcDefKey()));

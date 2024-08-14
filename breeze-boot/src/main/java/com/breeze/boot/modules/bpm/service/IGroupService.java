@@ -18,34 +18,14 @@ package com.breeze.boot.modules.bpm.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.bpm.model.entity.ActReDeployment;
-import com.breeze.boot.modules.bpm.model.query.BpmDefinitionQuery;
-import com.breeze.boot.modules.bpm.model.vo.BpmDefinitionVO;
-import org.springframework.stereotype.Service;
+import com.breeze.boot.modules.bpm.model.entity.Group;
+import com.breeze.boot.modules.bpm.model.query.BpmGroupQuery;
+import com.breeze.boot.modules.bpm.model.query.BpmUserQuery;
+import com.breeze.boot.modules.bpm.model.vo.BpmGroupVO;
 
-/**
- * 流程部署服务
- *
- * @author gaoweixuan
- * @since 2023-03-08
- */
-@Service
-public interface ActReDeploymentService extends IService<ActReDeployment> {
+public interface IGroupService extends IService<Group> {
 
-    /**
-     * 列表页面
-     *
-     * @param flowDeploymentQuery 流程定义查询
-     * @return {@link Page}<{@link BpmDefinitionVO}>
-     */
-    Page<BpmDefinitionVO> listPage(BpmDefinitionQuery flowDeploymentQuery);
-
-    /**
-     * 详情
-     *
-     * @param definitionId 定义id
-     * @return {@link BpmDefinitionVO }
-     */
-    BpmDefinitionVO getInfo(String definitionId);
+    Page<BpmGroupVO> listPage(BpmGroupQuery groupQuery);
 
 }
+

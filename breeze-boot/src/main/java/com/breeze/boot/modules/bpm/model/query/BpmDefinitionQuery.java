@@ -20,8 +20,6 @@ import com.breeze.boot.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * 流程定义查询参数
  *
@@ -39,11 +37,9 @@ public class BpmDefinitionQuery extends PageQuery {
     @Schema(description = "流程定义KEY")
     private String definitionKey;
 
-    @NotBlank(message = "业务Key")
     @Schema(description = "业务Key")
     private String businessKey;
 
-    @NotBlank(message = "租户ID不能为空")
     @Schema(description = "租户ID")
     private String tenantId;
 

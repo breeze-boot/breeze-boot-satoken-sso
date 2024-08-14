@@ -23,7 +23,7 @@ import com.breeze.boot.modules.bpm.mapper.ActRuExecutionMapper;
 import com.breeze.boot.modules.bpm.model.entity.ActRuExecution;
 import com.breeze.boot.modules.bpm.model.query.BpmInstanceQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmInstanceVO;
-import com.breeze.boot.modules.bpm.service.ActRuExecutionService;
+import com.breeze.boot.modules.bpm.service.IActRuExecutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +34,9 @@ import org.springframework.stereotype.Service;
  * @since 2023-03-08
  */
 @Service
+@DS("flowable")
 @RequiredArgsConstructor
-public class ActRuExecutionServiceImpl extends ServiceImpl<ActRuExecutionMapper, ActRuExecution> implements ActRuExecutionService {
+public class ActRuExecutionServiceImpl extends ServiceImpl<ActRuExecutionMapper, ActRuExecution> implements IActRuExecutionService {
 
     /**
      * 列表页面
@@ -43,7 +44,6 @@ public class ActRuExecutionServiceImpl extends ServiceImpl<ActRuExecutionMapper,
      * @param bpmInstanceQuery 流程实例查询
      * @return {@link Page}<{@link BpmInstanceVO}>
      */
-    @DS("flowable")
     @Override
     public Page<BpmInstanceVO> listPage(BpmInstanceQuery bpmInstanceQuery) {
         return this.baseMapper.listPage(new Page<>(bpmInstanceQuery.getCurrent(), bpmInstanceQuery.getSize()), bpmInstanceQuery);

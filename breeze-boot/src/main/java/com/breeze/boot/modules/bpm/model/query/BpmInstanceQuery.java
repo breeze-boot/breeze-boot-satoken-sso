@@ -21,8 +21,6 @@ import com.breeze.boot.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * 流程实例查询
  * 流程资源查询使用
@@ -41,7 +39,6 @@ public class BpmInstanceQuery extends PageQuery {
     /**
      * 租户ID
      */
-    @NotBlank(message = "租户ID不能为空")
     @Schema(description = "租户Id")
     private String tenantId;
 

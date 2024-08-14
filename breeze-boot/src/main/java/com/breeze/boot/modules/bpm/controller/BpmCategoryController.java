@@ -63,7 +63,6 @@ public class BpmCategoryController {
      * @param processCategory 流程类别
      * @return {@link Result}<{@link IPage}<{@link BpmCategoryVO}>>
      */
-    @DS("flowable")
     @Operation(summary = "列表")
     @GetMapping
     @PreAuthorize("hasAnyAuthority('bpm:category:list')")
@@ -77,7 +76,6 @@ public class BpmCategoryController {
      * @param categoryId 流程分类ID
      * @return {@link Result}<{@link BpmCategory}>
      */
-    @DS("flowable")
     @Operation(summary = "详情")
     @GetMapping("/info/{categoryId}")
     @PreAuthorize("hasAnyAuthority('auth:dict:info')")
@@ -92,7 +90,6 @@ public class BpmCategoryController {
      * @param categoryId   流程分类ID
      * @return {@link Result}<{@link BpmCategory}>
      */
-    @DS("flowable")
     @Operation(summary = "校验流程分类编码是否重复")
     @GetMapping("/checkCategoryCode")
     @PreAuthorize("hasAnyAuthority('bpm:category:list')")
@@ -109,7 +106,6 @@ public class BpmCategoryController {
      * @param bpmCategoryForm 流程分类表单
      * @return {@link Result}<{@link Boolean}>
      */
-    @DS("flowable")
     @Operation(summary = "保存")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('bpm:category:create')")
@@ -124,7 +120,6 @@ public class BpmCategoryController {
      * @param bpmCategoryForm 流程分类表单
      * @return {@link Result}<{@link Boolean}>
      */
-    @DS("flowable")
     @Operation(summary = "修改")
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('bpm:category:modify')")
@@ -140,7 +135,6 @@ public class BpmCategoryController {
      * @param ids id
      * @return {@link Result}<{@link Boolean}>
      */
-    @DS("flowable")
     @Operation(summary = "删除")
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('bpm:category:delete')")

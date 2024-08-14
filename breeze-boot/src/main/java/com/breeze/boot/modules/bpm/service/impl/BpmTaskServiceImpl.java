@@ -242,7 +242,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 for (User user : identityService.createUserQuery().memberOfGroup(identityLink.getGroupId()).list()) {
                     userList.add(user.getId());
                 }
-            } else {
+            } else if(Objects.nonNull(identityLink.getUserId())) {
                 User user = this.identityService.createUserQuery().userId(identityLink.getUserId()).singleResult();
                 if (Objects.nonNull(user)) {
                     userList.add(user.getId());
@@ -519,9 +519,14 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                     this.appendUserInfo(user, candidateName, candidate);
                 }
             } else if (StrUtil.equals(ASSIGNEE, identityLink.getType())) {
-                User user = this.identityService.createUserQuery().userId(identityLink.getUserId()).singleResult();
-                if (Objects.nonNull(user)) {
-                    this.appendUserInfo(user, assigneeName, assignee);
+                if (Objects.nonNull(identityLink.getUserId())) {
+                    User user = this.identityService.createUserQuery().userId(identityLink.getUserId()).singleResult();
+                    if (Objects.nonNull(user)) {
+                        this.appendUserInfo(user, assigneeName, assignee);
+                    }
+                } else {
+                    assigneeName.append("->未签收任务");
+                    assignee.append("->未签收任务");
                 }
             }
         }

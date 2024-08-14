@@ -23,7 +23,7 @@ import com.breeze.boot.modules.bpm.mapper.ActReDeploymentMapper;
 import com.breeze.boot.modules.bpm.model.entity.ActReDeployment;
 import com.breeze.boot.modules.bpm.model.query.BpmDefinitionQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmDefinitionVO;
-import com.breeze.boot.modules.bpm.service.ActReDeploymentService;
+import com.breeze.boot.modules.bpm.service.IActReDeploymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +34,9 @@ import org.springframework.stereotype.Service;
  * @since 2023-03-08
  */
 @Service
+@DS("flowable")
 @RequiredArgsConstructor
-public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMapper, ActReDeployment> implements ActReDeploymentService {
+public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMapper, ActReDeployment> implements IActReDeploymentService {
 
     /**
      * 列表页面
@@ -43,7 +44,6 @@ public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMappe
      * @param flowDeploymentQuery 流程定义查询
      * @return {@link Page}<{@link BpmDefinitionVO}>
      */
-    @DS("flowable")
     @Override
     public Page<BpmDefinitionVO> listPage(BpmDefinitionQuery flowDeploymentQuery) {
         return this.baseMapper.listPage(new Page<>(flowDeploymentQuery.getCurrent(), flowDeploymentQuery.getSize()), flowDeploymentQuery);

@@ -17,6 +17,7 @@
 package com.breeze.boot.modules.auth.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -32,6 +33,7 @@ import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
+import com.breeze.boot.modules.auth.model.bo.FlowUserBO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.*;
@@ -43,6 +45,7 @@ import com.breeze.boot.modules.auth.model.mappers.SysUserMapStruct;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.modules.auth.service.*;
+import com.breeze.boot.modules.bpm.manager.FlowableManager;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.breeze.boot.security.exception.AccessException;
 import com.breeze.boot.security.model.params.AuthLoginParam;
@@ -56,6 +59,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.enums.ResultCode.FAIL;
@@ -71,6 +75,8 @@ import static com.breeze.boot.core.enums.ResultCode.FAIL;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     private final SysUserMapStruct sysUserMapStruct;
+
+    private final FlowableManager flowableManager;
 
     /**
      * 密码编码器
@@ -283,7 +289,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser registerUser(SysUser registerUser, String roleCode) {
-        SysUser sysUser = SysUser.builder().username(registerUser.getUsername()).amountName(registerUser.getUsername()).password(this.passwordEncoder.encode("123456")).openId(registerUser.getOpenId()).phone(registerUser.getPhone()).tenantId(registerUser.getTenantId()).deptId(1L).build();
+        SysUser sysUser = SysUser.builder().username(registerUser.getUsername()).displayName(registerUser.getUsername()).password(this.passwordEncoder.encode("123456")).openId(registerUser.getOpenId()).phone(registerUser.getPhone()).tenantId(registerUser.getTenantId()).deptId(1L).build();
         this.save(sysUser);
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
@@ -350,6 +356,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return this.baseMapper.listUserByRole(roleCode);
     }
 
+    @Override
+    public void syncFlowableUser() {
+        List<SysUser> sysUserList = this.list();
+        List<SysRole> roles = this.sysRoleService.list();
+        List<FlowUserBO> syncUser = sysUserList.stream().map(item -> {
+            FlowUserBO flowUserBO = FlowUserBO.builder()
+                    .userId(item.getId())
+                    .username(item.getUsername())
+                    .displayName(item.getDisplayName())
+                    .email(item.getEmail())
+                    .build();
+            List<SysRole> userRoleList = this.sysUserRoleService.getSysRoleByUserId(item.getId());
+            if (CollUtil.isNotEmpty(userRoleList)) {
+                List<SysRole> sysRoleList = this.sysRoleService.listByIds(userRoleList.stream().map(SysRole::getId).collect(Collectors.toList()));
+                flowUserBO.setRoleList(sysRoleList);
+            }
+            return flowUserBO;
+        }).collect(Collectors.toList());
+        this.flowableManager.syncUser(syncUser,roles);
+    }
+
     /**
      * 加载用户通过用户名
      *
@@ -400,7 +427,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Result<UserInfoDTO> loadRegisterUserByOpenId(WxLoginParam wxLoginParam) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, wxLoginParam.getOpenId()));
         if (Objects.isNull(sysUser)) {
-            this.registerUser(SysUser.builder().phone(wxLoginParam.getPhone()).amountName(wxLoginParam.getNickName() + RandomUtil.randomString(6)).sex(wxLoginParam.getSex()).email(wxLoginParam.getEmail()).tenantId(wxLoginParam.getTenantId()).username(wxLoginParam.getOpenId()).deptId(1L).build(), "ROLE_MINI");
+            this.registerUser(SysUser.builder().phone(wxLoginParam.getPhone()).displayName(wxLoginParam.getNickName() + RandomUtil.randomString(6)).sex(wxLoginParam.getSex()).email(wxLoginParam.getEmail()).tenantId(wxLoginParam.getTenantId()).username(wxLoginParam.getOpenId()).deptId(1L).build(), "ROLE_MINI");
         }
         return Result.ok(this.buildLoginUserInfo(sysUser));
     }
@@ -416,7 +443,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, authLoginParam.getPhone()));
         if (Objects.isNull(sysUser)) {
             // 不存在就去创建
-            sysUser = this.registerUser(SysUser.builder().phone(authLoginParam.getPhone()).amountName(authLoginParam.getAppUserName()).sex(authLoginParam.getSex()).email(authLoginParam.getEmail()).tenantId(authLoginParam.getTenantId()).username(authLoginParam.getAppUserName() + RandomUtil.randomString(5)).deptId(1L).build(), "ROLE_AUTH");
+            sysUser = this.registerUser(SysUser.builder().phone(authLoginParam.getPhone()).displayName(authLoginParam.getAppUserName()).sex(authLoginParam.getSex()).email(authLoginParam.getEmail()).tenantId(authLoginParam.getTenantId()).username(authLoginParam.getAppUserName() + RandomUtil.randomString(5)).deptId(1L).build(), "ROLE_AUTH");
         }
         return Result.ok(this.buildLoginUserInfo(sysUser));
     }
@@ -502,4 +529,3 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return resultSet.stream().min(Comparator.comparingInt(DataPermissionType::getLevel)).map(DataPermissionType::toString).orElse("");
     }
 }
-

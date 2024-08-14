@@ -46,6 +46,7 @@ public class WoLeave extends Model<WoLeave> {
     private Long id;
 
     private String title;
+    private String code;
     private String reason;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

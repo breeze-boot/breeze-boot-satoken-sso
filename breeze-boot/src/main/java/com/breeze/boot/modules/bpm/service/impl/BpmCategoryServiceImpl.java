@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.bpm.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
  * @since 2023-03-06
  */
 @Service
+@DS("flowable")
 @RequiredArgsConstructor
 public class BpmCategoryServiceImpl extends ServiceImpl<BpmCategoryMapper, BpmCategory> implements IBpmCategoryService {
 
@@ -79,7 +81,7 @@ public class BpmCategoryServiceImpl extends ServiceImpl<BpmCategoryMapper, BpmCa
     /**
      * 修改流类别
      *
-     * @param id               ID
+     * @param id              ID
      * @param bpmCategoryForm 流程分类表单
      * @return {@link Boolean }
      */

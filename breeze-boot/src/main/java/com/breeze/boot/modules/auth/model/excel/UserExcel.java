@@ -75,7 +75,7 @@ public class UserExcel implements Serializable {
      */
     @Schema(description = "登录账户名称")
     @ExcelProperty(value = "登录账户名称")
-    private String amountName;
+    private String displayName;
 
     /**
      * 头像地址

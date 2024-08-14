@@ -24,7 +24,7 @@ import com.breeze.boot.modules.bpm.model.form.BpmApprovalForm;
 import com.breeze.boot.modules.bpm.model.form.BpmStartForm;
 import com.breeze.boot.modules.bpm.model.query.BpmInstanceQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmInstanceVO;
-import com.breeze.boot.modules.bpm.service.ActRuExecutionService;
+import com.breeze.boot.modules.bpm.service.IActRuExecutionService;
 import com.breeze.boot.modules.bpm.service.IBpmInstanceService;
 import com.breeze.boot.modules.bpm.service.IBpmTaskService;
 import com.breeze.boot.security.utils.SecurityUtils;
@@ -62,7 +62,7 @@ public class BpmInstanceServiceImpl implements IBpmInstanceService {
 
     private final TaskService taskService;
 
-    private final ActRuExecutionService actRuExecutionService;
+    private final IActRuExecutionService actRuExecutionService;
 
     /**
      * 发起

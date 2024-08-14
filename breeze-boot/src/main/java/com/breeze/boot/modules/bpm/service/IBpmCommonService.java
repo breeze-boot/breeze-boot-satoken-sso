@@ -30,7 +30,6 @@ import java.util.Map;
  */
 public interface IBpmCommonService {
 
-    @DS("flowable")
     Result<List<Map<String, Object>>> selectCategory();
 
 }

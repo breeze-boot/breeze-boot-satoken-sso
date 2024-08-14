@@ -16,7 +16,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/conf/my.ini:/etc/mysql/my.ini
       - ./docker/mysql/data/:/var/lib/mysql
       - ./docker/mysql/logs:/var/log/mysql
       - /etc/localtime:/etc/localtime:ro

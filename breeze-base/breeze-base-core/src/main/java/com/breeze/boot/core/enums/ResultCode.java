@@ -14,32 +14,45 @@ public enum ResultCode {
      * 成功
      */
     OK("0000", "请求成功"),
+
     /**
      * 警告
      */
     WARNING("0001", "请求不合法"),
+
     /**
      * 失败
      */
     FAIL("0002", "请求失败"),
 
     /**
+     * 演示环境
+     */
+    PREVIEW("0003", "演示环境不可删除修改"),
+
+    /**
      * 令牌无效
      */
     SC_UNAUTHORIZED("A101", "令牌无效"),
+
     /**
      * 未登录
      */
     UN_LOGIN("A102", "未登录"),
+
     /**
      * 未授权资源，请联系管理员授权
      */
     SC_FORBIDDEN("A103", "未授权资源，请联系管理员授权后重新登陆"),
+
     /**
      * 身份验证异常
      */
     FORBIDDEN("A104", "身份验证异常"),
 
+    /**
+     * 租户未获取到
+     */
     TENANT_NOT_FOUND("A105", "租户未获取到"),
 
     /**
@@ -62,8 +75,14 @@ public enum ResultCode {
      */
     PAGE_EXCEPTION("SYSTEM_ERROR_0002", "分页过大"),
 
+    /**
+     * 未获取到流程实例
+     */
     PROCESS_NOT_FOUND("SYSTEM_ERROR_0003", "未获取到流程实例"),
 
+    /**
+     * 未获取到任务实例
+     */
     TASK_NOT_FOUND("SYSTEM_ERROR_0004", "未获取到任务实例");
 
     private final String code;

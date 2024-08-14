@@ -64,7 +64,7 @@ public class UserBO implements Serializable {
      * 登录账户名称
      */
     @Schema(description = "登录账户名称")
-    private String amountName;
+    private String displayName;
 
     /**
      * 头像地址

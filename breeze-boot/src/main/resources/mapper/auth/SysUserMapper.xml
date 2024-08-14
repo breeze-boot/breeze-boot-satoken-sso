@@ -11,7 +11,7 @@
         <result property="password" column="password"/>
         <result property="deptId" column="dept_id"/>
         <result property="deptName" column="dept_name"/>
-        <result property="amountName" column="amount_name"/>
+        <result property="displayName" column="display_name"/>
         <result property="avatar" column="avatar"/>
         <result property="phone" column="phone"/>
         <result property="openId" column="open_id"/>
@@ -35,7 +35,7 @@
         SELECT
         a.id,
         a.dept_id,
-        a.amount_name,
+        a.display_name,
         a.user_code,
         a.username,
         a.avatar,
@@ -71,7 +71,7 @@
         SELECT
         a.id,
         a.dept_id,
-        a.amount_name,
+        a.display_name,
         a.user_code,
         a.username,
         a.avatar,
@@ -106,7 +106,7 @@
         SELECT
         a.id,
         a.dept_id,
-        a.amount_name,
+        a.display_name,
         a.user_code,
         a.username,
         a.avatar,
@@ -135,7 +135,7 @@
         SELECT
         a.id,
         a.dept_id,
-        a.amount_name,
+        a.display_name,
         a.user_code,
         a.username,
         a.avatar,

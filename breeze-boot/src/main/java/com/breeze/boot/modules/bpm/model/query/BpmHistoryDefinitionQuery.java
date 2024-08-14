@@ -20,8 +20,6 @@ package com.breeze.boot.modules.bpm.model.query;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * 流程定义查询参数
  *
@@ -39,7 +37,6 @@ public class BpmHistoryDefinitionQuery {
     @Schema(description = "流程定义ID")
     private String definitionId;
 
-    @NotBlank(message = "业务Key")
     @Schema(description = "业务Key")
     private String businessKey;
 

@@ -71,7 +71,7 @@ public class UserPrincipal extends User implements UserDetails {
      * 登录后显示的账户名称
      */
     @Schema(description = "登录显示的用户账户名")
-    private String amountName;
+    private String displayName;
 
     /**
      * 头像地址
@@ -154,7 +154,7 @@ public class UserPrincipal extends User implements UserDetails {
      * @param deptId                部门Id
      * @param deptName              部门名称
      * @param userCode              用户代码
-     * @param amountName            登录显示的用户账户名
+     * @param displayName            登录显示的用户账户名
      * @param avatar                头像
      * @param phone                 电话
      * @param sex                   性
@@ -176,7 +176,7 @@ public class UserPrincipal extends User implements UserDetails {
                          Long deptId,
                          String deptName,
                          String userCode,
-                         String amountName,
+                         String displayName,
                          String avatar,
                          String phone,
                          Integer sex,
@@ -193,7 +193,7 @@ public class UserPrincipal extends User implements UserDetails {
         this.deptId = deptId;
         this.deptName = deptName;
         this.userCode = userCode;
-        this.amountName = amountName;
+        this.displayName = displayName;
         this.avatar = avatar;
         this.phone = phone;
         this.sex = sex;

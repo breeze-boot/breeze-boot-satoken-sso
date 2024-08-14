@@ -143,4 +143,9 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
      */
     List<SysUser> listUserByRole(String roleCode);
 
+    /**
+     * 同步用户角色和用户角色关系
+     */
+    void syncFlowableUser();
+
 }

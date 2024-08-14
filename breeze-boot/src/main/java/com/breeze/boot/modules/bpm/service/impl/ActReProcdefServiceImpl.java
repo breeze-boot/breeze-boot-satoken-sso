@@ -16,10 +16,11 @@
 
 package com.breeze.boot.modules.bpm.service.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.modules.bpm.mapper.ActReProcdefMapper;
 import com.breeze.boot.modules.bpm.model.entity.ActReProcdef;
-import com.breeze.boot.modules.bpm.service.ActReProcdefService;
+import com.breeze.boot.modules.bpm.service.IActReProcdefService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
  * @since 2023-03-08
  */
 @Service
+@DS("flowable")
 @RequiredArgsConstructor
-public class ActReProcdefServiceImpl extends ServiceImpl<ActReProcdefMapper, ActReProcdef> implements ActReProcdefService {
+public class ActReProcdefServiceImpl extends ServiceImpl<ActReProcdefMapper, ActReProcdef> implements IActReProcdefService {
 }

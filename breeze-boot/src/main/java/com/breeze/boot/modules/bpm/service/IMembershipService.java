@@ -17,14 +17,8 @@
 package com.breeze.boot.modules.bpm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.modules.bpm.model.entity.ActReProcdef;
+import com.breeze.boot.modules.bpm.model.entity.Membership;
 
-/**
- * 流程文件资源服务
- *
- * @author gaoweixuan
- * @since 2023-03-08
- */
-public interface ActReProcdefService extends IService<ActReProcdef> {
+public interface IMembershipService extends IService<Membership> {
 
 }

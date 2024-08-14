@@ -190,6 +190,15 @@ public class SysUserController {
     }
 
     /**
+     * 同步用户角色和用户角色关系
+     */
+    @Operation(summary = "同步用户角色和用户角色关系")
+    @GetMapping("/syncFlowableUser")
+    public void syncFlowableUser() {
+        this.sysUserService.syncFlowableUser();
+    }
+
+    /**
      * 重置密码
      *
      * @param userResetForm 用户重置密码参数

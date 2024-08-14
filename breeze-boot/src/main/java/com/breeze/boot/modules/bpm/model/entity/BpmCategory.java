@@ -25,14 +25,12 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 /**
  * 流程分类
  *
  * @author gaoweixuan
  * @since 2023-03-06
  */
-
 @Data
 @Builder
 @NoArgsConstructor
