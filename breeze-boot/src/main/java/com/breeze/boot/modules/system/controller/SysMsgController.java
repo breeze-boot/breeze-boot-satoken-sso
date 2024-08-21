@@ -24,7 +24,7 @@ import com.breeze.boot.modules.system.model.entity.SysMsg;
 import com.breeze.boot.modules.system.model.form.MsgForm;
 import com.breeze.boot.modules.system.model.query.MsgQuery;
 import com.breeze.boot.modules.system.service.SysMsgService;
-import com.breeze.boot.websocket.vo.MsgVO;
+import com.breeze.boot.message.vo.MsgVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

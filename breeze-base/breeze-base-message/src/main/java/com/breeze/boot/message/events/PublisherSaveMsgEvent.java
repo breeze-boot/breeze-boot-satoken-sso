@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.system.model.mappers;
+package com.breeze.boot.message.events;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.system.model.entity.SysMsg;
-import com.breeze.boot.modules.system.model.form.MsgForm;
-import com.breeze.boot.message.vo.MsgVO;
-import org.mapstruct.Mapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
- *
- * 消息转换器
+ * 发布保存消息事件
  *
  * @author gaoweixuan
- * @since 2024-07-13
+ * @since 2022-11-28
  */
-@Mapper(componentModel = "spring")
-public interface SysMsgMapStruct {
+@RequiredArgsConstructor
+public class PublisherSaveMsgEvent {
 
-    Page<MsgVO> entityPage2VOPage(Page<SysMsg> page);
+    /**
+     * 应用程序事件发布者
+     */
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    MsgVO entity2VO(SysMsg sysMsg);
-
-    SysMsg form2Entity(MsgForm msgForm);
+    /**
+     * 发布事件
+     *
+     * @param applicationEvent 应用程序事件
+     */
+    public void publisherEvent(ApplicationEvent applicationEvent) {
+        this.applicationEventPublisher.publishEvent(applicationEvent);
+    }
 
 }
+

@@ -52,7 +52,7 @@ public class TenantLoadFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            log.info("[当前进入的请求]： {}", request.getRequestURI());
+            log.debug("[当前进入的请求]： {}", request.getRequestURI());
             String apiTenantId = request.getHeader(X_TENANT_ID);
             String webSocketTenantId = request.getParameter(X_TENANT_ID);
             if (StrUtil.isAllBlank(apiTenantId) && StrUtil.isAllBlank(webSocketTenantId)) {

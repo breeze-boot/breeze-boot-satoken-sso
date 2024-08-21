@@ -17,9 +17,9 @@
 package com.breeze.boot.modules.system.controller;
 
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.websocket.params.MsgParam;
-import com.breeze.boot.websocket.service.WebSocketMsgService;
-import com.breeze.boot.websocket.vo.MsgVO;
+import com.breeze.boot.message.params.MsgParam;
+import com.breeze.boot.message.service.WebSocketMsgService;
+import com.breeze.boot.message.vo.MsgVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class SendMsgController {
     // 前端发送信息的路径
     @MessageMapping("/asyncSendBroadcastMsg")
     // 发送到websocket的路径，广播消息的路径/topic，发送的通道和订阅者确定后可通过这个路径接收消息/msg
-    @SendTo("/topic/msg")
+    @SendTo("/topic/message")
     public Result<MsgVO> asyncSendBroadcastMsg(@Payload MsgParam msgParam) {
         return this.webSocketMsgService.asyncSendBroadcastMsg(msgParam);
     }

@@ -22,7 +22,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
 import com.breeze.boot.modules.system.model.vo.MsgUserVO;
-import com.breeze.boot.websocket.dto.UserMsgDTO;
+import com.breeze.boot.message.dto.UserMsgDTO;
 
 import java.util.List;
 

@@ -26,7 +26,7 @@ import com.breeze.boot.modules.system.model.form.MsgForm;
 import com.breeze.boot.modules.system.model.mappers.SysMsgMapStruct;
 import com.breeze.boot.modules.system.model.query.MsgQuery;
 import com.breeze.boot.modules.system.service.SysMsgService;
-import com.breeze.boot.websocket.vo.MsgVO;
+import com.breeze.boot.message.vo.MsgVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

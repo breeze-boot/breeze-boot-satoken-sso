@@ -363,7 +363,7 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-websocket</artifactId>
+                <artifactId>breeze-base-message</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

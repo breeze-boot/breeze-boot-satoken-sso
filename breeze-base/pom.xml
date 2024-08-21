@@ -15,7 +15,7 @@
 
     <modules>
         <module>breeze-base-xxljob</module>
-        <module>breeze-base-websocket</module>
+        <module>breeze-base-message</module>
         <module>breeze-base-redis-cache</module>
         <module>breeze-base-mybatis</module>
         <module>breeze-base-mail</module>

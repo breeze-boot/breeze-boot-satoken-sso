@@ -1,5 +1,5 @@
 # 基础镜像
-FROM openjdk:8
+FROM breeze-jdk:8
 
 # 作者信息
 MAINTAINER gaoweixuan (breeze-cloud@foxmail.com)

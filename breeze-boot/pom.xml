@@ -143,7 +143,7 @@
         <!--websocket-->
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-websocket</artifactId>
+            <artifactId>breeze-base-message</artifactId>
         </dependency>
 
         <!--代码生成-->
@@ -181,9 +181,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <arguments>
-                        <argument>${project.basedir}\libs</argument>
-                    </arguments>
+                    <includeSystemScope>true</includeSystemScope>
                 </configuration>
             </plugin>
             <plugin>

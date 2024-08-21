@@ -33,28 +33,6 @@
             <scope>system</scope>
             <systemPath>${basedir}/libs/sapjco3.jar</systemPath>
         </dependency>
-
     </dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.version}</version>
-                    <configuration>
-                        <target>${maven.compiler.target}</target>
-                        <source>${maven.compiler.source}</source>
-                        <encoding>UTF-8</encoding>
-                        <skip>true</skip>
-                        <!-- 导入\libs下的本地jar包 -->
-                        <compilerArguments>
-                            <extdirs>${project.basedir}\libs</extdirs>
-                        </compilerArguments>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>

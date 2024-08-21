@@ -16,7 +16,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./docker/mysql/conf/my.ini:/etc/mysql/my.ini
+      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
       - ./docker/mysql/data/:/var/lib/mysql
       - ./docker/mysql/logs:/var/log/mysql
       - /etc/localtime:/etc/localtime:ro
@@ -29,7 +29,7 @@ services:
 
   # redis
   breeze-redis:
-    image: redis
+    image: redis:7.2.5
     container_name: breeze-redis
     hostname: breeze-redis
     restart: always
@@ -52,7 +52,7 @@ services:
 
   # rabbitMq服务
   breeze-rabbitmq:
-    image: rabbitmq:3.9.13-management
+    image: rabbitmq:3.10.25-management
     container_name: breeze-rabbitmq
     hostname: breeze-rabbitmq
     ports:
@@ -62,6 +62,7 @@ services:
       - "25672:25672" # server间内部通信口
     volumes:
       - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/conf.d:/etc/rabbitmq/conf.d
       - ./docker/rabbitmq/log:/var/log/rabbitmq/log
     #环境变量
     environment:
@@ -75,7 +76,7 @@ services:
 
   breeze-minio:
     container_name: breeze-minio
-    image: minio/minio
+    image: minio/minio:RELEASE.2024-01-18T22-51-28Z
     hostname: breeze-minio
     ports:
       - "9092:9092" # api端口
@@ -136,7 +137,7 @@ services:
     image: xuxueli/xxl-job-admin:2.2.0
     environment:
       TZ: Asia/Shanghai
-      PARAMS: "--spring.datasource.url=jdbc:mysql://localhost:3306/breeze_xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      PARAMS: "--spring.datasource.url=jdbc:mysql://breeze-mysql:3306/breeze_xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
        --spring.datasource.username=root
        --spring.datasource.password=root"
     volumes:

@@ -28,7 +28,7 @@ import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.modules.system.mapper.SysMsgUserMapper;
 import com.breeze.boot.modules.system.service.SysMsgUserService;
 import com.breeze.boot.security.utils.SecurityUtils;
-import com.breeze.boot.websocket.dto.UserMsgDTO;
+import com.breeze.boot.message.dto.UserMsgDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -25,13 +25,13 @@ import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.service.SysUserService;
 import com.breeze.boot.modules.system.model.entity.SysMsg;
 import com.breeze.boot.modules.system.service.SysMsgService;
-import com.breeze.boot.websocket.dto.UserMsgDTO;
-import com.breeze.boot.websocket.events.MsgSaveEvent;
-import com.breeze.boot.websocket.events.PublisherSaveMsgEvent;
-import com.breeze.boot.websocket.params.FlowMsgParam;
-import com.breeze.boot.websocket.params.MsgParam;
-import com.breeze.boot.websocket.service.WebSocketMsgService;
-import com.breeze.boot.websocket.vo.MsgVO;
+import com.breeze.boot.message.dto.UserMsgDTO;
+import com.breeze.boot.message.events.MsgSaveEvent;
+import com.breeze.boot.message.events.PublisherSaveMsgEvent;
+import com.breeze.boot.message.params.BpmParam;
+import com.breeze.boot.message.params.MsgParam;
+import com.breeze.boot.message.service.WebSocketMsgService;
+import com.breeze.boot.message.vo.MsgVO;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -182,7 +182,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
     }
 
     @Override
-    public void asyncSendMsgToUser(FlowMsgParam msgParam) {
+    public void asyncSendMsgToUser(BpmParam msgParam) {
         BreezeThreadLocal.set(msgParam.getTenantId());
         SysMsg sysMsg = this.sysMsgService.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getCode, msgParam.getMsgCode()));
         if (Objects.isNull(sysMsg)) {

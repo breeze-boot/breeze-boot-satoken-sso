@@ -14,28 +14,30 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.system.model.mappers;
+package com.breeze.boot.message.config;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.system.model.entity.SysMsg;
-import com.breeze.boot.modules.system.model.form.MsgForm;
-import com.breeze.boot.message.vo.MsgVO;
-import org.mapstruct.Mapper;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- *
- * 消息转换器
+ * websocket 配置
  *
  * @author gaoweixuan
- * @since 2024-07-13
+ * @since 2022-11-16
  */
-@Mapper(componentModel = "spring")
-public interface SysMsgMapStruct {
+@Data
+@Configuration
+@RequiredArgsConstructor
+@ConfigurationProperties(prefix = "spring.rabbitmq")
+public class BreezeRabbitMqProperties {
 
-    Page<MsgVO> entityPage2VOPage(Page<SysMsg> page);
-
-    MsgVO entity2VO(SysMsg sysMsg);
-
-    SysMsg form2Entity(MsgForm msgForm);
+    private String username = "guest";
+    private String password = "guest";
+    private String virtualHost;
+    private String addresses;
+    private int stompPort;
+    private int port;
 
 }

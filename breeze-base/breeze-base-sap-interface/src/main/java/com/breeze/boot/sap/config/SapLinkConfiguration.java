@@ -60,15 +60,15 @@ public class SapLinkConfiguration implements InitializingBean {
             fos.close();
             log.info("Write jco file successfully. ({})", jcoFile.getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Write jco file failed. ({})", jcoFile.getName(), e);
         }
     }
 
     /**
      * 加载单个配置文件
      *
-     * @param resource
-     * @return
+     * @param resource 资源
+     * @return {@link Properties }
      */
     private Properties loadProfiles(Resource resource) {
         if (!resource.exists()) {
@@ -83,8 +83,8 @@ public class SapLinkConfiguration implements InitializingBean {
     /**
      * 加载properties格式的配置文件
      *
-     * @param resource
-     * @return
+     * @param resource 资源
+     * @return {@link Properties }
      */
     private Properties loadProperty(Resource resource) {
         try {
@@ -100,8 +100,8 @@ public class SapLinkConfiguration implements InitializingBean {
     /**
      * 加载yml格式的配置文件
      *
-     * @param resource
-     * @return
+     * @param resource 资源
+     * @return {@link Properties }
      */
     private Properties loadYaml(Resource resource) {
         try {

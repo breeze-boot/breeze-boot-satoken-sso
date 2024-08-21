@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.system.model.mappers;
+package com.breeze.boot.message.events;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.modules.system.model.entity.SysMsg;
-import com.breeze.boot.modules.system.model.form.MsgForm;
-import com.breeze.boot.message.vo.MsgVO;
-import org.mapstruct.Mapper;
+import com.breeze.boot.message.dto.UserMsgDTO;
+import org.springframework.context.ApplicationEvent;
 
 /**
- *
- * 消息转换器
+ * 消息保存事件
  *
  * @author gaoweixuan
- * @since 2024-07-13
+ * @since 2022-11-28
  */
-@Mapper(componentModel = "spring")
-public interface SysMsgMapStruct {
+public class MsgSaveEvent extends ApplicationEvent {
 
-    Page<MsgVO> entityPage2VOPage(Page<SysMsg> page);
-
-    MsgVO entity2VO(SysMsg sysMsg);
-
-    SysMsg form2Entity(MsgForm msgForm);
+    /**
+     * 消息保存事件
+     *
+     * @param userMsgDTO 消息BO
+     */
+    public MsgSaveEvent(UserMsgDTO userMsgDTO) {
+        super(userMsgDTO);
+    }
 
 }
