@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.system.controller;
+package com.breeze.boot.modules.auth.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
 import com.anji.captcha.util.StringUtils;
+import com.breeze.boot.security.annotation.JumpAuth;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,14 +42,13 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Bearer")
-@RequestMapping({"/captcha" })
+@RequestMapping({"/auth/v1/captcha"})
 public class BreezeCaptchaController {
 
     /**
      * 验证码服务
      */
     private final CaptchaService captchaService;
-
 
     /**
      * 获取远程id
@@ -83,18 +84,19 @@ public class BreezeCaptchaController {
      * @param request 请求
      * @return {@link ResponseModel}
      */
-    @PostMapping({"/getCode"})
-    public ResponseModel getCode(CaptchaVO data, HttpServletRequest request) {
+    @PostMapping("/code")
+    @JumpAuth
+    public ResponseModel code(@RequestBody CaptchaVO data, HttpServletRequest request) {
         assert request.getRemoteHost() != null;
-        data.setCaptchaType("blockPuzzle");
         data.setBrowserInfo(getRemoteId(request));
         return this.captchaService.get(data);
     }
 
-    @PostMapping({"/checkCode"})
-    public ResponseModel check(CaptchaVO data, HttpServletRequest request) {
+    @PostMapping("/check")
+    @JumpAuth
+    public ResponseModel check(@RequestBody CaptchaVO data, HttpServletRequest request) {
         data.setBrowserInfo(getRemoteId(request));
-        data.setCaptchaType("blockPuzzle");
         return this.captchaService.check(data);
     }
+
 }

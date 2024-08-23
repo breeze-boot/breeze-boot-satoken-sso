@@ -24,7 +24,6 @@ import com.breeze.boot.modules.bpm.model.vo.BpmInfoVO;
 import com.breeze.boot.modules.bpm.model.vo.TaskApproveInfoVO;
 import com.breeze.boot.modules.bpm.model.vo.UserTaskVO;
 import com.breeze.boot.modules.bpm.service.IBpmTaskService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -126,7 +125,7 @@ public class BpmTaskController {
      * 废止流程
      *
      * @param bpmApprovalForm bpm审批表单
-     * @return {@link Result }<{@link Bool }>
+     * @return {@link Result }<{@link Boolean }>
      */
     @PostMapping("/abolition")
     @ResponseBody

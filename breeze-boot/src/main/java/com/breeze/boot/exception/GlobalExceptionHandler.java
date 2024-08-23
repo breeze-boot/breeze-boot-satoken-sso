@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public Result<?> nullPointerException(NullPointerException ex) {
         log.error("NullPointerException 空指针异常：", ex);
-        return Result.fail(ResultCode.EXCEPTION);
+        return Result.fail(ResultCode.FAIL);
     }
 
     /**
@@ -68,8 +68,8 @@ public class GlobalExceptionHandler {
      * @return {@link Result}<{@link ?}>
      */
     @ExceptionHandler(BreezeBizException.class)
-    public Result<?> systemExceptionHandler(BreezeBizException ex) {
-        log.error("SystemServiceException 自定义的系统异常：", ex);
+    public Result<?> bizException(BreezeBizException ex) {
+        log.error("bizException 自定义的系统异常：", ex);
         return Result.fail(ex.getCode(), ex.getMsg());
     }
 

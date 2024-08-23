@@ -17,11 +17,10 @@
 package com.breeze.boot.security.config;
 
 import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.ResponseUtil;
-import com.breeze.boot.security.exception.TenantNotSupportException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
@@ -52,12 +51,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
      */
     private enum ExceptionHandler {
         BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()), INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage()),
-        INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(e -> {
-            if (e instanceof TenantNotSupportException) {
-                return "租户参数未获取到";
-            }
-            return "认证失败";
-        });
+        INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(e -> "认证失败:  " + e.getMessage());
         private final ExceptionHandlerStrategy strategy;
 
         ExceptionHandler(ExceptionHandlerStrategy strategy) {
@@ -83,15 +77,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         }
 
         ExceptionHandler handler;
-        if (e instanceof BadCredentialsException || e instanceof InvalidBearerTokenException || e instanceof InsufficientAuthenticationException) {
+        if (e instanceof BadCredentialsException || e instanceof InvalidBearerTokenException) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
             return;
         }
         if (e instanceof InternalAuthenticationServiceException) {
             handler = ExceptionHandler.INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION;
-            if (e.getCause() instanceof TenantNotSupportException) {
-                responseMsg(response, e, handler, ResultCode.TENANT_NOT_FOUND);
+            if (e.getCause() instanceof BreezeBizException) {
+                ResponseUtil.response(response, handler.handleException(e));
                 return;
             }
         }
@@ -99,10 +93,5 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
     }
 
-    private static void responseMsg(HttpServletResponse response, AuthenticationException e, ExceptionHandler handler, ResultCode resultCode) {
-        String errMsg = handler.handleException(e);
-        log.error(errMsg, e.getCause());
-        ResponseUtil.response(response, resultCode);
-    }
 }
 

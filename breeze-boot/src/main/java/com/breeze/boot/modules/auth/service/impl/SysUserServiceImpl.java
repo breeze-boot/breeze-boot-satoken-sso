@@ -337,7 +337,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<SysUser> listDeptsUser(Long deptId) {
         List<Long> deptIdList = this.sysDeptService.listDeptByParentId(deptId);
         if (CollUtil.isEmpty(deptIdList)) {
-            throw new BreezeBizException(ResultCode.EXCEPTION);
+            throw new BreezeBizException(FAIL);
         }
         if (CollUtil.isNotEmpty(deptIdList)) {
             return this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, deptIdList));

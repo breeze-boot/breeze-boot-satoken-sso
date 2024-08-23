@@ -31,7 +31,7 @@
             <artifactId>sapjco3</artifactId>
             <version>3.0.14</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/sapjco3.jar</systemPath>
+            <systemPath>${project.basedir}/libs/sapjco3.jar</systemPath>
         </dependency>
     </dependencies>
 

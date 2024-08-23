@@ -10,6 +10,8 @@ breeze:
   aesSecret: 1234567890123456
   security:
     ignore-urls:
+      - "/auth/**"
+      - "/oauth2/**"
       # SpringDoc & Knife4j
       - "/webjars/**"
       - "/doc.html"

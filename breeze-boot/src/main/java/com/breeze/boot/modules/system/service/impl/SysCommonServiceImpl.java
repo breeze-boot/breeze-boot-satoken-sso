@@ -198,10 +198,10 @@ public class SysCommonServiceImpl implements SysCommonService {
      */
     @Override
     public Result<List<Map<String, Object>>> selectTenant() {
-        return Result.ok(this.tenantService.list().stream().map(tanent -> {
+        return Result.ok(this.tenantService.list().stream().map(tenant -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", tanent.getId());
-            tenantMap.put("label", tanent.getTenantName());
+            tenantMap.put("value", tenant.getId());
+            tenantMap.put("label", tenant.getTenantName());
             return tenantMap;
         }).collect(Collectors.toList()));
     }

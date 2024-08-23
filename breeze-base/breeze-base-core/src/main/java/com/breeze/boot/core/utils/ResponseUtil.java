@@ -42,13 +42,27 @@ public class ResponseUtil {
      * @param resultCode 结果
      */
     public static void response(HttpServletResponse response, ResultCode resultCode) {
+        response(response, Result.fail(resultCode));
+    }
+
+    /**
+     * 响应
+     *
+     * @param response   响应
+     * @param errorMsg 结果
+     */
+    public static void response(HttpServletResponse response, String errorMsg) {
+        response(response, Result.fail(errorMsg));
+    }
+
+    private static void response(HttpServletResponse response, Result<Object> errorMsg) {
         ServletOutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             out = response.getOutputStream();
             ObjectMapper objectMapper = new ObjectMapper();
-            out.write(objectMapper.writeValueAsString(Result.fail(resultCode)).getBytes(StandardCharsets.UTF_8));
+            out.write(objectMapper.writeValueAsString(errorMsg).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             log.error("response 响应失败", e);
         } finally {

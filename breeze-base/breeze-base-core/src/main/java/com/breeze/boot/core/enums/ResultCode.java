@@ -55,6 +55,8 @@ public enum ResultCode {
      */
     TENANT_NOT_FOUND("A105", "租户未获取到"),
 
+    VERIFY_FOUND("A106", "验证码失败"),
+
     /**
      * http消息转换异常
      */
@@ -66,26 +68,22 @@ public enum ResultCode {
     FILE_NOT_FOUND("B002", "文件不存在"),
 
     /**
-     * 系统异常
-     */
-    EXCEPTION("SYSTEM_ERROR_0001", "系统异常"),
-
-    /**
      * 分页过大
      */
-    PAGE_EXCEPTION("SYSTEM_ERROR_0002", "分页过大"),
+    PAGE_EXCEPTION("B003", "分页过大"),
 
     /**
      * 未获取到流程实例
      */
-    PROCESS_NOT_FOUND("SYSTEM_ERROR_0003", "未获取到流程实例"),
+    PROCESS_NOT_FOUND("C001", "未获取到流程实例"),
 
     /**
      * 未获取到任务实例
      */
-    TASK_NOT_FOUND("SYSTEM_ERROR_0004", "未获取到任务实例");
+    TASK_NOT_FOUND("C002", "未获取到任务实例");
 
-    private final String code;
+    @Setter
+    private String code;
 
     @Setter
     private String msg;
@@ -102,12 +100,13 @@ public enum ResultCode {
     }
 
     public static ResultCode exception(String errMsg) {
-        ResultCode.EXCEPTION.setMsg(errMsg);
-        return ResultCode.EXCEPTION;
+        ResultCode.FAIL.setMsg(errMsg);
+        return ResultCode.FAIL;
     }
 
     public static ResultCode exception(ResultCode resultCode, String errMsg) {
-        resultCode.setMsg(errMsg);
+        resultCode.setCode(resultCode.getCode());
+        resultCode.setMsg(resultCode.getMsg() + errMsg);
         return resultCode;
     }
 }

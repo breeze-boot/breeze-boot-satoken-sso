@@ -16,6 +16,10 @@
 
 package com.breeze.boot.config;
 
+import cn.hutool.core.util.StrUtil;
+import com.anji.captcha.model.common.ResponseModel;
+import com.anji.captcha.model.vo.CaptchaVO;
+import com.anji.captcha.service.CaptchaService;
 import com.breeze.boot.security.service.ISysRegisteredClientService;
 import com.breeze.boot.security.service.ISysUserService;
 import com.breeze.boot.security.service.impl.RemoteRegisterClientService;
@@ -27,9 +31,15 @@ import io.swagger.v3.oas.models.info.License;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
+
+import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 资源服务器配置
@@ -41,17 +51,19 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 @RequiredArgsConstructor
 public class ResourceServerConfiguration {
 
-    /**
-     * 用户令牌服务
-     */
+    private final ApplicationContext context;
+
+    private final CaptchaService captchaService;
+
     private final ISysRegisteredClientService registeredClientService;
 
     private final CacheManager cacheManager;
 
-    /**
-     * 用户服务
-     */
     private final ISysUserService userService;
+
+    public String getActiveProfile() {
+        return context.getEnvironment().getActiveProfiles()[0];
+    }
 
     /**
      * 注册客户端库
@@ -70,7 +82,30 @@ public class ResourceServerConfiguration {
      */
     @Bean
     public UserDetailService userDetailService() {
-        return new UserDetailService(() -> userService, cacheManager);
+        return new UserDetailService(() -> userService, (userInfoDTO) -> {
+            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+        }, this::check);
+    }
+
+    private boolean check(HttpServletRequest contextRequest) {
+        if (getActiveProfile().endsWith("dev")) {
+            return true;
+        }
+        CaptchaVO captchaVO = new CaptchaVO();
+        String captchaVerification = contextRequest.getParameter("captchaVerification");
+        if (StrUtil.isBlank(captchaVerification)) {
+            return false;
+        }
+        captchaVO.setCaptchaVerification(captchaVerification);
+        ResponseModel response = captchaService.verification(captchaVO);
+        //验证码校验失败，返回信息告诉前端
+        //repCode  0000  无异常，代表成功
+        //repCode  9999  服务器内部异常
+        //repCode  0011  参数不能为空
+        //repCode  6110  验证码已失效，请重新获取
+        //repCode  6111  验证失败
+        //repCode  6112  获取验证码失败,请联系管理员
+        return response.isSuccess();
     }
 
     @Bean

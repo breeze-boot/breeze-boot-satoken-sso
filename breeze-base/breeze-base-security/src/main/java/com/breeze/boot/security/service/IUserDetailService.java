@@ -18,10 +18,11 @@ package com.breeze.boot.security.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.model.entity.UserPrincipal;
-import com.breeze.boot.security.exception.TenantNotSupportException;
 import com.google.common.collect.Lists;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -129,7 +130,7 @@ public interface IUserDetailService extends UserDetailsService {
             BreezeThreadLocal.set(Long.valueOf(tenantIdParam));
             return;
         }
-        throw new TenantNotSupportException("tenantId Not Found");
+        throw new BreezeBizException(ResultCode.exception("tenantId Not Found"));
     }
 
     /**

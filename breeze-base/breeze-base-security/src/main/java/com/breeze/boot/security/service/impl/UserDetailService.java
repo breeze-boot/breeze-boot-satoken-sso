@@ -17,22 +17,23 @@
 package com.breeze.boot.security.service.impl;
 
 import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.security.model.entity.UserPrincipal;
 import com.breeze.boot.security.service.ISysUserService;
 import com.breeze.boot.security.service.IUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.CacheManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 用户主体服务
@@ -48,8 +49,8 @@ public class UserDetailService implements IUserDetailService {
      * 用户服务接口
      */
     private final Supplier<ISysUserService> userService;
-
-    private final CacheManager cacheManager;
+    private final Consumer<UserInfoDTO> cacheManagerConsumer;
+    private final Function<HttpServletRequest, Boolean> captchaServiceFunction;
 
     /**
      * 加载用户用户名
@@ -62,10 +63,15 @@ public class UserDetailService implements IUserDetailService {
         try {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             Assert.notNull(requestAttributes, "requestAttributes is null");
+
             this.getTenantId(requestAttributes);
 
+            Boolean apply = this.captchaServiceFunction.apply(requestAttributes.getRequest());
+            if (!apply) {
+                throw new BreezeBizException(ResultCode.VERIFY_FOUND);
+            }
             UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByUsername(username));
-            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            this.cacheManagerConsumer.accept(userInfoDTO);
             return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();
@@ -86,7 +92,7 @@ public class UserDetailService implements IUserDetailService {
             this.getTenantId(requestAttributes);
 
             UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByPhone(phone));
-            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            this.cacheManagerConsumer.accept(userInfoDTO);
             return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();
@@ -107,7 +113,7 @@ public class UserDetailService implements IUserDetailService {
             this.getTenantId(requestAttributes);
 
             UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByEmail(email));
-            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
+            this.cacheManagerConsumer.accept(userInfoDTO);
             return this.convertResponseUserData(userInfoDTO);
         } finally {
             BreezeThreadLocal.remove();

@@ -121,7 +121,7 @@ public class SysDbResourceServiceImpl extends ServiceImpl<SysDbMapper, SysDbReso
         SysDbResource sysDbResource = this.getById(id);
         if (Objects.isNull(sysDbResource)) {
             log.error("[更新数据源失败]");
-            throw new BreezeBizException(ResultCode.EXCEPTION);
+            throw new BreezeBizException(ResultCode.FAIL);
         }
         DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
         dynamicRoutingDataSource.removeDataSource(sysDbResource.getDbName());
@@ -141,7 +141,7 @@ public class SysDbResourceServiceImpl extends ServiceImpl<SysDbMapper, SysDbReso
             SysDbResource sysDbResource = this.getById(id);
             if (Objects.isNull(sysDbResource)) {
                 log.error("[删除数据源失败]");
-                throw new BreezeBizException(ResultCode.EXCEPTION);
+                throw new BreezeBizException(ResultCode.FAIL);
             }
             DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
             dynamicRoutingDataSource.removeDataSource(sysDbResource.getDbName());

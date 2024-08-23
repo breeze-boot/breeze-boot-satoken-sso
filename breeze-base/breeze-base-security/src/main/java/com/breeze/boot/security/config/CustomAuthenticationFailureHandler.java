@@ -53,8 +53,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             log.error("[校验 {} - {}] ", errorMsg.getErrorCode(), errorMsg.getDescription(), exception);
 
             // 使用映射关系来简化错误处理逻辑
-            ResultCode resultCode = ResultCode.exception(FORBIDDEN,errorMsg.getDescription());
-            ResponseUtil.response(response, resultCode);
+            ResponseUtil.response(response, ResultCode.exception(FORBIDDEN, errorMsg.getDescription()));
         }
     }
 

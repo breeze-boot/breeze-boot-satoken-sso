@@ -32,11 +32,16 @@ import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.model.vo.TenantVO;
 import com.breeze.boot.modules.auth.service.SysTenantService;
 import com.breeze.boot.modules.auth.service.SysUserService;
+import com.breeze.boot.security.service.ITenantService;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 系统租户服务impl
@@ -46,7 +51,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService {
+public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService, ITenantService {
 
     /**
      * 系统用户服务
@@ -111,6 +116,15 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         return Result.ok(this.removeByIds(ids));
     }
 
+    @Override
+    public List<Map<String, Object>> selectTenant() {
+        return this.list().stream().map(tenant -> {
+            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
+            tenantMap.put("value", tenant.getId());
+            tenantMap.put("label", tenant.getTenantName());
+            return tenantMap;
+        }).collect(Collectors.toList());
+    }
 }
 
 
