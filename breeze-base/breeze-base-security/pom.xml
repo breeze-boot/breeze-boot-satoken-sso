@@ -19,11 +19,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-cas</artifactId>
-            <version>5.7.7</version>
-        </dependency>
+
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-anji-captcha</artifactId>
@@ -42,6 +38,11 @@
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-redis-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
 
         <!-- 认证配置 -->
@@ -74,6 +75,7 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>com.breeze</groupId>
             <artifactId>breeze-base-log</artifactId>

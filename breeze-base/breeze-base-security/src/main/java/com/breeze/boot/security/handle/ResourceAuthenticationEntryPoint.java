@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.config;
+package com.breeze.boot.security.handle;
 
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -37,7 +36,7 @@ import java.util.Objects;
  * @since 2022-08-31
  */
 @Slf4j
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class ResourceAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /**
      * 异常处理策略接口
@@ -94,4 +93,3 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
 
 }
-

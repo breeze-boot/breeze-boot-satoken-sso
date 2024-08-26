@@ -30,5 +30,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "breeze.security")
-public class IgnoreAuthProperties extends BaseProperties {
+public class JumpAuthProperties extends BaseProperties {
 }

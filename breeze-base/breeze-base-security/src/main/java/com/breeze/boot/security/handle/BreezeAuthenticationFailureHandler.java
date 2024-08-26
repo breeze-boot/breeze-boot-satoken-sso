@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.config;
+package com.breeze.boot.security.handle;
 
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.ResponseUtil;
@@ -36,7 +36,7 @@ import static com.breeze.boot.core.enums.ResultCode.FORBIDDEN;
  * @since 2023/05/09
  */
 @Slf4j
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class BreezeAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     /**
      * 在身份验证失败

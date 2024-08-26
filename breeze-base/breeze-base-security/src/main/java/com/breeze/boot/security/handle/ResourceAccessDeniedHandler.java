@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.config;
+package com.breeze.boot.security.handle;
 
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.ResponseUtil;
@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 2022-08-31
  */
 @Slf4j
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class ResourceAccessDeniedHandler implements AccessDeniedHandler {
 
     /**
      * 处理

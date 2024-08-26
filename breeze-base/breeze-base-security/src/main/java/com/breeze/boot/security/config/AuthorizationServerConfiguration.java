@@ -24,6 +24,7 @@ import com.breeze.boot.security.authentication.password.OAuth2ResourceOwnerPassw
 import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthenticationConverter;
 import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthenticationProvider;
 import com.breeze.boot.security.authentication.sms.SmsAuthenticationProvider;
+import com.breeze.boot.security.handle.BreezeAuthenticationFailureHandler;
 import com.breeze.boot.security.jose.Jwks;
 import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationService;
 import com.breeze.boot.security.service.impl.UserDetailService;
@@ -39,7 +40,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.Authentication;
@@ -48,6 +51,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -62,6 +66,8 @@ import org.springframework.security.oauth2.server.authorization.web.authenticati
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2RefreshTokenAuthenticationConverter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.Arrays;
@@ -77,8 +83,8 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
  * @author gaoweixuan
  * @since 2023-04-10
  */
-@SuppressWarnings("ALL")
 @Slf4j
+@SuppressWarnings("ALL")
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfiguration {
@@ -126,17 +132,21 @@ public class AuthorizationServerConfiguration {
                                     new OAuth2ResourceOwnerSmsAuthenticationConverter(),
                                     new OAuth2ResourceOwnerEmailAuthenticationConverter()
                             )))
-                    .errorResponseHandler(new CustomAuthenticationFailureHandler());
+                    .errorResponseHandler(new BreezeAuthenticationFailureHandler());
         }));
 
         authorizationServerConfigurer.clientAuthentication(authenticationConfigurer -> {
-            authenticationConfigurer.errorResponseHandler(new CustomAuthenticationFailureHandler());
+            authenticationConfigurer.errorResponseHandler(new BreezeAuthenticationFailureHandler());
         });
 
         // 根据需求对 authorizationServerConfigurer 进行一些个性化配置
         authorizationServerConfigurer
                 .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
-                        .errorResponseHandler(new CustomAuthenticationFailureHandler()));
+                        .errorResponseHandler(new BreezeAuthenticationFailureHandler())
+                        .consentPage(CUSTOM_CONSENT_PAGE_URI))
+                // Enable OpenID Connect 1.0
+                .oidc(Customizer.withDefaults());
+
 
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         DefaultSecurityFilterChain securityFilterChain = http
@@ -146,9 +156,16 @@ public class AuthorizationServerConfiguration {
                 .authorizeRequests().anyRequest().authenticated()
                 // 忽略掉相关端点的 CSRF(跨站请求): 对授权端点的访问可以是跨站的
                 .and().csrf().ignoringRequestMatchers(endpointsMatcher)
-                .and().exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                .exceptionHandling((exceptions) -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                                // 这里使用自定义的未登录处理，并设置登录地址为前端的登录地址
+                                        new LoginUrlAuthenticationEntryPoint("/login"),
+                                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                        )
+                )
                 // 开启JWT
-                .and().oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 // 应用授权服务器的配置
                 .apply(authorizationServerConfigurer)
                 .and().build();
@@ -193,6 +210,17 @@ public class AuthorizationServerConfiguration {
     public OAuth2AuthorizationService authorizationService(RegisteredClientRepository clientRepository,
                                                            AutowireCapableBeanFactory beanFactory) {
         return new InRedisOAuth2AuthorizationService(redisTemplate, clientRepository, beanFactory);
+    }
+
+    /**
+     * 授权同意服务
+     *
+     * @param beanFactory bean工厂
+     * @return {@link OAuth2AuthorizationConsentService}
+     */
+    @Bean
+    public OAuth2AuthorizationConsentService authorizationConsentService(AutowireCapableBeanFactory beanFactory) {
+        return new InRedisOAuth2AuthorizationConsentService(redisTemplate, beanFactory);
     }
 
     /**

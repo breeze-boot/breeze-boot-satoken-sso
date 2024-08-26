@@ -56,7 +56,7 @@ public class RedisConfiguration {
      * @return {@link RedisTemplate}<{@link Object}, {@link Object}>
      */
     @Bean
-    public RedisTemplate<String, Object> defaultRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
 

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title> 授权 </title>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"
+          rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}"/>
+    <style>
+        body {
+            background-color: aliceblue;
+        }
+    </style>
+    <script>
+        function cancelConsent() {
+            document.consent_form.reset();
+            document.consent_form.submit();
+        }
+    </script>
+</head>
+<body>
+<div class="container text-center" style="width:30vw; margin: 10vh auto">
+    <div class="py-5">
+        <h1 class="text-center text-primary">应用权限</h1>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                应用
+                <span class="font-weight-bold text-primary" th:text="${clientId}"></span>
+                正在访问您的账户
+                <span class="font-weight-bold" th:text="${principalName}"></span>
+            </p>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col">
+            <p>
+                上述应用程序请求以下权限， 请查看
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form action="/oauth2/authorize" method="post" name="consent_form">
+                <input name="client_id" th:value="${clientId}" type="hidden">
+                <input name="state" th:value="${state}" type="hidden">
+
+                <div class="form-check py-1" th:each="scope: ${scopes}">
+                    <input class="form-check-input"
+                           name="scope"
+                           th:id="${scope.scope}"
+                           th:value="${scope.scope}"
+                           type="checkbox">
+                    <label class="form-check-label" th:for="${scope.scope}"
+                           th:text="${scope.scope}"></label>
+                    <span class="text-primary" th:text="${scope.description}"></span>
+                </div>
+
+                <p th:if="${not #lists.isEmpty(previouslyApprovedScopes)}">
+                    您已经授予以下权限
+                    对上述应用程序的权限：
+                </p>
+
+                <div class="form-check py-1" th:each="scope: ${previouslyApprovedScopes}">
+                    <input checked
+                           class="form-check-input"
+                           disabled
+                           th:id="${scope.scope}"
+                           type="checkbox">
+                    <label class="form-check-label" th:for="${scope.scope}"
+                           th:text="${scope.scope}"></label>
+                    <span class="text-primary" th:text="${scope.description}"></span>
+                </div>
+
+                <div class="pt-3">
+                    <button class="btn btn-primary btn-md" id="submit-consent" type="submit">
+                        同意
+                    </button>
+                    <button class="btn btn-link regular" id="cancel-consent" onclick="cancelConsent();" type="button">
+                        取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col">
+            <p>
+                <small>
+                    需要您同意提供访问权限。
+                    <br>
+                    如果您不批准，请单击“取消”，在这种情况下，将不会与应用程序共享任何信息。
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+<script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+<script src="/webjars/jquery/3.6.0/jquery.min.js" th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+</body>
+</html>

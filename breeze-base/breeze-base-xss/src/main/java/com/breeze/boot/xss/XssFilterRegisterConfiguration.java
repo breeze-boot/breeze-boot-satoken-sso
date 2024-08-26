@@ -58,7 +58,7 @@ public class XssFilterRegisterConfiguration {
     public FilterRegistrationBean<Filter> xssFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         // 过滤器要设置最先执行
-        registration.setOrder(Integer.MAX_VALUE);
+        registration.setOrder(Integer.MAX_VALUE - 1);
         registration.setDispatcherTypes(DispatcherType.REQUEST);
         registration.setFilter(new XssFilter(this.xssProperties,
                 this.requestMappingHandlerMapping,

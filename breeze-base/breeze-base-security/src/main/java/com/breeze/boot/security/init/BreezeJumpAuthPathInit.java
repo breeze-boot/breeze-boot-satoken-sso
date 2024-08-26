@@ -17,7 +17,7 @@
 package com.breeze.boot.security.init;
 
 import com.breeze.boot.core.utils.LoadAnnotationUtils;
-import com.breeze.boot.security.config.IgnoreAuthProperties;
+import com.breeze.boot.security.config.JumpAuthProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +36,14 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @Slf4j
 @RequiredArgsConstructor
-@EnableConfigurationProperties(IgnoreAuthProperties.class)
+@EnableConfigurationProperties(JumpAuthProperties.class)
 public class BreezeJumpAuthPathInit implements InitializingBean {
 
     /**
      * 忽略的url
      */
     @Getter
-    private final IgnoreAuthProperties ignoreAuthProperties;
+    private final JumpAuthProperties jumpAuthProperties;
 
     /**
      * 请求映射处理程序映射
@@ -71,7 +71,7 @@ public class BreezeJumpAuthPathInit implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         log.info("----- 初始化auth需要被过滤的路径开始 -----");
-        LoadAnnotationUtils.loadControllerMapping(ignoreAuthProperties, applicationContext, requestMappingHandlerMapping);
+        LoadAnnotationUtils.loadControllerMapping(jumpAuthProperties, applicationContext, requestMappingHandlerMapping);
         log.info("----- 初始化auth需要被过滤的路径结束 -----");
     }
 }

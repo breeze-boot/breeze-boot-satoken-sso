@@ -10,25 +10,10 @@ breeze:
   aesSecret: 1234567890123456
   security:
     ignore-urls:
-      # SpringDoc & Knife4j
-      - "/webjars/**"
-      - "/doc.html"
-      - "/v3/api-docs/**"
-      - "/swagger-ui/**"
-      # Websocket & Monitor
-      - "/ws/**"
+      # Monitor
       - "/actuator/**"
-      # Captcha & Local file storage
-      - "/captcha/**"
+      # Local file storage
       - "/img/**"
-      # Static resources
-      - "/**/*.js"
-      - "/**/*.css"
-      - "/**/*.png"
-      - "/*.html"
-      - "/**/*.html"
-      - "/*.ico"
-      - "/**/*.ico"
       # Data sources & Report generation
       - "/druid/**"
       - "/ureport/**"

@@ -20,10 +20,14 @@ import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,34 +42,28 @@ import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class TenantLoadFilter extends OncePerRequestFilter {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class TenantLoadFilter extends GenericFilterBean {
 
-    /**
-     * 过滤器
-     *
-     * @param request     请求
-     * @param response    响应
-     * @param filterChain 过滤器链
-     * @throws ServletException servlet异常
-     * @throws IOException      IO异常
-     */
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         try {
-            log.debug("[当前进入的请求]： {}", request.getRequestURI());
-            String apiTenantId = request.getHeader(X_TENANT_ID);
-            String webSocketTenantId = request.getParameter(X_TENANT_ID);
-            if (StrUtil.isAllBlank(apiTenantId) && StrUtil.isAllBlank(webSocketTenantId)) {
-                // TODO 默认
-            } else if (StrUtil.isAllNotBlank(apiTenantId)) {
-                BreezeThreadLocal.set(Long.parseLong(apiTenantId));
-            } else if (StrUtil.isAllNotBlank(webSocketTenantId)) {
-                BreezeThreadLocal.set(Long.parseLong(webSocketTenantId));
+            String headerTenantId = request.getHeader(X_TENANT_ID);
+            String paramTenantId = request.getParameter(X_TENANT_ID);
+            if (StrUtil.isNotBlank(headerTenantId)) {
+                BreezeThreadLocal.set(Long.parseLong(headerTenantId));
+            } else if (StrUtil.isAllNotBlank(paramTenantId)) {
+                BreezeThreadLocal.set(Long.parseLong(paramTenantId));
+            } else {
+                // TODO
             }
+            log.info("[当前进入的请求]： {}  系统租户： {}  {} ]", request.getRequestURI(), paramTenantId , headerTenantId);
             filterChain.doFilter(request, response);
         } finally {
             BreezeThreadLocal.remove();
         }
     }
-
 }
