@@ -17,7 +17,6 @@
 package com.breeze.boot.modules.auth.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -37,6 +36,7 @@ import com.breeze.boot.modules.auth.model.bo.FlowUserBO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.*;
+import com.breeze.boot.modules.auth.model.excel.UserExcel;
 import com.breeze.boot.modules.auth.model.form.UserForm;
 import com.breeze.boot.modules.auth.model.form.UserOpenForm;
 import com.breeze.boot.modules.auth.model.form.UserResetForm;
@@ -314,13 +314,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 导出
      *
-     * @param response 响应
+     * @param userQuery 用户查询
+     * @param response  响应
      */
     @Override
-    public void export(HttpServletResponse response) {
-        List<SysUser> userList = this.baseMapper.listAllUser();
+    public void export(UserQuery userQuery, HttpServletResponse response) {
+        Page<UserVO> userList = this.listPage(userQuery);
+        List<UserExcel> userExcels = this.sysUserMapStruct.vo2Excel(userList.getRecords());
         try {
-            EasyExcelExport.export(response, "用户数据", "用户数据", userList, SysUser.class);
+            EasyExcelExport.export(response, "用户数据", "用户数据", userExcels, UserExcel.class);
         } catch (Exception e) {
             log.error("导出用户数据失败", e);
         }

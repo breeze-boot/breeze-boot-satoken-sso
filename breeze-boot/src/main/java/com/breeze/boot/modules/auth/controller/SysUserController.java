@@ -181,12 +181,13 @@ public class SysUserController {
     /**
      * 导出
      *
-     * @param response 响应
+     * @param userQuery 用户查询
+     * @param response  响应
      */
     @Operation(summary = "导出")
-    @GetMapping("/export")
-    public void export(HttpServletResponse response) {
-        this.sysUserService.export(response);
+    @PostMapping("/export")
+    public void export(@RequestBody UserQuery userQuery, HttpServletResponse response) {
+        this.sysUserService.export(userQuery, response);
     }
 
     /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.security.config;
+package com.breeze.boot.security.service.impl;
 
 import com.breeze.boot.security.jackson2.OAuth2AuthorizationConsentModule;
 import com.fasterxml.jackson.core.type.TypeReference;

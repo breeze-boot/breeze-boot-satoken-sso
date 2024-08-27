@@ -26,6 +26,7 @@ import com.breeze.boot.security.authentication.sms.OAuth2ResourceOwnerSmsAuthent
 import com.breeze.boot.security.authentication.sms.SmsAuthenticationProvider;
 import com.breeze.boot.security.handle.BreezeAuthenticationFailureHandler;
 import com.breeze.boot.security.jose.Jwks;
+import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationConsentService;
 import com.breeze.boot.security.service.impl.InRedisOAuth2AuthorizationService;
 import com.breeze.boot.security.service.impl.UserDetailService;
 import com.nimbusds.jose.jwk.JWKSet;

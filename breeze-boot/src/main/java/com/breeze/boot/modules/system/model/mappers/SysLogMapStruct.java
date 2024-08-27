@@ -17,6 +17,7 @@
 package com.breeze.boot.modules.system.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.log.bo.SysLogBO;
 import com.breeze.boot.modules.system.model.entity.SysLog;
 import com.breeze.boot.modules.system.model.vo.LogVO;
 import org.mapstruct.Mapper;
@@ -34,6 +35,6 @@ public interface SysLogMapStruct {
 
     LogVO entity2VO(SysLog byId);
 
-    SysLog bo2Entity(SysLogMapStruct sysLogMapStruct);
+    SysLog bo2Entity(SysLogBO sysLogBO);
 
 }

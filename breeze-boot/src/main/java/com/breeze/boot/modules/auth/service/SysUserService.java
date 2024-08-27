@@ -123,9 +123,10 @@ public interface SysUserService extends IService<SysUser>, ISysUserService {
     /**
      * 导出
      *
-     * @param response 响应
+     * @param userQuery 用户查询
+     * @param response  响应
      */
-    void export(HttpServletResponse response);
+    void export(UserQuery userQuery, HttpServletResponse response);
 
     /**
      * 获取部门用户

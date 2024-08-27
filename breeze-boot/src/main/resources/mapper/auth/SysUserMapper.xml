@@ -102,35 +102,6 @@
         ORDER BY a.create_time DESC
     </select>
 
-    <select id="listAllUser" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
-        SELECT
-        a.id,
-        a.dept_id,
-        a.display_name,
-        a.user_code,
-        a.username,
-        a.avatar,
-        a.phone,
-        a.sex,
-        a.id_card,
-        a.is_lock,
-        a.open_id,
-        a.email,
-        a.post_id,
-        c.post_name,
-        b.dept_name
-        FROM
-        sys_user AS a
-        LEFT JOIN sys_dept AS b ON a.dept_id = b.id
-        LEFT JOIN sys_post AS c ON a.post_id = c.id
-        <where>
-            a.is_delete = 0
-            AND b.is_delete = 0
-            AND c.is_delete = 0
-        </where>
-        ORDER BY a.create_time DESC
-    </select>
-
     <select id="listUserByRole" resultType="com.breeze.boot.modules.auth.model.entity.SysUser">
         SELECT
         a.id,

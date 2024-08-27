@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.model.excel.UserExcel;
 import com.breeze.boot.modules.auth.model.form.UserForm;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
 import org.mapstruct.Mapper;
@@ -48,5 +49,7 @@ public interface SysUserMapStruct {
             @Mapping(target = "userId", source = "id")
     })
     UserInfoDTO entity2BaseLoginUser(SysUser sysUser);
+
+    List<UserExcel> vo2Excel(List<UserVO> records);
 
 }

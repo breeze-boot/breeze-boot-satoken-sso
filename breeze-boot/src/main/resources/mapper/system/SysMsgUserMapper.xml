@@ -62,7 +62,7 @@
                a.type,
                a.`level`,
                a.content,
-               b.msg_id,
+               b.id as msg_id,
                b.is_close,
                b.is_read,
                b.dept_id,

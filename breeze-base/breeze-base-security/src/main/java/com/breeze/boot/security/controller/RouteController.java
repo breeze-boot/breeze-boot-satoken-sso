@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 路由控制器
@@ -73,7 +74,7 @@ public class RouteController {
     @SneakyThrows
     @GetMapping("/error")
     public String error(Model model, @RequestParam(required = false) String error) {
-        model.addAttribute("error", URLDecoder.decode(error, "UTF-8"));
+        model.addAttribute("error", URLDecoder.decode(Optional.ofNullable(error).orElse("未知异常"), "UTF-8"));
         return "error";
     }
 

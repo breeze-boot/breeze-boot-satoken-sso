@@ -66,7 +66,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @DS("master")
     @Override
     public void saveSysLog(SysLogBO sysLogBO) {
-        SysLog sysLog = this.sysLogMapStruct.bo2Entity(sysLogMapStruct);
+        SysLog sysLog = this.sysLogMapStruct.bo2Entity(sysLogBO);
         sysLog.setSystemModule("权限系统");
         this.save(sysLog);
     }

@@ -31,6 +31,7 @@ import com.breeze.boot.security.utils.SecurityUtils;
 import com.breeze.boot.message.dto.UserMsgDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,6 +74,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
      * @param userMsgDTO 用户消息BO
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveUserMsg(UserMsgDTO userMsgDTO) {
         // 保存接收消息的用户
         List<SysMsgUser> sysMsgUserList = userMsgDTO.getMsgBodyList().stream()
@@ -95,7 +97,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     @Override
     public Result<Boolean> close(Long msgId) {
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsClose, 1)
-                .eq(SysMsgUser::getMsgId, msgId)
+                .eq(SysMsgUser::getId, msgId)
                 .eq(SysMsgUser::getIsClose, 0)
                 .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
     }
@@ -109,7 +111,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     @Override
     public Result<Boolean> read(Long msgId) {
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsRead, 1)
-                .eq(SysMsgUser::getMsgId, msgId)
+                .eq(SysMsgUser::getId, msgId)
                 .eq(SysMsgUser::getIsRead, 0)
                 .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
 
@@ -122,6 +124,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeUserMsgByIds(List<Long> ids) {
         List<SysMsgUser> sysMsgUserList = this.listByIds(ids);
         if (CollUtil.isEmpty(sysMsgUserList)) {

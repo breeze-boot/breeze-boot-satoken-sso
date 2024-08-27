@@ -142,6 +142,13 @@ public class WebSecurityConfig {
                 .maxSessionsPreventsLogin(false)
                 .sessionRegistry(sessionBackedSessionRegistry());
 
+        // 默认是开通session fixation防护的,
+        // 防护的原理为，每当用户认证过后，就会重新生成一个新的session，并抛弃旧的session
+        http.sessionManagement()
+                .sessionFixation()
+                .migrateSession()
+                .disable();
+
         http
                 // 当未登录时访问认证端点时重定向至login页面
                 .exceptionHandling((exceptions) -> exceptions
@@ -151,9 +158,6 @@ public class WebSecurityConfig {
                         )
                 );
 
-        // 默认是开通session fixation防护的,
-        // 防护的原理为，每当用户认证过后，就会重新生成一个新的session，并抛弃旧的session
-        http.sessionManagement().sessionFixation().migrateSession();
 
         // @formatter:on
         return http.build();

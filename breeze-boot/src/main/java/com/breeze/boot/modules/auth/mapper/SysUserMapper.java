@@ -54,13 +54,6 @@ public interface SysUserMapper extends BreezeBaseMapper<SysUser> {
     List<UserBO> listUserByDeptId(@Param("deptIds") List<Long> deptIds);
 
     /**
-     * 查出所有用户
-     *
-     * @return {@link List}<{@link SysUser}>
-     */
-    List<SysUser> listAllUser();
-
-    /**
      * 获取用户通过角色
      *
      * @param roleCode 角色编码

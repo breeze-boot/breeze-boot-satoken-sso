@@ -171,7 +171,7 @@ public class PageQuery {
         if (this.size == null) {
             return 10;
         }
-        if (this.size >= 1000) {
+        if (this.size > 1000) {
             throw new BreezeBizException(ResultCode.PAGE_EXCEPTION);
         }
         return size;
