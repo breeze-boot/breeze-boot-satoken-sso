@@ -17,6 +17,7 @@
 package com.breeze.boot.core.exception;
 
 import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.utils.MessageUtil;
 import lombok.Getter;
 
 /**
@@ -28,14 +29,14 @@ import lombok.Getter;
 @Getter
 public class BreezeBizException extends RuntimeException {
 
-    private final String code;
-
-    private final String msg;
+    /**
+     * 响应码
+     */
+    private final ResultCode resultCode;
 
     public BreezeBizException(ResultCode resultCode) {
-        super(resultCode.getMsg());
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMsg();
+        super(MessageUtil.getMessage(resultCode.getKey()));
+        this.resultCode = resultCode;
     }
 
 }

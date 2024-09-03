@@ -90,7 +90,7 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
             Principal principal = (Principal) simpUser;
             UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(principal.getName());
             if (Objects.isNull(user)) {
-                throw new BreezeBizException(ResultCode.exception("用户未登录"));
+                throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
             }
             log.debug("[订阅内容] {}", principal.getName());
         }
@@ -99,15 +99,15 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
 
     private static String checkUserPermission(List<String> nativeHeader) {
         if (CollUtil.isEmpty(nativeHeader)) {
-            throw new BreezeBizException(ResultCode.exception("用户名不能为空"));
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
         String username = nativeHeader.get(0);
         if (StrUtil.isAllBlank(username)) {
-            throw new BreezeBizException(ResultCode.exception("用户名不能为空"));
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
         UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(username);
         if (Objects.isNull(user)) {
-            throw new BreezeBizException(ResultCode.exception("用户未登录"));
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
         return username;
     }

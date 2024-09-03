@@ -16,6 +16,7 @@
 
 package com.breeze.boot.message.dto;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -89,6 +90,21 @@ public class UserMsgDTO implements Serializable {
          * 用户ID
          */
         private Long userId;
+
+        /**
+         * 创建人
+         */
+        @ExcelIgnore
+        @Schema(description = "创建人编码", hidden = true)
+        private String createBy;
+
+        /**
+         * 创建人姓名
+         */
+        @ExcelIgnore
+        @Schema(description = "创建人姓名", hidden = true)
+        private String createName;
+
     }
 
 }

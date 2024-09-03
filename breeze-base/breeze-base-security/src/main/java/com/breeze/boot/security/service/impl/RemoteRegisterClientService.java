@@ -79,7 +79,7 @@ public class RemoteRegisterClientService implements RegisteredClientRepository {
      */
     @Override
     public void save(RegisteredClient registeredClient) {
-        throw new BreezeBizException(ResultCode.exception("保存服务在system服务提供"));
+        throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
     }
 
     /**

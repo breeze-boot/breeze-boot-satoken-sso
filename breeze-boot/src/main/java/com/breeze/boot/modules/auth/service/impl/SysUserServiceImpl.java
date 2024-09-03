@@ -27,12 +27,13 @@ import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
-import com.breeze.boot.core.propertise.AesSecretProperties;
+import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
 import com.breeze.boot.modules.auth.model.bo.FlowUserBO;
+import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
 import com.breeze.boot.modules.auth.model.entity.*;
@@ -47,7 +48,6 @@ import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.modules.auth.service.*;
 import com.breeze.boot.modules.bpm.manager.FlowableManager;
 import com.breeze.boot.modules.system.service.SysFileService;
-import com.breeze.boot.security.exception.AccessException;
 import com.breeze.boot.security.model.params.AuthLoginParam;
 import com.breeze.boot.security.model.params.WxLoginParam;
 import com.google.common.collect.Lists;
@@ -116,11 +116,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 系统角色行数据权限服务
      */
     private final SysRoleRowPermissionService sysRoleRowPermissionService;
-
-    /**
-     * 系统角色字段数据权限服务
-     */
-    private final SysRoleMenuColumnService sysRoleMenuColumnService;
 
     /**
      * 列表页面
@@ -293,7 +288,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
         if (Objects.isNull(sysRole)) {
-            throw new AccessException(ResultCode.SC_FORBIDDEN);
+            throw new BreezeBizException(ResultCode.SC_FORBIDDEN);
         }
         this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
         return sysUser;
@@ -462,10 +457,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             // 查询用户的角色
             List<UserRoleBO> userRoleBOList = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId())).orElse(Collections.emptyList());
             if (CollUtil.isEmpty(userRoleBOList)) {
-                throw new BreezeBizException(ResultCode.exception("用户需要初始角色"));
+                throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
             }
             // 获取部门名称
             this.setDeptName(sysUser, userInfo);
+            // 获取子级部门
+            this.setSubDeptId(sysUser, userInfo);
             // 权限
             this.setAuthorities(userRoleBOList, userInfo);
             // 角色CODE
@@ -478,6 +475,37 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             log.error(e.getMessage(), e);
         }
         return userInfo;
+    }
+
+    // 递归遍历树形结构并获取所有节点的 ID
+    public static Set<Long> getAllNodeIds(SysDeptBO root) {
+        Set<Long> ids = Sets.newHashSet();
+        traverseTree(root, ids);
+        return ids;
+    }
+
+    private static void traverseTree(SysDeptBO node, Set<Long> ids) {
+        if (Objects.isNull(node)) {
+            return;
+        }
+        // 添加当前节点的 ID 到列表
+        ids.add(node.getId());
+        // 递归遍历所有子节点
+        for (SysDeptBO child : node.getSubDeptList()) {
+            traverseTree(child, ids);
+        }
+    }
+
+    private void setSubDeptId(SysUser sysUser, UserInfoDTO userInfo) {
+        Long deptId = sysUser.getDeptId();
+        if (Objects.isNull(deptId)) {
+            return;
+        }
+        List<SysDeptBO> sysDeptList = this.sysDeptService.listSubDeptId(deptId);
+        if (CollUtil.isEmpty(sysDeptList)) {
+            return;
+        }
+        userInfo.setSubDeptId(getAllNodeIds(sysDeptList.get(0)));
     }
 
     private void setAuthorities(List<UserRoleBO> userRoleBOList, UserInfoDTO userInfo) {

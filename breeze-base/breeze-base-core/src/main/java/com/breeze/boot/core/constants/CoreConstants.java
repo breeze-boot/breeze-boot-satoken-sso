@@ -38,6 +38,16 @@ public class CoreConstants {
     public static final Long ROOT = 1111111111111111111L;
 
     /**
+     * 成功标记
+     */
+    public static final   String SUCCESS = "0000";
+
+    /**
+     * 失败标记
+     */
+    public static final  String FAIL = "0001";
+
+    /**
      * 系统bucket名称
      */
     public static final String SYSTEM_BUCKET_NAME = "system";

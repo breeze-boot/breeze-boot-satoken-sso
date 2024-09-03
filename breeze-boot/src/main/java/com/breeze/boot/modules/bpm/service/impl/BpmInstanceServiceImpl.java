@@ -99,7 +99,7 @@ public class BpmInstanceServiceImpl implements IBpmInstanceService {
             }
             log.info("状态: {}", processDefinition.isSuspended());
             if (processDefinition.isSuspended()) {
-                throw new BreezeBizException(ResultCode.exception("流程挂起"));
+                throw new BreezeBizException(ResultCode.PROCESS_SUSPENDED);
             }
 
             //启动流程

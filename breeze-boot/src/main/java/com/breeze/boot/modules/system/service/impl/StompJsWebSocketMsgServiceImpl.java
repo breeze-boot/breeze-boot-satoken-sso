@@ -21,10 +21,6 @@ import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.modules.auth.model.entity.SysUser;
-import com.breeze.boot.modules.auth.service.SysUserService;
-import com.breeze.boot.modules.system.model.entity.SysMsg;
-import com.breeze.boot.modules.system.service.SysMsgService;
 import com.breeze.boot.message.dto.UserMsgDTO;
 import com.breeze.boot.message.events.MsgSaveEvent;
 import com.breeze.boot.message.events.PublisherSaveMsgEvent;
@@ -32,10 +28,13 @@ import com.breeze.boot.message.params.BpmParam;
 import com.breeze.boot.message.params.MsgParam;
 import com.breeze.boot.message.service.WebSocketMsgService;
 import com.breeze.boot.message.vo.MsgVO;
+import com.breeze.boot.modules.auth.model.entity.SysUser;
+import com.breeze.boot.modules.auth.service.SysUserService;
+import com.breeze.boot.modules.system.model.entity.SysMsg;
+import com.breeze.boot.modules.system.service.SysMsgService;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -74,22 +73,23 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
      */
     private final SysUserService sysUserService;
 
-    private static UserMsgDTO.MsgBody buildMsgBody(SysMsg sysMsg, SysUser sysUser) {
+    private UserMsgDTO.MsgBody buildMsgBody(SysMsg sysMsg, String sender, SysUser sysUser) {
         // @formatter:off
         return UserMsgDTO.MsgBody.builder()
                 .msgId(sysMsg.getId())
                 .code(sysMsg.getCode())
                 .title(sysMsg.getTitle())
-                .deptId(sysUser.getDeptId())
                 .level(sysMsg.getLevel())
                 .userId(sysUser.getId())
                 .type(sysMsg.getType())
                 .content(sysMsg.getContent())
+                .deptId(sysUser.getDeptId())
+                .createName(sender)
                 .build();
         // @formatter:on
     }
 
-    private static MsgVO buildMsgVO(SysMsg sysMsg) {
+    private MsgVO buildMsgVO(SysMsg sysMsg) {
         // @formatter:off
         return MsgVO.builder()
                 .id(sysMsg.getId())
@@ -116,9 +116,9 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
             log.error("[消息不存在] {}", msgParam.getMsgId());
             return Result.fail("消息不存在");
         }
-        this.sendMsgToUser(this.sysUserService.list(), sysMsg);
+        this.sendMsgToUser(this.sysUserService.list(), msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
-        return Result.ok(buildMsgVO(sysMsg));
+        return Result.ok(this.buildMsgVO(sysMsg));
     }
 
     /**
@@ -137,9 +137,10 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
             log.error("[消息不存在]{}", msgParam.getMsgId());
             return Result.fail("消息不存在");
         }
-        this.sendMsgToUser(this.sysUserService.listByIds(msgParam.getUserIds()), sysMsg);
+        List<SysUser> sysUserList = this.sysUserService.listByIds(msgParam.getUserIds());
+        this.sendMsgToUser(sysUserList, msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
-        return Result.ok(buildMsgVO(sysMsg));
+        return Result.ok(this.buildMsgVO(sysMsg));
     }
 
     /**
@@ -166,50 +167,34 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
-            throw new BreezeBizException(ResultCode.exception("未发现此消息"));
+            throw new BreezeBizException(ResultCode.MSG_UN_FOUND);
         }
-        MsgVO msgVO = MsgVO.builder()
-                .id(sysMsg.getId())
-                .title(sysMsg.getTitle())
-                .code(sysMsg.getCode())
-                .type(sysMsg.getType())
-                .level(sysMsg.getLevel())
-                .content(sysMsg.getContent())
-                .build();
-        List<UserMsgDTO.MsgBody> sysUserMsgList = sendAndGetMsgBodyList(msgParam.getUserIds(), msgVO, sysMsg);
+        List<UserMsgDTO.MsgBody> sysUserMsgList = this.sendAndGetMsgBodyList(msgParam.getUserIds(), msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
         this.asyncSendMsg(sysUserMsgList);
     }
 
     @Override
-    public void asyncSendMsgToUser(BpmParam msgParam) {
-        BreezeThreadLocal.set(msgParam.getTenantId());
-        SysMsg sysMsg = this.sysMsgService.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getCode, msgParam.getMsgCode()));
+    public void asyncSendMsgToUser(BpmParam bpmParam) {
+        BreezeThreadLocal.set(bpmParam.getTenantId());
+        SysMsg sysMsg = this.sysMsgService.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getCode, bpmParam.getMsgCode()));
         if (Objects.isNull(sysMsg)) {
-            log.error("[消息不存在]{}", msgParam.getMsgCode());
-            throw new BreezeBizException(ResultCode.exception("未发现此消息"));
+            log.error("[消息不存在]{}", bpmParam.getMsgCode());
+            throw new BreezeBizException(ResultCode.MSG_UN_FOUND);
         }
-        MsgVO msgVO = MsgVO.builder()
-                .id(sysMsg.getId())
-                .title(sysMsg.getTitle())
-                .code(sysMsg.getCode())
-                .type(sysMsg.getType())
-                .level(sysMsg.getLevel())
-                .content(String.format(sysMsg.getContent(), msgParam.getContentMap()))
-                .build();
-        List<UserMsgDTO.MsgBody> sysUserMsgList = sendAndGetMsgBodyList(msgParam.getUserIds(), msgVO, sysMsg);
+        List<UserMsgDTO.MsgBody> sysUserMsgList = sendAndGetMsgBodyList(bpmParam.getUserIds(), bpmParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
         this.asyncSendMsg(sysUserMsgList);
     }
 
-    @NotNull
-    private List<UserMsgDTO.MsgBody> sendAndGetMsgBodyList(List<Long> userIds, MsgVO msgVO, SysMsg sysMsg) {
+    private List<UserMsgDTO.MsgBody> sendAndGetMsgBodyList(List<Long> userIds, String sender, SysMsg sysMsg) {
+        MsgVO msgVO = MsgVO.builder().id(sysMsg.getId()).title(sysMsg.getTitle()).code(sysMsg.getCode()).type(sysMsg.getType()).level(sysMsg.getLevel()).content(sysMsg.getContent()).build();
         List<UserMsgDTO.MsgBody> sysUserMsgList = Lists.newArrayList();
         List<SysUser> sysUserList = this.sysUserService.listByIds(userIds);
         for (SysUser sysUser : sysUserList) {
             // 这里只是使用另一种实现方式
             this.simpMessagingTemplate.convertAndSendToUser(sysUser.getUsername(), "/queue/userMsg", Result.ok(msgVO));
-            sysUserMsgList.add(buildMsgBody(sysMsg, sysUser));
+            sysUserMsgList.add(this.buildMsgBody(sysMsg, sender, sysUser));
         }
         return sysUserMsgList;
     }
@@ -230,22 +215,23 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
             log.error("[消息不存在]{}", msgParam.getMsgId());
             return Result.fail("消息不存在");
         }
-        this.sendMsgToUser(this.sysUserService.listDeptsUser(msgParam.getDeptId()), sysMsg);
+        this.sendMsgToUser(this.sysUserService.listDeptsUser(msgParam.getDeptId()), msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
-        return Result.ok(buildMsgVO(sysMsg));
+        return Result.ok(this.buildMsgVO(sysMsg));
     }
 
     /**
      * 发送消息给指定用户
      *
      * @param sysUserList 系统用户列表
+     * @param sender      发送者
      * @param sysMsg      系统消息
      */
-    private void sendMsgToUser(List<SysUser> sysUserList, SysMsg sysMsg) {
+    private void sendMsgToUser(List<SysUser> sysUserList, String sender, SysMsg sysMsg) {
         List<UserMsgDTO.MsgBody> msgBodyList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
             log.debug("[msgId]：{}, [username]： {}", sysUser, sysUser.getUsername());
-            msgBodyList.add(buildMsgBody(sysMsg, sysUser));
+            msgBodyList.add(this.buildMsgBody(sysMsg, sender, sysUser));
         }
         this.asyncSendMsg(msgBodyList);
     }

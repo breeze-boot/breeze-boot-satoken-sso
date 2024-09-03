@@ -111,7 +111,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public Result<Boolean> removeTenantByIds(List<Long> ids) {
         List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getTenantId, ids));
         if (CollUtil.isNotEmpty(sysUserList)) {
-            return Result.warning(Boolean.FALSE, "租户已经被使用");
+            return Result.fail(Boolean.FALSE, "租户已经被使用");
         }
         return Result.ok(this.removeByIds(ids));
     }

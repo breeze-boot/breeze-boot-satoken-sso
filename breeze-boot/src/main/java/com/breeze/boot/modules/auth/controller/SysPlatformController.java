@@ -152,7 +152,7 @@ public class SysPlatformController {
     public Result<Boolean> delete(@Parameter(description = "平台IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {
-            return Result.warning(Boolean.FALSE, "该平台有菜单配置");
+            return Result.fail(Boolean.FALSE, "该平台有菜单配置");
         }
         return Result.ok(this.sysPlatformService.removeByIds(Arrays.asList(ids)));
     }

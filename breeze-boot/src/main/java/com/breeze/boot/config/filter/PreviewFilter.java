@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.core.filter;
+package com.breeze.boot.config.filter;
 
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.ResponseUtil;
@@ -43,7 +43,7 @@ public class PreviewFilter implements Filter {
         if (method.equals("PUT") || method.equals("DELETE")) {
             log.warn("演示环境不允许操作！");
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            httpServletResponse.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
             ResponseUtil.response(httpServletResponse, ResultCode.PREVIEW);
             return;
         }

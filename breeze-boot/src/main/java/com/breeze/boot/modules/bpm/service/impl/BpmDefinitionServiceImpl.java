@@ -18,7 +18,6 @@ package com.breeze.boot.modules.bpm.service.impl;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
@@ -179,7 +178,7 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
 
             if (Objects.isNull(processDefinition)) {
                 log.error("未找到流程定义: {}", procDefId);
-                throw new BreezeBizException(ResultCode.exception("未找到指定的流程定义"));
+                throw new BreezeBizException(ResultCode.DEFINITION_NOT_FOUND);
             }
 
             log.info("状态: {}", processDefinition.isSuspended());
@@ -301,10 +300,11 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
         try {
             bpmnModel = this.repositoryService.getBpmnModel(hiscProcInst.getProcessDefinitionId());
             if (bpmnModel == null) {
-                throw new BreezeBizException(ResultCode.exception("无法获取BPMN模型: " + hiscProcInst.getProcessDefinitionId()));
+                throw new BreezeBizException(ResultCode.BPM_MODEL_NOT_FOUND);
             }
         } catch (Exception e) {
-            throw new BreezeBizException(ResultCode.exception("获取BPMN模型失败: " + e.getMessage()));
+            log.error("", e);
+            throw new BreezeBizException(ResultCode.BPM_MODEL_NOT_FOUND);
         }
 
         // 查询流程实例的所有历史活动实例
@@ -346,7 +346,8 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
         try (InputStream resourceAsStream = this.repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), processDefinition.getResourceName())) {
             return IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new BreezeBizException(ResultCode.exception("获取xml资源失败：" + e.getMessage()));
+            log.error("未获取到XML", e);
+            throw new BreezeBizException(ResultCode.XML_NOT_FOUND);
         }
     }
 

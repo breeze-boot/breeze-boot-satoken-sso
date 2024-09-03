@@ -80,7 +80,7 @@ public class RedisConfiguration {
      * @return {@link RedisCacheManager}
      */
     @Bean
-    public RedisCacheManager defaultCacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
+    public RedisCacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
         RedisSerializer<String> strSerializer = new StringRedisSerializer();
 

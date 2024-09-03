@@ -116,7 +116,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public Result<Boolean> deleteById(Long id) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
         if (CollUtil.isNotEmpty(deptEntityList)) {
-            return Result.warning(Boolean.FALSE, "此部门存在下级部门,不允许删除");
+            return Result.fail(Boolean.FALSE, "此部门存在下级部门,不允许删除");
         }
         boolean remove = this.removeById(id);
         if (remove) {
@@ -134,6 +134,10 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return this.findPropertyInTree(deptBOList.get(0));
     }
 
+    @Override
+    public List<SysDeptBO> listSubDeptId(Long deptId) {
+        return this.baseMapper.selectDeptById(deptId);
+    }
 
     public List<Long> findPropertyInTree(SysDeptBO node) {
         List<Long> result = new ArrayList<>();

@@ -16,7 +16,7 @@
 
 package com.breeze.boot.config;
 
-import com.breeze.boot.core.filter.PreviewFilter;
+import com.breeze.boot.config.filter.PreviewFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

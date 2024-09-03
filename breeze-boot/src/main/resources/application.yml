@@ -2,6 +2,9 @@ server:
   port: 9000
 
 spring:
+  messages:
+    basename: i18n/message
+    encoding: UTF-8
   # json提交时 [Date Calendar] 的全局序列化和反序列化配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

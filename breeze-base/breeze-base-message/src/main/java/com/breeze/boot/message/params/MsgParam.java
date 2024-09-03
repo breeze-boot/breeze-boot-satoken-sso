@@ -70,4 +70,6 @@ public class MsgParam implements Serializable {
     @Schema(description = "租户ID")
     private Long tenantId;
 
+    private String sender;
+
 }

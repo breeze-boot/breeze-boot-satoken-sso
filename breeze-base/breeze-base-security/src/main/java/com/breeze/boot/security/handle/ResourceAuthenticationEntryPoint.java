@@ -49,7 +49,8 @@ public class ResourceAuthenticationEntryPoint implements AuthenticationEntryPoin
      * 异常处理策略枚举
      */
     private enum ExceptionHandler {
-        BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()), INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage()),
+        BAD_CREDENTIALS(e -> "认证失败: " + e.getMessage()),
+        INSUFFICIENT_AUTHENTICATION(e -> "权限不足: " + e.getMessage()),
         INTERNAL_AUTHENTICATION_SERVICE_EXCEPTION(e -> "认证失败:  " + e.getMessage());
         private final ExceptionHandlerStrategy strategy;
 
@@ -68,6 +69,7 @@ public class ResourceAuthenticationEntryPoint implements AuthenticationEntryPoin
         if (request == null || response == null) {
             throw new IllegalArgumentException("Request and response must not be null.");
         }
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         log.info("[url:{}]", request.getRequestURI());
         if (response.isCommitted()) {
             // 记录日志，说明响应已提交
@@ -77,8 +79,7 @@ public class ResourceAuthenticationEntryPoint implements AuthenticationEntryPoin
 
         ExceptionHandler handler;
         if (e instanceof BadCredentialsException || e instanceof InvalidBearerTokenException) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
+            ResponseUtil.response(response, ResultCode.SC_FORBIDDEN);
             return;
         }
         if (e instanceof InternalAuthenticationServiceException) {
@@ -89,7 +90,7 @@ public class ResourceAuthenticationEntryPoint implements AuthenticationEntryPoin
             }
         }
 
-        ResponseUtil.response(response, ResultCode.SC_UNAUTHORIZED);
+        ResponseUtil.response(response, ResultCode.SC_FORBIDDEN);
     }
 
 }

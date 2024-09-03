@@ -148,7 +148,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     public Result<Boolean> saveRowPermission(RowPermissionForm rowPermissionForm) {
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
         if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            return Result.warning(Boolean.FALSE, "固定权限无需再次添加，请添加自定义权限");
+            return Result.fail(Boolean.FALSE, "固定权限无需再次添加，请添加自定义权限");
         }
         return Result.ok(this.save(sysRowPermission));
     }
@@ -166,7 +166,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
         sysRowPermission.setId(id);
         if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            return Result.warning(Boolean.FALSE, "固定权限无需修改，请修改自定义权限");
+            return Result.fail(Boolean.FALSE, "固定权限无需修改，请修改自定义权限");
         }
         return Result.ok(sysRowPermission.updateById());
     }
@@ -183,7 +183,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
         Cache cache = cacheManager.getCache(ROW_PERMISSION);
         List<SysRoleRowPermission> rolePermissionList = this.sysRoleRowPermissionService.list(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getPermissionId, ids));
         if (CollectionUtil.isNotEmpty(rolePermissionList)) {
-            return Result.warning(Boolean.FALSE, "该数据权限已被使用");
+            return Result.fail(Boolean.FALSE, "该数据权限已被使用");
         }
         List<SysRowPermission> rowPermissionList = this.listByIds(ids);
         for (SysRowPermission rowPermission : rowPermissionList) {

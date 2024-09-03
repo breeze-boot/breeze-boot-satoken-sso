@@ -56,7 +56,7 @@ public class BreezeHandShakeInterceptor implements HandshakeInterceptor {
         String username = serverHttpRequest.getServletRequest().getParameter("username");
         UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(username);
         if (Objects.isNull(user)) {
-            throw new BreezeBizException(ResultCode.exception("握手失败"));
+            throw new BreezeBizException(ResultCode.FAIL);
         }
 
         log.info("握手成功");

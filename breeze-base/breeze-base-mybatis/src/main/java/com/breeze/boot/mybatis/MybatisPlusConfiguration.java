@@ -21,9 +21,10 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.mybatis.config.BreezeLogicSqlInjector;
-import com.breeze.boot.mybatis.exception.TenantNotValueException;
 import com.breeze.boot.mybatis.filters.TenantProperties;
 import com.breeze.boot.mybatis.plugins.BreezeDataPermissionInterceptor;
 import com.breeze.boot.mybatis.plugins.BreezeSqlLogInnerInterceptor;
@@ -88,7 +89,7 @@ public class MybatisPlusConfiguration {
                 log.info("[当前租户]： {}", tenantId);
 
                 if (Objects.isNull(tenantId)) {
-                    throw new TenantNotValueException("租户信息未获取到");
+                    throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
                 }
                 return new LongValue(tenantId);
             }

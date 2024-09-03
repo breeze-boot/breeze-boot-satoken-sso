@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.core.propertise;
+package com.breeze.boot.mybatis.constant;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import cn.hutool.core.text.StrPool;
 
 /**
- * aes��������
+ * str池
  *
  * @author gaoweixuan
- * @since 2023/05/25
+ * @since 2022-10-22
  */
-@Data
-@Component
-@ConfigurationProperties(prefix = "breeze")
-public class AesSecretProperties {
+public interface BreezeStrPoolConstants extends StrPool {
 
-    private String aesSecret;
+    char M_DELIM_START = '(';
 
+    char M_DELIM_END = ')';
+
+    String BASE_SQL = "<script>insert into %s %s values %s</script>";
+
+    String FOREACH_START = "<foreach collection=\"list\" item=\"item\" index=\"index\" open=\"(\" separator=\"),(\" close=\")\">";
+
+    String ITEM_START = "#{item.";
+
+    String FOREACH_END = "</foreach>";
 }

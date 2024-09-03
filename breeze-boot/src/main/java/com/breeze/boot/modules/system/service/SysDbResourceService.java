@@ -23,7 +23,6 @@ import com.breeze.boot.modules.system.model.form.DbResourceForm;
 import com.breeze.boot.modules.system.model.query.DbResourceQuery;
 import com.breeze.boot.modules.system.model.vo.DbResourceVO;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public interface SysDbResourceService extends IService<SysDbResource> {
      * @param dbResourceForm 数据源
      * @return {@link Boolean}
      */
-    Boolean saveDbResource(@Valid DbResourceForm dbResourceForm);
+    Boolean saveDbResource(DbResourceForm dbResourceForm);
 
     /**
      * 更新数据源

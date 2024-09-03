@@ -158,7 +158,6 @@ public class WebSecurityConfig {
                         )
                 );
 
-
         // @formatter:on
         return http.build();
     }

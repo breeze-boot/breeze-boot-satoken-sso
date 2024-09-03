@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.modules.bpm.model.entity.ActReDeployment;
 import com.breeze.boot.modules.bpm.model.query.BpmDefinitionQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmDefinitionVO;
-import org.springframework.stereotype.Service;
 
 /**
  * 流程部署服务
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
  * @author gaoweixuan
  * @since 2023-03-08
  */
-@Service
 public interface IActReDeploymentService extends IService<ActReDeployment> {
 
     /**

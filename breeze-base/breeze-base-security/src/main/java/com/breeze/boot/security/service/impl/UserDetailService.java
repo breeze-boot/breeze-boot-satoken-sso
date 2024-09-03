@@ -68,7 +68,7 @@ public class UserDetailService implements IUserDetailService {
 
             Boolean apply = this.captchaServiceFunction.apply(requestAttributes.getRequest());
             if (!apply) {
-                throw new BreezeBizException(ResultCode.VERIFY_FOUND);
+                throw new BreezeBizException(ResultCode.VERIFY_UN_FOUND);
             }
             UserInfoDTO userInfoDTO = this.getUserPrincipal(this.userService.get().loadUserByUsername(username));
             this.cacheManagerConsumer.accept(userInfoDTO);

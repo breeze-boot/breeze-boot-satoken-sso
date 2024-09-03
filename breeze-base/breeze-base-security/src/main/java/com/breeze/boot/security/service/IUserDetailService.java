@@ -111,7 +111,8 @@ public interface IUserDetailService extends UserDetailsService {
                 userInfo.getUserRoleIds(),
                 userInfo.getTenantId(),
                 userInfo.getPermissionType(),
-                userInfo.getRowPermissionCode());
+                userInfo.getRowPermissionCode()
+        );
     }
 
     /**
@@ -130,7 +131,7 @@ public interface IUserDetailService extends UserDetailsService {
             BreezeThreadLocal.set(Long.valueOf(tenantIdParam));
             return;
         }
-        throw new BreezeBizException(ResultCode.exception("tenantId Not Found"));
+        throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
     }
 
     /**

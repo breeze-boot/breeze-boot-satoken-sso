@@ -47,6 +47,8 @@ public class BpmParam implements Serializable {
 
     private String msgCode;
 
+    private String sender;
+
     private Map<String, Object> contentMap;
 
     /**

@@ -82,6 +82,8 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
                         .msgId(msgBody.getMsgId())
                         .deptId(msgBody.getDeptId())
                         .userId(msgBody.getUserId())
+                        .createBy(msgBody.getCreateBy())
+                        .createName(msgBody.getCreateName())
                         .build())
                 .collect(Collectors.toList());
         this.saveBatch(sysMsgUserList);
@@ -128,7 +130,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     public Result<Boolean> removeUserMsgByIds(List<Long> ids) {
         List<SysMsgUser> sysMsgUserList = this.listByIds(ids);
         if (CollUtil.isEmpty(sysMsgUserList)) {
-            return Result.warning("用户消息不存在");
+            return Result.fail("用户消息不存在");
         }
         boolean remove = this.removeByIds(ids);
         if (!remove) {

@@ -17,7 +17,7 @@
 package com.breeze.boot.security.authentication.password;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.breeze.boot.core.propertise.AesSecretProperties;
+import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.security.authentication.OAuth2ResourceOwnerAuthenticationConverter;
 import com.breeze.boot.security.authentication.OAuth2ResourceOwnerAuthenticationToken;

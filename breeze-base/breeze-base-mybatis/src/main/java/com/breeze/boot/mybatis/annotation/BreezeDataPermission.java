@@ -39,11 +39,17 @@ public @interface BreezeDataPermission {
 
     /**
      * 范围权限字段名称
+     * <p>
+     * 默认 dept_id
+     * </p>
      */
     DataRole dept() default DataRole.DEPT_ID;
 
     /**
      * 个人权限字段名称
+     * <p>
+     * 默认 user_id
+     * </p>
      */
     DataRole own() default DataRole.USER_ID;
 

@@ -151,7 +151,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public Result<Boolean> deleteById(Long id) {
         List<SysMenu> menuEntityList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
         if (CollUtil.isNotEmpty(menuEntityList)) {
-            return Result.warning(Boolean.FALSE, "存在子菜单, 不可删除");
+            return Result.fail(Boolean.FALSE, "存在子菜单, 不可删除");
         }
         boolean remove = this.removeById(id);
         if (remove) {

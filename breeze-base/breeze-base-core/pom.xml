@@ -44,6 +44,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

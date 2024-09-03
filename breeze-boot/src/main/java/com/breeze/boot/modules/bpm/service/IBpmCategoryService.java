@@ -23,8 +23,6 @@ import com.breeze.boot.modules.bpm.model.form.BpmCategoryForm;
 import com.breeze.boot.modules.bpm.model.query.BpmCategoryQuery;
 import com.breeze.boot.modules.bpm.model.vo.BpmCategoryVO;
 
-import javax.validation.Valid;
-
 /**
  * 流程分类服务
  *
@@ -64,6 +62,6 @@ public interface IBpmCategoryService extends IService<BpmCategory> {
      * @param bpmCategoryForm 流程分类表单
      * @return {@link Boolean }
      */
-    Boolean modifyFlowCategory(Long id, @Valid BpmCategoryForm bpmCategoryForm);
+    Boolean modifyFlowCategory(Long id, BpmCategoryForm bpmCategoryForm);
 
 }

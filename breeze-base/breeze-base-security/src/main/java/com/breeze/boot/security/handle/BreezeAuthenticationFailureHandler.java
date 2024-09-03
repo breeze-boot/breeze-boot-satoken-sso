@@ -27,10 +27,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.breeze.boot.core.enums.ResultCode.FORBIDDEN;
-
 /**
- * 自定义身份验证失败处理程序
+ * 自定义身份认证失败处理程序
  *
  * @author gaoweixuan
  * @since 2023/05/09
@@ -53,7 +51,8 @@ public class BreezeAuthenticationFailureHandler implements AuthenticationFailure
             log.error("[校验 {} - {}] ", errorMsg.getErrorCode(), errorMsg.getDescription(), exception);
 
             // 使用映射关系来简化错误处理逻辑
-            ResponseUtil.response(response, ResultCode.exception(FORBIDDEN, errorMsg.getDescription()));
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ResponseUtil.response(response, ResultCode.AUTHENTICATION_FAILURE);
         }
     }
 

@@ -103,7 +103,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
         Assert.notNull(tokenSettings, "tokenSettings cannot be null");
         SysRegisteredClient byClientId = this.getByClientId(registeredClientForm.getClientId());
         if (Objects.nonNull(byClientId)) {
-            return Result.warning(Boolean.FALSE, "已经存在此客户端");
+            return Result.fail(Boolean.FALSE, "已经存在此客户端");
         }
         return Result.ok(this.save(this.buildClient(registeredClientForm)));
     }

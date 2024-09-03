@@ -42,7 +42,8 @@ public class ResponseUtil {
      * @param resultCode 结果
      */
     public static void response(HttpServletResponse response, ResultCode resultCode) {
-        response(response, Result.fail(resultCode));
+        String message = MessageUtil.getMessage(resultCode.getKey());
+        response(response, Result.fail(message));
     }
 
     /**

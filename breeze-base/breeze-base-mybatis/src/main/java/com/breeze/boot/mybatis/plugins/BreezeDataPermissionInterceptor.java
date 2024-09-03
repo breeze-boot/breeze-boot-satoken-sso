@@ -41,6 +41,7 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -137,7 +138,7 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
             originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s = %s", column, originalSql, dataPer.dept().getColumn(), currentUser.getDeptId());
         } else if (StrUtil.equals(DataPermissionType.SUB_DEPT_LEVEL.getType(), permissionType)) {
             // 本级部门以及子部门
-            // originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s IN (%s)", column, originalSql, dataPer.own().getColumn(), currentUser.getSubDeptId());
+            originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s IN (%s)", column, originalSql, dataPer.dept().getColumn(), StringUtil.join(",", currentUser.getSubDeptId().toArray()));
         } else if (StrUtil.equals(DataPermissionType.OWN.getType(), permissionType)) {
             // 个人范围权限
             originalSql = String.format("SELECT %s FROM (%s) temp WHERE temp.%s = '%s'", column, originalSql, dataPer.own().getColumn(), currentUser.getUserId());
@@ -156,12 +157,12 @@ public class BreezeDataPermissionInterceptor extends JsqlParserSupport implement
         StringBuilder originalSqlBuilder = new StringBuilder();
         originalSqlBuilder.append(String.format("SELECT %s FROM (%s) temp WHERE 1 = 1 ", column, originalSql));
         if (cache == null) {
-            throw new BreezeBizException(ResultCode.exception("自定义权限缓存未开启"));
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
         for (String rowPermissionCode : rowPermissionCodeSet) {
             CustomizePermission sysCustomizePermission = cache.get(rowPermissionCode, CustomizePermission.class);
             if (sysCustomizePermission == null) {
-                throw new BreezeBizException(ResultCode.exception("自定义权限缓存未开启"));
+                throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
             }
             DataRole dataRole = getDataRoleByType(sysCustomizePermission.getCustomizesType());
             if (dataRole != null) {

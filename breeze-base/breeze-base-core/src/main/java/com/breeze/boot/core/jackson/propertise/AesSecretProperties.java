@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.mybatis.exception;
+package com.breeze.boot.core.jackson.propertise;
 
-import com.breeze.boot.core.enums.ResultCode;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
- * 租户未获取到值异常
+ * aes��������
  *
  * @author gaoweixuan
- * @since 2023/04/16
+ * @since 2023/05/25
  */
-public class TenantNotValueException extends RuntimeException {
+@Data
+@Component
+@ConfigurationProperties(prefix = "breeze")
+public class AesSecretProperties {
 
-    private String code;
-    private final String msg;
+    private String aesSecret;
 
-    public TenantNotValueException(ResultCode resultCode) {
-        super(resultCode.getMsg());
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMsg();
-    }
-
-    public TenantNotValueException(String msg) {
-        super(msg);
-        this.msg = msg;
-    }
 }

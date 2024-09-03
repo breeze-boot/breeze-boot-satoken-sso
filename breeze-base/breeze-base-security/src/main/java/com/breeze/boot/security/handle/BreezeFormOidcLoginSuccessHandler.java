@@ -107,7 +107,7 @@ public class BreezeFormOidcLoginSuccessHandler extends SimpleUrlAuthenticationSu
     private SysLogBO buildLog(HttpServletRequest request) {
         String tenantId = request.getParameter(X_TENANT_ID);
         if (StrUtil.isBlank(tenantId)) {
-            throw new BreezeBizException(ResultCode.exception("tenantId Not Found"));
+            throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
         }
         BreezeThreadLocal.set(Long.valueOf(tenantId));
         String userAgent = request.getHeader("User-Agent");

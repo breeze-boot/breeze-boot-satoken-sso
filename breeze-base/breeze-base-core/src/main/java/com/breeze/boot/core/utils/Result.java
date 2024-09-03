@@ -16,11 +16,13 @@
 
 package com.breeze.boot.core.utils;
 
-import com.breeze.boot.core.enums.ResultCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+
+import static com.breeze.boot.core.constants.CoreConstants.FAIL;
+import static com.breeze.boot.core.constants.CoreConstants.SUCCESS;
 
 /**
  * 结果
@@ -70,8 +72,8 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> ok(T data) {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.OK.getCode());
-        result.setMessage(ResultCode.OK.getMsg());
+        result.setCode(SUCCESS);
+        result.setMessage(null);
         result.setData(data);
         return result;
     }
@@ -83,8 +85,8 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> ok() {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.OK.getCode());
-        result.setMessage(ResultCode.OK.getMsg());
+        result.setCode(SUCCESS);
+        result.setMessage(null);
         return result;
     }
 
@@ -97,7 +99,7 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> ok(T data, String msg) {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.OK.getCode());
+        result.setCode(SUCCESS);
         result.setMessage(msg);
         result.setData(data);
         return result;
@@ -111,36 +113,20 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> fail(String message) {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.FAIL.getCode());
+        result.setCode(FAIL);
         result.setMessage(message);
         return result;
     }
 
     /**
-     * 警告
+     * 失败
      *
-     * @param message 消息
      * @return {@link Result}<{@link T}>
      */
-    public static <T> Result<T> warning(String message) {
+    public static <T> Result<T> fail() {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.WARNING.getCode());
-        result.setMessage(message);
-        return result;
-    }
-
-    /**
-     * 警告
-     *
-     * @param message 消息
-     * @param data    数据
-     * @return {@link Result}<{@link T}>
-     */
-    public static <T> Result<T> warning(T data, String message) {
-        Result<T> result = new Result<>();
-        result.setCode(ResultCode.WARNING.getCode());
-        result.setMessage(message);
-        result.setData(data);
+        result.setCode(FAIL);
+        result.setMessage(null);
         return result;
     }
 
@@ -153,52 +139,9 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> fail(T data, String message) {
         Result<T> result = new Result<>();
-        result.setCode(ResultCode.FAIL.getCode());
+        result.setCode(FAIL);
         result.setMessage(message);
         result.setData(data);
-        return result;
-    }
-
-    /**
-     * 失败
-     *
-     * @param data    数据
-     * @param message 消息
-     * @param code    代码
-     * @return {@link Result}<{@link T}>
-     */
-    public static <T> Result<T> fail(String code, T data, String message) {
-        Result<T> result = new Result<>();
-        result.setCode(code);
-        result.setData(data);
-        result.setMessage(message);
-        return result;
-    }
-
-    /**
-     * 失败
-     *
-     * @param resultCode 结果代码枚举
-     * @return {@link Result}<{@link T}>
-     */
-    public static <T> Result<T> fail(ResultCode resultCode) {
-        Result<T> result = new Result<>();
-        result.setCode(resultCode.getCode());
-        result.setMessage(resultCode.getMsg());
-        return result;
-    }
-
-    /**
-     * 失败
-     *
-     * @param code 结果代码
-     * @param msg  信息
-     * @return {@link Result}<{@link String}>
-     */
-    public static Result<String> fail(String code, String msg) {
-        Result<String> result = new Result<>();
-        result.setCode(code);
-        result.setMessage(msg);
         return result;
     }
 

@@ -149,12 +149,6 @@ public class UserInfoDTO implements Serializable {
     private Set<String> authorities;
 
     /**
-     * 租户ID
-     */
-    @Schema(description = "租户ID")
-    private Long tenantId;
-
-    /**
      * 数据权限编码
      */
     @Schema(description = "数据权限编码")
@@ -166,4 +160,15 @@ public class UserInfoDTO implements Serializable {
     @Schema(description = "数据权限规则")
     private String permissionType;
 
+    /**
+     * 部门以及子部门
+     */
+    @Schema(description = "部门以及子部门")
+    private Set<Long> subDeptId;
+
+    /**
+     * 租户ID
+     */
+    @Schema(description = "租户ID")
+    private Long tenantId;
 }

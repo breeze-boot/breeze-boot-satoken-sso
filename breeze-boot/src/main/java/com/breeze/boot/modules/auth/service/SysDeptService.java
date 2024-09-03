@@ -19,6 +19,7 @@ package com.breeze.boot.modules.auth.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
 import com.breeze.boot.modules.auth.model.entity.SysDept;
 import com.breeze.boot.modules.auth.model.form.DeptForm;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
@@ -72,6 +73,14 @@ public interface SysDeptService extends IService<SysDept> {
      * @return {@link List}<{@link SysDept}>
      */
     List<Long> listDeptByParentId(Long deptId);
+
+    /**
+     * 列出子部门id
+     *
+     * @param deptId 深度id
+     * @return {@link List }<{@link SysDeptBO }>
+     */
+    List<SysDeptBO> listSubDeptId(Long deptId);
 
 }
 

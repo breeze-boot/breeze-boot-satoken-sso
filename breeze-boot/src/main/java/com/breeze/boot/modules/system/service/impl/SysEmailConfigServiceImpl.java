@@ -131,10 +131,11 @@ public class SysEmailConfigServiceImpl extends ServiceImpl<SysEmailConfigMapper,
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         SysEmailConfig sysEmailConfig = this.getOne(Wrappers.<SysEmailConfig>lambdaQuery().eq(SysEmailConfig::getStatus, 1));
         if (Objects.isNull(sysEmailConfig)) {
-            throw new BreezeBizException(ResultCode.exception("未配置默认邮箱"));
+            log.error("未配置默认邮箱");
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
         MailDTO mailDTO = this.sysEmailMapStruct.entity2DTO(sysEmailConfig);
         CustomJavaMailSender customJavaMailSender = new CustomJavaMailSender(templateEngine);

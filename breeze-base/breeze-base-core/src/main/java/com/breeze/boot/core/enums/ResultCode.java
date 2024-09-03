@@ -1,7 +1,6 @@
 package com.breeze.boot.core.enums;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author gaoweixuan
@@ -13,100 +12,116 @@ public enum ResultCode {
     /**
      * 成功
      */
-    OK("0000", "请求成功"),
-
-    /**
-     * 警告
-     */
-    WARNING("0001", "请求不合法"),
+    OK("result_ok", "请求成功"),
 
     /**
      * 失败
      */
-    FAIL("0002", "请求失败"),
+    FAIL("result_fail", "请求失败"),
+
+    /**
+     * 参数异常
+     */
+    HTTP_MESSAGE_NOT_READABLE_EXCEPTION("result_http_message_not_readable_exception", "请求失败"),
 
     /**
      * 演示环境
      */
-    PREVIEW("0003", "演示环境不可删除修改"),
+    PREVIEW("result_preview", "演示环境不可删除修改"),
 
     /**
      * 令牌无效
      */
-    SC_UNAUTHORIZED("A101", "令牌无效"),
+    SC_FORBIDDEN("result_sc_forbidden", "未授权资源"),
 
     /**
-     * 未登录
+     * 认证失败
      */
-    UN_LOGIN("A102", "未登录"),
-
-    /**
-     * 未授权资源，请联系管理员授权
-     */
-    SC_FORBIDDEN("A103", "未授权资源，请联系管理员授权后重新登陆"),
-
-    /**
-     * 身份验证异常
-     */
-    FORBIDDEN("A104", "身份验证异常"),
+    AUTHENTICATION_FAILURE("result_authentication_failure", "认证失败"),
 
     /**
      * 租户未获取到
      */
-    TENANT_NOT_FOUND("A105", "租户未获取到"),
+    TENANT_NOT_FOUND("result_tenant_not_found", "租户未获取到"),
 
-    VERIFY_FOUND("A106", "验证码失败"),
+    /**
+     * 验证码失败
+     */
+    VERIFY_UN_FOUND("result_verify_un_found", "验证码失败"),
 
     /**
      * http消息转换异常
      */
-    HTTP_MESSAGE_CONVERSION_EXCEPTION("B001", "请求参数错误"),
+    HTTP_MESSAGE_CONVERSION_EXCEPTION("result_http_message_conversion_exception", "请求参数错误"),
 
     /**
      * 文件不存在
      */
-    FILE_NOT_FOUND("B002", "文件不存在"),
+    FILE_NOT_FOUND("result_file_not_found", "文件不存在"),
 
     /**
      * 分页过大
      */
-    PAGE_EXCEPTION("B003", "分页过大"),
+    PAGE_EXCEPTION("result_page_exception", "分页过大"),
 
     /**
      * 未获取到流程实例
      */
-    PROCESS_NOT_FOUND("C001", "未获取到流程实例"),
+    PROCESS_NOT_FOUND("result_process_not_found","未获取到流程实例"),
 
     /**
      * 未获取到任务实例
      */
-    TASK_NOT_FOUND("C002", "未获取到任务实例");
+    TASK_NOT_FOUND("result_task_not_found","未获取到任务实例"),
 
-    @Setter
-    private String code;
+    /**
+     * 未获取到流程定义
+     */
+    DEFINITION_NOT_FOUND("result_definition_not_found","未获取到流程定义"),
 
-    @Setter
-    private String msg;
+    /**
+     * 未获取到BPMN模型
+     */
+    BPM_MODEL_NOT_FOUND("result_bpm_model_not_found","无法获取BPMN模型"),
+
+    /**
+     * 未获取到XML
+     */
+    XML_NOT_FOUND("result_xml_not_found","未获取到XML"),
+
+    /**
+     * 流程已挂起
+     */
+    PROCESS_SUSPENDED("result_process_suspended","流程已挂起"),
+
+    /**
+     * 系统异常
+     */
+    SYSTEM_EXCEPTION("result_system_exception","系统异常"),
+
+    /**
+     * 邮箱不存在
+     */
+    EMAIL_UN_FOUND("result_email_un_found", "邮箱不存在"),
+
+    /**
+     * 未发现此消息
+     */
+    MSG_UN_FOUND("result_msg_un_found", "未发现此消息");
+
+    private final String key;
+
+    private final String desc;
 
     /**
      * 返回结果代码
      *
-     * @param code 代码
-     * @param msg  msg
+     * @param key  代码
+     * @param desc 描述
      */
-    ResultCode(String code, String msg) {
-        this.code = code;
-        this.msg = msg;
+    ResultCode(String key, String desc) {
+        this.key = key;
+        this.desc = desc;
     }
 
-    public static ResultCode exception(String errMsg) {
-        ResultCode.FAIL.setMsg(errMsg);
-        return ResultCode.FAIL;
-    }
-
-    public static ResultCode exception(ResultCode resultCode, String errMsg) {
-        resultCode.setCode(resultCode.getCode());
-        resultCode.setMsg(resultCode.getMsg() + errMsg);
-        return resultCode;
-    }
 }
