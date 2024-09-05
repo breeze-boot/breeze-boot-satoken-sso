@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -43,6 +44,7 @@ import java.time.LocalDateTime;
 @Schema(description = "角色行权限实体")
 public class SysRoleRowPermission extends Model<SysRoleRowPermission> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -22,7 +22,6 @@ import lombok.Data;
  * 邮箱配置DTO
  *
  * @author gaoweixuan
- * @version 1.0.0
  * @since 2024/07/14
  */
 @Data

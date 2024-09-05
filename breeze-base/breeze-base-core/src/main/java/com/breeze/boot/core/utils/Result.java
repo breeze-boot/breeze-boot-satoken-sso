@@ -19,6 +19,7 @@ package com.breeze.boot.core.utils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import static com.breeze.boot.core.constants.CoreConstants.FAIL;
@@ -35,6 +36,7 @@ import static com.breeze.boot.core.constants.CoreConstants.SUCCESS;
 @Setter
 public class Result<T> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

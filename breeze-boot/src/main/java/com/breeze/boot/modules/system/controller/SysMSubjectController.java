@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -28,17 +29,15 @@ import com.breeze.boot.modules.system.model.vo.EmailConfigVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectEmailVO;
 import com.breeze.boot.modules.system.model.vo.MSubjectVO;
 import com.breeze.boot.modules.system.service.SysMSubjectService;
-import com.breeze.boot.security.annotation.JumpAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:list')")
+    @SaCheckPermission("sys:mSubject:list")
     public Result<Page<MSubjectVO>> list(MSubjectQuery mSubjectQuery) {
         return Result.ok(this.sysMSubjectService.listPage(mSubjectQuery));
     }
@@ -81,7 +80,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{subjectId}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:info')")
+    @SaCheckPermission("sys:mSubject:info")
     public Result<MSubjectVO> info(@Parameter(description = "邮箱主题主题ID") @PathVariable("subjectId") Long subjectId) {
         return Result.ok(this.sysMSubjectService.getInfoById(subjectId));
     }
@@ -94,7 +93,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:create')")
+    @SaCheckPermission("sys:mSubject:create")
     @BreezeSysLog(description = "邮箱主题信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody MSubjectForm mSubjectForm) {
         return Result.ok(this.sysMSubjectService.saveEmailSubject(mSubjectForm));
@@ -108,7 +107,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:modify')")
+    @SaCheckPermission("sys:mSubject:modify")
     @BreezeSysLog(description = "邮箱主题信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "邮箱主题ID") @PathVariable Long id, @Valid @RequestBody MSubjectForm mSubjectForm) {
         return Result.ok(this.sysMSubjectService.modifyEmailSubject(id, mSubjectForm));
@@ -122,7 +121,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "设置邮箱接收人")
     @PutMapping("/setEmailUser/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:modify')")
+    @SaCheckPermission("sys:mSubject:modify")
     @BreezeSysLog(description = "设置邮箱接收人", type = LogType.EDIT)
     public Result<Boolean> setEmailUser(@Parameter(description = "邮箱主题ID") @PathVariable Long id, @Valid @RequestBody MSubjectSetUserForm mSubjectSetUserForm) {
         return Result.ok(this.sysMSubjectService.setEmailUser(id, mSubjectSetUserForm));
@@ -135,7 +134,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "查看邮箱接收人")
     @GetMapping("/listCcEmailUser/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:list')")
+    @SaCheckPermission("sys:mSubject:list")
     public Result<List<MSubjectEmailVO>> listCcEmailUser(@Parameter(description = "邮箱主题ID") @PathVariable Long id) {
         return Result.ok(this.sysMSubjectService.listCcEmailUser(id));
     }
@@ -147,7 +146,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "查看邮箱抄送人")
     @GetMapping("/listToEmailUser/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:list')")
+    @SaCheckPermission("sys:mSubject:list")
     public Result<List<MSubjectEmailVO>> listToEmailUser(@Parameter(description = "邮箱主题ID") @PathVariable Long id) {
         return Result.ok(this.sysMSubjectService.listToEmailUser(id));
     }
@@ -160,9 +159,8 @@ public class SysMSubjectController {
      */
     @Operation(summary = "发送")
     @GetMapping("/send/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:create')")
+    @SaCheckPermission("sys:mSubject:create")
     @BreezeSysLog(description = "发送", type = LogType.SAVE)
-    @JumpAuth
     public Result<Boolean> send(@Parameter(description = "邮箱主题ID") @PathVariable Long id) {
         return Result.ok(this.sysMSubjectService.send(id));
     }
@@ -175,7 +173,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:mSubject:delete')")
+    @SaCheckPermission("sys:mSubject:delete")
     @BreezeSysLog(description = "邮箱主题信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "邮箱主题IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysMSubjectService.removeByIds(Arrays.asList(ids)));
@@ -189,7 +187,7 @@ public class SysMSubjectController {
      */
     @Operation(summary = "邮箱主题开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('auth:mSubject:modify')")
+    @SaCheckPermission("auth:mSubject:modify")
     @BreezeSysLog(description = "邮箱主题开关", type = LogType.EDIT)
     public Result<Boolean> open(@Valid @RequestBody MSubjectOpenForm mSubjectOpenForm) {
         return Result.ok(this.sysMSubjectService.open(mSubjectOpenForm));

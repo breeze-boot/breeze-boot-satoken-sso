@@ -17,10 +17,11 @@
 package com.breeze.boot.modules.auth.model.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -37,6 +38,7 @@ import java.io.Serializable;
 @Schema(description = "系统部门表单")
 public class DeptForm implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

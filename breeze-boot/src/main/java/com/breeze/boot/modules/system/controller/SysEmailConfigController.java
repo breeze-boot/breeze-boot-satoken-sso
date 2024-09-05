@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -29,12 +30,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -63,7 +63,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:list')")
+    @SaCheckPermission("sys:emailConfig:list")
     public Result<Page<EmailConfigVO>> list(EmailConfigQuery emailConfigQuery) {
         return Result.ok(this.sysEmailConfigService.listPage(emailConfigQuery));
     }
@@ -76,7 +76,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{emailId}")
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:info')")
+    @SaCheckPermission("sys:emailConfig:info")
     public Result<EmailConfigVO> info(@Parameter(description = "邮箱ID") @PathVariable("emailId") Long emailId) {
         return Result.ok(this.sysEmailConfigService.getInfoById(emailId));
     }
@@ -89,7 +89,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:create')")
+    @SaCheckPermission("sys:emailConfig:create")
     @BreezeSysLog(description = "邮箱信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody EmailConfigForm emailConfigForm) {
         return Result.ok(this.sysEmailConfigService.saveEmail(emailConfigForm));
@@ -103,7 +103,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:modify')")
+    @SaCheckPermission("sys:emailConfig:modify")
     @BreezeSysLog(description = "邮箱信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "邮箱ID") @PathVariable Long id, @Valid @RequestBody EmailConfigForm emailConfigForm) {
         return Result.ok(this.sysEmailConfigService.modifyEmail(id, emailConfigForm));
@@ -117,7 +117,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:delete')")
+    @SaCheckPermission("sys:emailConfig:delete")
     @BreezeSysLog(description = "邮箱信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "邮箱IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysEmailConfigService.removeByIds(Arrays.asList(ids)));
@@ -131,7 +131,7 @@ public class SysEmailConfigController {
      */
     @Operation(summary = "邮箱锁定开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:emailConfig:modify')")
+    @SaCheckPermission("sys:emailConfig:modify")
     @BreezeSysLog(description = "邮箱锁定开关", type = LogType.EDIT)
     public Result<Boolean> open(@Valid @RequestBody EmailConfigOpenForm emailConfigOpenForm) {
         return Result.ok(this.sysEmailConfigService.open(emailConfigOpenForm));

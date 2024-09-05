@@ -16,20 +16,14 @@
 
 package com.breeze.boot.message.config;
 
-import com.breeze.boot.core.base.UserInfoDTO;
-import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
-import com.breeze.boot.message.utils.WebSocketSecurityUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 握手拦截器
@@ -52,14 +46,6 @@ public class BreezeHandShakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, @NotNull ServerHttpResponse response, @NotNull WebSocketHandler wsHandler, @NotNull Map<String, Object> attributes) {
         log.info("[握手前]：{}", request.getURI());
-        ServletServerHttpRequest serverHttpRequest = (ServletServerHttpRequest) request;
-        String username = serverHttpRequest.getServletRequest().getParameter("username");
-        UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(username);
-        if (Objects.isNull(user)) {
-            throw new BreezeBizException(ResultCode.FAIL);
-        }
-
-        log.info("握手成功");
         return true;
     }
 

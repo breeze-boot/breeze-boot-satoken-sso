@@ -19,10 +19,10 @@ package com.breeze.boot.modules.auth.model.vo;
 import com.breeze.boot.core.annotation.SensitiveInfo;
 import com.breeze.boot.core.enums.SensitiveStrategy;
 import com.breeze.boot.modules.auth.model.entity.SysRole;
-import com.breeze.boot.security.annotation.SecuredField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,6 +40,7 @@ import java.util.List;
 @Schema(description = "系统用户VO")
 public class UserVO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -120,7 +121,6 @@ public class UserVO implements Serializable {
      */
     @Schema(description = "身份证号")
     @SensitiveInfo(SensitiveStrategy.ID_CARD)
-    @SecuredField(column = "id_card")
     private String idCard;
 
     /**

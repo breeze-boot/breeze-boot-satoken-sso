@@ -20,26 +20,25 @@ import cn.hutool.core.util.StrUtil;
 import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
-import com.breeze.boot.security.service.ISysRegisteredClientService;
-import com.breeze.boot.security.service.ISysUserService;
-import com.breeze.boot.security.service.impl.RemoteRegisterClientService;
-import com.breeze.boot.security.service.impl.UserDetailService;
+import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
+import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
+import com.breeze.boot.modules.auth.service.SysUserService;
+import com.breeze.boot.satoken.SaTokenOauthConfigure;
+import com.breeze.boot.satoken.oauth2.client.SaOAuth2DataLoaderImpl;
+import com.breeze.boot.satoken.oauth2.oidc.BreezeOidcScopeHandler;
+import com.breeze.boot.satoken.oauth2.phone.PhoneCodeGrantTypeHandler;
+import com.breeze.boot.satoken.oauth2.userinfo.UserinfoScopeHandler;
+import com.breeze.boot.satoken.spt.StpInterfaceImpl;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
-
-import static com.breeze.boot.core.constants.CacheConstants.LOGIN_USER;
 
 /**
  * 资源服务器配置
@@ -55,36 +54,59 @@ public class ResourceServerConfiguration {
 
     private final CaptchaService captchaService;
 
-    private final ISysRegisteredClientService registeredClientService;
+    private final SysUserService userService;
 
-    private final CacheManager cacheManager;
+    private final SysRegisteredClientService sysRegisteredClientService;
 
-    private final ISysUserService userService;
+    private final AesSecretProperties aesSecretProperties;
 
     public String getActiveProfile() {
         return context.getEnvironment().getActiveProfiles()[0];
     }
 
-    /**
-     * 注册客户端库
-     *
-     * @return {@link RegisteredClientRepository}
-     */
     @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-        return new RemoteRegisterClientService(() -> registeredClientService);
+    public SaOAuth2DataLoaderImpl saOAuth2DataLoader() {
+        return new SaOAuth2DataLoaderImpl(() -> sysRegisteredClientService, () -> aesSecretProperties);
+    }
+
+    @Bean
+    public StpInterfaceImpl stpInterfaceImpl() {
+        return new StpInterfaceImpl(() -> userService);
+    }
+
+    @Bean
+    public SaTokenOauthConfigure saTokenOauthConfigure() {
+        return new SaTokenOauthConfigure(() -> userService, this::check, () -> aesSecretProperties);
     }
 
     /**
      * 用户服务
      *
-     * @return {@link UserDetailService}
+     * @return {@link BreezeOidcScopeHandler}
      */
     @Bean
-    public UserDetailService userDetailService() {
-        return new UserDetailService(() -> userService, (userInfoDTO) -> {
-            Objects.requireNonNull(cacheManager.getCache(LOGIN_USER)).put(userInfoDTO.getUsername(), userInfoDTO);
-        }, this::check);
+    public BreezeOidcScopeHandler oidcScopeHandler() {
+        return new BreezeOidcScopeHandler(() -> userService);
+    }
+
+    /**
+     * 用户服务
+     *
+     * @return {@link BreezeOidcScopeHandler}
+     */
+    @Bean
+    public PhoneCodeGrantTypeHandler phoneCodeGrantTypeHandler() {
+        return new PhoneCodeGrantTypeHandler(() -> userService);
+    }
+
+    /**
+     * 用户服务
+     *
+     * @return {@link BreezeOidcScopeHandler}
+     */
+    @Bean
+    public UserinfoScopeHandler userinfoScopeHandler() {
+        return new UserinfoScopeHandler(() -> userService);
     }
 
     private boolean check(HttpServletRequest contextRequest) {

@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -29,11 +30,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +63,7 @@ public class SysRoleMenuColumnController {
      */
     @Operation(summary = "保存角色列权限")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('auth:menu:create')")
+    @SaCheckPermission("auth:menu:create")
     @BreezeSysLog(description = "保存角色列权限", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody RoleMenuColumnForm roleMenuColumnForm) {
         return this.sysRoleMenuColumnService.saveRoleMenuColumn(roleMenuColumnForm);

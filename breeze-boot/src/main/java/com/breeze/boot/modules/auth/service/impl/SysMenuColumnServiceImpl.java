@@ -32,7 +32,7 @@ import com.breeze.boot.modules.auth.model.vo.RolesMenuColumnVO;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import com.breeze.boot.modules.auth.service.SysMenuColumnService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuColumnService;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,7 +61,7 @@ public class SysMenuColumnServiceImpl extends ServiceImpl<SysMenuColumnMapper, S
      */
     @Override
     public List<RolesMenuColumnVO> getRolesMenuColumns() {
-        List<SysMenuColumn> sysRowPermissionList = this.baseMapper.getRolesMenuColumns(SecurityUtils.getCurrentUser().getUserRoleIds());
+        List<SysMenuColumn> sysRowPermissionList = this.baseMapper.getRolesMenuColumns(BreezeStpUtil.getUser().getUserRoleIds());
         List<RolesMenuColumnVO> rolesMenuColumnList = Lists.newArrayList();
         Map<String, List<SysMenuColumn>> menuMapList = sysRowPermissionList.stream().collect(Collectors.groupingBy(SysMenuColumn::getMenu));
         menuMapList.forEach((menu, sysMenuColumnList) -> {

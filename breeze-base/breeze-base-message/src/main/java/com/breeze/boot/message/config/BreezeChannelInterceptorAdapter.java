@@ -16,17 +16,14 @@
 
 package com.breeze.boot.message.config;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
-import com.breeze.boot.message.utils.WebSocketSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -52,7 +49,7 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
      * @return boolean
      */
     @Override
-    public boolean preReceive(@NotNull MessageChannel channel) {
+    public boolean preReceive(MessageChannel channel) {
         return true;
     }
 
@@ -64,15 +61,17 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
      * @return {@link Message}<{@link ?}>
      */
     @Override
-    public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel channel) {
+    public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         assert accessor != null;
-        String sessionId = accessor.getSessionId();
         StompCommand command = accessor.getCommand();
+        //2、判断token
         log.info("[发送后拦截, 状态: {} 心跳： {}]", command, accessor.getHeartbeat());
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            List<String> nativeHeader = accessor.getNativeHeader("username");
-            String username = checkUserPermission(nativeHeader);
+            List<String> nativeHeader = accessor.getNativeHeader("Authorization");
+            checkUserPermission(nativeHeader);
+            List<String> usernameHeader = accessor.getNativeHeader("username");
+            String username = usernameHeader.get(0);
             log.info("[发送前拦截{}请求]", username);
             Principal principal = () -> username;
             accessor.setUser(principal);
@@ -84,32 +83,31 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
             log.debug("[订阅内容]");
         }
         // 检测用户发送内容
-        if (StompCommand.SEND.equals(command)) {
-            Object simpUser = accessor.getHeader( SimpMessageHeaderAccessor.USER_HEADER);
-            assert simpUser != null;
-            Principal principal = (Principal) simpUser;
-            UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(principal.getName());
-            if (Objects.isNull(user)) {
-                throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-            }
-            log.debug("[订阅内容] {}", principal.getName());
+        if (StompCommand.SEND.equals(accessor.getCommand())) {
+            List<String> nativeHeader = accessor.getNativeHeader("Authorization");
+            checkUserPermission(nativeHeader);
+            List<String> usernameHeader = accessor.getNativeHeader("username");
+            String username = usernameHeader.get(0);
+            log.info("[发送前拦截{}请求]", username);
+            Principal principal = () -> username;
+            accessor.setUser(principal);
+            return message;
         }
         return message;
     }
 
-    private static String checkUserPermission(List<String> nativeHeader) {
+    private static void checkUserPermission(List<String> nativeHeader) {
         if (CollUtil.isEmpty(nativeHeader)) {
             throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
-        String username = nativeHeader.get(0);
-        if (StrUtil.isAllBlank(username)) {
+        String token = nativeHeader.get(0);
+        if (StrUtil.isAllBlank(token)) {
             throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
-        UserInfoDTO user = WebSocketSecurityUtils.getCurrentUser(username);
-        if (Objects.isNull(user)) {
+        Object id = StpUtil.getLoginIdByToken(token);
+        if (Objects.isNull(id)) {
             throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
         }
-        return username;
     }
 
     /**
@@ -121,7 +119,7 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
      * @param ex      异常
      */
     @Override
-    public void afterSendCompletion(@NotNull Message<?> message, @NotNull MessageChannel channel, boolean sent, Exception ex) {
+    public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         StompCommand command = accessor.getCommand();
         log.info("[发送后拦截, 状态: {} 心跳： {}]", command, accessor.getHeartbeat());

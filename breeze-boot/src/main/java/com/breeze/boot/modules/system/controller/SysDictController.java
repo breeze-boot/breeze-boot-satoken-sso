@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
@@ -32,12 +33,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +74,7 @@ public class SysDictController {
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    @SaCheckPermission("sys:dict:list")
     public Result<Page<DictVO>> list(DictQuery dictQuery) {
         return Result.ok(this.sysDictService.listPage(dictQuery));
     }
@@ -87,7 +87,7 @@ public class SysDictController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{dictId}")
-    @PreAuthorize("hasAnyAuthority('auth:dict:info')")
+    @SaCheckPermission("auth:dict:info")
     public Result<DictVO> info(@PathVariable("dictId") Long dictId) {
         return Result.ok(this.sysDictService.getInfoById(dictId));
     }
@@ -101,7 +101,7 @@ public class SysDictController {
      */
     @Operation(summary = "校验字典编码是否重复")
     @GetMapping("/checkDictCode")
-    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    @SaCheckPermission("sys:dict:list")
     public Result<Boolean> checkDictCode(@Parameter(description = "字典编码") @NotNull(message = "字典编码不能为空") @RequestParam("dictCode") String dictCode,
                                          @Parameter(description = "字典ID") @RequestParam(value = "dictId", required = false) Long dictId) {
         return Result.ok(Objects.isNull(this.sysDictService.getOne(Wrappers.<SysDict>lambdaQuery()
@@ -117,7 +117,7 @@ public class SysDictController {
      */
     @Operation(summary = "获取字典")
     @PostMapping("/v1/listDict")
-    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    @SaCheckPermission("sys:dict:list")
     public Result<Map<String, List<Map<String, Object>>>> listDicts(@Parameter(description = "字典ID") @RequestBody List<String> dictCodes) {
         return this.sysDictItemService.listDictByCodes(dictCodes);
     }
@@ -142,7 +142,7 @@ public class SysDictController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:create')")
+    @SaCheckPermission("sys:dict:create")
     @BreezeSysLog(description = "字典信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody DictForm dictForm) {
         return Result.ok(sysDictService.saveDict(dictForm));
@@ -157,7 +157,7 @@ public class SysDictController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
+    @SaCheckPermission("sys:dict:modify")
     @BreezeSysLog(description = "字典信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "字典ID") @NotNull(message = "字典ID")@PathVariable Long id,
                                   @Valid @RequestBody DictForm dictForm) {
@@ -172,7 +172,7 @@ public class SysDictController {
      */
     @Operation(summary = "开关")
     @PutMapping("/open")
-    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
+    @SaCheckPermission("sys:dict:modify")
     @BreezeSysLog(description = "字典信息开关", type = LogType.EDIT)
     public Result<Boolean> open(@Valid @RequestBody DictOpenForm dictOpenForm) {
         return Result.ok(this.sysDictService.open(dictOpenForm));
@@ -186,7 +186,7 @@ public class SysDictController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
+    @SaCheckPermission("sys:dict:delete")
     @BreezeSysLog(description = "字典信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "字典IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysDictService.deleteByIds(Arrays.asList(ids));

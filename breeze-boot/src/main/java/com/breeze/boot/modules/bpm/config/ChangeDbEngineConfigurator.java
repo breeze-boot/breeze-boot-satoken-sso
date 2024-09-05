@@ -4,8 +4,8 @@ import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.common.engine.impl.AbstractEngineConfiguration;
 import org.flowable.common.engine.impl.EngineConfigurator;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 2023-03-01
  */
 @Slf4j
-@Component
+@Configuration
 public class ChangeDbEngineConfigurator implements EngineConfigurator {
 
     private static final AtomicBoolean INITIALIZED = new AtomicBoolean();
@@ -46,6 +46,6 @@ public class ChangeDbEngineConfigurator implements EngineConfigurator {
 
     @Override
     public int getPriority() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 }

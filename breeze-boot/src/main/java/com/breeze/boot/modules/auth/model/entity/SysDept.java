@@ -22,6 +22,7 @@ import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import java.util.List;
 @Schema(description = "系统部门实体")
 public class SysDept extends BaseModel<SysDept> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -20,6 +20,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import java.util.List;
 @Schema(description = "用户消息DTO")
 public class UserMsgDTO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private List<MsgBody> msgBodyList;
@@ -49,6 +51,7 @@ public class UserMsgDTO implements Serializable {
     @Schema(description = "用户消息体")
     public static class MsgBody implements Serializable {
 
+        @Serial
         private static final long serialVersionUID = 1L;
 
         /**

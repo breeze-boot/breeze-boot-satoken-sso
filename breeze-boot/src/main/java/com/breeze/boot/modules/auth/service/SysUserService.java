@@ -26,9 +26,9 @@ import com.breeze.boot.modules.auth.model.form.UserResetForm;
 import com.breeze.boot.modules.auth.model.form.UserRolesForm;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
-import com.breeze.boot.security.service.ISysUserService;
+import com.breeze.boot.satoken.oauth2.IUserDetailService;
+import jakarta.servlet.http.HttpServletResponse;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -37,7 +37,7 @@ import java.util.List;
  * @author gaoweixuan
  * @since 2021-12-06 22:03:39
  */
-public interface SysUserService extends IService<SysUser>, ISysUserService {
+public interface SysUserService extends IService<SysUser>, IUserDetailService {
 
     /**
      * 列表页面

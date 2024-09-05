@@ -16,11 +16,10 @@
 
 package com.breeze.boot.modules.auth.model.vo;
 
-import cn.hutool.json.JSONArray;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -37,6 +36,7 @@ import java.io.Serializable;
 @Schema(description = "系统列数据权限规则VO")
 public class MenuColumnVO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

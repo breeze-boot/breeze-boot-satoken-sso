@@ -14,11 +14,6 @@
     <packaging>jar</packaging>
     <description>mybatis 配置</description>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -34,14 +29,7 @@
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <exclusions>
-                <!-- 排除默认的 HikariCP 数据源 -->
-                <exclusion>
-                    <groupId>com.zaxxer</groupId>
-                    <artifactId>HikariCP</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -51,12 +39,13 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-security</artifactId>
+            <artifactId>breeze-base-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-core</artifactId>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-core</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

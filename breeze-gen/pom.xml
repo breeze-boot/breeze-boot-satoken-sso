@@ -24,7 +24,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-sa-token</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!--undertow容器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -46,7 +50,7 @@
         <!--数据源-->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
         </dependency>
 
         <!--mybatis-->

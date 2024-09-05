@@ -19,12 +19,12 @@ package com.breeze.boot.modules.dev.service.Impl;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.modules.dev.service.SysDbMateService;
 import com.google.common.collect.Maps;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;

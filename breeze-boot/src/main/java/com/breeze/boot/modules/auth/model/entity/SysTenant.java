@@ -21,6 +21,7 @@ import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -38,6 +39,7 @@ import java.io.Serializable;
 @Schema(description = "系统租户实体")
 public class SysTenant extends BaseModel<SysTenant> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

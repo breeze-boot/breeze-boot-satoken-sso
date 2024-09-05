@@ -16,10 +16,14 @@
 
 package com.breeze.boot.exception;
 
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.MessageUtil;
 import com.breeze.boot.core.utils.Result;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -32,8 +36,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 /**
@@ -171,4 +173,31 @@ public class GlobalExceptionHandler {
         return Result.fail(ex.getMessage());
     }
 
+    /**
+     * 无权限
+     *
+     * @param ex 异常
+     * @return {@link Result}<{@link ?}>
+     */
+    @ExceptionHandler(NotPermissionException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result<?> notPermissionException(NotPermissionException ex) {
+        log.error("NotPermissionException 无权限：", ex);
+        String message = MessageUtil.getMessage(ResultCode.SC_FORBIDDEN.getKey());
+        return Result.fail(message);
+    }
+
+    /**
+     * 无权限
+     *
+     * @param ex 异常
+     * @return {@link Result}<{@link ?}>
+     */
+    @ExceptionHandler(NotRoleException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result<?> notRoleException(NotRoleException ex) {
+        log.error("NotRoleException 无权限：", ex);
+        String message = MessageUtil.getMessage(ResultCode.SC_FORBIDDEN.getKey());
+        return Result.fail(message);
+    }
 }

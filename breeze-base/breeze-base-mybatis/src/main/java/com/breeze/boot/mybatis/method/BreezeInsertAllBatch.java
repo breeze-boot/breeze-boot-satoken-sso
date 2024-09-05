@@ -18,13 +18,14 @@ package com.breeze.boot.mybatis.method;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
-import com.breeze.boot.mybatis.constant.BreezeStrPoolConstants;
+import com.breeze.boot.mybatis.constants.BreezeStrPoolConstants;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
 import static cn.hutool.core.text.StrPool.C_COMMA;
-import static com.breeze.boot.mybatis.constant.BreezeStrPoolConstants.*;
+import static cn.hutool.core.text.StrPool.C_DELIM_END;
+import static com.breeze.boot.mybatis.constants.BreezeStrPoolConstants.*;
 
 /**
  * 批量插入

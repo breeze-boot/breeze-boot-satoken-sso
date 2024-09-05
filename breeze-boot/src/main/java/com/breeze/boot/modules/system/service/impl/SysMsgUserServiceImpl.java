@@ -21,14 +21,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.message.dto.UserMsgDTO;
+import com.breeze.boot.modules.system.mapper.SysMsgUserMapper;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
 import com.breeze.boot.modules.system.model.vo.MsgUserVO;
-import com.breeze.boot.modules.system.mapper.SysMsgUserMapper;
 import com.breeze.boot.modules.system.service.SysMsgUserService;
-import com.breeze.boot.security.utils.SecurityUtils;
-import com.breeze.boot.message.dto.UserMsgDTO;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,8 +84,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
                         .msgId(msgBody.getMsgId())
                         .deptId(msgBody.getDeptId())
                         .userId(msgBody.getUserId())
-                        .createBy(msgBody.getCreateBy())
-                        .createName(msgBody.getCreateName())
+                        .userId(msgBody.getUserId())
                         .build())
                 .collect(Collectors.toList());
         this.saveBatch(sysMsgUserList);
@@ -101,7 +102,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsClose, 1)
                 .eq(SysMsgUser::getId, msgId)
                 .eq(SysMsgUser::getIsClose, 0)
-                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
+                .eq(SysMsgUser::getUserId, BreezeStpUtil.getUser().getId())));
     }
 
     /**
@@ -115,7 +116,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
         return Result.ok(this.update(Wrappers.<SysMsgUser>lambdaUpdate().set(SysMsgUser::getIsRead, 1)
                 .eq(SysMsgUser::getId, msgId)
                 .eq(SysMsgUser::getIsRead, 0)
-                .eq(SysMsgUser::getUserId, SecurityUtils.getCurrentUser().getUserId())));
+                .eq(SysMsgUser::getUserId, BreezeStpUtil.getUser().getId())));
 
     }
 
@@ -130,7 +131,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     public Result<Boolean> removeUserMsgByIds(List<Long> ids) {
         List<SysMsgUser> sysMsgUserList = this.listByIds(ids);
         if (CollUtil.isEmpty(sysMsgUserList)) {
-            return Result.fail("用户消息不存在");
+            throw new BreezeBizException(ResultCode.NOT_FOUND);
         }
         boolean remove = this.removeByIds(ids);
         if (!remove) {

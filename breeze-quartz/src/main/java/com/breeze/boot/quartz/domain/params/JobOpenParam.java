@@ -17,9 +17,10 @@
 package com.breeze.boot.quartz.domain.params;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -36,6 +37,7 @@ import java.io.Serializable;
 @Schema(description = "任务的开启关闭参数")
 public class JobOpenParam implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "任务ID不能为空")

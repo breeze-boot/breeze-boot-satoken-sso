@@ -25,12 +25,12 @@ import com.breeze.boot.modules.bpm.model.vo.TaskApproveInfoVO;
 import com.breeze.boot.modules.bpm.model.vo.UserTaskVO;
 import com.breeze.boot.modules.bpm.service.IBpmTaskService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**

@@ -16,13 +16,13 @@
 
 package com.breeze.boot.modules.dev.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.dev.service.SysDbMateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +52,7 @@ public class SysDbMateController {
      */
     @Operation(summary = "表列表")
     @GetMapping("/tables")
-    @PreAuthorize("hasAnyAuthority('auth:db:tables')")
+    @SaCheckPermission("auth:db:tables")
     public Result<List<?>> listTable() {
         return Result.ok(this.sysDbMateService.listTable());
     }
@@ -65,7 +65,7 @@ public class SysDbMateController {
      */
     @Operation(summary = "表字段列表")
     @GetMapping("/columns")
-    @PreAuthorize("hasAnyAuthority('auth:db:columns')")
+    @SaCheckPermission("auth:db:columns")
     public Result<List<?>> listTableColumn(@RequestParam String tableName) {
         return Result.ok(this.sysDbMateService.listTableColumn(tableName));
     }

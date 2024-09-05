@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.bpm.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.bpm.model.query.BpmGroupQuery;
@@ -25,7 +26,6 @@ import com.breeze.boot.modules.bpm.service.IGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +52,7 @@ public class BpmGroupController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('bpm:group:list')")
+    @SaCheckPermission("bpm:group:list")
     public Result<Page<BpmGroupVO>> list(BpmGroupQuery groupQuery) {
         return Result.ok(this.groupService.listPage(groupQuery));
     }

@@ -16,10 +16,12 @@
 
 package com.breeze.boot.modules.system.model.form;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -36,6 +38,7 @@ import java.io.Serializable;
 @Schema(description = "系统数据源表单")
 public class DbResourceForm implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

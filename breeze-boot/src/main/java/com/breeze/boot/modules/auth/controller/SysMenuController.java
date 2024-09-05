@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -28,13 +29,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -63,7 +63,7 @@ public class SysMenuController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('auth:menu:list')")
+    @SaCheckPermission("auth:menu:list")
     public Result<?> list(MenuQuery menuQuery) {
         return this.sysMenuService.listMenu(menuQuery);
     }
@@ -105,7 +105,7 @@ public class SysMenuController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('auth:menu:info')")
+    @SaCheckPermission("auth:menu:info")
     public Result<SysMenu> info(@Parameter(description = "菜单ID") @NotNull(message = "菜单ID不能为空") @PathVariable Long id) {
         return Result.ok(sysMenuService.getById(id));
     }
@@ -118,7 +118,7 @@ public class SysMenuController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('auth:menu:create')")
+    @SaCheckPermission("auth:menu:create")
     @BreezeSysLog(description = "菜单信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody MenuForm menuForm) {
         return this.sysMenuService.saveMenu(menuForm);
@@ -132,7 +132,7 @@ public class SysMenuController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('auth:menu:modify')")
+    @SaCheckPermission("auth:menu:modify")
     @BreezeSysLog(description = "菜单信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "菜单ID") @PathVariable Long id,
                                   @Valid @RequestBody MenuForm menuForm) {
@@ -147,7 +147,7 @@ public class SysMenuController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('auth:menu:delete')")
+    @SaCheckPermission("auth:menu:delete")
     @BreezeSysLog(description = "菜单信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "菜单ID") @NotNull(message = "参数不能为空") @RequestBody Long id) {
         return this.sysMenuService.deleteById(id);

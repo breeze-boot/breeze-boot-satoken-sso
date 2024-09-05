@@ -29,11 +29,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -56,7 +56,7 @@ public class ${className}Controller {
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:list')")
+    @SaCheckPermission("${moduleName}:${pathName}:list")
     public Result<Page<${className}>> list(${className}Query ${lowCaseClassName}Query) {
         return Result.ok(this.${lowCaseClassName}Service.listPage(${lowCaseClassName}Query));
     }
@@ -66,7 +66,7 @@ public class ${className}Controller {
      */
     @Operation(summary = "信息")
     @GetMapping("/info/${pk.attrname}")
-    @PreAuthorize("${moduleName}:${pathName}:info")
+    @SaCheckPermission("${moduleName}:${pathName}:info")
     public Result<${className}> info(@PathVariable("${pkColumn.attrName}") ${pkColumn.attrType} ${pkColumn.attrName}){
         return Result.ok(this.${className}Service.getById(${pk.attrName}));
     }
@@ -76,7 +76,7 @@ public class ${className}Controller {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("${moduleName}:${pathName}:create")
+    @SaCheckPermission("${moduleName}:${pathName}:create")
     @BreezeSysLog(description = "${comments}保存", type = LogType.SAVE)
     public Result<Boolean> save(@RequestBody ${className}Entity ${className}){
         return Result.ok(this.${classname}Service.save(${classname}););
@@ -87,7 +87,7 @@ public class ${className}Controller {
      */
     @Operation(summary = "修改")
     @PutMapping
-    @PreAuthorize("${moduleName}:${pathName}:modify")
+    @SaCheckPermission("${moduleName}:${pathName}:modify")
     @BreezeSysLog(description = "${comments}修改", type = LogType.EDIT)
     public Result<Boolean> update(@RequestBody ${className}Entity ${className}){
         return R.ok(this.${className}Service.updateById(${classname}););
@@ -98,7 +98,7 @@ public class ${className}Controller {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("${moduleName}:${pathName}:delete")
+    @SaCheckPermission("${moduleName}:${pathName}:delete")
     @BreezeSysLog(description = "${comments}删除", type = LogType.DELETE)
     public R delete(@RequestBody ${pkColumn.attrType}[] ${pkColumn.attrName}s){
         return R.ok(this.${className}Service.removeByIds(Arrays.asList(${pkColumn.attrName}s)););

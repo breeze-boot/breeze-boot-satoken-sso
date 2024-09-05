@@ -105,7 +105,6 @@ public class RedisConfiguration {
      * @return {@link Jackson2JsonRedisSerializer}
      */
     private Jackson2JsonRedisSerializer<Object> getJsonRedisSerializer() {
-        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper mapper = new ObjectMapper()
                 .registerModule(new ParameterNamesModule())
                 .registerModule((new SimpleModule()))
@@ -122,8 +121,7 @@ public class RedisConfiguration {
         mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         // 解决jackson2无法反序列化LocalDateTime的问题
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        serializer.setObjectMapper(mapper);
-        return serializer;
+        return new Jackson2JsonRedisSerializer<>(mapper, Object.class);
     }
 
 }

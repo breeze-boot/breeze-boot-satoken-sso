@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.bpm.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.bpm.model.form.BpmApprovalForm;
@@ -26,14 +27,13 @@ import com.breeze.boot.modules.bpm.service.IBpmInstanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -61,7 +61,7 @@ public class BpmInstanceController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('bpm:instance:list')")
+    @SaCheckPermission("bpm:instance:list")
     public Result<Page<BpmInstanceVO>> list(@ParameterObject BpmInstanceQuery bpmInstanceQuery) {
         return Result.ok(this.bpmInstanceService.listPage(bpmInstanceQuery));
     }
@@ -74,7 +74,7 @@ public class BpmInstanceController {
      */
     @Operation(summary = "发起")
     @PostMapping("/start")
-    @PreAuthorize("hasAnyAuthority('bpm:instance:start')")
+    @SaCheckPermission("bpm:instance:start")
     public Result<String> startProcess(@Valid @RequestBody @ParameterObject BpmStartForm startForm) {
         return this.bpmInstanceService.startProcess(startForm);
     }
@@ -88,7 +88,7 @@ public class BpmInstanceController {
      */
     @Operation(summary = "挂起")
     @PutMapping("/suspendedInstance")
-    @PreAuthorize("hasAnyAuthority('bpm:instance:suspended')")
+    @SaCheckPermission("bpm:instance:suspended")
     public Result<Boolean> suspendedInstance(@NotBlank(message = "流程实例ID不能为空") @Schema(description = "流程实例ID")
                                              @RequestParam(name = "procInstId") String procInstId) {
         return this.bpmInstanceService.suspendedInstance(procInstId);

@@ -20,6 +20,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRoleMapper;
 import com.breeze.boot.modules.auth.model.bo.RoleBO;
@@ -147,7 +149,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysRole> roleEntityList = this.listByIds(ids);
         if (CollUtil.isEmpty(roleEntityList)) {
-            return Result.fail(Boolean.FALSE, "角色不存在");
+            throw new BreezeBizException(ResultCode.NOT_FOUND);
         }
         boolean remove = this.removeByIds(ids);
         if (remove) {

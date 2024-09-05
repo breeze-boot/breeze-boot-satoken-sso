@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.breeze.boot.core.utils.Result;
@@ -30,13 +31,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,7 +66,7 @@ public class SysPostController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('auth:post:list')")
+    @SaCheckPermission("auth:post:list")
     public Result<IPage<PostVO>> list(PostQuery postQuery) {
         return Result.ok(this.sysPostService.listPage(postQuery));
     }
@@ -79,7 +79,7 @@ public class SysPostController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{postId}")
-    @PreAuthorize("hasAnyAuthority('auth:post:info')")
+    @SaCheckPermission("auth:post:info")
     public Result<PostVO> info(@Parameter(description = "岗位ID") @PathVariable("postId") Long postId) {
         return Result.ok(this.sysPostService.getInfoById(postId));
     }
@@ -93,7 +93,7 @@ public class SysPostController {
      */
     @Operation(summary = "校验岗位编码是否重复")
     @GetMapping("/checkPostCode")
-    @PreAuthorize("hasAnyAuthority('auth:post:list')")
+    @SaCheckPermission("auth:post:list")
     public Result<Boolean> checkPostCode(@Parameter(description = "岗位编码") @NotBlank(message = "岗位编码不能为空") @RequestParam("postCode") String postCode,
                                          @Parameter(description = "岗位ID") @RequestParam(value = "postId", required = false) Long postId) {
         return Result.ok(Objects.isNull(this.sysPostService.getOne(Wrappers.<SysPost>lambdaQuery()
@@ -109,7 +109,7 @@ public class SysPostController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('auth:post:create')")
+    @SaCheckPermission("auth:post:create")
     @BreezeSysLog(description = "岗位信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody PostForm postForm) {
         return Result.ok(this.sysPostService.savePost(postForm));
@@ -123,7 +123,7 @@ public class SysPostController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('auth:post:modify')")
+    @SaCheckPermission("auth:post:modify")
     @BreezeSysLog(description = "岗位信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "岗位ID") @PathVariable Long id,
                                   @Valid @RequestBody PostForm postForm) {
@@ -138,7 +138,7 @@ public class SysPostController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('auth:post:delete')")
+    @SaCheckPermission("auth:post:delete")
     @BreezeSysLog(description = "岗位信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "岗位IDS") @NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
         return Result.ok(this.sysPostService.removeByIds(ids));

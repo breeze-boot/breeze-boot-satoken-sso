@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.bpm.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
@@ -29,12 +30,11 @@ import com.breeze.boot.xss.annotation.JumpXss;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -60,7 +60,7 @@ public class BpmDefinitionController {
     @Operation(summary = "保存设计V1")
     @PostMapping("/v1/design")
     @JumpXss
-    @PreAuthorize("hasAnyAuthority('bpm:definition:design')")
+    @SaCheckPermission("bpm:definition:design")
     public Result<String> deploy(@Valid @RequestBody BpmDesignXmlStringForm bpmDesignXmlStringForm) {
         return this.bpmDefinitionService.deploy(bpmDesignXmlStringForm);
     }
@@ -73,7 +73,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "保存设计V2")
     @PostMapping("/v2/design")
-    @PreAuthorize("hasAnyAuthority('bpm:definition:design')")
+    @SaCheckPermission("bpm:definition:design")
     @JumpXss
     public Result<String> deploy(@Valid @RequestBody BpmDesignXmlFileForm bpmDesignXmlFileForm) {
         return this.bpmDefinitionService.deploy(bpmDesignXmlFileForm);
@@ -87,7 +87,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('bpm:definition:list')")
+    @SaCheckPermission("bpm:definition:list")
     public Result<Page<BpmDefinitionVO>> list(BpmDefinitionQuery bpmDefinitionQuery) {
         return Result.ok(this.bpmDefinitionService.listPage(bpmDefinitionQuery));
     }
@@ -100,7 +100,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{procDefId}")
-    @PreAuthorize("hasAnyAuthority('bpm:definition:list')")
+    @SaCheckPermission("bpm:definition:list")
     public Result<BpmDefinitionVO> info(@PathVariable(value = "procDefId") String procDefId) {
         return Result.ok(this.bpmDefinitionService.getInfo(procDefId));
     }
@@ -113,7 +113,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "流程定义版本列表")
     @PostMapping("/listVersion")
-    @PreAuthorize("hasAnyAuthority('bpm:definition:list')")
+    @SaCheckPermission("bpm:definition:list")
     public Result<Page<BpmDefinitionVO>> listVersion(@RequestBody BpmDefinitionQuery bpmDefinitionQuery) {
         return Result.ok(this.bpmDefinitionService.listVersionPage(bpmDefinitionQuery));
     }
@@ -126,7 +126,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "获取各个版本流程定义png")
     @GetMapping("/getBpmDefinitionPng")
-    @PreAuthorize("hasAnyAuthority('bpm:definition:info')")
+    @SaCheckPermission("bpm:definition:info")
     public Result<?> getBpmDefinitionPng(@NotBlank(message = "流程定义Key不能为空") @Schema(description = "流程定义Key") @RequestParam String procInstId) {
         return Result.ok(this.bpmDefinitionService.getBpmDefinitionPng(procInstId));
     }
@@ -139,7 +139,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "获取各个版本流程定义xml")
     @GetMapping("/getBpmDefinitionXml")
-    @PreAuthorize("hasAnyAuthority('bpm:definition:info')")
+    @SaCheckPermission("bpm:definition:info")
     public Result<?> getBpmDefinitionXml(@NotBlank(message = "流程实例ID不能为空") @Schema(description = "流程实例ID") @RequestParam String procInstId) {
         return Result.ok(this.bpmDefinitionService.getBpmDefinitionXml(procInstId));
     }
@@ -169,7 +169,7 @@ public class BpmDefinitionController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('bpm:definition:delete')")
+    @SaCheckPermission("bpm:definition:delete")
     public Result<Boolean> delete(@RequestBody List<BpmDefinitionDeleteForm> bpmDefinitionDeleteFormList) {
         return Result.ok(this.bpmDefinitionService.delete(bpmDefinitionDeleteFormList));
     }

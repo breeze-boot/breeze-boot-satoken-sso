@@ -18,16 +18,17 @@ package com.breeze.boot.xss;
 
 import com.breeze.boot.xss.config.XssProperties;
 import com.breeze.boot.xss.filters.XssFilter;
+import jakarta.annotation.Resource;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
 
 /**
  * xxs过滤器注册配置
@@ -45,7 +46,9 @@ public class XssFilterRegisterConfiguration {
      */
     private final XssProperties xssProperties;
 
-    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
+    @Resource
+    @Qualifier("requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     private final ApplicationContext applicationContext;
 

@@ -3,7 +3,6 @@ package com.breeze.boot.service;
 import com.anji.captcha.service.CaptchaCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +19,6 @@ import java.util.concurrent.TimeUnit;
  * @Title: 使用redis缓存
  * @since 2020-05-12
  */
-@Service
 public class CaptchaCacheServiceRedis implements CaptchaCacheService {
 
     /**

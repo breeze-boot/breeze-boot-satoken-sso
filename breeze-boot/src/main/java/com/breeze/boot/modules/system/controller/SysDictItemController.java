@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
@@ -27,12 +28,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class SysDictItemController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:list')")
+    @SaCheckPermission("sys:dict:list")
     public Result<List<DictItemVO>> list(DictItemQuery dictItemQuery) {
         return Result.ok(this.sysDictItemService.listDictItem(dictItemQuery));
     }
@@ -75,7 +75,7 @@ public class SysDictItemController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{dictItemId}")
-    @PreAuthorize("hasAnyAuthority('auth:dict:info')")
+    @SaCheckPermission("auth:dict:info")
     public Result<DictItemVO> info(@Parameter(description = "字典项ID") @NotNull(message = "字典项ID") @PathVariable("dictItemId") Long dictItemId) {
         return Result.ok(this.sysDictItemService.getInfoById(dictItemId));
     }
@@ -88,7 +88,7 @@ public class SysDictItemController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:create')")
+    @SaCheckPermission("sys:dict:create")
     @BreezeSysLog(description = "字典项信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody DictItemForm dictItemForm) {
         return Result.ok(sysDictItemService.saveDictItem(dictItemForm));
@@ -103,7 +103,7 @@ public class SysDictItemController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dict:modify')")
+    @SaCheckPermission("sys:dict:modify")
     @BreezeSysLog(description = "字典项信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "字典项ID") @NotNull(message = "字典项ID") @PathVariable Long id,
                                   @Valid @RequestBody DictItemForm dictItemForm) {
@@ -118,7 +118,7 @@ public class SysDictItemController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:dict:delete')")
+    @SaCheckPermission("sys:dict:delete")
     @BreezeSysLog(description = "字典项信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "字典项ID") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysDictItemService.removeByIds(Arrays.asList(ids)));

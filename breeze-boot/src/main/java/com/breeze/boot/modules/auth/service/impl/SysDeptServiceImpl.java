@@ -23,6 +23,8 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysDeptMapper;
 import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
@@ -32,11 +34,11 @@ import com.breeze.boot.modules.auth.model.mappers.SysDeptMapStruct;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.SysDeptService;
 import com.google.common.collect.Maps;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,13 +118,13 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public Result<Boolean> deleteById(Long id) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
         if (CollUtil.isNotEmpty(deptEntityList)) {
-            return Result.fail(Boolean.FALSE, "此部门存在下级部门,不允许删除");
+            throw new BreezeBizException(ResultCode.IS_USED);
         }
         boolean remove = this.removeById(id);
-        if (remove) {
-            return Result.ok(Boolean.TRUE, "删除成功");
+        if (!remove) {
+            throw new BreezeBizException(ResultCode.FAIL);
         }
-        return Result.fail(Boolean.FALSE, "删除失败");
+        return Result.ok(Boolean.TRUE, "删除成功");
     }
 
     @Override

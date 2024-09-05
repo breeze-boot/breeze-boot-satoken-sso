@@ -18,6 +18,7 @@ package com.breeze.boot.modules.system.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.enums.DataRole;
 import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
 import com.breeze.boot.modules.system.model.vo.MsgUserVO;
@@ -43,7 +44,7 @@ public interface SysMsgUserMapper extends BreezeBaseMapper<SysMsgUser> {
      * @param userMsgQuery 用户消息查询
      * @return {@link IPage}<{@link MsgUserVO}>
      */
-    @BreezeDataPermission
+    @BreezeDataPermission(dept = DataRole.DEPT_ID)
     IPage<MsgUserVO> listPage(Page<SysMsgUser> page, @Param("userMsgQuery") UserMsgQuery userMsgQuery);
 
     /**

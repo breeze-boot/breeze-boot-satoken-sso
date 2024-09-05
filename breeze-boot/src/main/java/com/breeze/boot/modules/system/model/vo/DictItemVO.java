@@ -19,6 +19,7 @@ package com.breeze.boot.modules.system.model.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -35,6 +36,7 @@ import java.io.Serializable;
 @Schema(description = "系统字典项VO")
 public class DictItemVO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

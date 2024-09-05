@@ -19,11 +19,10 @@ package com.breeze.boot.modules.bpm.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * 流程分类

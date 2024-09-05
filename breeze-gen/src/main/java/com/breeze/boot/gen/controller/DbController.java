@@ -16,20 +16,19 @@
 
 package com.breeze.boot.gen.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.gen.domain.Table;
 import com.breeze.boot.gen.domain.param.TableParam;
 import com.breeze.boot.gen.service.DbService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class DbController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('auth:user:list')")
+    @SaCheckPermission("auth:user:list")
     public Result<IPage<Table>> list(TableParam tableParam) {
         return Result.ok(dbService.listPage(tableParam));
     }
@@ -59,7 +58,7 @@ public class DbController {
      * 生成代码
      */
     @RequestMapping("/gen")
-    public void code(List<String> tables, HttpServletResponse response) throws IOException {
+    public void code(List<String> tables, HttpServletResponse response) {
         byte[] data = dbService.generatorCode(tables);
     }
 

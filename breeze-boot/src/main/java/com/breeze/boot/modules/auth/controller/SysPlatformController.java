@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -33,13 +34,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +75,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('auth:platform:list')")
+    @SaCheckPermission("auth:platform:list")
     public Result<Page<PlatformVO>> list(PlatformQuery platformQuery) {
         return Result.ok(this.sysPlatformService.listPage(platformQuery));
     }
@@ -88,7 +88,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{platformId}")
-    @PreAuthorize("hasAnyAuthority('auth:platform:info')")
+    @SaCheckPermission("auth:platform:info")
     public Result<PlatformVO> info(@Parameter(description = "平台ID") @PathVariable("platformId") Long platformId) {
         return Result.ok(this.sysPlatformService.getInfoById(platformId));
     }
@@ -102,7 +102,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "校验平台编码是否重复")
     @GetMapping("/checkPlatformCode")
-    @PreAuthorize("hasAnyAuthority('auth:platform:list')")
+    @SaCheckPermission("auth:platform:list")
     public Result<Boolean> checkPlatformCode(@Parameter(description = "平台编码") @NotBlank(message = "平台编码不能为空") @RequestParam("platformCode") String platformCode,
                                              @Parameter(description = "平台ID") @RequestParam(value = "platformId", required = false) Long platformId) {
         return Result.ok(Objects.isNull(this.sysPlatformService.getOne(Wrappers.<SysPlatform>lambdaQuery()
@@ -118,7 +118,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('auth:platform:create')")
+    @SaCheckPermission("auth:platform:create")
     @BreezeSysLog(description = "平台信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody PlatformForm platformForm) {
         return Result.ok(this.sysPlatformService.savePlatform(platformForm));
@@ -132,7 +132,7 @@ public class SysPlatformController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('auth:platform:modify')")
+    @SaCheckPermission("auth:platform:modify")
     @BreezeSysLog(description = "平台信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "菜单ID") @PathVariable Long id,
                                   @Valid @RequestBody PlatformForm platformForm) {
@@ -147,10 +147,10 @@ public class SysPlatformController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('auth:platform:delete')")
+    @SaCheckPermission("auth:platform:delete")
     @BreezeSysLog(description = "平台信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "平台IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
-        List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, ids));
+        List<SysMenu> menuEntityList = this.sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().in(SysMenu::getPlatformId, (Object[]) ids));
         if (CollectionUtil.isNotEmpty(menuEntityList)) {
             return Result.fail(Boolean.FALSE, "该平台有菜单配置");
         }

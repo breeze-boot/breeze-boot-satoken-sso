@@ -20,10 +20,6 @@ package com.breeze.boot.modules.bpm.model.query;
 import com.breeze.boot.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * 流程用户查询参数

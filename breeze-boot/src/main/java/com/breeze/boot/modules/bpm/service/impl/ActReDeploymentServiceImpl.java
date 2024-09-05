@@ -48,7 +48,6 @@ public class ActReDeploymentServiceImpl extends ServiceImpl<ActReDeploymentMappe
     public Page<BpmDefinitionVO> listPage(BpmDefinitionQuery flowDeploymentQuery) {
         return this.baseMapper.listPage(new Page<>(flowDeploymentQuery.getCurrent(), flowDeploymentQuery.getSize()), flowDeploymentQuery);
     }
-
     @Override
     public BpmDefinitionVO getInfo(String definitionId) {
         return this.baseMapper.getInfo(definitionId);

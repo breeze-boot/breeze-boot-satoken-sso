@@ -24,7 +24,6 @@ package com.breeze.boot.core.constants;
  */
 public class CoreConstants {
 
-
     /**
      * 列
      */
@@ -36,20 +35,17 @@ public class CoreConstants {
     public static final String X_TENANT_ID = "X-Tenant-Id";
 
     public static final Long ROOT = 1111111111111111111L;
-
     /**
      * 成功标记
      */
-    public static final   String SUCCESS = "0000";
+    public static final String SUCCESS = "0000";
 
     /**
      * 失败标记
      */
-    public static final  String FAIL = "0001";
+    public static final String FAIL = "0001";
 
-    /**
-     * 系统bucket名称
-     */
-    public static final String SYSTEM_BUCKET_NAME = "system";
+    public final static String USER_INFO = "user_info";
+    public static final String USER_TYPE = "userPrincipal";
 
 }

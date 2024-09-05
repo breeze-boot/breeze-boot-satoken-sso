@@ -16,7 +16,6 @@
 
 package com.breeze.boot;
 
-import com.breeze.boot.security.annotation.EnableResourceServer;
 import com.breeze.boot.validater.EnableFastValidator;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
@@ -29,7 +28,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2022-11-16
  */
 @EnableRabbit
-@EnableResourceServer
 @EnableFastValidator
 @SpringBootApplication
 public class BreezeBootApplication {

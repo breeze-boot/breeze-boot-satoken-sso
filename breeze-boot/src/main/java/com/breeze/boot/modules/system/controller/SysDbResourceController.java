@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -29,12 +30,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -63,7 +63,7 @@ public class SysDbResourceController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:dbResource:list')")
+    @SaCheckPermission("sys:dbResource:list")
     public Result<Page<DbResourceVO>> list(DbResourceQuery dbResourceQuery) {
         return Result.ok(this.sysDbResourceService.listPage(dbResourceQuery));
     }
@@ -76,7 +76,7 @@ public class SysDbResourceController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dbResource:info')")
+    @SaCheckPermission("sys:dbResource:info")
     public Result<DbResourceVO> info(@NotNull(message = "不能为空") @PathVariable Long id) {
         return Result.ok(this.sysDbResourceService.getDbResourceById(id));
     }
@@ -89,7 +89,7 @@ public class SysDbResourceController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('sys:dbResource:create')")
+    @SaCheckPermission("sys:dbResource:create")
     @BreezeSysLog(description = "数据源信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody DbResourceForm dbResourceForm) {
         return Result.ok(this.sysDbResourceService.saveDbResource(dbResourceForm));
@@ -104,7 +104,7 @@ public class SysDbResourceController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('sys:dbResource:modify')")
+    @SaCheckPermission("sys:dbResource:modify")
     @BreezeSysLog(description = "数据源信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "数据源ID") @NotNull(message = "数据源ID") @PathVariable Long id,
                                   @Valid @RequestBody DbResourceForm dbResourceForm) {
@@ -119,7 +119,7 @@ public class SysDbResourceController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:dbResource:delete')")
+    @SaCheckPermission("sys:dbResource:delete")
     @BreezeSysLog(description = "数据源信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysDbResourceService.removeDbResourceByIds(Arrays.asList(ids)));

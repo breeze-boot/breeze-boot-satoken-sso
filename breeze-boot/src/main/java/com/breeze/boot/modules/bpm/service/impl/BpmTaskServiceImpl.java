@@ -26,7 +26,7 @@ import com.breeze.boot.modules.bpm.model.form.BpmApprovalForm;
 import com.breeze.boot.modules.bpm.model.query.UserTaskQuery;
 import com.breeze.boot.modules.bpm.model.vo.*;
 import com.breeze.boot.modules.bpm.service.IBpmTaskService;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,6 @@ import org.flowable.idm.api.User;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.flowable.task.api.history.HistoricTaskInstance;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -91,7 +90,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .key("start")
                 .procInstId(null)
                 .taskId(null)
-                .username(SecurityUtils.getUsername())
+                .username(BreezeStpUtil.getUser().getUsername())
                 .build());
         // @formatter:on
         bpmInfoVO.setButtons(buttonList);
@@ -106,7 +105,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .key("claim")
                 .procInstId(procInstId)
                 .taskId(task.getId())
-                .username( SecurityUtils.getUsername())
+                .username(BreezeStpUtil.getUser().getUsername())
                 .build());
         // @formatter:on
     }
@@ -119,7 +118,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .key("unClaim")
                 .procInstId(procInstId)
                 .taskId(task.getId())
-                .username( SecurityUtils.getUsername())
+                .username(BreezeStpUtil.getUser().getUsername())
                 .build());
         // @formatter:on
     }
@@ -132,7 +131,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .key("agree")
                 .procInstId(procInstId)
                 .taskId(task.getId())
-                .username( SecurityUtils.getUsername())
+                .username(BreezeStpUtil.getUser().getUsername())
                 .build();
         // @formatter:on
     }
@@ -145,7 +144,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .key("reject")
                 .procInstId(procInstId)
                 .taskId(task.getId())
-                .username( SecurityUtils.getUsername())
+                .username(BreezeStpUtil.getUser().getUsername())
                 .build();
         // @formatter:on
     }
@@ -160,9 +159,9 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
     public List<UserTaskVO> listUserTodoTask(UserTaskQuery userTaskQuery) {
         List<UserTaskVO> result = new ArrayList<>();
         // 已签收的任务
-        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getUsername()), userTaskQuery.getTaskTitle(), true));
+        result.addAll(this.getUserTaskList(String.valueOf(BreezeStpUtil.getUser().getUsername()), userTaskQuery.getTaskTitle(), true));
         // 待签收的任务
-        result.addAll(this.getUserTaskList(String.valueOf(SecurityUtils.getUsername()), userTaskQuery.getTaskTitle(), false));
+        result.addAll(this.getUserTaskList(String.valueOf(BreezeStpUtil.getUser().getUsername()), userTaskQuery.getTaskTitle(), false));
         // 按照任务时间倒序排列
         // @formatter:off
         return result.stream()
@@ -201,7 +200,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
         // 查询历史任务实例
         // @formatter:off
         List<HistoricTaskInstance> hisTaskInsList = historyService.createHistoricTaskInstanceQuery()
-                .taskAssignee(SecurityUtils.getUsername())
+                .taskAssignee(BreezeStpUtil.getUser().getUsername())
                 .orderByTaskCreateTime().asc()
                 .includeIdentityLinks()
                 .includeProcessVariables()
@@ -209,7 +208,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
                 .listPage(userTaskQuery.getOffset(), userTaskQuery.getSize());
 
         long count = historyService.createHistoricTaskInstanceQuery()
-                .taskAssignee(SecurityUtils.getUsername())
+                .taskAssignee(BreezeStpUtil.getUser().getUsername())
                 .orderByTaskCreateTime().asc()
                 .finished()
                 .count();
@@ -563,9 +562,9 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
         TaskQuery taskQuery = this.taskService.createTaskQuery();
         TaskQuery todoTaskQuery;
         if (isAssigned) {
-            todoTaskQuery = SecurityUtils.isAdmin() ? taskQuery.active().includeProcessVariables() : taskQuery.taskAssignee(username).active().includeProcessVariables();
+            todoTaskQuery = BreezeStpUtil.isAdmin() ? taskQuery.active().includeProcessVariables() : taskQuery.taskAssignee(username).active().includeProcessVariables();
         } else {
-            todoTaskQuery = SecurityUtils.isAdmin() ? taskQuery.active().includeProcessVariables() : taskQuery.taskCandidateUser(username).active().includeProcessVariables();
+            todoTaskQuery = BreezeStpUtil.isAdmin() ? taskQuery.active().includeProcessVariables() : taskQuery.taskCandidateUser(username).active().includeProcessVariables();
         }
         if (StringUtils.isNotBlank(taskTitle)) {
             todoTaskQuery.processVariableValueLike("taskTitle", "%" + taskTitle + "%");
@@ -694,7 +693,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
      */
     @Override
     public Boolean complete(BpmApprovalForm bpmApprovalForm) {
-        String username = SecurityUtils.getUsername();
+        String username = BreezeStpUtil.getUser().getUsername();
         String comment = StrUtil.isNotBlank(bpmApprovalForm.getComment()) ? bpmApprovalForm.getComment() : "";
         //设置审批意见
         if (StrUtil.isNotEmpty(comment)) {
@@ -718,7 +717,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
      */
     @Override
     public Boolean claim(String taskId) {
-        String username = SecurityUtils.getUsername();
+        String username = BreezeStpUtil.getUser().getUsername();
         Task task = getTask(taskId);
         taskService.addComment(taskId, task.getProcessInstanceId(), username + "签收任务");
         this.taskService.claim(taskId, username);
@@ -738,7 +737,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
             throw new BreezeBizException(ResultCode.TASK_NOT_FOUND);
         }
         // 添加审批意见
-        taskService.addComment(taskId, task.getProcessInstanceId(), SecurityUtils.getUsername() + "释放签收任务");
+        taskService.addComment(taskId, task.getProcessInstanceId(), BreezeStpUtil.getUser().getUsername() + "释放签收任务");
 
         List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(taskId);
         boolean canClaim = identityLinks.stream().anyMatch(link -> CANDIDATE.equals(link.getType()));
@@ -764,7 +763,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
         if (Objects.nonNull(task)) {
             //直接setAssignee即可
             taskService.setAssignee(taskId, username);
-            taskService.addComment(taskId, task.getProcessInstanceId(), SecurityUtils.getUsername() + "转办" + username);
+            taskService.addComment(taskId, task.getProcessInstanceId(), BreezeStpUtil.getUser().getUsername() + "转办" + username);
         }
         return Boolean.TRUE;
     }
@@ -779,7 +778,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
     @Override
     public Boolean resolveTask(String taskId) {
         Task task = getTask(taskId);
-        taskService.addComment(taskId, task.getProcessInstanceId(), SecurityUtils.getUsername() + "审批加签任务");
+        taskService.addComment(taskId, task.getProcessInstanceId(), BreezeStpUtil.getUser().getUsername() + "审批加签任务");
         // 通过resolveTask完成加签任务，加签任务没有更改任务的基本信息,只是更新了assignee
         taskService.resolveTask(taskId);
         return Boolean.TRUE;
@@ -798,7 +797,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
             throw new BreezeBizException(ResultCode.PROCESS_NOT_FOUND);
         }
 
-        taskService.addComment(bpmApprovalForm.getTaskId(), processInstance.getProcessInstanceId(), SecurityUtils.getUsername() + "废止任务,退回到发起人");
+        taskService.addComment(bpmApprovalForm.getTaskId(), processInstance.getProcessInstanceId(), BreezeStpUtil.getUser().getUsername() + "废止任务,退回到发起人");
         this.runtimeService.deleteProcessInstance(bpmApprovalForm.getProcInstId(), bpmApprovalForm.getComment());
         return Boolean.TRUE;
     }
@@ -814,7 +813,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
         // 查询历史任务实例
         // @formatter:off
         List<HistoricProcessInstance> hisProcInstList = historyService.createHistoricProcessInstanceQuery()
-                .startedBy(SecurityUtils.getUsername())
+                .startedBy(BreezeStpUtil.getUser().getUsername())
                 .orderByProcessInstanceStartTime().asc()
                 .listPage(userTaskQuery.getOffset(), userTaskQuery.getSize());
         // @formatter:on
@@ -848,7 +847,6 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
         return taskList;
     }
 
-    @NotNull
     private Task getTask(String taskId) {
         Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (Objects.isNull(task)) {
@@ -867,7 +865,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
     public Boolean delegateTask(String taskId, String username) {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         if (Objects.nonNull(task)) {
-            taskService.addComment(taskId, task.getProcessInstanceId(), SecurityUtils.getUsername() + "加签" + username);
+            taskService.addComment(taskId, task.getProcessInstanceId(), BreezeStpUtil.getUser().getUsername() + "加签" + username);
             taskService.delegateTask(taskId, username);
         }
         return Boolean.TRUE;
@@ -883,7 +881,7 @@ public class BpmTaskServiceImpl implements IBpmTaskService {
      */
     private List<TaskButtonVO> findTasksButtons(String procInstId, Supplier<TaskQuery> taskAssigneeQuerySupplier, Supplier<TaskQuery> taskCandidateQuerySupplier) {
         List<TaskButtonVO> buttonList = new ArrayList<>();
-        String username = SecurityUtils.getUsername();
+        String username = BreezeStpUtil.getUser().getUsername();
         // @formatter:off
         Task task = taskAssigneeQuerySupplier.get()
                 .taskAssignee(username)

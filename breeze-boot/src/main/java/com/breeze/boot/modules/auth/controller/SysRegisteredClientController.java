@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.auth.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -30,12 +31,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 
@@ -65,7 +65,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "列表", description = "分页")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('auth:client:list')")
+    @SaCheckPermission("auth:client:list")
     public Result<Page<RegisteredClientVO>> list(RegisteredClientQuery registeredClientQuery) {
         return Result.ok(this.registeredClientService.listPage(registeredClientQuery));
     }
@@ -78,7 +78,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "通过clientId获取客户端")
     @GetMapping("/info/{clientId}")
-    @PreAuthorize("hasAnyAuthority('auth:client:info')")
+    @SaCheckPermission("auth:client:info")
     public Result<RegisteredClientVO> info(@Parameter(description = "客户端ID") @PathVariable("clientId") Long clientId) {
         return Result.ok(this.registeredClientService.info(clientId));
     }
@@ -91,7 +91,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "保存")
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('auth:client:create')")
+    @SaCheckPermission("auth:client:create")
     @BreezeSysLog(description = "客户端信息保存", type = LogType.SAVE)
     public Result<Boolean> save(@Valid @RequestBody RegisteredClientForm registeredClientForm) {
         return this.registeredClientService.saveRegisteredClient(registeredClientForm);
@@ -105,7 +105,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "修改")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('auth:client:modify')")
+    @SaCheckPermission("auth:client:modify")
     @BreezeSysLog(description = "客户端信息修改", type = LogType.EDIT)
     public Result<Boolean> modify(@Parameter(description = "客户端ID") @PathVariable Long id,
                                   @Valid @RequestBody RegisteredClientForm registeredClientForm) {
@@ -120,7 +120,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('auth:client:delete')")
+    @SaCheckPermission("auth:client:delete")
     @BreezeSysLog(description = "客户端信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "客户端IDS") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.registeredClientService.removeBatchByIds(Arrays.asList(ids)));
@@ -134,7 +134,7 @@ public class SysRegisteredClientController {
      */
     @Operation(summary = "重置密钥")
     @PutMapping("/resetClientSecret")
-    @PreAuthorize("hasAnyAuthority('auth:client:resetClientSecret')")
+    @SaCheckPermission("auth:client:resetClientSecret")
     @BreezeSysLog(description = "重置密钥", type = LogType.EDIT)
     public Result<Boolean> resetClientSecret(@Valid @RequestBody ResetClientSecretForm resetClientSecretForm) {
         return Result.ok(this.registeredClientService.resetClientSecret(resetClientSecretForm));

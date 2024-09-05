@@ -20,12 +20,12 @@ import cn.hutool.core.text.AntPathMatcher;
 import com.breeze.boot.core.utils.LoadAnnotationUtils;
 import com.breeze.boot.xss.config.XssHttpServletRequestWrapper;
 import com.breeze.boot.xss.config.XssProperties;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 

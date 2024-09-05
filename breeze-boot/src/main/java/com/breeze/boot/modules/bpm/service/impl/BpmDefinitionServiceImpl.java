@@ -30,7 +30,7 @@ import com.breeze.boot.modules.bpm.model.vo.BpmDefinitionVO;
 import com.breeze.boot.modules.bpm.model.vo.XmlVO;
 import com.breeze.boot.modules.bpm.service.IActReDeploymentService;
 import com.breeze.boot.modules.bpm.service.IBpmDefinitionService;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,6 @@ import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.impl.DefaultProcessDiagramGenerator;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -81,8 +80,8 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
      */
     @Override
     public Result<String> deploy(BpmDesignXmlStringForm xmlStringForm) {
-        Long currentUserId = SecurityUtils.getCurrentUser().getUserId();
-        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+        Long currentUserId = 0L;
+        Long tenantId = 0L;
         try {
             Authentication.setAuthenticatedUserId(String.valueOf(currentUserId));
             // 构造文件名
@@ -117,8 +116,8 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
     @Override
     public Result<String> deploy(BpmDesignXmlFileForm xmlFileForm) {
         try {
-            Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getUsername()));
-            Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+            Authentication.setAuthenticatedUserId(String.valueOf(BreezeStpUtil.getUser().getUsername()));
+            Long tenantId = 0L;
             // 生成文件名的逻辑
             String xmlName = this.generateXmlName(xmlFileForm);
             // @formatter:off
@@ -166,9 +165,9 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
      */
     @Override
     public Boolean suspendedDefinition(String procDefId) {
-        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+        Long tenantId = 0L;
         try {
-            Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getCurrentUser().getUserId()));
+            Authentication.setAuthenticatedUserId(String.valueOf(0L));
             // @formatter:off
             ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(procDefId)
@@ -293,7 +292,6 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
         return this.getXmlVO(procInstId, historicProcessInstance);
     }
 
-    @NotNull
     private XmlVO getXmlVO(String procInstId, HistoricProcessInstance hiscProcInst) {
         // 获取流程定义的BPMN模型
         BpmnModel bpmnModel;
@@ -333,10 +331,9 @@ public class BpmDefinitionServiceImpl implements IBpmDefinitionService {
         return xmlVO;
     }
 
-    @NotNull
     private String getXmlStr(String definitionKey) {
         // @formatter:off
-        Long tenantId = SecurityUtils.getCurrentUser().getTenantId();
+        Long tenantId = 0L;
         ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(definitionKey)
                 .processDefinitionTenantId(String.valueOf(tenantId))

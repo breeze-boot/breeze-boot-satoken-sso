@@ -16,13 +16,15 @@
 
 package com.breeze.boot.mybatis.config;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.breeze.boot.core.base.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
+
+import static com.breeze.boot.core.constants.CoreConstants.USER_TYPE;
 
 /**
  * mybatis元对象处理程序
@@ -48,19 +50,17 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
     }
 
     private String getUsername() {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-        if (null != authentication) {
-            return authentication.getName();
+        boolean login = StpUtil.isLogin();
+        if (login) {
+            return ((UserPrincipal) StpUtil.getSession().get(USER_TYPE)).getUsername();
         }
         return null;
     }
 
     private String getUserCode() {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-        if (null != authentication) {
-            return authentication.getName();
+        boolean login = StpUtil.isLogin();
+        if (login) {
+            return ((UserPrincipal) StpUtil.getSession().get(USER_TYPE)).getUserCode();
         }
         return null;
     }

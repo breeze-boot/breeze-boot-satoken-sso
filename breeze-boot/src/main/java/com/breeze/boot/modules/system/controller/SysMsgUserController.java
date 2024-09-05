@@ -16,6 +16,7 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -26,11 +27,10 @@ import com.breeze.boot.modules.system.service.SysMsgUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class SysMsgUserController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:msgUser:list')")
+    @SaCheckPermission("sys:msgUser:list")
     public Result<IPage<MsgUserVO>> list(UserMsgQuery userMsgQuery) {
         return Result.ok(this.sysMsgUserService.listPage(userMsgQuery));
     }
@@ -109,7 +109,7 @@ public class SysMsgUserController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:msgUser:delete')")
+    @SaCheckPermission("sys:msgUser:delete")
     @BreezeSysLog(description = "消息信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return this.sysMsgUserService.removeUserMsgByIds(Arrays.asList(ids));

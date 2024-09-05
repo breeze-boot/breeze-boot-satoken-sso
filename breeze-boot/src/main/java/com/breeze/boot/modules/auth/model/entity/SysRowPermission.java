@@ -24,6 +24,7 @@ import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -41,6 +42,7 @@ import java.io.Serializable;
 @Schema(description = "系统行数据权限规则实体")
 public class SysRowPermission extends BaseModel<SysRowPermission> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

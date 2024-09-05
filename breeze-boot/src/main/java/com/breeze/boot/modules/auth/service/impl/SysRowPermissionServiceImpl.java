@@ -23,6 +23,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.CustomizePermission;
 import com.breeze.boot.core.enums.DataPermissionType;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRowPermissionMapper;
@@ -31,12 +33,13 @@ import com.breeze.boot.modules.auth.model.entity.SysRowPermission;
 import com.breeze.boot.modules.auth.model.entity.SysTenant;
 import com.breeze.boot.modules.auth.model.form.RowPermissionForm;
 import com.breeze.boot.modules.auth.model.mappers.SysRowPermissionMapStruct;
-import com.breeze.boot.modules.auth.model.query.MenuColumnQuery;
 import com.breeze.boot.modules.auth.model.query.RowPermissionQuery;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import com.breeze.boot.modules.auth.service.SysRoleRowPermissionService;
 import com.breeze.boot.modules.auth.service.SysRowPermissionService;
 import com.breeze.boot.modules.auth.service.SysTenantService;
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -44,13 +47,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CacheConstants.ROW_PERMISSION;
-
 
 /**
  * 系统行级数据权限服务 impl
@@ -77,12 +78,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     @PostConstruct
     public void init() {
         List<SysTenant> sysTenantList = sysTenantService.list();
-        Cache cache = cacheManager.getCache(ROW_PERMISSION); // 提前获取Cache实例，避免多次调用
-
-        // 检查cache是否为null
-        if (cache == null) {
-            throw new IllegalStateException("Cache is null.");
-        }
+        Cache cache = getCache();
 
         sysTenantList.forEach(sysTenant -> {
             BreezeThreadLocal.set(sysTenant.getId());
@@ -134,6 +130,17 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     @Override
     public RowPermissionVO getInfoById(Long permissionId) {
         SysRowPermission sysRowPermission = this.getById(permissionId);
+        Cache cache = getCache();
+        cache.put(sysRowPermission.getPermissionCode(), sysRowPermission);
+        CustomizePermission customizePermission = sysRowPermissionMapStruct.entity2Cache(sysRowPermission);
+        String permissionsString = sysRowPermission.getPermissions().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+        customizePermission.setPermissions(permissionsString);
+
+        // 批量添加到缓存中
+        String permissionCode = customizePermission.getPermissionCode();
+        cache.put(permissionCode, customizePermission);
         return this.sysRowPermissionMapStruct.entity2VO(sysRowPermission);
     }
 
@@ -144,15 +151,38 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
      * @return {@link Result}<{@link Boolean}>
      */
     @Override
-    @CacheEvict(cacheNames = ROW_PERMISSION, key = "#rowPermissionForm.permissionCode")
     public Result<Boolean> saveRowPermission(RowPermissionForm rowPermissionForm) {
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
         if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            return Result.fail(Boolean.FALSE, "固定权限无需再次添加，请添加自定义权限");
+            throw new BreezeBizException(ResultCode.NO_ACTION_IS_ALLOWED);
         }
-        return Result.ok(this.save(sysRowPermission));
+        boolean save = this.save(sysRowPermission);
+        if (!save) {
+            throw new BreezeBizException(ResultCode.FAIL);
+        }
+        Cache cache = getCache();
+        cache.put(sysRowPermission.getPermissionCode(), sysRowPermission);
+        CustomizePermission customizePermission = sysRowPermissionMapStruct.entity2Cache(sysRowPermission);
+        String permissionsString = sysRowPermission.getPermissions().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+        customizePermission.setPermissions(permissionsString);
+
+        // 批量添加到缓存中
+        String permissionCode = customizePermission.getPermissionCode();
+        cache.put(permissionCode, customizePermission);
+        return Result.ok();
     }
 
+    @NotNull
+    private Cache getCache() {
+        Cache cache = cacheManager.getCache(ROW_PERMISSION);
+        // 检查cache是否为null
+        if (cache == null) {
+            throw new IllegalStateException("Cache is null.");
+        }
+        return cache;
+    }
 
     /**
      * 修改权限
@@ -166,9 +196,24 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
         sysRowPermission.setId(id);
         if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            return Result.fail(Boolean.FALSE, "固定权限无需修改，请修改自定义权限");
+            throw new BreezeBizException(ResultCode.NO_ACTION_IS_ALLOWED);
         }
-        return Result.ok(sysRowPermission.updateById());
+        boolean update = sysRowPermission.updateById();
+        if (!update) {
+            throw new BreezeBizException(ResultCode.FAIL);
+        }
+        Cache cache = getCache();
+        cache.put(sysRowPermission.getPermissionCode(), sysRowPermission);
+        CustomizePermission customizePermission = sysRowPermissionMapStruct.entity2Cache(sysRowPermission);
+        String permissionsString = sysRowPermission.getPermissions().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+        customizePermission.setPermissions(permissionsString);
+
+        // 批量添加到缓存中
+        String permissionCode = customizePermission.getPermissionCode();
+        cache.put(permissionCode, customizePermission);
+        return Result.ok();
     }
 
     /**
@@ -183,7 +228,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
         Cache cache = cacheManager.getCache(ROW_PERMISSION);
         List<SysRoleRowPermission> rolePermissionList = this.sysRoleRowPermissionService.list(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getPermissionId, ids));
         if (CollectionUtil.isNotEmpty(rolePermissionList)) {
-            return Result.fail(Boolean.FALSE, "该数据权限已被使用");
+            throw new BreezeBizException(ResultCode.IS_USED);
         }
         List<SysRowPermission> rowPermissionList = this.listByIds(ids);
         for (SysRowPermission rowPermission : rowPermissionList) {

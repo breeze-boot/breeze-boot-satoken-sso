@@ -27,7 +27,7 @@ import com.breeze.boot.modules.bpm.model.vo.BpmInstanceVO;
 import com.breeze.boot.modules.bpm.service.IActRuExecutionService;
 import com.breeze.boot.modules.bpm.service.IBpmInstanceService;
 import com.breeze.boot.modules.bpm.service.IBpmTaskService;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -72,8 +72,8 @@ public class BpmInstanceServiceImpl implements IBpmInstanceService {
      */
     @Override
     public Result<String> startProcess(BpmStartForm startForm) {
-        String tenantId = String.valueOf(SecurityUtils.getCurrentUser().getTenantId());
-        Authentication.setAuthenticatedUserId(String.valueOf(SecurityUtils.getUsername()));
+        String tenantId = String.valueOf(BreezeStpUtil.getUser().getTenantId());
+        Authentication.setAuthenticatedUserId(String.valueOf(BreezeStpUtil.getUser().getUsername()));
         // @formatter:off
         List<Execution> executionList = runtimeService.createExecutionQuery()
                 .processDefinitionKey(startForm.getProcDefKey())
@@ -201,7 +201,7 @@ public class BpmInstanceServiceImpl implements IBpmInstanceService {
                 throw new BreezeBizException(ResultCode.PROCESS_NOT_FOUND);
                 // historyService.deleteHistoricProcessInstance(procInstId);
             }
-            runtimeService.deleteProcessInstance(procInstId, SecurityUtils.getUsername() + "流程实例删除");
+            runtimeService.deleteProcessInstance(procInstId, BreezeStpUtil.getUser().getUsername() + "流程实例删除");
         }
     }
 

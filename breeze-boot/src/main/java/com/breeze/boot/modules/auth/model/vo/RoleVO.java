@@ -19,6 +19,7 @@ package com.breeze.boot.modules.auth.model.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import java.util.List;
 @Schema(description = "系统角色VO")
 public class RoleVO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "主键")

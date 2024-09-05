@@ -15,6 +15,7 @@
     <description>业务模块</description>
 
     <dependencies>
+        <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -24,8 +25,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
 
+        <!-- actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -38,20 +41,26 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- aop -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!-- flowable -->
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
+            <version>${flowable.version}</version>
         </dependency>
 
+        <!-- monitor client -->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
         </dependency>
 
+        <!-- thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -82,7 +91,7 @@
         <!--安全-->
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-security</artifactId>
+            <artifactId>breeze-base-sa-token</artifactId>
         </dependency>
 
         <!--定时任务-->
@@ -141,23 +150,12 @@
 
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-sap-interface</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.breeze</groupId>
             <artifactId>breeze-base-anji-captcha</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-ureport</artifactId>
-            <version>1.0</version>
+            <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
         </dependency>
     </dependencies>
 

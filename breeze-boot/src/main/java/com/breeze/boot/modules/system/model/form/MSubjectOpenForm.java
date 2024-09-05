@@ -17,9 +17,8 @@
 package com.breeze.boot.modules.system.model.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 邮箱开关表单

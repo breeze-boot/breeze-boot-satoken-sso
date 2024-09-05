@@ -19,9 +19,13 @@ package com.breeze.boot.monitor.config;
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -31,6 +35,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
  * @author gaoweixuan
  * @since 2022-10-10
  */
+@Configuration
 @EnableWebSecurity(debug = true)
 public class BreezeBootAdminSecurityConfig {
 
@@ -56,22 +61,19 @@ public class BreezeBootAdminSecurityConfig {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("redirectTo");
         successHandler.setDefaultTargetUrl(adminContextPath + "/");
-
-        return http.headers().frameOptions().disable()
-                .and()
-                .authorizeRequests()
-                .antMatchers(
+        http.headers(configurer -> configurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        http.authorizeHttpRequests(expressionInterceptUrlRegistry
+                -> expressionInterceptUrlRegistry.requestMatchers(
                         adminContextPath + "/instances/**",
                         adminContextPath + "/login",
                         adminContextPath + "/assets/**",
                         adminContextPath + "/actuator/**").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler)
-                .and().logout().logoutUrl(adminContextPath + "/logout")
-                .and().httpBasic()
-                .and()
-                .csrf().disable()
-                .build();
+                .anyRequest().authenticated());
+        http.formLogin(configurer -> configurer.loginPage(adminContextPath + "/login").successHandler(successHandler));
+        http.logout(configurer -> configurer.logoutUrl(adminContextPath + "/logout"));
+        http.httpBasic(Customizer.withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable);
+        return http.build();
     }
 
 }

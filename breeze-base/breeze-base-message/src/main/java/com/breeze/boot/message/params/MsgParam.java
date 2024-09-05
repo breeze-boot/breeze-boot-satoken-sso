@@ -17,9 +17,10 @@
 package com.breeze.boot.message.params;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import java.util.List;
 @Schema(description = "消息参数")
 public class MsgParam implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -65,11 +67,15 @@ public class MsgParam implements Serializable {
     private String msg;
 
     /**
+     * 发送人
+     */
+    @Schema(description = "发送方")
+    private String sender;
+
+    /**
      * 租户ID
      */
     @Schema(description = "租户ID")
     private Long tenantId;
-
-    private String sender;
 
 }

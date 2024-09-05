@@ -28,17 +28,17 @@ import com.breeze.boot.modules.auth.model.entity.SysPlatform;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.query.DeptQuery;
 import com.breeze.boot.modules.auth.service.*;
+import com.breeze.boot.modules.dev.service.SysDbMateService;
 import com.breeze.boot.modules.system.model.form.FileForm;
 import com.breeze.boot.modules.system.service.SysCommonService;
-import com.breeze.boot.modules.dev.service.SysDbMateService;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.google.common.collect.Maps;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -200,7 +200,7 @@ public class SysCommonServiceImpl implements SysCommonService {
     public Result<List<Map<String, Object>>> selectTenant() {
         return Result.ok(this.tenantService.list().stream().map(tenant -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", tenant.getId());
+            tenantMap.put("value", String.valueOf(tenant.getId()));
             tenantMap.put("label", tenant.getTenantName());
             return tenantMap;
         }).collect(Collectors.toList()));

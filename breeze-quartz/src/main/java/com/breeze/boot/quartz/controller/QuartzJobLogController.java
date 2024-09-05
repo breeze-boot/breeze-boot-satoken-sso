@@ -16,6 +16,7 @@
 
 package com.breeze.boot.quartz.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -24,11 +25,10 @@ import com.breeze.boot.quartz.domain.SysQuartzJobLog;
 import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.service.SysQuartzJobLogService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -55,7 +55,7 @@ public class QuartzJobLogController {
      */
     @Operation(summary = "列表")
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:jLog:list')")
+    @SaCheckPermission("sys:jLog:list")
     public Result<Page<SysQuartzJobLog>> listPage(JobQuery jobQuery) {
         return Result.ok(this.quartzJobLogService.listPage(jobQuery));
     }
@@ -68,7 +68,7 @@ public class QuartzJobLogController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:jLog:delete')")
+    @SaCheckPermission("sys:jLog:delete")
     @BreezeSysLog(description = "删除任务日志", type = LogType.DELETE)
     public Result<Boolean> delete(@NotNull(message = "参数不能为空") @RequestBody List<Long> logIds) {
         return Result.ok(this.quartzJobLogService.deleteLogs(logIds));
@@ -79,7 +79,7 @@ public class QuartzJobLogController {
      */
     @Operation(summary = "清空")
     @PutMapping("/truncate")
-    @PreAuthorize("hasAnyAuthority('sys:jLog:truncate')")
+    @SaCheckPermission("sys:jLog:truncate")
     @BreezeSysLog(description = "清空任务日志", type = LogType.DELETE)
     public void truncate() {
         this.quartzJobLogService.truncate();

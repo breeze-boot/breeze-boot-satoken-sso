@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -37,6 +38,7 @@ import java.time.LocalDateTime;
 @Schema(description = "系统角色菜单字段数据权限")
 public class SysRoleMenuColumn extends Model<SysRoleMenuColumn> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

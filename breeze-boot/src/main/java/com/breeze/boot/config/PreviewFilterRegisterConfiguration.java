@@ -17,14 +17,13 @@
 package com.breeze.boot.config;
 
 import com.breeze.boot.config.filter.PreviewFilter;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
 
 /**
  * @author gaoweixuan

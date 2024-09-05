@@ -24,8 +24,7 @@ import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
 import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
-import com.breeze.boot.security.model.entity.BaseSysRegisteredClient;
-import com.breeze.boot.security.service.ISysRegisteredClientService;
+import com.breeze.boot.satoken.oauth2.IClientService;
 
 /**
  * 注册客户服务接口
@@ -33,13 +32,13 @@ import com.breeze.boot.security.service.ISysRegisteredClientService;
  * @author gaoweixuan
  * @since 2023/05/09
  */
-public interface SysRegisteredClientService extends IService<SysRegisteredClient>, ISysRegisteredClientService {
+public interface SysRegisteredClientService extends IService<SysRegisteredClient>, IClientService {
 
     /**
      * 发现由客户端Id
      *
      * @param clientId 客户端Id
-     * @return {@link BaseSysRegisteredClient}
+     * @return {@link SysRegisteredClient}
      */
     @Override
     SysRegisteredClient getByClientId(String clientId);
@@ -48,7 +47,7 @@ public interface SysRegisteredClientService extends IService<SysRegisteredClient
      * 发现通过id
      *
      * @param id id
-     * @return {@link BaseSysRegisteredClient}
+     * @return {@link SysRegisteredClient}
      */
     @Override
     SysRegisteredClient getById(String id);

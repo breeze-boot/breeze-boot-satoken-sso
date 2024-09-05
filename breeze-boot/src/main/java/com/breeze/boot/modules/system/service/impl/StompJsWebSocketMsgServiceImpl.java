@@ -135,7 +135,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getById(msgParam);
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
-            return Result.fail("消息不存在");
+            throw new BreezeBizException(ResultCode.MSG_NOT_FOUND);
         }
         List<SysUser> sysUserList = this.sysUserService.listByIds(msgParam.getUserIds());
         this.sendMsgToUser(sysUserList, msgParam.getSender(), sysMsg);
@@ -167,7 +167,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
-            throw new BreezeBizException(ResultCode.MSG_UN_FOUND);
+            throw new BreezeBizException(ResultCode.MSG_NOT_FOUND);
         }
         List<UserMsgDTO.MsgBody> sysUserMsgList = this.sendAndGetMsgBodyList(msgParam.getUserIds(), msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
@@ -180,7 +180,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getOne(Wrappers.<SysMsg>lambdaQuery().eq(SysMsg::getCode, bpmParam.getMsgCode()));
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", bpmParam.getMsgCode());
-            throw new BreezeBizException(ResultCode.MSG_UN_FOUND);
+            throw new BreezeBizException(ResultCode.MSG_NOT_FOUND);
         }
         List<UserMsgDTO.MsgBody> sysUserMsgList = sendAndGetMsgBodyList(bpmParam.getUserIds(), bpmParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();
@@ -213,7 +213,7 @@ public class StompJsWebSocketMsgServiceImpl extends WebSocketMsgService {
         SysMsg sysMsg = this.sysMsgService.getById(msgParam.getMsgId());
         if (Objects.isNull(sysMsg)) {
             log.error("[消息不存在]{}", msgParam.getMsgId());
-            return Result.fail("消息不存在");
+            throw new BreezeBizException(ResultCode.MSG_NOT_FOUND);
         }
         this.sendMsgToUser(this.sysUserService.listDeptsUser(msgParam.getDeptId()), msgParam.getSender(), sysMsg);
         BreezeThreadLocal.remove();

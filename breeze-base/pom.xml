@@ -23,14 +23,13 @@
         <module>breeze-base-xss</module>
         <module>breeze-base-log</module>
         <module>breeze-base-validator</module>
-        <module>breeze-base-security</module>
         <module>breeze-base-core</module>
         <module>breeze-base-doc</module>
         <module>breeze-base-sms</module>
-        <module>breeze-flowable-ui-bom</module>
-        <module>breeze-base-sap-interface</module>
         <module>breeze-base-anji-captcha</module>
-        <module>breeze-base-ureport</module>
+        <module>breeze-base-sa-token</module>
+        <module>spring-boot3-starter-captcha</module>
+        <module>anj-captcha</module>
     </modules>
 
 </project>

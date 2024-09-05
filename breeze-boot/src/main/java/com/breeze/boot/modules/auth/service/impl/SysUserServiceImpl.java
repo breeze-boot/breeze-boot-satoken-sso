@@ -16,14 +16,14 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.base.UserPrincipal;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
@@ -48,16 +48,16 @@ import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.modules.auth.service.*;
 import com.breeze.boot.modules.bpm.manager.FlowableManager;
 import com.breeze.boot.modules.system.service.SysFileService;
-import com.breeze.boot.security.model.params.AuthLoginParam;
-import com.breeze.boot.security.model.params.WxLoginParam;
+import com.breeze.boot.satoken.model.UserInfoDTO;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,11 +76,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysUserMapStruct sysUserMapStruct;
 
     private final FlowableManager flowableManager;
-
-    /**
-     * 密码编码器
-     */
-    private final PasswordEncoder passwordEncoder;
 
     /**
      * 系统角色服务
@@ -165,7 +160,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (Objects.isNull(this.sysDeptService.getById(userForm.getDeptId()))) {
             return Result.fail("部门不存在");
         }
-        userForm.setPassword(this.passwordEncoder.encode(userForm.getPassword()));
+        userForm.setPassword(BCrypt.hashpw(userForm.getPassword(), BCrypt.gensalt()));
         SysUser sysUser = sysUserMapStruct.form2Entity(userForm);
         boolean save = this.save(sysUser);
         if (save) return Result.ok(this.saveUserRole(userForm, sysUser.getId()));
@@ -226,7 +221,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Boolean reset(UserResetForm userResetForm) {
         AesSecretProperties aesSecretProperties = SpringUtil.getBean(AesSecretProperties.class);
-        userResetForm.setPassword(this.passwordEncoder.encode(AesUtil.decryptStr(userResetForm.getPassword(), aesSecretProperties.getAesSecret())));
+        userResetForm.setPassword(BCrypt.hashpw(AesUtil.decryptStr(userResetForm.getPassword(), aesSecretProperties.getAesSecret()), BCrypt.gensalt()));
         return this.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, userResetForm.getPassword()).eq(SysUser::getId, userResetForm.getId()));
     }
 
@@ -283,7 +278,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser registerUser(SysUser registerUser, String roleCode) {
-        SysUser sysUser = SysUser.builder().username(registerUser.getUsername()).displayName(registerUser.getUsername()).password(this.passwordEncoder.encode("123456")).openId(registerUser.getOpenId()).phone(registerUser.getPhone()).tenantId(registerUser.getTenantId()).deptId(1L).build();
+        SysUser sysUser = SysUser.builder().username(registerUser.getUsername()).displayName(registerUser.getUsername()).password(("123456")).openId(registerUser.getOpenId()).phone(registerUser.getPhone()).tenantId(registerUser.getTenantId()).deptId(1L).build();
         this.save(sysUser);
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
@@ -370,78 +365,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             return flowUserBO;
         }).collect(Collectors.toList());
-        this.flowableManager.syncUser(syncUser,roles);
-    }
-
-    /**
-     * 加载用户通过用户名
-     *
-     * @param username 用户名
-     * @return {@link Result}<{@link UserInfoDTO}>
-     */
-    @Override
-    public Result<UserInfoDTO> loadUserByUsername(String username) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
-        if (Objects.isNull(sysUser)) {
-            return Result.fail("未获取到用户");
-        }
-        return Result.ok(this.buildLoginUserInfo(sysUser));
-    }
-
-    /**
-     * 加载用户通过电话
-     *
-     * @param phone 电话
-     * @return {@link UserInfoDTO}
-     */
-    @Override
-    public Result<UserInfoDTO> loadUserByPhone(String phone) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
-        if (Objects.isNull(sysUser)) {
-            return Result.fail("未获取到用户");
-        }
-        return Result.ok(this.buildLoginUserInfo(sysUser));
-
-    }
-
-    /**
-     * 加载用户通过电子邮件
-     *
-     * @param email 电子邮件
-     * @return {@link UserInfoDTO}
-     */
-    @Override
-    public Result<UserInfoDTO> loadUserByEmail(String email) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
-        if (Objects.isNull(sysUser)) {
-            return Result.fail("未获取到用户");
-        }
-        return Result.ok(this.buildLoginUserInfo(sysUser));
-    }
-
-    @Override
-    public Result<UserInfoDTO> loadRegisterUserByOpenId(WxLoginParam wxLoginParam) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, wxLoginParam.getOpenId()));
-        if (Objects.isNull(sysUser)) {
-            this.registerUser(SysUser.builder().phone(wxLoginParam.getPhone()).displayName(wxLoginParam.getNickName() + RandomUtil.randomString(6)).sex(wxLoginParam.getSex()).email(wxLoginParam.getEmail()).tenantId(wxLoginParam.getTenantId()).username(wxLoginParam.getOpenId()).deptId(1L).build(), "ROLE_MINI");
-        }
-        return Result.ok(this.buildLoginUserInfo(sysUser));
-    }
-
-    /**
-     * 加载用户通过电话
-     *
-     * @param authLoginParam auth三方登录消息体
-     * @return {@link Result}<{@link UserInfoDTO}>
-     */
-    @Override
-    public Result<UserInfoDTO> loadRegisterUserByPhone(AuthLoginParam authLoginParam) {
-        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, authLoginParam.getPhone()));
-        if (Objects.isNull(sysUser)) {
-            // 不存在就去创建
-            sysUser = this.registerUser(SysUser.builder().phone(authLoginParam.getPhone()).displayName(authLoginParam.getAppUserName()).sex(authLoginParam.getSex()).email(authLoginParam.getEmail()).tenantId(authLoginParam.getTenantId()).username(authLoginParam.getAppUserName() + RandomUtil.randomString(5)).deptId(1L).build(), "ROLE_AUTH");
-        }
-        return Result.ok(this.buildLoginUserInfo(sysUser));
+        this.flowableManager.syncUser(syncUser, roles);
     }
 
     /**
@@ -477,13 +401,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return userInfo;
     }
 
-    // 递归遍历树形结构并获取所有节点的 ID
-    public static Set<Long> getAllNodeIds(SysDeptBO root) {
-        Set<Long> ids = Sets.newHashSet();
-        traverseTree(root, ids);
-        return ids;
-    }
-
     private static void traverseTree(SysDeptBO node, Set<Long> ids) {
         if (Objects.isNull(node)) {
             return;
@@ -494,6 +411,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         for (SysDeptBO child : node.getSubDeptList()) {
             traverseTree(child, ids);
         }
+    }
+
+    // 递归遍历树形结构并获取所有节点的 ID
+    public static Set<Long> getAllNodeIds(SysDeptBO root) {
+        Set<Long> ids = Sets.newHashSet();
+        traverseTree(root, ids);
+        return ids;
     }
 
     private void setSubDeptId(SysUser sysUser, UserInfoDTO userInfo) {
@@ -516,7 +440,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Optional.ofNullable(this.sysDeptService.getById(sysUser.getDeptId())).ifPresent(sysDept -> userInfo.setDeptName(sysDept.getDeptName()));
     }
 
-    @NotNull
     private Set<Long> getHasNormalPermissionRoleId(List<UserRoleBO> userRoleBOList) {
         // @formatter:off
         return userRoleBOList.stream()
@@ -557,4 +480,70 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         return resultSet.stream().min(Comparator.comparingInt(DataPermissionType::getLevel)).map(DataPermissionType::toString).orElse("");
     }
+
+    @Override
+    public UserPrincipal loadUserByUserId(String userId) {
+        SysUser sysUser = this.getById(userId);
+        if (Objects.isNull(sysUser)) {
+            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
+        }
+        UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        Assert.notNull(requestAttributes, "requestAttributes is null");
+        return convertResponseUserInfo(userInfoDTO);
+    }
+
+    @Override
+    public List<String> loadUserPermissionByUserId(String userId) {
+        // 查询用户的角色
+        List<UserRoleBO> userRoleBOList = sysRoleService.listRoleByUserId(Long.valueOf(userId));
+        if (CollUtil.isEmpty(userRoleBOList)) {
+            throw new BreezeBizException(ResultCode.USERS_ROLE_IS_NULL);
+        }
+        // 权限
+        return this.sysMenuService.listUserMenuPermission(userRoleBOList).stream().toList();
+    }
+
+    @Override
+    public UserPrincipal loadUserByPhone(String phone) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+        if (Objects.isNull(sysUser)) {
+            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
+        }
+        UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
+        return convertResponseUserInfo(userInfoDTO);
+    }
+
+
+    @Override
+    public UserPrincipal loadUserByUsername(String username) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
+        if (Objects.isNull(sysUser)) {
+            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
+        }
+        UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
+        return convertResponseUserInfo(userInfoDTO);
+    }
+
+
+    @Override
+    public UserPrincipal loadUserByEmail(String email) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
+        if (Objects.isNull(sysUser)) {
+            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
+        }
+        UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
+        return convertResponseUserInfo(userInfoDTO);
+    }
+
+    @Override
+    public List<String> loadUserRoleByUserId(String userId) {
+        // 查询用户的角色
+        List<UserRoleBO> userRoleBOList = sysRoleService.listRoleByUserId(Long.valueOf(userId));
+        if (CollUtil.isEmpty(userRoleBOList)) {
+            throw new BreezeBizException(ResultCode.USERS_ROLE_IS_NULL);
+        }
+        return userRoleBOList.stream().map(UserRoleBO::getRoleCode).collect(Collectors.toList());
+    }
+
 }

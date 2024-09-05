@@ -17,12 +17,12 @@
 package com.breeze.boot.modules.auth.model.mappers;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.breeze.boot.core.base.UserInfoDTO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.excel.UserExcel;
 import com.breeze.boot.modules.auth.model.form.UserForm;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
+import com.breeze.boot.satoken.model.UserInfoDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

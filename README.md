@@ -1,55 +1,31 @@
-# Breeze-boot 《开发中》
-
+# Breeze-Boot-satoken
 ### 平台简介
 
-##### Breeze-boot 是基于RBAC的权限管理系统，包括用户管理、角色管理、菜单管理、权限管理等功能，适合Java开发者入门学习或者直接用此项目。
+##### Breeze-boot 是基于RBAC的权限管理系统，包括用户管理、角色管理、菜单管理、权限管理，使用bpmnJS绘制Flowable流程图等功能，适合Java开发者入门学习或者直接用此项目。
 
-- 前端采用Vue、Element UI。
-- 后端采用Spring Boot、Spring Security、Redis、Jwt、Druid。
+- 前端采用Vue、Element UI PLUS、VITE、TypeScript、bpmn-process-designer（bpmjs）。
+- 后端采用Spring Boot3 JDK17、Spring Security + spring-security-oauth2-authorization-server、Flowable（审批流程）、Redis、Jwt、Druid。
 - 权限认证使用Jwt、支持按钮级别的权限控制
-- 支持加载动态权限菜单，多方式轻松权限控制。
+- 支持加载动态权限菜单。
 - 前端代码，请移步
-    - [github https://github.com/memory1998/breeze-web](https://github.com/memory1998/breeze-web)
-    - [gitee https://gitee.com/memoryGiter/breeze-web](https://gitee.com/memoryGiter/breeze-web)
+    - [github：vue + vite + TS 版本](https://github.com/Memory1998/breeze-vite-ui.git)
+    - [gitee: vue + vite + TS 版本]( https://gitee.com/memoryGiter/breeze-vite-ui)
 
 ### 特别鸣谢：
-
-- [验证码 https://gitee.com/anji-plus/captcha](https://gitee.com/anji-plus/captcha)
-- [流程设计器 https://gitee.com/MiyueSC/bpmn-process-designer](https://gitee.com/MiyueSC/bpmn-process-designer)
+- [验证码： https://gitee.com/anji-plus/captcha](https://gitee.com/anji-plus/captcha)
+- [流程设计器： https://gitee.com/MiyueSC/bpmn-process-designer](https://gitee.com/MiyueSC/bpmn-process-designer)
+- [流程设计器：VUE3版本 https://gitee.com/xlys998/bpmn-vue3](https://gitee.com/xlys998/bpmn-vue3)
 
 # 请遵循 Apache 2.0 协议
-
-### 功能菜单
-
-##### 后端
-
-- 管理系统 \
-  ├─ 系统设置 \
-  │ ├── 平台管理 \
-  │ ├── 用户管理 \
-  │ ├── 菜单管理 \
-  │ ├── 岗位管理 \
-  │ ├── 角色管理 \
-  │ ├── 字典管理 \
-  │ ├── 日志管理 \
-  │ ├── 数据权限 \
-  │ ├── 部门管理 \
-  │ ├── 租户管理 \
-  │ ├── 系统文件 \
-  ├─ 消息管理 \
-  │ ├── 用户消息 \
-  │ ├── 消息公告 \
-  ├─ 监控平台 \
-  │ ├── swagger \
-  │ └── 德鲁伊
 
 ### 代码结构
 
 - breeze-boot \
-  ├─ breeze \
+  ├─ breeze-boot \
   │ ├─ src \
-  │ │ ├─ src\java\com\breeze\boot\..\flowable 【任务流相关的包】 \
-  │ │ ├─ src\java\com\breeze\boot\..\system 【系统相关的包】 \
+  │ │ ├─ src\java\com\breeze\boot\..\modules\bpm    【任务流相关的包】 \
+  │ │ ├─ src\java\com\breeze\boot\..\modules\system 【系统相关的包】 \
+  │ │ ├─ src\java\com\breeze\boot\..\modules\auth   【权限相关的包】 \
   ├─ breeze-base \
   │ ├─ breeze-base-core \
   │ ├─ breeze-base-log \
@@ -57,24 +33,32 @@
   │ ├─ breeze-base-oss-s3 \
   │ ├─ breeze-base-security \
   │ ├─ breeze-base-validator \
-  │ ├─ breeze-base-websocket\
+  │ ├─ breeze-base-message\
+  │ ├─ breeze-base-redis-cache\
+  │ ├─ breeze-base-mail \
   │ ├─ breeze-base-xss  \
-  ├─ breeze-boot-admin-server 【监控服务（SpringBoot项目）】 \
-  ├─ flowable-ui-app-server 【Flowable-UI官方项目 可启动】
+  │ ├─ breeze-base--doc  \
+  │ ├─ breeze-...
+  ├─ breeze-monitor                                  监控服务（SpringBoot项目）】 \
+  ├─ flowable-ui-app-server                         【Flowable-UI官方项目 可启动】
 
 ### 前端界面相关
 
+### 登录页
 ![login.png](doc/images/login.png)
-
+### 首页
+![home.png](doc/images/home.png)
+### 布局1
 ![img_1.png](doc/images/img_1.png)
-
+### 布局2
 ![img_2.png](doc/images/img_2.png)
-
+### 布局3
 ![img_3.png](doc/images/img_3.png)
+### 布局4
+![img_4.png](doc/images/img_4.png)
+### flowable bpmn
+![flowable bpmn](doc/images/flowable.jpg)
 
-![img_5.png](doc/images/img_5.png)
 
-![img_6.png](doc/images/img_6.png)
 
-![img_7.png](doc/images/img_7.png)
 

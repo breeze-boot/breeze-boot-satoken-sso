@@ -20,6 +20,7 @@ package com.breeze.boot.modules.system.model.form;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -36,6 +37,7 @@ import java.io.Serializable;
 @Schema(description = "系统消息表单")
 public class MsgForm implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

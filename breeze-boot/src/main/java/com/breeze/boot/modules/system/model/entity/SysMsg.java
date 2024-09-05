@@ -21,6 +21,7 @@ import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -38,6 +39,7 @@ import java.io.Serializable;
 @Schema(description = "系统消息实体")
 public class SysMsg extends BaseModel<SysMsg> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

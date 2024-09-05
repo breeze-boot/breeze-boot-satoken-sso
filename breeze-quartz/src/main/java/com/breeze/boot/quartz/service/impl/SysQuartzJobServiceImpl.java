@@ -25,10 +25,10 @@ import com.breeze.boot.quartz.domain.query.JobQuery;
 import com.breeze.boot.quartz.manager.QuartzManager;
 import com.breeze.boot.quartz.mapper.SysQuartzJobMapper;
 import com.breeze.boot.quartz.service.SysQuartzJobService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 

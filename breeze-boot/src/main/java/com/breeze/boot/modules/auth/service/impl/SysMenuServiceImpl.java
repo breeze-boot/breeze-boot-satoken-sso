@@ -23,7 +23,8 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.base.UserInfoDTO;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysMenuMapper;
 import com.breeze.boot.modules.auth.model.bo.SysMenuBO;
@@ -35,7 +36,7 @@ import com.breeze.boot.modules.auth.model.mappers.SysMenuMapStruct;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
-import com.breeze.boot.security.utils.SecurityUtils;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,13 +85,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreeMenu(String platformCode, String i18n) {
-        UserInfoDTO currentUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentUser.getUserRoleIds())) {
+        Set<Long> roleIds = BreezeStpUtil.getUser().getUserRoleIds();
+        if (CollUtil.isEmpty(roleIds)) {
             return Result.ok();
         }
 
         // 查询角色下的菜单信息
-        List<SysMenuBO> menuList = this.baseMapper.selectMenusByRoleId(currentUser.getUserRoleIds(), platformCode);
+        List<SysMenuBO> menuList = this.baseMapper.selectMenusByRoleId(roleIds, platformCode);
         return Result.ok(this.buildTrees(menuList));
     }
 
@@ -134,8 +135,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public Result<List<Tree<Long>>> listTreePermission(List<Integer> type) {
-        UserInfoDTO currentUser = SecurityUtils.getCurrentUser();
-        if (CollUtil.isEmpty(currentUser.getUserRoleCodes())) {
+        Set<String> roleCodes = BreezeStpUtil.getUser().getUserRoleCodes();
+        if (CollUtil.isEmpty(roleCodes)) {
             return Result.ok();
         }
         return this.listTreeRolePermission(type);
@@ -151,15 +152,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public Result<Boolean> deleteById(Long id) {
         List<SysMenu> menuEntityList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
         if (CollUtil.isNotEmpty(menuEntityList)) {
-            return Result.fail(Boolean.FALSE, "存在子菜单, 不可删除");
+            log.warn("存在子菜单, 不可删除");
+            throw new BreezeBizException(ResultCode.IS_USED);
         }
         boolean remove = this.removeById(id);
-        if (remove) {
-            // 删除已经关联的角色的菜单
-            this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, id));
-            return Result.ok(Boolean.TRUE, "删除成功");
+        if (!remove) {
+            throw new BreezeBizException(ResultCode.FAIL);
         }
-        return Result.fail(Boolean.FALSE, "删除失败");
+        // 删除已经关联的角色的菜单
+        this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, id));
+        return Result.ok(Boolean.TRUE, "删除成功");
     }
 
     /**
@@ -172,7 +174,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public Result<Boolean> saveMenu(MenuForm menuForm) {
         SysMenu sysMenu = this.getById(menuForm.getParentId());
         if (!Objects.equals(ROOT, menuForm.getParentId()) && Objects.isNull(sysMenu)) {
-            return Result.fail("上一层组件不存在");
+            throw new BreezeBizException(ResultCode.NOT_FOUND);
         }
         return Result.ok(this.save(sysMenuMapStruct.form2Entity(menuForm)));
     }

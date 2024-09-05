@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -41,6 +42,7 @@ import java.util.Date;
 public class ActReDeployment implements Serializable {
 
     @TableField(exist = false)
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

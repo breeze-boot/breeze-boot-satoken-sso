@@ -20,10 +20,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.breeze.boot.core.base.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import java.util.List;
 @Schema(description = "系统字典实体")
 public class SysDict extends BaseModel<SysDict> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

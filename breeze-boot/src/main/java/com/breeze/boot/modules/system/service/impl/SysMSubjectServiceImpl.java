@@ -39,7 +39,6 @@ import com.breeze.boot.modules.system.model.vo.MSubjectVO;
 import com.breeze.boot.modules.system.service.SysMSubjectService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -209,11 +208,10 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
         return resultList;
     }
 
-    @NotNull
     private SysEmailSubject getSysEmailSubject(Long id) {
         SysEmailSubject sysEmailSubject = this.getById(id);
         if (Objects.isNull(sysEmailSubject)) {
-            throw new BreezeBizException(ResultCode.EMAIL_UN_FOUND);
+            throw new BreezeBizException(ResultCode.EMAIL_NOT_FOUND);
         }
         return sysEmailSubject;
     }

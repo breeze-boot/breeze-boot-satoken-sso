@@ -16,10 +16,13 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRegisteredClientMapper;
 import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
@@ -35,7 +38,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -57,12 +59,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredClientMapper, SysRegisteredClient> implements SysRegisteredClientService {
 
-    /**
-     * 密码编码器
-     */
-    private final PasswordEncoder passwordEncoder;
-
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private final AesSecretProperties aesSecretProperties;
 
 
     /**
@@ -135,7 +134,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
 
     @SneakyThrows
     private void getClientVO(RegisteredClientVO registeredClientVO) {
-        registeredClientVO.setClientSettings(mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<ClientSettingsVO>() {
+        registeredClientVO.setClientSettings(mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<>() {
         }));
         registeredClientVO.setTokenSettings(mapper.readValue(registeredClientVO.getJsonTokenSettings(), new TypeReference<TokenSettingsVO>() {
         }));
@@ -153,7 +152,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
                 .clientName(client.getClientName())
                 .clientIdIssuedAt(client.getClientIdIssuedAt())
                 .clientSecretExpiresAt(client.getClientSecretExpiresAt())
-                .clientSecret(Optional.ofNullable(client.getClientSecret()).map(this.passwordEncoder::encode).orElse(null))
+                .clientSecret(Optional.ofNullable(client.getClientSecret()).map(pwd -> SaSecureUtil.aesEncrypt(aesSecretProperties.getAesSecret(), pwd)).orElse(null))
                 .clientAuthenticationMethods(Optional.ofNullable(client.getClientAuthenticationMethods()).map(convertSet2String()).orElse(null))
                 .authorizationGrantTypes(Optional.ofNullable(client.getAuthorizationGrantTypes()).map(convertSet2String()).orElse(null))
                 .scopes(Optional.ofNullable(client.getScopes()).map(convertSet2String()).orElse(null))
@@ -196,7 +195,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
      */
     @Override
     public Boolean resetClientSecret(ResetClientSecretForm resetClientSecretForm) {
-        resetClientSecretForm.setClientSecret(this.passwordEncoder.encode(resetClientSecretForm.getClientSecret()));
+        resetClientSecretForm.setClientSecret(BCrypt.hashpw(resetClientSecretForm.getClientSecret(), BCrypt.gensalt()));
         return this.update(Wrappers.<SysRegisteredClient>lambdaUpdate()
                 .set(SysRegisteredClient::getClientSecret, resetClientSecretForm.getClientSecret())
                 .eq(SysRegisteredClient::getId, resetClientSecretForm.getId()));
@@ -214,10 +213,10 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
         SysRegisteredClient registeredClient = this.getById(clientId);
         RegisteredClientVO registeredClientVO = new RegisteredClientVO();
         BeanUtil.copyProperties(registeredClient, registeredClientVO);
-        ClientSettingsVO clientSettings = mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<ClientSettingsVO>() {
+        ClientSettingsVO clientSettings = mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<>() {
         });
         registeredClientVO.setClientSettings(clientSettings);
-        TokenSettingsVO tokenSettings = mapper.readValue(registeredClientVO.getJsonTokenSettings(), new TypeReference<TokenSettingsVO>() {
+        TokenSettingsVO tokenSettings = mapper.readValue(registeredClientVO.getJsonTokenSettings(), new TypeReference<>() {
         });
         registeredClientVO.setTokenSettings(tokenSettings);
 

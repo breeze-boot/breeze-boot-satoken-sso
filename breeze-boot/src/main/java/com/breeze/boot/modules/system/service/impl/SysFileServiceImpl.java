@@ -36,6 +36,8 @@ import com.breeze.boot.modules.system.model.query.FileQuery;
 import com.breeze.boot.modules.system.service.SysFileService;
 import com.breeze.boot.oss.operation.MinioOssTemplate;
 import com.google.common.collect.Maps;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -44,13 +46,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.breeze.boot.core.constants.CoreConstants.SYSTEM_BUCKET_NAME;
+import static com.breeze.boot.core.constants.StorageConstants.SYSTEM_BUCKET_NAME;
 
 /**
  * 系统文件服务impl
@@ -141,7 +141,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                     .path(objectName)
                     .bizId(fileForm.getBizId())
                     .bizType(fileForm.getBizType())
-                    .format(extractFileFormat(originalFilename))
+                    .format(extractFileFormat(Objects.requireNonNull(originalFilename)))
                     .contentType(request.getContentType())
                     .bucket(SYSTEM_BUCKET_NAME)
                     .storeType(1)
@@ -158,7 +158,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 
         } catch (Exception ex) {
             log.error("[文件上传至Minio失败]", ex);
-            return Result.fail("文件上传至Minio失败");
+            throw new BreezeBizException(ResultCode.FAIL);
         }
         return Result.ok(resultMap);
     }

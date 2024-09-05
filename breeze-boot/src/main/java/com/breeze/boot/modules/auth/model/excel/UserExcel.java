@@ -23,10 +23,10 @@ import com.alibaba.excel.enums.poi.HorizontalAlignmentEnum;
 import com.alibaba.excel.enums.poi.VerticalAlignmentEnum;
 import com.breeze.boot.core.annotation.SensitiveInfo;
 import com.breeze.boot.core.enums.SensitiveStrategy;
-import com.breeze.boot.security.annotation.SecuredField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -54,6 +54,7 @@ import java.io.Serializable;
 @Schema(description = "系统用户Excel")
 public class UserExcel implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -111,7 +112,6 @@ public class UserExcel implements Serializable {
     @Schema(description = "身份证号")
     @ExcelProperty(value = "身份证号")
     @SensitiveInfo(SensitiveStrategy.ID_CARD)
-    @SecuredField(column = "id_card")
     private String idCard;
 
     /**

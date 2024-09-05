@@ -18,10 +18,11 @@ package com.breeze.boot.modules.auth.model.form;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import java.util.List;
 @Schema(description = "系统菜单表单")
 public class MenuForm implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

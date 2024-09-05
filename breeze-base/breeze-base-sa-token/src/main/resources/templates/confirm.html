@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sa-OAuth2-认证中心-确认授权页</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .confirm-box {
+            margin: 0 auto;
+            padding: 70px;
+        }
+
+        .confirm-box button {
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+    </style>
+    <link href="https://cdn.bootcdn.net/ajax/libs/layui/2.9.16/css/layui.css" rel="stylesheet">
+</head>
+<body>
+<div class="confirm-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        <h2>Sa-OAuth2-认证中心-确认授权页</h2> <br>
+        <div>
+            <div><b>应用ID：</b><span th:utext="${clientId}"></span></div>
+            <div><b>请求授权：</b><span th:utext="${scope}"></span></div>
+            <br>
+            <div>------------- 是否同意授权 -------------</div>
+            <br>
+            <div>
+                <button class="layui-btn" onclick="yes()">确认</button>
+                <button class="layui-btn layui-btn-primary" onclick="no()">拒绝</button>
+            </div>
+        </div>
+    </blockquote>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.9.16/layui.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>window.jQuery || alert('当前页面CDN服务商已宕机，请将所有js包更换为本地依赖')</script>
+
+<script type="text/javascript">
+
+    // 同意授权
+    function yes() {
+        console.log('-----------');
+        $.ajax({
+            url: '/oauth2/doConfirm',
+            method: "POST",
+            data: {
+                client_id: getParam('client_id'),
+                scope: getParam('scope'),
+                // 以下四个参数必须一起出现
+                build_redirect_uri: true,
+                response_type: getParam('response_type'),
+                redirect_uri: getParam('redirect_uri'),
+                state: getParam('state'),
+            },
+            dataType: 'json',
+            success: function (res) {
+                console.log('res：', res);
+                if (res.code === 200) {
+                    layer.msg('授权成功！');
+                    setTimeout(function () {
+                        if (res.redirect_uri) {
+                            location.href = res.redirect_uri;
+                        } else {
+                            location.reload();
+                        }
+                    }, 800);
+                } else {
+                    // 重定向至授权失败URL
+                    layer.alert('授权失败:' + res.msg);
+                }
+            },
+            error: function (e) {
+                console.log('error');
+            }
+        });
+    }
+
+    // 拒绝授权
+    function no() {
+        location.href = joinParam(getParam('redirect_uri'), "handle=refuse&msg=用户拒绝了授权");
+    }
+
+    // 从url中查询到指定名称的参数值
+    function getParam(name, defaultValue) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+            let pair = vars[i].split("=");
+            if (pair[0] === name) {
+                return pair[1];
+            }
+        }
+        return (defaultValue === undefined ? null : defaultValue);
+    }
+
+    // 在url上拼接上kv参数并返回
+    function joinParam(url, paramStr) {
+        if (paramStr === null || paramStr.length === 0) {
+            return url;
+        }
+        let index = url.indexOf('?');
+        // ? 不存在
+        if (index === -1) {
+            return url + '?' + paramStr;
+        }
+        // ? 是最后一位
+        if (index === url.length - 1) {
+            return url + paramStr;
+        }
+        // ? 是其中一位
+        if (index > -1 && index < url.length - 1) {
+            // 如果最后一位是 不是&, 且 paramStr 第一位不是 &, 就增送一个 &
+            if (url.lastIndexOf('&') !== url.length - 1 && paramStr.indexOf('&') !== 0) {
+                return url + '&' + paramStr;
+            } else {
+                return url + paramStr;
+            }
+        }
+    }
+</script>
+</body>
+</html>

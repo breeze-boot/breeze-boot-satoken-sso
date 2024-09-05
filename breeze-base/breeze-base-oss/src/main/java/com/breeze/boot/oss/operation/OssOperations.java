@@ -19,9 +19,9 @@ package com.breeze.boot.oss.operation;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;

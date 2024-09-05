@@ -4,6 +4,7 @@ import com.breeze.boot.core.base.PageQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Data
 public class UserTaskQuery extends PageQuery implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

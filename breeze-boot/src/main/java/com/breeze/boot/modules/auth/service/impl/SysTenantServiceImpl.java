@@ -22,6 +22,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysTenantMapper;
 import com.breeze.boot.modules.auth.model.entity.SysTenant;
@@ -32,7 +34,6 @@ import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.model.vo.TenantVO;
 import com.breeze.boot.modules.auth.service.SysTenantService;
 import com.breeze.boot.modules.auth.service.SysUserService;
-import com.breeze.boot.security.service.ITenantService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService, ITenantService {
+public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant> implements SysTenantService {
 
     /**
      * 系统用户服务
@@ -111,12 +112,11 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     public Result<Boolean> removeTenantByIds(List<Long> ids) {
         List<SysUser> sysUserList = this.sysUserService.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getTenantId, ids));
         if (CollUtil.isNotEmpty(sysUserList)) {
-            return Result.fail(Boolean.FALSE, "租户已经被使用");
+            throw new BreezeBizException(ResultCode.IS_USED);
         }
         return Result.ok(this.removeByIds(ids));
     }
 
-    @Override
     public List<Map<String, Object>> selectTenant() {
         return this.list().stream().map(tenant -> {
             Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();

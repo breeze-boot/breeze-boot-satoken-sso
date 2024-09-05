@@ -18,6 +18,8 @@ package com.breeze.boot.modules.auth.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRoleMenuColumnMapper;
 import com.breeze.boot.modules.auth.model.entity.SysRoleMenuColumn;
@@ -50,7 +52,7 @@ public class SysRoleMenuColumnServiceImpl extends ServiceImpl<SysRoleMenuColumnM
     public Result<Boolean> saveRoleMenuColumn(RoleMenuColumnForm roleMenuColumnForm) {
         boolean remove = this.remove(Wrappers.<SysRoleMenuColumn>lambdaQuery().eq(SysRoleMenuColumn::getRoleId, roleMenuColumnForm.getRoleId()));
         if (!remove) {
-            return Result.fail(Boolean.FALSE, "设置失败");
+            throw new BreezeBizException(ResultCode.FAIL);
         }
         return Result.ok(this.saveBatch(roleMenuColumnForm.getMenu().stream().map(menu -> {
             SysRoleMenuColumn sysRoleMenuColumn = new SysRoleMenuColumn();

@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -40,6 +41,7 @@ import java.io.Serializable;
 @TableName("ACT_ID_GROUP")
 @Schema(description = "流程用户组")
 public class Group implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "ID_", type = IdType.INPUT)

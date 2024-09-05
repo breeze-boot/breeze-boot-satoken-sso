@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.anji-plus</groupId>
-            <artifactId>spring-boot-starter-captcha</artifactId>
+            <artifactId>spring-boot3-starter-captcha</artifactId>
         </dependency>
 
         <dependency>

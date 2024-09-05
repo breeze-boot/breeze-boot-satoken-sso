@@ -51,7 +51,7 @@ public class AllowConcurrentExecutionJob extends QuartzJobBean {
         Object[] parameters = new Object[paramArray.length];
         JobInvokeUtils.getParams(paramArray, parameterTypes, parameters);
         if (clazzName.startsWith("com.")) {
-            Object bean = Class.forName(beanName).newInstance();
+            Object bean = Class.forName(beanName).getDeclaredConstructor().newInstance();
             Method method = bean.getClass().getMethod(methodName, parameterTypes);
             method.invoke(bean, parameters);
         } else {

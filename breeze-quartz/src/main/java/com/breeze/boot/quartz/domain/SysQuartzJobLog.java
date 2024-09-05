@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -41,6 +42,7 @@ import java.time.LocalDateTime;
 @Schema(description = "quartz的log实体")
 public class SysQuartzJobLog implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

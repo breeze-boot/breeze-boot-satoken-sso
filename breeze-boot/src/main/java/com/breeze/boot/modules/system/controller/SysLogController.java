@@ -16,11 +16,11 @@
 
 package com.breeze.boot.modules.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
 import com.breeze.boot.log.enums.LogType;
-import com.breeze.boot.modules.system.model.entity.SysLog;
 import com.breeze.boot.modules.system.model.query.LogQuery;
 import com.breeze.boot.modules.system.model.vo.LogVO;
 import com.breeze.boot.modules.system.service.SysLogService;
@@ -28,11 +28,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 
 /**
@@ -60,7 +59,7 @@ public class SysLogController {
      * @return {@link Result}<{@link Page}<{@link LogVO}>>
      */
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('sys:log:list')")
+    @SaCheckPermission("sys:log:list")
     public Result<Page<LogVO>> list(LogQuery logQuery) {
         return Result.ok(this.sysLogService.listPage(logQuery));
     }
@@ -73,7 +72,7 @@ public class SysLogController {
      */
     @Operation(summary = "详情")
     @GetMapping("/info/{logId}")
-    @PreAuthorize("hasAnyAuthority('auth:log:info')")
+    @SaCheckPermission("auth:log:info")
     public Result<LogVO> info(@Parameter(description = "日志ID") @PathVariable("logId") Long logId) {
         return Result.ok(this.sysLogService.getInfoById(logId));
     }
@@ -83,7 +82,7 @@ public class SysLogController {
      */
     @Operation(summary = "清空")
     @DeleteMapping("/truncate")
-    @PreAuthorize("hasAnyAuthority('sys:log:truncate')")
+    @SaCheckPermission("sys:log:truncate")
     @BreezeSysLog(description = "日志信息清空", type = LogType.DELETE)
     public void truncate() {
         this.sysLogService.truncate();
@@ -97,7 +96,7 @@ public class SysLogController {
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @PreAuthorize("hasAnyAuthority('sys:log:delete')")
+    @SaCheckPermission("sys:log:delete")
     @BreezeSysLog(description = "日志信息删除", type = LogType.DELETE)
     public Result<Boolean> delete(@Parameter(description = "日志ID") @NotNull(message = "参数不能为空") @RequestBody Long[] ids) {
         return Result.ok(this.sysLogService.removeByIds(Arrays.asList(ids)));

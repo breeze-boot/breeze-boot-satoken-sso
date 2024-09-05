@@ -16,25 +16,32 @@
 
 package com.breeze.boot.core.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 线程本地
  *
  * @author gaoweixuan
  * @since 2022-11-08
  */
+@Slf4j
 public class BreezeThreadLocal {
+
 
     private static final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     public static Long get() {
+        log.info(Thread.currentThread().getName());
         return threadLocal.get();
     }
 
     public static void remove() {
+        log.info(Thread.currentThread().getName());
         threadLocal.remove();
     }
 
     public static void set(Long value) {
+        log.info(Thread.currentThread().getName());
         threadLocal.set(value);
     }
 
