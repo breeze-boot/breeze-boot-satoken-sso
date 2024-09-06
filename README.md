@@ -31,7 +31,7 @@
   │ ├─ breeze-base-log \
   │ ├─ breeze-base-mail \
   │ ├─ breeze-base-oss-s3 \
-  │ ├─ breeze-base-security \
+  │ ├─ breeze-base-sa-token \
   │ ├─ breeze-base-validator \
   │ ├─ breeze-base-message\
   │ ├─ breeze-base-redis-cache\
