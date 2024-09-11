@@ -23,12 +23,10 @@ import com.anji.captcha.service.CaptchaService;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
 import com.breeze.boot.modules.auth.service.SysUserService;
-import com.breeze.boot.satoken.SaTokenOauthConfigure;
-import com.breeze.boot.satoken.oauth2.client.SaOAuth2DataLoaderImpl;
-import com.breeze.boot.satoken.oauth2.oidc.BreezeOidcScopeHandler;
-import com.breeze.boot.satoken.oauth2.phone.PhoneCodeGrantTypeHandler;
-import com.breeze.boot.satoken.oauth2.userinfo.UserinfoScopeHandler;
-import com.breeze.boot.satoken.spt.StpInterfaceImpl;
+import com.breeze.boot.sso.config.SaTokenSsoServerConfigure;
+import com.breeze.boot.sso.config.BreezeSaSsoServerTemplate;
+import com.breeze.boot.sso.config.SsoClientConfigure;
+import com.breeze.boot.sso.spt.StpInterfaceImpl;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -59,14 +57,16 @@ public class ResourceServerConfiguration {
     private final SysRegisteredClientService sysRegisteredClientService;
 
     private final AesSecretProperties aesSecretProperties;
-
+    @Bean
+    public BreezeSaSsoServerTemplate saSsoServerTemplate() {
+        return new BreezeSaSsoServerTemplate(() -> sysRegisteredClientService, () -> aesSecretProperties);
+    }
+    @Bean
+    public SsoClientConfigure ssoClientConfigure() {
+        return new SsoClientConfigure(() -> userService);
+    }
     public String getActiveProfile() {
         return context.getEnvironment().getActiveProfiles()[0];
-    }
-
-    @Bean
-    public SaOAuth2DataLoaderImpl saOAuth2DataLoader() {
-        return new SaOAuth2DataLoaderImpl(() -> sysRegisteredClientService, () -> aesSecretProperties);
     }
 
     @Bean
@@ -75,38 +75,8 @@ public class ResourceServerConfiguration {
     }
 
     @Bean
-    public SaTokenOauthConfigure saTokenOauthConfigure() {
-        return new SaTokenOauthConfigure(() -> userService, this::check, () -> aesSecretProperties);
-    }
-
-    /**
-     * 用户服务
-     *
-     * @return {@link BreezeOidcScopeHandler}
-     */
-    @Bean
-    public BreezeOidcScopeHandler oidcScopeHandler() {
-        return new BreezeOidcScopeHandler(() -> userService);
-    }
-
-    /**
-     * 用户服务
-     *
-     * @return {@link BreezeOidcScopeHandler}
-     */
-    @Bean
-    public PhoneCodeGrantTypeHandler phoneCodeGrantTypeHandler() {
-        return new PhoneCodeGrantTypeHandler(() -> userService);
-    }
-
-    /**
-     * 用户服务
-     *
-     * @return {@link BreezeOidcScopeHandler}
-     */
-    @Bean
-    public UserinfoScopeHandler userinfoScopeHandler() {
-        return new UserinfoScopeHandler(() -> userService);
+    public SaTokenSsoServerConfigure saTokenOauthConfigure() {
+        return new SaTokenSsoServerConfigure(() -> userService, this::check, () -> aesSecretProperties);
     }
 
     private boolean check(HttpServletRequest contextRequest) {

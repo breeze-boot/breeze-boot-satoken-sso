@@ -12,12 +12,7 @@
         client_secret,
         client_secret_expires_at,
         client_name,
-        client_authentication_methods AS str_client_authentication_methods,
-        authorization_grant_types AS str_authorization_grant_types,
-        redirect_uris AS str_redirect_uris,
-        scopes AS str_scopes,
-        json_client_settings,
-        json_token_settings
+        redirect_uris AS str_redirect_uris
         FROM
         sys_registered_client
         <where>
@@ -40,22 +35,37 @@
         client_secret,
         client_secret_expires_at,
         client_name,
-        client_authentication_methods,
-        authorization_grant_types,
-        redirect_uris,
-        scopes,
-        json_client_settings,
-        json_token_settings
+        redirect_uris
         FROM
         sys_registered_client
         <where>
             AND is_delete = 0
+            <if test="registeredClient.id == null and registeredClient.clientId == null">
+                AND 1 != 1
+            </if>
             <if test="registeredClient.id != null and registeredClient.id != ''">
                 AND id = #{registeredClient.id}
             </if>
             <if test="registeredClient.clientId != null and registeredClient.clientId != ''">
                 AND client_id = #{registeredClient.clientId}
             </if>
+        </where>
+    </select>
+
+    <select id="getAllRegisteredClient"
+            resultType="com.breeze.boot.modules.auth.model.entity.SysRegisteredClient">
+        SELECT
+        id,
+        client_id,
+        client_id_issued_at,
+        client_secret,
+        client_secret_expires_at,
+        client_name,
+        redirect_uris
+        FROM
+        sys_registered_client
+        <where>
+            AND is_delete = 0
         </where>
     </select>
 

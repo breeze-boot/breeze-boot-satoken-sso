@@ -1,0 +1,31 @@
+breeze:
+  aes-secret: 1234567890123456
+
+# sa-token配置
+sa-token:
+  ignore-urls:
+    # Monitor
+    - "/actuator/**"
+    # Local file storage
+    - "/img/**"
+    # Data sources & Report generation
+    - "/druid/**"
+    - "/ureport/**"
+
+  # sso-client 相关配置
+  sso-client:
+    # sso-server 端主机地址
+    server-url: http://sa-sso-server.com:9000
+    # 使用 Http 请求校验ticket (模式三)
+    is-http: true
+    # 当前 client 标识
+    client: sso-client1
+  sign:
+    # API 接口调用秘钥
+    secret-key: breeze
+
+forest:
+  # 关闭 forest 请求日志打印
+  log-enabled: false
+
+

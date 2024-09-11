@@ -22,7 +22,7 @@ import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.model.excel.UserExcel;
 import com.breeze.boot.modules.auth.model.form.UserForm;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
-import com.breeze.boot.satoken.model.UserInfoDTO;
+import com.breeze.boot.sso.model.UserInfoDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

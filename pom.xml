@@ -36,6 +36,7 @@
         <module>breeze-quartz</module>
         <module>breeze-gen</module>
         <module>breeze-monitor</module>
+        <module>breeze-sample</module>
     </modules>
 
     <properties>
@@ -61,7 +62,6 @@
         <druid.version>1.2.8</druid.version>
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
 
-        <flowable.version>7.0.0.M1</flowable.version>
         <lombok.version>1.18.34</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
@@ -138,12 +138,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-undertow</artifactId>
                 <version>${spring-boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-spring-boot-starter</artifactId>
-                <version>${flowable.version}</version>
             </dependency>
 
             <dependency>
@@ -231,13 +225,6 @@
                 <version>${sa-token.version}</version>
             </dependency>
 
-            <!-- Sa-Token OAuth2.0 模块 -->
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-oauth2</artifactId>
-                <version>${sa-token.version}</version>
-            </dependency>
-
             <!-- Sa-Token 整合 Redis (可选) -->
             <dependency>
                 <groupId>cn.dev33</groupId>
@@ -256,8 +243,18 @@
                 <version>${sa-token.version}</version>
                 <scope>compile</scope>
             </dependency>
+            <!-- Sa-Token 插件：整合SSO -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-sso</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dtflys.forest</groupId>
+                <artifactId>forest-spring-boot-starter</artifactId>
+                <version>1.5.36</version>
+            </dependency>
             <!-- Sa-Token -->
-
 
             <!-- mybatis plus -->
             <dependency>
@@ -406,7 +403,7 @@
 
             <dependency>
                 <groupId>com.breeze</groupId>
-                <artifactId>breeze-base-sa-token</artifactId>
+                <artifactId>breeze-base-sa-sso</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

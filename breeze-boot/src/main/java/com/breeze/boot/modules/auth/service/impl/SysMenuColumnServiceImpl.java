@@ -32,7 +32,7 @@ import com.breeze.boot.modules.auth.model.vo.RolesMenuColumnVO;
 import com.breeze.boot.modules.auth.model.vo.RowPermissionVO;
 import com.breeze.boot.modules.auth.service.SysMenuColumnService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuColumnService;
-import com.breeze.boot.satoken.utils.BreezeStpUtil;
+import com.breeze.boot.sso.utils.BreezeStpUtil;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

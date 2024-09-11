@@ -24,7 +24,10 @@ import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
 import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
-import com.breeze.boot.satoken.oauth2.IClientService;
+import com.breeze.boot.sso.model.BaseSysRegisteredClient;
+import com.breeze.boot.sso.spt.IClientService;
+
+import java.util.List;
 
 /**
  * 注册客户服务接口
@@ -35,22 +38,21 @@ import com.breeze.boot.satoken.oauth2.IClientService;
 public interface SysRegisteredClientService extends IService<SysRegisteredClient>, IClientService {
 
     /**
-     * 发现由客户端Id
+     * 通过客户端ID获取客户端信息
      *
      * @param clientId 客户端Id
-     * @return {@link SysRegisteredClient}
+     * @return {@link BaseSysRegisteredClient}
      */
     @Override
     SysRegisteredClient getByClientId(String clientId);
 
     /**
-     * 发现通过id
+     * 获取所有客户端回调地址
      *
-     * @param id id
-     * @return {@link SysRegisteredClient}
+     * @return {@link String }
      */
     @Override
-    SysRegisteredClient getById(String id);
+    String getAllRedirectUris();
 
     /**
      * 列表页面

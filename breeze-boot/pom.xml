@@ -47,13 +47,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-        <!-- flowable -->
-        <dependency>
-            <groupId>org.flowable</groupId>
-            <artifactId>flowable-spring-boot-starter</artifactId>
-            <version>${flowable.version}</version>
-        </dependency>
-
         <!-- monitor client -->
         <dependency>
             <groupId>de.codecentric</groupId>
@@ -91,7 +84,7 @@
         <!--安全-->
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-sa-token</artifactId>
+            <artifactId>breeze-base-sa-sso</artifactId>
         </dependency>
 
         <!--定时任务-->

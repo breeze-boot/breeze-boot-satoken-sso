@@ -30,7 +30,7 @@ import com.breeze.boot.modules.system.model.entity.SysMsgUser;
 import com.breeze.boot.modules.system.model.query.UserMsgQuery;
 import com.breeze.boot.modules.system.model.vo.MsgUserVO;
 import com.breeze.boot.modules.system.service.SysMsgUserService;
-import com.breeze.boot.satoken.utils.BreezeStpUtil;
+import com.breeze.boot.sso.utils.BreezeStpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

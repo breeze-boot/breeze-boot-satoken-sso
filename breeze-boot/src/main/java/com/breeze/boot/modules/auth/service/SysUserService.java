@@ -26,7 +26,7 @@ import com.breeze.boot.modules.auth.model.form.UserResetForm;
 import com.breeze.boot.modules.auth.model.form.UserRolesForm;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
-import com.breeze.boot.satoken.oauth2.IUserDetailService;
+import com.breeze.boot.sso.spt.IUserDetailService;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;

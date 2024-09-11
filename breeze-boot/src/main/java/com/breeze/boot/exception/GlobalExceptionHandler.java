@@ -18,6 +18,7 @@ package com.breeze.boot.exception;
 
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.sso.exception.SaSsoException;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.utils.MessageUtil;
@@ -72,6 +73,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result<?> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         log.error("HttpRequestMethodNotSupportedException 请求类型不支持：", ex);
+        return Result.fail(ex.getMessage());
+    }
+
+    /**
+     * SaSsoException
+     *
+     * @param ex 异常
+     * @return {@link Result}<{@link ?}>
+     */
+    @ExceptionHandler(SaSsoException.class)
+    public Result<?> saSsoException(SaSsoException ex) {
+        log.error("SaSsoException 请求类型不支持：", ex);
         return Result.fail(ex.getMessage());
     }
 

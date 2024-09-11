@@ -36,7 +36,7 @@ import com.breeze.boot.modules.auth.model.mappers.SysMenuMapStruct;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
-import com.breeze.boot.satoken.utils.BreezeStpUtil;
+import com.breeze.boot.sso.utils.BreezeStpUtil;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

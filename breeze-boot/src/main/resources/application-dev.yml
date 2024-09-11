@@ -5,6 +5,7 @@ spring:
       host: ${BREEZE_REDIS_HOST:breeze-redis}
       port: ${BREEZE_REDIS_PORT:6379}
       password: ${BREEZE_REDIS_PASSWORD:breeze}
+      timeout: 10s
       lettuce:
         pool:
           # 连接池最大连接数 默认8 ，负数表示没有限制
@@ -30,14 +31,7 @@ spring:
       datasource:
         # 主库
         master:
-          url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql:3306}/breeze_boot_17?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          username: root
-          password: ${BREEZE_MYSQL_PWD:root}
-          type: com.alibaba.druid.pool.DruidDataSource
-        # flowable 从库 硬编码，若使用flowable单独的数据库，指定数据源名称为flowable
-        flowable:
-          url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql:3306}/breeze_flowable_17?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://${BREEZE_MYSQL_HOST:breeze-mysql:3306}/breeze_boot_sso?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: root
           password: ${BREEZE_MYSQL_PWD:root}

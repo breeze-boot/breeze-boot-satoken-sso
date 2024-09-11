@@ -7,6 +7,3 @@ logging:
   file:
     name: ./logs/${spring.application.name}/${spring.application.name}.log
   config: classpath:logback-spring.xml
-  level:
-    org:
-      flowable: debug

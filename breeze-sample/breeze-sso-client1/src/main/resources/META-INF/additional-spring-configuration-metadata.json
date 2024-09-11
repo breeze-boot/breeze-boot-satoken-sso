@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.profiles.preview",
+      "type": "java.lang.String",
+      "description": "spring.profiles.preview. 是否开启演示模式"
+    },
+    {
+      "name": "spring.rabbitmq.stomp-port",
+      "type": "java.lang.String",
+      "description": "spring.rabbitmq.stomp-port. stomp端口"
+    }
+  ] }

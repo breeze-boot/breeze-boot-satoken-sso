@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.auth.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.satoken.model.BaseSysRegisteredClient;
+import com.breeze.boot.sso.model.BaseSysRegisteredClient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -64,33 +64,8 @@ public class SysRegisteredClient extends BaseSysRegisteredClient {
     private String clientName;
 
     /**
-     * 客户端身份验证方法
-     */
-    private String clientAuthenticationMethods;
-
-    /**
-     * 授权批准类型
-     */
-    private String authorizationGrantTypes;
-
-    /**
      * 重定向uri
      */
     private String redirectUris;
-
-    /**
-     * 作用域
-     */
-    private String scopes;
-
-    /**
-     * 客户端设置
-     */
-    private String jsonClientSettings;
-
-    /**
-     * 令牌设置
-     */
-    private String jsonTokenSettings;
 
 }

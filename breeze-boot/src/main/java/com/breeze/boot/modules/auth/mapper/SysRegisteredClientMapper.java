@@ -25,6 +25,8 @@ import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 系统注册客户端映射器
  *
@@ -50,5 +52,12 @@ public interface SysRegisteredClientMapper extends BreezeBaseMapper<SysRegistere
      * @return {@link SysRegisteredClient}
      */
     SysRegisteredClient getRegisteredClientBy(@Param("registeredClient") RegisteredClientQuery registeredClient);
+
+    /**
+     * 获取注册客户端
+     *
+     * @return {@link List }<{@link SysRegisteredClient }>
+     */
+    List<SysRegisteredClient> getAllRegisteredClient();
 
 }

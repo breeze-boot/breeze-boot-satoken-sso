@@ -27,7 +27,7 @@
         <module>breeze-base-doc</module>
         <module>breeze-base-sms</module>
         <module>breeze-base-anji-captcha</module>
-        <module>breeze-base-sa-token</module>
+        <module>breeze-base-sa-sso</module>
         <module>spring-boot3-starter-captcha</module>
         <module>anj-captcha</module>
     </modules>

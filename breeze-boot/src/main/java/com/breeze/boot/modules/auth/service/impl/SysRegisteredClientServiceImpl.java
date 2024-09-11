@@ -19,6 +19,7 @@ package com.breeze.boot.modules.auth.service.impl;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,22 +30,15 @@ import com.breeze.boot.modules.auth.model.entity.SysRegisteredClient;
 import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
 import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
-import com.breeze.boot.modules.auth.model.vo.ClientSettingsVO;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
-import com.breeze.boot.modules.auth.model.vo.TokenSettingsVO;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,10 +53,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredClientMapper, SysRegisteredClient> implements SysRegisteredClientService {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     private final AesSecretProperties aesSecretProperties;
-
 
     /**
      * set 转换 string + [,]
@@ -95,11 +86,6 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     public Result<Boolean> saveRegisteredClient(RegisteredClientForm registeredClientForm) {
         Assert.notNull(registeredClientForm, "registeredClient cannot be null");
 
-        RegisteredClientForm.ClientSettings clientSettings = registeredClientForm.getClientSettings();
-        Assert.notNull(clientSettings, "clientSettings cannot be null");
-
-        RegisteredClientForm.TokenSettings tokenSettings = registeredClientForm.getTokenSettings();
-        Assert.notNull(tokenSettings, "tokenSettings cannot be null");
         SysRegisteredClient byClientId = this.getByClientId(registeredClientForm.getClientId());
         if (Objects.nonNull(byClientId)) {
             return Result.fail(Boolean.FALSE, "已经存在此客户端");
@@ -123,24 +109,12 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
                 .set(SysRegisteredClient::getClientName, sysRegisteredClient.getClientName())
                 .set(SysRegisteredClient::getClientIdIssuedAt, sysRegisteredClient.getClientIdIssuedAt())
                 .set(SysRegisteredClient::getClientSecretExpiresAt, sysRegisteredClient.getClientSecretExpiresAt())
-                .set(SysRegisteredClient::getClientAuthenticationMethods, sysRegisteredClient.getClientAuthenticationMethods())
-                .set(SysRegisteredClient::getAuthorizationGrantTypes, sysRegisteredClient.getAuthorizationGrantTypes())
                 .set(SysRegisteredClient::getRedirectUris, sysRegisteredClient.getRedirectUris())
-                .set(SysRegisteredClient::getScopes, sysRegisteredClient.getScopes())
-                .set(SysRegisteredClient::getJsonClientSettings, sysRegisteredClient.getJsonClientSettings())
-                .set(SysRegisteredClient::getJsonTokenSettings, sysRegisteredClient.getJsonTokenSettings())
                 .eq(SysRegisteredClient::getId, id));
     }
 
     @SneakyThrows
     private void getClientVO(RegisteredClientVO registeredClientVO) {
-        registeredClientVO.setClientSettings(mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<>() {
-        }));
-        registeredClientVO.setTokenSettings(mapper.readValue(registeredClientVO.getJsonTokenSettings(), new TypeReference<TokenSettingsVO>() {
-        }));
-        registeredClientVO.setAuthorizationGrantTypes(Arrays.stream(registeredClientVO.getStrAuthorizationGrantTypes().split(",")).collect(Collectors.toSet()));
-        registeredClientVO.setScopes(Arrays.stream(registeredClientVO.getStrScopes().split(",")).collect(Collectors.toSet()));
-        registeredClientVO.setClientAuthenticationMethods(Arrays.stream(registeredClientVO.getStrClientAuthenticationMethods().split(",")).collect(Collectors.toSet()));
         registeredClientVO.setRedirectUris(Arrays.stream(registeredClientVO.getStrRedirectUris().split(",")).collect(Collectors.toSet()));
     }
 
@@ -153,12 +127,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
                 .clientIdIssuedAt(client.getClientIdIssuedAt())
                 .clientSecretExpiresAt(client.getClientSecretExpiresAt())
                 .clientSecret(Optional.ofNullable(client.getClientSecret()).map(pwd -> SaSecureUtil.aesEncrypt(aesSecretProperties.getAesSecret(), pwd)).orElse(null))
-                .clientAuthenticationMethods(Optional.ofNullable(client.getClientAuthenticationMethods()).map(convertSet2String()).orElse(null))
-                .authorizationGrantTypes(Optional.ofNullable(client.getAuthorizationGrantTypes()).map(convertSet2String()).orElse(null))
-                .scopes(Optional.ofNullable(client.getScopes()).map(convertSet2String()).orElse(null))
                 .redirectUris(Optional.ofNullable(client.getRedirectUris()).map(convertSet2String()).orElse(null))
-                .jsonClientSettings(Optional.ofNullable(client.getClientSettings()).map(this::write).orElse(null))
-                .jsonTokenSettings(Optional.ofNullable(client.getTokenSettings()).map(this::write).orElse(null))
                 .build();
         registeredClient.setId(client.getId());
         return registeredClient;
@@ -166,7 +135,7 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     }
 
     /**
-     * 获取客户端由客户端id
+     * 通过客户端ID获取客户端信息
      *
      * @param clientId 客户端id
      * @return {@link SysRegisteredClient}
@@ -177,14 +146,17 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
     }
 
     /**
-     * 获取客户端通过id
+     * 获取所有客户端回调地址
      *
-     * @param id id
-     * @return {@link SysRegisteredClient}
+     * @return {@link String }
      */
     @Override
-    public SysRegisteredClient getById(String id) {
-        return this.baseMapper.getRegisteredClientBy(RegisteredClientQuery.builder().id(Long.valueOf(id)).build());
+    public String getAllRedirectUris() {
+        List<SysRegisteredClient> sysRegisteredClientList = this.baseMapper.getAllRegisteredClient();
+        if (CollUtil.isNotEmpty(sysRegisteredClientList)) {
+            return sysRegisteredClientList.stream().map(SysRegisteredClient::getRedirectUris).distinct().collect(Collectors.joining(","));
+        }
+        return "";
     }
 
     /**
@@ -213,32 +185,8 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
         SysRegisteredClient registeredClient = this.getById(clientId);
         RegisteredClientVO registeredClientVO = new RegisteredClientVO();
         BeanUtil.copyProperties(registeredClient, registeredClientVO);
-        ClientSettingsVO clientSettings = mapper.readValue(registeredClientVO.getJsonClientSettings(), new TypeReference<>() {
-        });
-        registeredClientVO.setClientSettings(clientSettings);
-        TokenSettingsVO tokenSettings = mapper.readValue(registeredClientVO.getJsonTokenSettings(), new TypeReference<>() {
-        });
-        registeredClientVO.setTokenSettings(tokenSettings);
-
-        registeredClientVO.setAuthorizationGrantTypes(Arrays.stream(registeredClient.getAuthorizationGrantTypes().split(",")).collect(Collectors.toSet()));
-        registeredClientVO.setScopes(Arrays.stream(registeredClient.getScopes().split(",")).collect(Collectors.toSet()));
-        registeredClientVO.setClientAuthenticationMethods(Arrays.stream(registeredClient.getClientAuthenticationMethods().split(",")).collect(Collectors.toSet()));
         registeredClientVO.setRedirectUris(Arrays.stream(registeredClient.getRedirectUris().split(",")).collect(Collectors.toSet()));
         return registeredClientVO;
-    }
-
-    /**
-     * 写
-     *
-     * @param data 数据
-     * @return {@link String}
-     */
-    public String write(Object data) {
-        try {
-            return mapper.writeValueAsString(data);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException(ex.getMessage(), ex);
-        }
     }
 
 }

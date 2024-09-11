@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-sa-token</artifactId>
+            <artifactId>breeze-base-sa-sso</artifactId>
             <version>1.0</version>
         </dependency>
         <!--undertow容器-->

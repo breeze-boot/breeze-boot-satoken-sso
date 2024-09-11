@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Sa-Token 认证中心</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/layui/2.9.16/css/layui.css" rel="stylesheet">
+</head>
+<body class="layui-padding-3">
+
+<style>
+    .demo-login-container {
+        width: 320px;
+        margin: 21px auto 0;
+    }
+
+    .demo-login-other .layui-icon {
+        position: relative;
+        display: inline-block;
+        margin: 0 2px;
+        top: 2px;
+        font-size: 26px;
+    }
+</style>
+<form class="layui-form">
+    <div class="demo-login-container">
+        <div class="layui-form-item" style="text-align: center">
+            <h2>Sa-SSO 认证中心</h2>
+        </div>
+        <div class="demo-login-container">
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="layui-icon layui-icon-username"></i>
+                    </div>
+                    <input autocomplete="off" class="layui-input" lay-affix="clear" lay-reqtext="请填写用户名"
+                           lay-verify="required"
+                           name="name" placeholder="用户名" type="text" value="admin">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="layui-icon layui-icon-password"></i>
+                    </div>
+                    <input autocomplete="off" class="layui-input" lay-affix="eye" lay-reqtext="请填写密码"
+                           lay-verify="required"
+                           name="pwd" placeholder="密   码" type="password" value="123456">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                    </div>
+                    <select disabled id="tenant" name="X-Tenant-Id">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-fluid" lay-filter="demo-login" lay-submit>登录</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.9.16/layui.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>window.jQuery || alert('当前页面CDN服务商已宕机，请将所有js包更换为本地依赖')</script>
+
+<script type="text/javascript">
+
+    const SALES = '1234567890123456'
+
+    /**
+     * 从url中查询到指定名称的参数值
+     *
+     * @param name
+     * @param defaultValue
+     */
+    const getParam = function (name, defaultValue) {
+        const query = window.location.hash.substring(1)
+        const vars = query.split('&')
+        for (let i = 0; i < vars.length; i++) {
+            const pair = vars[i].split('=')
+            if (pair[0] === name) {
+                return pair[1]
+            }
+        }
+        return !defaultValue ? null : defaultValue
+    }
+
+    function getTenant() {
+        $.ajax({
+            url: '/sys/v1/common/selectTenant',
+            success: function (response) {
+                $.each(response.data, function (index, item) {
+                    const tenantId = getParam('X-Tenant-Id')
+                    if (tenantId === item.value) {
+                        $('#tenant').append(new Option(item.label, item.value, true, true));
+                    } else {
+                        $('#tenant').append(new Option(item.label, item.value));
+                    }
+                })
+                layui.form.render("select");
+            }
+        })
+    }
+
+    $(() => {
+        getTenant()
+    })
+
+    /**
+     * 加密
+     *
+     * @param content
+     * @param key
+     * @returns {string}
+     */
+    function encrypt(content, key) {
+        const sKey = CryptoJS.enc.Utf8.parse(key)
+        const sContent = CryptoJS.enc.Utf8.parse(content)
+        const encrypted = CryptoJS.AES.encrypt(sContent, sKey, {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7,
+        })
+        return encrypted.toString()
+    }
+
+    // 登录方法
+    function doLogin(field) {
+        $.ajax({
+            url: '/sso/doLogin',
+            data: {
+                name: field['name'],
+                pwd: encrypt(field['pwd'], SALES),
+            },
+            headers: {
+                'X-Tenant-Id': field['X-Tenant-Id'],
+                'accept-language': 'zhCn'
+            },
+            dataType: 'json',
+            success: function (res) {
+                if (res.code === '0000') {
+                    layer.msg('登录成功');
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 800);
+                } else {
+                    layer.alert(res.message);
+                }
+            },
+            error: function (e) {
+                layer.alert(e.responseJSON.message);
+            }
+        });
+    }
+
+    layui.use(function () {
+        const form = layui.form;
+        const layer = layui.layer;
+        // 提交事件
+        form.on('submit(demo-login)', function (data) {
+            const field = data.field; // 获取表单字段值
+            // 此处可执行 Ajax 等操作
+            doLogin(field)
+            // 阻止默认 form 跳转
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

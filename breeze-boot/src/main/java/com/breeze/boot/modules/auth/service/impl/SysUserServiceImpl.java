@@ -46,9 +46,8 @@ import com.breeze.boot.modules.auth.model.mappers.SysUserMapStruct;
 import com.breeze.boot.modules.auth.model.query.UserQuery;
 import com.breeze.boot.modules.auth.model.vo.UserVO;
 import com.breeze.boot.modules.auth.service.*;
-import com.breeze.boot.modules.bpm.manager.FlowableManager;
 import com.breeze.boot.modules.system.service.SysFileService;
-import com.breeze.boot.satoken.model.UserInfoDTO;
+import com.breeze.boot.sso.model.UserInfoDTO;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,8 +73,6 @@ import static com.breeze.boot.core.enums.ResultCode.FAIL;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     private final SysUserMapStruct sysUserMapStruct;
-
-    private final FlowableManager flowableManager;
 
     /**
      * 系统角色服务
@@ -365,7 +362,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             return flowUserBO;
         }).collect(Collectors.toList());
-        this.flowableManager.syncUser(syncUser, roles);
     }
 
     /**

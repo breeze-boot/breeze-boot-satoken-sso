@@ -114,7 +114,7 @@ public class SysRoleController {
     /**
      * 创建
      *
-     * @param roleForm  角色参数
+     * @param roleForm 角色参数
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")
@@ -127,6 +127,7 @@ public class SysRoleController {
 
     /**
      * 修改
+     *
      * @param id       ID
      * @param roleForm 角色表单
      * @return {@link Result}<{@link Boolean}>
@@ -192,7 +193,7 @@ public class SysRoleController {
      */
     @Operation(summary = "编辑菜单权限")
     @PutMapping("/modifyPermission")
-    @SaCheckPermission("auth:menu:permission:modify','ROLE_ADMIN")
+    @SaCheckPermission(value = "auth:menu:permission:modify", orRole = "ROLE_ADMIN")
     @BreezeSysLog(description = "编辑菜单权限", type = LogType.EDIT)
     public Result<Boolean> modifyMenuPermission(@Valid @RequestBody MenuPermissionForm menuPermissionForm) {
         return this.sysRoleMenuService.modifyMenuPermission(menuPermissionForm);

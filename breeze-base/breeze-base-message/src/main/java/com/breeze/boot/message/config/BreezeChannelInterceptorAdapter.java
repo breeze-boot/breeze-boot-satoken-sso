@@ -42,6 +42,20 @@ import java.util.Objects;
 @Slf4j
 public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
 
+    private static void checkUserPermission(List<String> nativeHeader) {
+        if (CollUtil.isEmpty(nativeHeader)) {
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
+        }
+        String token = nativeHeader.get(0);
+        if (StrUtil.isAllBlank(token)) {
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
+        }
+        Object id = StpUtil.getLoginIdByToken(token);
+        if (Objects.isNull(id)) {
+            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
+        }
+    }
+
     /**
      * 收到之前
      *
@@ -94,20 +108,6 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
             return message;
         }
         return message;
-    }
-
-    private static void checkUserPermission(List<String> nativeHeader) {
-        if (CollUtil.isEmpty(nativeHeader)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
-        String token = nativeHeader.get(0);
-        if (StrUtil.isAllBlank(token)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
-        Object id = StpUtil.getLoginIdByToken(token);
-        if (Objects.isNull(id)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
     }
 
     /**
