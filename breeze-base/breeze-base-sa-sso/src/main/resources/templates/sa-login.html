@@ -91,12 +91,17 @@
         return !defaultValue ? null : defaultValue
     }
 
+    let tenantId = ''
     function getTenant() {
+         tenantId = getParam('X-Tenant-Id')
+        if (!tenantId){
+            layer.alert('未选择租户信息');
+            return
+        }
         $.ajax({
             url: '/sys/v1/common/selectTenant',
             success: function (response) {
                 $.each(response.data, function (index, item) {
-                    const tenantId = getParam('X-Tenant-Id')
                     if (tenantId === item.value) {
                         $('#tenant').append(new Option(item.label, item.value, true, true));
                     } else {
@@ -138,7 +143,7 @@
                 pwd: encrypt(field['pwd'], SALES),
             },
             headers: {
-                'X-Tenant-Id': field['X-Tenant-Id'],
+                'X-Tenant-Id': field['X-Tenant-Id'] || tenantId,
                 'accept-language': 'zhCn'
             },
             dataType: 'json',
