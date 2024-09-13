@@ -8,8 +8,8 @@
 - 支持按钮级别的权限控制。
 - 支持加载动态权限菜单。
 - 前端代码，请移步。
-    - [github：vue + vite + TS 版本](https://github.com/Memory1998/breeze-vite-ui-satoken-sso.git)
-    - [gitee: vue + vite + TS 版本](https://gitee.com/memoryGiter/breeze-vite-ui-satoken-sso.git)
+    - [github：vue + vite + TS 版本](https://github.com/breeze-boot/breeze-vite-ui-satoken-sso.git)
+    - [gitee: vue + vite + TS 版本](https://gitee.com/breeze-boot/breeze-vite-ui-satoken-sso.git)
 
 ### 特别鸣谢：
 - [验证码： https://gitee.com/anji-plus/captcha](https://gitee.com/anji-plus/captcha)
