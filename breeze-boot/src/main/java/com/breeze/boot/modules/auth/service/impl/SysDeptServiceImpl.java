@@ -24,7 +24,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysDeptMapper;
 import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
@@ -117,13 +117,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public Result<Boolean> deleteById(Long id) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
-        if (CollUtil.isNotEmpty(deptEntityList)) {
-            throw new BreezeBizException(ResultCode.IS_USED);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(deptEntityList), ResultCode.IS_USED);
         boolean remove = this.removeById(id);
-        if (!remove) {
-            throw new BreezeBizException(ResultCode.FAIL);
-        }
+        AssertUtil.isTrue(remove, ResultCode.FAIL);
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 

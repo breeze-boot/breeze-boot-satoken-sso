@@ -20,7 +20,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.config.SaSsoClientConfig;
 import cn.dev33.satoken.stp.StpUtil;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.model.User;
 import com.breeze.boot.service.UserService;
 import com.dtflys.forest.Forest;
@@ -59,9 +59,7 @@ public class SsoClientConfigure {
             User user = userService.loadUserByClientId(id);
 
             // 如果找不到，说明是首次登录本系统的新用户，提示异常信息或注册一个新账号
-            if (user == null) {
-                throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
-            }
+            AssertUtil.isNotNull(user, ResultCode.USER_NOT_FOUND);
 
             // 进行登录
             StpUtil.login(user.getId(), ctr.remainSessionTimeout);

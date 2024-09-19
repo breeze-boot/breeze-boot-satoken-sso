@@ -26,6 +26,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ContentType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.local.operation.LocalStorageTemplate;
 import com.breeze.boot.modules.system.mapper.SysFileMapper;
@@ -247,9 +248,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Override
     public void download(Long fileId, HttpServletResponse response) {
         SysFile sysFile = this.getById(fileId);
-        if (Objects.isNull(sysFile)) {
-            throw new BreezeBizException(ResultCode.FILE_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysFile, ResultCode.FILE_NOT_FOUND);
         this.ossTemplate.downloadObject(SYSTEM_BUCKET_NAME, sysFile.getPath(), sysFile.getName(), response);
     }
 
