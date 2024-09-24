@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.breeze</groupId>
+        <artifactId>breeze-sso-sample</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>breeze-spring-security-sso-client</artifactId>
+    <description>整合 spring Security sso 案例</description>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- undertow容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+        <!-- actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+
+        <!-- aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- monitor client -->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+        </dependency>
+
+        <!-- 校验 -->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-validator</artifactId>
+        </dependency>
+
+        <!-- 缓存 -->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-redis-cache</artifactId>
+        </dependency>
+
+        <!--接口文档-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-doc</artifactId>
+        </dependency>
+
+        <!--日志-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-log</artifactId>
+        </dependency>
+
+        <!--基础依赖包-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-core</artifactId>
+        </dependency>
+
+        <!--xss过滤-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-xss</artifactId>
+        </dependency>
+
+        <!--mybatis-->
+        <dependency>
+            <groupId>com.breeze</groupId>
+            <artifactId>breeze-base-mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.cc/ -->
+        <!-- Http请求工具 -->
+        <dependency>
+            <groupId>com.dtflys.forest</groupId>
+            <artifactId>forest-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.41.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

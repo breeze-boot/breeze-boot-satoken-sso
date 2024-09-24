@@ -36,7 +36,7 @@
         <module>breeze-quartz</module>
         <module>breeze-gen</module>
         <module>breeze-monitor</module>
-        <module>breeze-sample</module>
+        <module>breeze-sso-sample</module>
     </modules>
 
     <properties>

@@ -20,6 +20,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.sso.config.SaSsoServerConfig;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.base.UserPrincipal;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
@@ -72,10 +73,10 @@ public class SaTokenSsoServerConfigure {
 
         // 配置：Ticket校验函数
         ssoServer.checkTicketAppendData = (loginId, result) -> {
-            System.out.println("-------- 追加返回信息到 sso-client --------");
+            log.info("-------- 追加返回信息到 sso-client --------");
             try {
                 String tenantId = SaHolder.getRequest().getParam(X_TENANT_ID);
-                if (tenantId == null) {
+                if (StrUtil.isBlankIfStr(tenantId)) {
                     throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
                 }
                 BreezeThreadLocal.set(Long.valueOf(tenantId));

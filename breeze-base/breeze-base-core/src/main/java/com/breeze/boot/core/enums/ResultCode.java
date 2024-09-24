@@ -60,7 +60,7 @@ public enum ResultCode {
     PREVIEW("result_preview", "演示环境不可删除修改"),
 
     /**
-     * 令牌无效
+     * 未授权资源
      */
     SC_FORBIDDEN("result_sc_forbidden", "未授权资源"),
 

@@ -1,0 +1,20 @@
+breeze:
+  aes-secret: 1234567890123456
+
+# sa-token配置
+sa-token:
+  ignore-urls:
+    # Monitor
+    - "/actuator/**"
+    # Local file storage
+    - "/img/**"
+    # Data sources & Report generation
+    - "/druid/**"
+    - "/ureport/**"
+
+forest:
+  timeout: 10000
+  # 关闭 forest 请求日志打印
+  log-enabled: false
+
+

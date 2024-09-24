@@ -23,6 +23,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.sso.spt.IUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,6 +51,7 @@ public class SsoServerEndPoint {
      */
     @RequestMapping({"/sso/auth", "/sso/doLogin", "/sso/checkTicket", "/sso/signout"})
     public Object ssoServerRequest() {
+        log.debug(SaHolder.getRequest().getRequestPath());
         return SaSsoServerProcessor.instance.dister();
     }
 
@@ -66,6 +68,13 @@ public class SsoServerEndPoint {
         UserPrincipal userPrincipal = userDetailService.loadUserByUserId(loginId);
         // 自定义返回结果（模拟）
         return Result.ok(userPrincipal);
+    }
+
+    // 全局异常拦截
+    @ExceptionHandler
+    public Result<?> handlerException(Exception e) {
+        log.error("", e);
+        return Result.fail(e.getMessage());
     }
 
 }

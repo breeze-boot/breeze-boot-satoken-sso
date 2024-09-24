@@ -28,13 +28,13 @@ sa-token:
   # ------- SSO SERVER---------
   sso-server:
     # Ticket有效期 (单位: 秒)，默认五分钟
-    ticket-timeout: 300
+    ticket-timeout: 30000
     # 是否打开模式三
     is-http: true
 
 forest:
   # 关闭 forest 请求日志打印
-  log-enabled: false
+  log-enabled: true
 
 
 

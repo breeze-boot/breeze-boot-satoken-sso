@@ -53,9 +53,9 @@ public class SsoClientConfigure {
 
         // 配置Http请求处理器
         ssoClient.sendHttp = url -> {
-            System.out.println("------ 发起请求：" + url);
+            log.info("------ 发起请求：" + url);
             String resStr = Forest.get(url + "&" + X_TENANT_ID + "=" + Optional.ofNullable(SaHolder.getRequest().getHeader(X_TENANT_ID)).orElse("")).executeAsString();
-            System.out.println("------ 请求结果：" + resStr);
+            log.info("------ 请求结果：" + resStr);
             return resStr;
         };
 

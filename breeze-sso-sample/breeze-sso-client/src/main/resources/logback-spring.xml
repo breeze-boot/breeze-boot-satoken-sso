@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name"
+                    defaultValue="spring-boot"/>
+    <!-- 日志名称 -->
+    <property name="LOG_NAME" value="${spring.application.name}"/>
+
+    <!-- 日志相对路径 -->
+    <property name="LOG_PATH" value="logs/${spring.application.name}"/>
+
+    <property name="FILE_NAME_PATTERN" value="${LOG_PATH}/${spring.application.name}.%d{yyyy-MM-dd}.%i.log"/>
+
+    <property name="FILE_NAME_PATTERN_ERROR"
+              value="${LOG_PATH}/${spring.application.name}.%d{yyyy-MM-dd}.%i-error.log"/>
+
+    <!-- 日志打印格式 -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5level ---[%15.15thread] %-40.40logger{39} :: %msg%n"/>
+
+    <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+    <property name="CONSOLE_COLOR_FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss} -%5level ---[%15.15thread] %-40.40logger{39} :: %cyan(%msg) %n"/>
+
+    <!-- 日志文件大小 30MB -->
+    <property name="MAX_FILE_SIZE" value="30MB"/>
+
+    <!-- 保留最近 10 天的日志 -->
+    <property name="MAX_HISTORY" value="10"/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE_LOG" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 彩色日志 -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${CONSOLE_COLOR_FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE_LOG_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 滚动策略 -->
+            <FileNamePattern>${FILE_NAME_PATTERN}</FileNamePattern>
+            <!-- 日志文件最大的大小 -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 生成 ERROR 日志文件 -->
+    <appender name="FILE_LOG_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_NAME}-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 滚动策略 -->
+            <FileNamePattern>${FILE_NAME_PATTERN_ERROR}</FileNamePattern>
+            <!-- 日志文件最大的大小 -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- 输出error级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>ACCEPT</OnMatch>
+        </filter>
+    </appender>
+
+    <!-- 生产环境 -->
+    <springProfile name="pro">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="com.breeze.boot.modules" level="INFO"/>
+        <!-- 日志输出级别 -->
+        <root level="info">
+            <appender-ref ref="FILE_LOG_ALL"/>
+            <appender-ref ref="FILE_LOG_ERROR"/>
+        </root>
+    </springProfile>
+
+    <!-- 开发 和 测试 -->
+    <springProfile name="dev,test">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="com.breeze.boot.modules" level="INFO"/>
+        <!-- 日志输出级别 -->
+        <root level="info">
+            <appender-ref ref="CONSOLE_LOG"/>
+            <appender-ref ref="FILE_LOG_ALL"/>
+            <appender-ref ref="FILE_LOG_ERROR"/>
+        </root>
+    </springProfile>
+
+</configuration>
