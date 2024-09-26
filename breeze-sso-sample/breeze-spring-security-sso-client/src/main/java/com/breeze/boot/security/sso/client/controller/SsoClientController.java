@@ -27,9 +27,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -47,10 +44,6 @@ import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 @RestController
 @RequiredArgsConstructor
 public class SsoClientController {
-
-    private final AuthenticationManager authenticationManager;
-
-    private final BreezeJwsTokenProvider jwsTokenProvider;
 
     /**
      * SSO-Client端：首页
@@ -112,8 +105,8 @@ public class SsoClientController {
             return null;
         }
 
-        // 调用 sso-server 认证中心单点注销API 
-        Object loginId = session.getAttribute("userId");  // 账号id 
+        // 调用 sso-server 认证中心单点注销API
+        Object loginId = session.getAttribute("userId");  // 账号id
         String XTenantId = "1";  // 租户ID
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
@@ -121,7 +114,7 @@ public class SsoClientController {
 
         String url = SsoRequestUtil.sloUrl + "?loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign;
         Result<?> result = SsoRequestUtil.request(url);
-        // 校验响应状态码，200 代表成功
+        // 校验响应状态码，0000 代表成功
         if (result.getCode().equals("0000")) {
 
             // 极端场景下，sso-server 中心的单点注销可能并不会通知到此 client 端，所以这里需要再补一刀
@@ -153,51 +146,30 @@ public class SsoClientController {
 
     /**
      * 查询我的账号信息
-     *
+     * <p>
      * 调用此接口的前提是 sso-server 的 /sso/userinfo
+     * </p>
      *
-     * @param session   session
      * @param XTenantId 扩展租户ID
      * @return {@link Result }<{@link ? }>
      */
     @RequestMapping("/sso/userInfo")
-    public Result<?> userInfo(HttpSession session, @RequestHeader(value = X_TENANT_ID, required = false, defaultValue = "1") String XTenantId) {
+    public Result<?> userInfo(@RequestHeader(value = X_TENANT_ID, required = false, defaultValue = "1") String XTenantId) {
         // 如果尚未登录
 //        if (session.getAttribute("userId") == null) {
 //            return Result.fail("尚未登录，无法获取");
 //        }
         //TODO
 
-        // 组织 url 参数 
+        // 组织 url 参数
         Object loginId = "1111111111111111111";  // 账号id
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
         String sign = SsoRequestUtil.getSign(XTenantId, loginId, timestamp, nonce);    // 参数签名
 
-        String url = SsoRequestUtil.getDataUrl
-                + "?loginId=" + loginId
-                + "&timestamp=" + timestamp
-                + "&nonce=" + nonce
-                + "&sign=" + sign
-                + "&client=sso-client1"
-                + "&" + X_TENANT_ID + "=" + XTenantId;
+        String url = SsoRequestUtil.getDataUrl + "?loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign + "&client=sso-client1" + "&" + X_TENANT_ID + "=" + XTenantId;
         // 返回给前端
         return SsoRequestUtil.request(url);
-    }
-
-    /**
-     * 登录
-     *
-     * @param username 用户名
-     * @param password 密码
-     * @return {@link LoginInfo }
-     */
-    @RequestMapping("/auth/login")
-    public LoginInfo login(String username, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        String accessToken = jwsTokenProvider.createJwtToken(authentication);
-        return LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).build();
     }
 
     /**

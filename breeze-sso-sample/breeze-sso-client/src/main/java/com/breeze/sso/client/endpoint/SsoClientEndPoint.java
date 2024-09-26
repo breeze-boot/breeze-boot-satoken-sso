@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
+
 /**
  * Sa-Token-SSO Client端
  */
@@ -69,13 +71,13 @@ public class SsoClientEndPoint {
      * @return {@link Object }
      */
     @RequestMapping("/sso/userInfo")
-    public Object userInfo(@RequestHeader("X-Tenant-Id") String XTenantId) {
+    public Object userInfo(@RequestHeader(X_TENANT_ID) String XTenantId) {
         // 组织请求参数
         Map<String, Object> map = new HashMap<>();
         map.put("apiType", "userinfo");
         map.put("loginId", StpUtil.getLoginId());
         map.put("client", SaSsoManager.getClientConfig().getClient());
-        map.put("X-Tenant-Id", XTenantId);
+        map.put(X_TENANT_ID, XTenantId);
         // 发起请求
         Object resData = SaSsoUtil.getData(map);
         log.info("sso-server 返回的用户信息：{}", resData);
