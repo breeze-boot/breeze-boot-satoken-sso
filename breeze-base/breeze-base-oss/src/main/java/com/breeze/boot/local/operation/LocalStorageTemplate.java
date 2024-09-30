@@ -22,6 +22,7 @@ import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.enums.ContentType;
 import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.local.config.LocalProperties;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
@@ -116,9 +117,7 @@ public class LocalStorageTemplate {
         // 获取指定路径的文件对象
         File file = this.getFile(path);
         // 检查文件是否存在，若不存在则抛出异常
-        if (!file.exists()) {
-            throw new BreezeBizException(ResultCode.FILE_NOT_FOUND);
-        }
+        AssertUtil.isTrue(file.exists(), ResultCode.FILE_NOT_FOUND);
 
         // 设置HTTP响应的相关属性以支持文件下载
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());

@@ -17,6 +17,7 @@
 
 package com.breeze.boot.modules.auth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,7 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.CustomizePermission;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRowPermissionMapper;
@@ -153,13 +154,9 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     @Override
     public Result<Boolean> saveRowPermission(RowPermissionForm rowPermissionForm) {
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
-        if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            throw new BreezeBizException(ResultCode.NO_ACTION_IS_ALLOWED);
-        }
+        AssertUtil.isFalse(DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode()), ResultCode.NO_ACTION_IS_ALLOWED);
         boolean save = this.save(sysRowPermission);
-        if (!save) {
-            throw new BreezeBizException(ResultCode.FAIL);
-        }
+        AssertUtil.isTrue(save, ResultCode.FAIL);
         Cache cache = getCache();
         cache.put(sysRowPermission.getPermissionCode(), sysRowPermission);
         CustomizePermission customizePermission = sysRowPermissionMapStruct.entity2Cache(sysRowPermission);
@@ -195,13 +192,9 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     public Result<Boolean> modifyRowPermission(Long id, RowPermissionForm rowPermissionForm) {
         SysRowPermission sysRowPermission = sysRowPermissionMapStruct.form2Entity(rowPermissionForm);
         sysRowPermission.setId(id);
-        if (DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode())) {
-            throw new BreezeBizException(ResultCode.NO_ACTION_IS_ALLOWED);
-        }
+        AssertUtil.isFalse(DataPermissionType.checkInEnum(rowPermissionForm.getPermissionCode()), ResultCode.NO_ACTION_IS_ALLOWED);
         boolean update = sysRowPermission.updateById();
-        if (!update) {
-            throw new BreezeBizException(ResultCode.FAIL);
-        }
+        AssertUtil.isTrue(update, ResultCode.FAIL);
         Cache cache = getCache();
         cache.put(sysRowPermission.getPermissionCode(), sysRowPermission);
         CustomizePermission customizePermission = sysRowPermissionMapStruct.entity2Cache(sysRowPermission);
@@ -227,9 +220,7 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     public Result<Boolean> removeRowPermissionByIds(List<Long> ids) {
         Cache cache = cacheManager.getCache(ROW_PERMISSION);
         List<SysRoleRowPermission> rolePermissionList = this.sysRoleRowPermissionService.list(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getPermissionId, ids));
-        if (CollectionUtil.isNotEmpty(rolePermissionList)) {
-            throw new BreezeBizException(ResultCode.IS_USED);
-        }
+        AssertUtil.isTrue(CollUtil.isEmpty(rolePermissionList), ResultCode.IS_USED);
         List<SysRowPermission> rowPermissionList = this.listByIds(ids);
         for (SysRowPermission rowPermission : rowPermissionList) {
             assert cache != null;

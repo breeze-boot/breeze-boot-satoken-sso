@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.mail.service.CustomJavaMailSender;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
 import com.breeze.boot.modules.auth.service.SysUserService;
@@ -210,9 +210,7 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
 
     private SysEmailSubject getSysEmailSubject(Long id) {
         SysEmailSubject sysEmailSubject = this.getById(id);
-        if (Objects.isNull(sysEmailSubject)) {
-            throw new BreezeBizException(ResultCode.EMAIL_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysEmailSubject, ResultCode.EMAIL_NOT_FOUND);
         return sysEmailSubject;
     }
 
