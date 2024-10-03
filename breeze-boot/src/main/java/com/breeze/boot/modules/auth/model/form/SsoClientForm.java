@@ -14,19 +14,37 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.auth.mapper;
+package com.breeze.boot.modules.auth.model.form;
 
-import com.breeze.boot.modules.auth.model.entity.SysTenant;
-import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
-import org.apache.ibatis.annotations.Mapper;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
- * 系统租户映射器
+ * 系统sso客户端表单
  *
  * @author gaoweixuan
- * @since 2022-11-06
+ * @since 2024-09-30
  */
-@Mapper
-public interface SysTenantMapper extends BreezeBaseMapper<SysTenant> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "系统sso客户端表单")
+public class SsoClientForm implements Serializable {
+
+    /**
+     * 客户端编码
+     */
+    @Schema(description = "客户端编码")
+    private String clientCode;
+
+    /**
+     * 客户端地址
+     */
+    @Schema(description = "客户端地址")
+    private String clientUrl;
 
 }

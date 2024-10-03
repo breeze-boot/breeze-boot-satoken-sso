@@ -15,3 +15,4 @@ breeze:
       - "sys_menu"
       - "sys_msg"
       - "sys_row_permission"
+      - "sys_sso_client"

@@ -88,7 +88,7 @@ public class SysTenantController {
     /**
      * 创建
      *
-     * @param tenant 平台表单
+     * @param tenant 租户表单
      * @return {@link Result}<{@link Boolean}>
      */
     @Operation(summary = "保存")

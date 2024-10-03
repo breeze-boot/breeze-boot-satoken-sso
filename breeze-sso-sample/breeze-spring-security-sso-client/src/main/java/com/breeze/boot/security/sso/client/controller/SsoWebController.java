@@ -17,11 +17,16 @@
 package com.breeze.boot.security.sso.client.controller;
 
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
+import com.breeze.boot.security.sso.client.security.model.LoginInfo;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +42,12 @@ import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class SsoWebController {
+
+    private final AuthenticationManager authenticationManager;
+
+    private final BreezeJwsTokenProvider jwsTokenProvider;
 
     // 当前是否登录
     @RequestMapping("/sso/isLogin")
@@ -45,10 +55,16 @@ public class SsoWebController {
         return Result.ok(Boolean.TRUE);
     }
 
-    // 返回SSO认证中心登录地址
+    /**
+     * 返回SSO认证中心登录地址
+     * <p>
+     * http://sa-sso-server.com:9000/sso/auth
+     * ?client=sso-client1
+     * &redirect=http://localhost:3000/#/sso-login?back=http%3A%2F%2Flocalhost%3A3000%2F%23%2Fsso%3Fredirect%3D%2Fhome
+     * </p>
+     */
     @RequestMapping("/sso/getSsoAuthUrl")
     public Result<String> getSsoAuthUrl(String clientLoginUrl) {
-        //http://sa-sso-server.com:9000/sso/auth?client=sso-client1&redirect=http://localhost:3000/#/sso-login?back=http%3A%2F%2Flocalhost%3A3000%2F%23%2Fsso%3Fredirect%3D%2Fhome
         String serverAuthUrl = SsoRequestUtil.buildServerAuthUrl(clientLoginUrl, "");
         return Result.ok(serverAuthUrl);
     }
@@ -58,14 +74,11 @@ public class SsoWebController {
      *
      * @param ticket   票
      * @param request  请求
-     * @param response 响应
      * @return {@link Result }<{@link ? }>
      */
     @SneakyThrows
     @RequestMapping("/sso/doLoginByTicket")
-    public Result<?> doLoginByTicket(String ticket,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response) {
+    public Result<?> doLoginByTicket(String ticket, HttpServletRequest request) {
         // 获取当前 client 端的单点注销回调地址
         String ssoLogoutCall = "";
         if (SsoRequestUtil.isSlo) {
@@ -87,13 +100,16 @@ public class SsoWebController {
 
         Result<?> result = SsoRequestUtil.request(checkUrl);
 
+        // 使用 satoken 的返回协议 状态200 成功
         if (result.getCode().equals("200") && !SsoRequestUtil.isEmpty(result.getData())) {
             // 登录
             Object loginId = result.getData();
-            return Result.ok(loginId);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginId, "123456");
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            String accessToken = jwsTokenProvider.createJwtToken(authentication);
+            return Result.ok(LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).build());
         }
         throw new RuntimeException(result.getMessage());
     }
-
 
 }

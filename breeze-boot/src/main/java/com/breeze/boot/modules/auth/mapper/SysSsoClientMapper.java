@@ -16,17 +16,17 @@
 
 package com.breeze.boot.modules.auth.mapper;
 
-import com.breeze.boot.modules.auth.model.entity.SysTenant;
+import com.breeze.boot.modules.auth.model.entity.SysSsoClient;
 import com.breeze.boot.mybatis.mapper.BreezeBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 系统租户映射器
+ * 系统sso客户端维护映射器
  *
  * @author gaoweixuan
- * @since 2022-11-06
+ * @since 2024-09-30
  */
 @Mapper
-public interface SysTenantMapper extends BreezeBaseMapper<SysTenant> {
+public interface SysSsoClientMapper extends BreezeBaseMapper<SysSsoClient> {
 
 }

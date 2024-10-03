@@ -117,14 +117,6 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         return Result.ok(this.removeByIds(ids));
     }
 
-    public List<Map<String, Object>> selectTenant() {
-        return this.list().stream().map(tenant -> {
-            Map<@Nullable String, @Nullable Object> tenantMap = Maps.newHashMap();
-            tenantMap.put("value", tenant.getId());
-            tenantMap.put("label", tenant.getTenantName());
-            return tenantMap;
-        }).collect(Collectors.toList());
-    }
 }
 
 
