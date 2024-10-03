@@ -20,7 +20,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.config.SaSsoClientConfig;
 import cn.dev33.satoken.stp.StpUtil;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.sso.client.model.User;
 import com.breeze.sso.client.service.UserService;
 import com.dtflys.forest.Forest;
