@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysRoleMapper;
 import com.breeze.boot.modules.auth.model.bo.RoleBO;
@@ -148,9 +148,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> deleteByIds(List<Long> ids) {
         List<SysRole> roleEntityList = this.listByIds(ids);
-        if (CollUtil.isEmpty(roleEntityList)) {
-            throw new BreezeBizException(ResultCode.NOT_FOUND);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(roleEntityList), ResultCode.NOT_FOUND);
         boolean remove = this.removeByIds(ids);
         if (remove) {
             List<Long> collect = roleEntityList.stream().map(SysRole::getId).collect(Collectors.toList());

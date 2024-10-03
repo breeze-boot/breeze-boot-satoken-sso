@@ -21,8 +21,8 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.sign.SaSignTemplate;
 import cn.dev33.satoken.sso.template.SaSsoServerTemplate;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.sso.model.BaseSysRegisteredClient;
 import com.breeze.boot.sso.spt.IClientService;
 import lombok.RequiredArgsConstructor;
@@ -52,9 +52,7 @@ public class BreezeSaSsoServerTemplate extends SaSsoServerTemplate {
     @Override
     public SaSignTemplate getSignTemplate(String client) {
         BaseSysRegisteredClient registeredClient = clientServiceSupplier.get().getByClientId(client);
-        if (registeredClient == null) {
-            throw new BreezeBizException(ResultCode.CLIENT_IS_NOT_EXISTS);
-        }
+        AssertUtil.isNotNull(registeredClient, ResultCode.CLIENT_IS_NOT_EXISTS);
         // 从数据库中获取
         return new SaSignTemplate(new SaSignConfig(SaSecureUtil.aesDecrypt(aesSecretPropertiesSupplier.get().getAesSecret(), registeredClient.getClientSecret())));
     }

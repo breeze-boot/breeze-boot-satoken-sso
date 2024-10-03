@@ -23,9 +23,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.base.UserPrincipal;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.BreezeThreadLocal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.sso.spt.IUserDetailService;
@@ -76,9 +76,7 @@ public class SaTokenSsoServerConfigure {
             log.info("-------- 追加返回信息到 sso-client --------");
             try {
                 String tenantId = SaHolder.getRequest().getParam(X_TENANT_ID);
-                if (StrUtil.isBlankIfStr(tenantId)) {
-                    throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
-                }
+                AssertUtil.isNotNull(tenantId, ResultCode.TENANT_NOT_FOUND);
                 BreezeThreadLocal.set(Long.valueOf(tenantId));
                 // 在校验 ticket 后，给 sso-client 端追加返回信息的函数
                 UserPrincipal userPrincipal = userDetailServiceSupplier.get().loadUserByUserId(String.valueOf(loginId));

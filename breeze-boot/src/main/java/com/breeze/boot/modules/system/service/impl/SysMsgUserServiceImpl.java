@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.message.dto.UserMsgDTO;
 import com.breeze.boot.modules.system.mapper.SysMsgUserMapper;
@@ -130,13 +130,9 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeUserMsgByIds(List<Long> ids) {
         List<SysMsgUser> sysMsgUserList = this.listByIds(ids);
-        if (CollUtil.isEmpty(sysMsgUserList)) {
-            throw new BreezeBizException(ResultCode.NOT_FOUND);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(sysMsgUserList), ResultCode.NOT_FOUND);
         boolean remove = this.removeByIds(ids);
-        if (!remove) {
-            return Result.fail(Boolean.FALSE, "删除失败");
-        }
+        AssertUtil.isTrue(remove, ResultCode.FAIL);
         return Result.ok(Boolean.TRUE, "删除成功");
     }
 

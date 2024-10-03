@@ -20,7 +20,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
+import com.breeze.boot.core.utils.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -31,7 +31,6 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 通道拦截器适配器
@@ -43,17 +42,11 @@ import java.util.Objects;
 public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
 
     private static void checkUserPermission(List<String> nativeHeader) {
-        if (CollUtil.isEmpty(nativeHeader)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(nativeHeader), ResultCode.SYSTEM_EXCEPTION);
         String token = nativeHeader.get(0);
-        if (StrUtil.isAllBlank(token)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
+        AssertUtil.isTrue(StrUtil.isNotBlank(token), ResultCode.SYSTEM_EXCEPTION);
         Object id = StpUtil.getLoginIdByToken(token);
-        if (Objects.isNull(id)) {
-            throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-        }
+        AssertUtil.isNotNull(id, ResultCode.SYSTEM_EXCEPTION);
     }
 
     /**

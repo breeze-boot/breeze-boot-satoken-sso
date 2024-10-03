@@ -26,9 +26,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.base.UserPrincipal;
 import com.breeze.boot.core.enums.DataPermissionType;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.core.exception.BreezeBizException;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AesUtil;
+import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
@@ -131,9 +131,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserVO getInfoById(Long id) {
         SysUser sysUser = this.getById(id);
         UserVO userVO = this.sysUserMapStruct.entity2VO(sysUser);
-        if (Objects.isNull(sysUser)) {
-            throw new BreezeBizException(FAIL);
-        }
+        AssertUtil.isNotNull(sysUser, FAIL);
         List<SysRole> roleList = this.sysUserRoleService.getSysRoleByUserId(sysUser.getId());
         userVO.setRoleNames(roleList.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
         userVO.setRoleIds(roleList.stream().map(SysRole::getId).collect(Collectors.toList()));
@@ -279,9 +277,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.save(sysUser);
         // 给用户赋予一个临时角色，临时角色指定接口的权限
         SysRole sysRole = this.sysRoleService.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getRoleCode, roleCode));
-        if (Objects.isNull(sysRole)) {
-            throw new BreezeBizException(ResultCode.SC_FORBIDDEN);
-        }
+        AssertUtil.isNotNull(sysRole, ResultCode.SC_FORBIDDEN);
         this.sysUserRoleService.save(SysUserRole.builder().userId(sysUser.getId()).roleId(sysRole.getId()).build());
         return sysUser;
     }
@@ -324,9 +320,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<SysUser> listDeptsUser(Long deptId) {
         List<Long> deptIdList = this.sysDeptService.listDeptByParentId(deptId);
-        if (CollUtil.isEmpty(deptIdList)) {
-            throw new BreezeBizException(FAIL);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(deptIdList), FAIL);
         if (CollUtil.isNotEmpty(deptIdList)) {
             return this.list(Wrappers.<SysUser>lambdaQuery().in(SysUser::getDeptId, deptIdList));
         }
@@ -376,9 +370,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         try {
             // 查询用户的角色
             List<UserRoleBO> userRoleBOList = Optional.ofNullable(sysRoleService.listRoleByUserId(sysUser.getId())).orElse(Collections.emptyList());
-            if (CollUtil.isEmpty(userRoleBOList)) {
-                throw new BreezeBizException(ResultCode.SYSTEM_EXCEPTION);
-            }
+            AssertUtil.isTrue(CollUtil.isNotEmpty(userRoleBOList), ResultCode.SYSTEM_EXCEPTION);
             // 获取部门名称
             this.setDeptName(sysUser, userInfo);
             // 获取子级部门
@@ -480,9 +472,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserPrincipal loadUserByUserId(String userId) {
         SysUser sysUser = this.getById(userId);
-        if (Objects.isNull(sysUser)) {
-            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysUser, ResultCode.USER_NOT_FOUND);
         UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         Assert.notNull(requestAttributes, "requestAttributes is null");
@@ -493,9 +483,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<String> loadUserPermissionByUserId(String userId) {
         // 查询用户的角色
         List<UserRoleBO> userRoleBOList = sysRoleService.listRoleByUserId(Long.valueOf(userId));
-        if (CollUtil.isEmpty(userRoleBOList)) {
-            throw new BreezeBizException(ResultCode.USERS_ROLE_IS_NULL);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(userRoleBOList), ResultCode.USERS_ROLE_IS_NULL);
         // 权限
         return this.sysMenuService.listUserMenuPermission(userRoleBOList).stream().toList();
     }
@@ -503,9 +491,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserPrincipal loadUserByPhone(String phone) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
-        if (Objects.isNull(sysUser)) {
-            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysUser, ResultCode.USER_NOT_FOUND);
         UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
         return convertResponseUserInfo(userInfoDTO);
     }
@@ -514,9 +500,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserPrincipal loadUserByUsername(String username) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
-        if (Objects.isNull(sysUser)) {
-            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysUser, ResultCode.USER_NOT_FOUND);
         UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
         return convertResponseUserInfo(userInfoDTO);
     }
@@ -525,9 +509,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserPrincipal loadUserByEmail(String email) {
         SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
-        if (Objects.isNull(sysUser)) {
-            throw new BreezeBizException(ResultCode.USER_NOT_FOUND);
-        }
+        AssertUtil.isNotNull(sysUser, ResultCode.USER_NOT_FOUND);
         UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
         return convertResponseUserInfo(userInfoDTO);
     }
@@ -536,9 +518,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<String> loadUserRoleByUserId(String userId) {
         // 查询用户的角色
         List<UserRoleBO> userRoleBOList = sysRoleService.listRoleByUserId(Long.valueOf(userId));
-        if (CollUtil.isEmpty(userRoleBOList)) {
-            throw new BreezeBizException(ResultCode.USERS_ROLE_IS_NULL);
-        }
+        AssertUtil.isTrue(CollUtil.isNotEmpty(userRoleBOList), ResultCode.USERS_ROLE_IS_NULL);
         return userRoleBOList.stream().map(UserRoleBO::getRoleCode).collect(Collectors.toList());
     }
 
