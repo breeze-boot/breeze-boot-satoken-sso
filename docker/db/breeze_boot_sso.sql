@@ -780,7 +780,7 @@ INSERT INTO `sys_menu` VALUES (1633338860669214722, 1111111111111111111, 9223372
 INSERT INTO `sys_menu` VALUES (1635920329879056385, 1111111111111111111, 1580357263003439106, 'bpmUI', '', 1, 'bpm_designer', 'http://localhost:8989/bpm-ui/idm/#/user-mgmt', NULL, NULL, 1, 0, 0, 15, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1637297406628823041, 1111111111111111111, 1111111111111111111, '系统管理', '', 0, 'system', '/system', NULL, NULL, 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1637647486464438273, 1111111111111111111, 1594135789623184129, '运行一次', '', 2, NULL, NULL, NULL, 'sys:job:run', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1648569698801393666, 1111111111111111111, 1840590870386941953, '客户端管理', 'Client', 1, 'client', '/client', '/auth/sso/client/index', 'auth:client:list', 0, 0, 0, 2, NULL, NULL, '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1648569698801393666, 1111111111111111111, 1840590870386941953, '客户端管理', 'Client', 1, 'client', '/client', '/auth/sso/client/index', 'auth:client:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:15', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464120406532098, 1111111111111111111, 1648569698801393666, '添加', '', 2, NULL, NULL, NULL, 'auth:client:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464313466150914, 1111111111111111111, 1648569698801393666, '修改', '', 2, NULL, NULL, NULL, 'auth:client:modify', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464432802488321, 1111111111111111111, 1648569698801393666, '删除', '', 2, NULL, NULL, NULL, 'auth:client:delete', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -833,7 +833,7 @@ INSERT INTO `sys_menu` VALUES (1812002047382114305, 1111111111111111111, 1813418
 INSERT INTO `sys_menu` VALUES (1813418484919291905, 1111111111111111111, 1637297406628823041, '邮箱管理', '', 0, 'email', '/email', NULL, NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1813427994547273729, 1111111111111111111, 1578702340666851329, '数据权限', '', 0, 'permission', '/permission', NULL, NULL, 0, 0, 0, 12, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1813429194697031681, 1111111111111111111, 1813427994547273729, '菜单加密列管理', 'MenuColumn', 1, 'column_permission', '/menuColumn', '/auth/permission/menuColumn/index', 'auth:menuColumn:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1814127259431047169, 1111111111111111111, 1111111111111111111, '开发管理', '', 0, 'dev', '/dev', NULL, 'auth:db:tables', 0, 0, 0, 9, NULL, NULL, '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1814127259431047169, 1111111111111111111, 1111111111111111111, '开发管理', '', 0, 'dev', '/dev', NULL, 'auth:db:tables', 0, 0, 0, 9, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:17', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1814127396630925314, 1111111111111111111, 1814127259431047169, '表结构管理', 'Tables', 1, 'tables', '/tables', '/dev/tables/index', 'dev:tables:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1814129777775054850, 1111111111111111111, 1814127396630925314, '字段查询', '', 2, NULL, NULL, NULL, 'auth:db:columns', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1818527209413775362, 1111111111111111111, 1633285580421271553, '查看', '', 2, NULL, NULL, NULL, 'bpm:instance:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -844,12 +844,12 @@ INSERT INTO `sys_menu` VALUES (1821000447351885826, 1111111111111111111, 1806941
 INSERT INTO `sys_menu` VALUES (1823638956944486401, 1111111111111111111, 1806941904676159490, '用户列表', '', 2, NULL, NULL, NULL, 'bpm:user:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1823645296190382081, 1111111111111111111, 1806941904676159490, '用户组列表', '', 2, NULL, NULL, NULL, 'bpm:group:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1826078313903144962, 1111111111111111111, 1581966349440581634, 'VTable', 'Vtable', 1, NULL, '/vTable', '/test/vTable/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840590870386941953, 1111111111111111111, 1578702340666851329, 'SSO中心管理', '', 0, 'sso-config', '/sso', NULL, NULL, 0, 0, 0, 1, NULL, NULL, '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840591490338627586, 1111111111111111111, 1840590870386941953, 'sso客户端', 'ssoClient', 1, 'sso-client', '/ssoClient', '/auth/sso/ssoClient/index', 'auth:ssoClient:list', 0, 0, 0, 1, NULL, NULL, '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638453574615041, 1111111111111111111, 1840591490338627586, '详情', '', 2, NULL, NULL, NULL, 'auth:ssoClient:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', NULL, NULL, '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638543223668737, 1111111111111111111, 1840591490338627586, '添加', '', 2, NULL, NULL, NULL, 'auth:ssoClient:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', NULL, NULL, '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638658072100865, 1111111111111111111, 1840591490338627586, '修改', '', 2, NULL, NULL, NULL, 'auth:ssoClient:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', NULL, NULL, '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638745858883586, 1111111111111111111, 1840591490338627586, '删除', '', 2, NULL, NULL, NULL, 'auth:ssoClient:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', NULL, NULL, '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840590870386941953, 1111111111111111111, 1578702340666851329, 'SSO中心管理', '', 0, 'sso-config', '/sso', NULL, NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840591490338627586, 1111111111111111111, 1840590870386941953, 'sso客户端', 'ssoClient', 1, 'sso-client', '/ssoClient', '/auth/sso/ssoClient/index', 'auth:ssoClient:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638453574615041, 1111111111111111111, 1840591490338627586, '详情', '', 2, NULL, NULL, NULL, 'auth:ssoClient:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638543223668737, 1111111111111111111, 1840591490338627586, '添加', '', 2, NULL, NULL, NULL, 'auth:ssoClient:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638658072100865, 1111111111111111111, 1840591490338627586, '修改', '', 2, NULL, NULL, NULL, 'auth:ssoClient:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638745858883586, 1111111111111111111, 1840591490338627586, '删除', '', 2, NULL, NULL, NULL, 'auth:ssoClient:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775119, 1111111111111111111, 1753664334832967682, '消息公告', 'Msg', 1, 'msg_template', '/msg', '/system/messages/msg/index', 'sys:msg:list', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775120, 1111111111111111111, 1753664334832967682, '用户消息', 'UserMsg', 1, 'user_msg', '/msgUser', '/system/messages/msgUser/index', 'sys:msgUser:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775121, 1111111111111111111, 1580357263003439106, '流程定义', 'Definition', 1, 'bpm_definition', '/definition', '/bpm/def/definition/index', 'bpm:definition:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -873,8 +873,6 @@ CREATE TABLE `sys_menu_column`  (
 -- Records of sys_menu_column
 -- ----------------------------
 INSERT INTO `sys_menu_column` VALUES (2, 'User', 'id_card', 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_menu_column` VALUES (1818470250547298305, 'Platform', 'platformCode', 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_menu_column` VALUES (1822199069229768706, 'Apply', 'procDefKey', 'admin', 'admin', '2024-09-01 10:04:48');
 
 -- ----------------------------
 -- Table structure for sys_msg
@@ -1066,8 +1064,8 @@ CREATE TABLE `sys_registered_client`  (
 -- ----------------------------
 -- Records of sys_registered_client
 -- ----------------------------
-INSERT INTO `sys_registered_client` VALUES (1657300993757003778, 'sso-server', '2023-05-13 10:25:00', 'CUi+0sdni4FoCqkqfTv0QA==', '2024-12-30 00:00:00', 'breeze SSO 客户端', 'http://localhost:3000/,http://localhost:5173/', 'admin', 'admin', '2024-09-01 21:04:48', 'admin', 'admin', '2024-09-01 21:04:48', 0, NULL);
-INSERT INTO `sys_registered_client` VALUES (1657300993757003779, 'sso-client1', '2023-05-13 10:25:00', 'CUi+0sdni4FoCqkqfTv0QA==', '2024-12-30 00:00:00', 'breeze Client1 客户端', 'http://localhost:5173/,http://localhost:3000/', 'admin', 'admin', '2024-09-01 21:04:48', 'admin', 'admin', '2024-09-01 21:04:48', 0, NULL);
+INSERT INTO `sys_registered_client` VALUES (1657300993757003778, 'sso-server', '2023-05-13 10:25:00', 'CUi+0sdni4FoCqkqfTv0QA==', '2024-12-30 00:00:00', 'breeze SSO 客户端', 'http://localhost:3000/,http://localhost:5173/,http://139.9.138.80:9876/', 'admin', 'admin', '2024-09-01 21:04:48', 'admin', 'admin', '2024-09-01 21:04:48', 0, NULL);
+INSERT INTO `sys_registered_client` VALUES (1657300993757003779, 'sso-client1', '2023-05-13 10:25:00', 'CUi+0sdni4FoCqkqfTv0QA==', '2024-12-30 00:00:00', 'breeze Client1 客户端', 'http://localhost:5173/,http://localhost:3001/,http://139.9.138.80:7654/,http://139.9.138.80:6543/', 'admin', 'admin', '2024-09-01 21:04:48', 'admin', 'admin', '2024-09-01 21:04:48', 0, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1501,8 +1499,11 @@ INSERT INTO `sys_row_permission` VALUES (1770381218118750209, '部门数据权�
 DROP TABLE IF EXISTS `sys_sso_client`;
 CREATE TABLE `sys_sso_client`  (
   `id` bigint NOT NULL COMMENT '主键ID',
-  `client_code` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端编码',
-  `client_url` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端跳转地址',
+  `register_client_code` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '注册客户端编码',
+  `client_code` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端编码',
+  `client_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端名称',
+  `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端重定向地址',
+  `back` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户端重定向后跳转地址',
   `create_by` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人编码',
   `create_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人姓名',
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -1518,6 +1519,7 @@ CREATE TABLE `sys_sso_client`  (
 -- ----------------------------
 -- Records of sys_sso_client
 -- ----------------------------
+INSERT INTO `sys_sso_client` VALUES (1844561602670309377, 'sso-client1', 'DMS', 'DMS', 'http://localhost:3001/#/sso-login', 'http://localhost:3001/#/sso?redirect=/home', 'admin', 'admin', '2024-10-13 15:26:38', 'admin', 'admin', '2024-10-13 15:26:43', 0, 'admin', 1);
 
 -- ----------------------------
 -- Table structure for sys_tenant
