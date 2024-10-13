@@ -25,6 +25,7 @@ import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.modules.auth.model.entity.SysSsoClient;
 import com.breeze.boot.modules.auth.model.form.SsoClientForm;
 import com.breeze.boot.modules.auth.model.query.SsoClientQuery;
+import com.breeze.boot.modules.auth.model.vo.SsoClientHomeVO;
 import com.breeze.boot.modules.auth.model.vo.SsoClientVO;
 import com.breeze.boot.modules.auth.service.SysSsoClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +61,7 @@ public class SysSsoClientController {
      */
     @Operation(summary = "查询主页sso数据")
     @GetMapping("/getHomeSsoClient")
-    public Result<List<String>> getHomeSsoClient() {
+    public Result<List<SsoClientHomeVO>> getHomeSsoClient() {
         return Result.ok(this.sysSsoClientService.getHomeSsoClient());
     }
 
@@ -86,7 +87,9 @@ public class SysSsoClientController {
     @Operation(summary = "详情")
     @GetMapping("/info/{ssoClientId}")
     @SaCheckPermission("auth:ssoClient:info")
-    public Result<SsoClientVO> info(@Parameter(description = "客户端ID") @NotNull(message = "客户端ID不能为空") @PathVariable("ssoClientId") Long ssoClientId) {
+    public Result<SsoClientVO> info(@Parameter(description = "客户端ID")
+                                    @NotNull(message = "客户端ID不能为空")
+                                    @PathVariable("ssoClientId") Long ssoClientId) {
         return Result.ok(this.sysSsoClientService.getInfoById(ssoClientId));
     }
 

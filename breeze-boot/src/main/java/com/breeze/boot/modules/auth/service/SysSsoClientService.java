@@ -22,6 +22,7 @@ import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.model.entity.SysSsoClient;
 import com.breeze.boot.modules.auth.model.form.SsoClientForm;
 import com.breeze.boot.modules.auth.model.query.SsoClientQuery;
+import com.breeze.boot.modules.auth.model.vo.SsoClientHomeVO;
 import com.breeze.boot.modules.auth.model.vo.SsoClientVO;
 
 import java.util.List;
@@ -34,7 +35,7 @@ import java.util.List;
  */
 public interface SysSsoClientService  extends IService<SysSsoClient> {
 
-    List<String> getHomeSsoClient();
+    List<SsoClientHomeVO> getHomeSsoClient();
 
     Page<SsoClientVO> listPage(SsoClientQuery ssoClientQuery);
 

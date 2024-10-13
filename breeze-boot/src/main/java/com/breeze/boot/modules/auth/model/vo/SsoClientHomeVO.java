@@ -14,30 +14,41 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.modules.auth.model.query;
+package com.breeze.boot.modules.auth.model.vo;
 
-import com.breeze.boot.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
- * 系统sso客户端查询参数
+ * 系统sso客户端实体VO
  *
  * @author gaoweixuan
- * @since 2024-09-30
+ * @since 2024-07-14
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "系统sso客户端查询参数")
-public class SsoClientQuery extends PageQuery {
+@Schema(description = "系统sso客户端主页VO")
+public class SsoClientHomeVO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 客户端编码
+     * 客户端名称
      */
-    @Schema(description = "客户端编码")
-    private String clientCode;
+    @Schema(description = "客户端名称")
+    private String clientName;
+
+    /**
+     * url
+     */
+    @Schema(description = "url")
+    private String url;
 
 }

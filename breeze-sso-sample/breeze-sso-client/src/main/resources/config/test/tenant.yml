@@ -1,0 +1,4 @@
+# 租户配置
+breeze:
+  tenant:
+    tables:

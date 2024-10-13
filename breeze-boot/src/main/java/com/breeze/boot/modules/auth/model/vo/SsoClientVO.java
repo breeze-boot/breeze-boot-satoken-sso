@@ -46,10 +46,22 @@ public class SsoClientVO implements Serializable {
     private Long id;
 
     /**
+     * 注册客户端编码
+     */
+    @Schema(description = "注册客户端编码")
+    private String registerClientCode;
+
+    /**
      * 客户端编码
      */
     @Schema(description = "客户端编码")
     private String clientCode;
+
+    /**
+     * 客户端名称
+     */
+    @Schema(description = "客户端名称")
+    private String clientName;
 
     /**
      * 客户端重定向地址
