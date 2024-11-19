@@ -142,10 +142,10 @@ public class BreezeDataPermissionInterceptor extends BaseMultiTableInnerIntercep
 
         StringBuilder originalSqlBuilder = new StringBuilder();
         originalSqlBuilder.append(String.format("SELECT %s FROM (%s) temp WHERE 1 = 1 ", column, originalSql));
-        AssertUtil.isNotNull(cache, ResultCode.SYSTEM_EXCEPTION);
+        AssertUtil.isTrue(cache != null, ResultCode.SYSTEM_EXCEPTION);
         for (String rowPermissionCode : rowPermissionCodeSet) {
             CustomizePermission sysCustomizePermission = cache.get(rowPermissionCode, CustomizePermission.class);
-            AssertUtil.isNotNull(sysCustomizePermission, ResultCode.SYSTEM_EXCEPTION);
+            AssertUtil.isTrue(sysCustomizePermission != null, ResultCode.SYSTEM_EXCEPTION);
             DataRole dataRole = getDataRoleByType(sysCustomizePermission.getCustomizesType());
             if (dataRole != null) {
                 String permissions = sysCustomizePermission.getPermissions();
