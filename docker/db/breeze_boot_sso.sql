@@ -616,10 +616,10 @@ CREATE TABLE `sys_log`  (
   `id` bigint NOT NULL COMMENT '主键ID',
   `system_module` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '系统模块',
   `log_title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日志标题',
-  `log_type` tinyint(1) NULL DEFAULT 0 COMMENT '日志类型 0 普通日志 1 登录日志',
+  `log_type` tinyint(1) NULL DEFAULT 0 COMMENT '日志类型 0 系统日志 1 登录日志',
   `request_type` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求类型  GET  POST  PUT DELETE ',
   `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP',
-  `do_type` tinyint(1) NULL DEFAULT 3 COMMENT '操作类型 0 添加 1 删除 2 修改 3 查询 4 doLogin',
+  `do_type` tinyint(1) NULL DEFAULT 3 COMMENT '操作类型 0 添加 1 删除 2 修改',
   `browser` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器名称',
   `system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统类型',
   `param_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '入参',
@@ -698,7 +698,7 @@ CREATE TABLE `sys_menu`  (
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1578702340612321378, 1111111111111111111, 1594135789623184129, '任务日志', 'JLog', 1, 'el-icon-s-comment', '/jLog', '/system/job/jlog/index', 'sys:jLog:list', 0, 0, 1, 6, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1578702340612325378, 1111111111111111111, 1637297406628823041, '日志管理', 'Log', 1, 'log', '/log', '/system/log/index', 'sys:log:list', 0, 0, 0, 9, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1578702340612325378, 1111111111111111111, 1855883083916333058, '系统日志', 'SysLog', 1, 'log', '/sysLog', '/system/log/sysLog/index', 'sys:sysLog:list', 0, 0, 0, 9, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:09', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340620713987, 1111111111111111111, 1578702340683628545, '修改', '', 2, NULL, NULL, NULL, 'auth:user:modify', 0, 0, 0, 5, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340620713988, 1111111111111111111, 1578702340683628545, '删除', '', 2, NULL, NULL, NULL, 'auth:user:delete', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340624908290, 1111111111111111111, 1578702340683628545, '添加', '', 2, NULL, NULL, NULL, 'auth:user:create', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -713,10 +713,10 @@ INSERT INTO `sys_menu` VALUES (1578702340650074114, 1111111111111111111, 1578702
 INSERT INTO `sys_menu` VALUES (1578702340650074115, 1111111111111111111, 1578702340662657027, '修改', '', 2, NULL, NULL, NULL, 'sys:dict:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340650074116, 1111111111111111111, 1578702340662657027, '删除', '', 2, NULL, NULL, NULL, 'sys:dict:delete', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340650074117, 1111111111111111111, 1578702340662657027, '添加', '', 2, NULL, NULL, NULL, 'sys:dict:create', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1578702340654268411, 1111111111111111111, 1578702340612325378, '清空表', '', 2, NULL, NULL, NULL, 'sys:log:truncate', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1578702340654268411, 1111111111111111111, 1578702340612325378, '清空表', '', 2, NULL, NULL, NULL, 'sys:sysLog:truncate', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:10', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340654268412, 1111111111111111111, 1578702340666851329, '租户管理', 'Tenant', 1, 'tenant', '/tenant', '/auth/tenant/index', 'auth:tenant:list', 0, 0, 0, 10, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340654268416, 1111111111111111111, 1578702340666851329, '岗位管理', 'Post', 1, 'post', '/post', '/auth/post/index', 'auth:post:list', 0, 0, 0, 4, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1578702340654268417, 1111111111111111111, 1578702340612325378, '删除', '', 2, NULL, NULL, NULL, 'sys:log:delete', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1578702340654268417, 1111111111111111111, 1578702340612325378, '删除', '', 2, NULL, NULL, NULL, 'sys:sysLog:delete', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:10', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340654268418, 1111111111111111111, 1578702340666851329, '角色管理', 'Role', 1, 'role', '/role', '/auth/role/index', 'auth:role:list', 0, 0, 0, 5, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340662657026, 1111111111111111111, 1578702340666851329, '部门管理', 'Dept', 1, 'dept', '/dept', '/auth/dept/index', 'auth:dept:list', 0, 0, 0, 9, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340662657027, 1111111111111111111, 1637297406628823041, '字典管理', 'Dict', 1, 'dict', '/dict', '/system/dict/index', 'sys:dict:list', 0, 0, 0, 6, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -727,13 +727,11 @@ INSERT INTO `sys_menu` VALUES (1578702340679434241, 1111111111111111111, 1578702
 INSERT INTO `sys_menu` VALUES (1578702340679434243, 1111111111111111111, 1578702340671045634, '删除', '', 2, NULL, NULL, NULL, 'auth:platform:delete', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340683628545, 1111111111111111111, 1578702340666851329, '用户管理', 'User', 1, 'user', '/user', '/auth/user/index', 'auth:user:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1578702340683628546, 1111111111111111111, 1578702340666851329, '菜单管理', 'Menu', 1, 'menu', '/menu', '/auth/menu/index', 'auth:menu:list', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1580357263003439106, 1111111111111111111, 1111111111111111111, '流程管理', '', 0, 'bpm_manage', '/bpm', NULL, NULL, 0, 0, 0, 4, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1580357773622202370, 1111111111111111111, 1580357263003439106, '流程分类', 'Category', 1, 'bpm_category', '/category', '/bpm/def/category/index', 'bpm:category:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1581843318345035778, 1111111111111111111, 1578702340662657026, '修改', '', 2, NULL, NULL, NULL, 'auth:dept:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1581965904601088001, 1111111111111111111, 1581966349440581634, '测试KeepAive', 'KeepAlive', 1, 'client', '/keepAlive', '/test/keepalive/index', 'keep:create', 0, 1, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1581965904601088002, 1111111111111111111, 1581966349440581634, '测试外部链接', '', 1, 'icon-test', 'http://ww.baidu.com', NULL, NULL, 1, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1581966349440581634, 1111111111111111111, 1111111111111111111, '相关测试', '', 0, 'icon-test', '/test', NULL, NULL, 0, 0, 0, 8, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1582554585967800321, 1111111111111111111, 1111111111111111111, '监控平台', '', 0, 'monitor', '/monitor', NULL, NULL, 0, 0, 0, 7, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1581966349440581634, 1111111111111111111, 1111111111111111111, '相关测试', '', 0, 'icon-test', '/test', NULL, NULL, 0, 0, 0, 4, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:11', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1582554585967800321, 1111111111111111111, 1111111111111111111, '监控平台', '', 0, 'monitor', '/monitor', NULL, NULL, 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:11', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1582555155344568321, 1111111111111111111, 1582554585967800321, 'swagger', '', 1, 'swagger', 'http://localhost:9000/doc.html#/home', NULL, NULL, 1, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1582558188828790785, 1111111111111111111, 1582554585967800321, '德鲁伊', '', 1, 'durid', 'http://localhost:9000/druid/login.html', NULL, NULL, 1, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1582607135668621314, 1111111111111111111, 1581966349440581634, '掘金', '', 1, 'icon-test', 'https://juejin.cn/', NULL, NULL, 1, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -767,20 +765,11 @@ INSERT INTO `sys_menu` VALUES (1601081152259891202, 1111111111111111111, 1578702
 INSERT INTO `sys_menu` VALUES (1632642093459915239, 1111111111111111111, 1578702340612321378, '删除', '', 2, NULL, NULL, NULL, 'sys:jLog:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1632642093459935231, 1111111111111111111, 1594135789623184129, '添加', '', 2, NULL, NULL, NULL, 'sys:job:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1632642093459935232, 1111111111111111111, 1594135789623184129, '删除', '', 2, NULL, NULL, NULL, 'sys:job:delete', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632642093459935234, 1111111111111111111, 1580357773622202370, '添加', '', 2, NULL, NULL, NULL, 'bpm:category:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632642093459935235, 1111111111111111111, 1580357773622202370, '删除', '', 2, NULL, NULL, NULL, 'bpm:category:delete', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1632642093459935236, 1111111111111111111, 1578702340612321378, '清空', '', 2, NULL, NULL, NULL, 'sys:jLog:truncate', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1632642093459935239, 1111111111111111111, 1594135789623184129, '修改', '', 2, NULL, NULL, NULL, 'sys:job:modify', 0, 0, 0, 4, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632642093459935256, 1111111111111111111, 1580357773622202370, '修改', '', 2, NULL, NULL, NULL, 'bpm:category:modify', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632925687029903361, 1111111111111111111, 9223372036854775121, '查看', '', 2, NULL, NULL, NULL, 'bpm:definition:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632925792583757826, 1111111111111111111, 9223372036854775121, '删除', '', 2, NULL, NULL, NULL, 'bpm:definition:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1632950163226464257, 1111111111111111111, 9223372036854775121, '启动', '', 2, NULL, NULL, NULL, 'bpm:instance:start', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1633285580421271553, 1111111111111111111, 1580357263003439106, '流程实例', 'Instance', 1, 'bpm_instance', '/instance', '/bpm/def/instance/index', 'bpm:instance:list', 0, 0, 0, 5, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1633338860669214722, 1111111111111111111, 9223372036854775121, '流程挂起', '', 2, NULL, NULL, NULL, 'bpm:definition:suspended', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1635920329879056385, 1111111111111111111, 1580357263003439106, 'bpmUI', '', 1, 'bpm_designer', 'http://localhost:8989/bpm-ui/idm/#/user-mgmt', NULL, NULL, 1, 0, 0, 15, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1637297406628823041, 1111111111111111111, 1111111111111111111, '系统管理', '', 0, 'system', '/system', NULL, NULL, 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1637647486464438273, 1111111111111111111, 1594135789623184129, '运行一次', '', 2, NULL, NULL, NULL, 'sys:job:run', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1648569698801393666, 1111111111111111111, 1840590870386941953, '客户端管理', 'Client', 1, 'client', '/client', '/auth/sso/client/index', 'auth:client:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:15', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1648569698801393666, 1111111111111111111, 1840590870386941953, '客户端管理', 'Client', 1, 'client', '/client', '/auth/sso/client/index', 'auth:client:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464120406532098, 1111111111111111111, 1648569698801393666, '添加', '', 2, NULL, NULL, NULL, 'auth:client:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464313466150914, 1111111111111111111, 1648569698801393666, '修改', '', 2, NULL, NULL, NULL, 'auth:client:modify', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1657464432802488321, 1111111111111111111, 1648569698801393666, '删除', '', 2, NULL, NULL, NULL, 'auth:client:delete', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -799,7 +788,7 @@ INSERT INTO `sys_menu` VALUES (1762353511967580162, 1111111111111111111, 1578702
 INSERT INTO `sys_menu` VALUES (1762353732504084481, 1111111111111111111, 1648569698801393666, '详情', '', 2, NULL, NULL, NULL, 'auth:client:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1762353800099487746, 1111111111111111111, 1594135789623184129, '详情', '', 2, NULL, NULL, NULL, 'sys:job:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1762353849600663553, 1111111111111111111, 1578702340662657027, '详情', '', 2, NULL, NULL, NULL, 'auth:dict:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1762353899760345089, 1111111111111111111, 1578702340612325378, '详情', '', 2, NULL, NULL, NULL, 'auth:log:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1762353899760345089, 1111111111111111111, 1578702340612325378, '详情', '', 2, NULL, NULL, NULL, 'sys:sysLog:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:13', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1762354008057274370, 1111111111111111111, 1586717542633123843, '详情', '', 2, NULL, NULL, NULL, 'auth:dictItem:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1764834376870072321, 1111111111111111111, 1594135789623984129, '修改', '', 2, NULL, NULL, NULL, 'sys:file:edit', 1, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1769605991864541186, 1111111111111111111, 9223372036854775119, '详情', '', 2, NULL, NULL, NULL, 'sys:msg:info', 1, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -810,14 +799,6 @@ INSERT INTO `sys_menu` VALUES (1772119073333514242, 1111111111111111111, 9223372
 INSERT INTO `sys_menu` VALUES (1773244400852008961, 1111111111111111111, 1581966349440581634, '二级菜单', '', 0, 'auth', '/test', NULL, NULL, 1, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1773244571417575425, 1111111111111111111, 1773244400852008961, '三级菜单', 'Test3', 1, 'add', '/test3', '/system/file/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1793490122163617793, 1111111111111111111, 1581966349440581634, 'wangEditor', 'WangEditor', 1, NULL, '/wangEditor', '/test/wangEditor/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1795343069638156290, 1111111111111111111, 9223372036854775121, '流程设计', '', 2, NULL, NULL, NULL, 'bpm:definition:design', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1795361472646008833, 1111111111111111111, 9223372036854775121, '部署', '', 2, NULL, NULL, NULL, 'bpm:definition:deploy', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806128900648783874, 1111111111111111111, 1111111111111111111, '任务管理', '', 0, 'task_manager', '/task', NULL, NULL, 0, 0, 0, 5, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806941904676159490, 1111111111111111111, 1806128900648783874, '待办任务', 'Todo', 1, 'todo', '/todo', '/bpm/task/todo/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806942129591517186, 1111111111111111111, 1806128900648783874, '已办任务', 'Completed', 1, 'completed_tasks', '/completed', '/bpm/task/completed/index', NULL, 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806942202333331457, 1111111111111111111, 1806128900648783874, '我的提交', 'Apply', 1, 'history_task', '/apply', '/bpm/task/apply/index', NULL, 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806949939763052546, 1111111111111111111, 1111111111111111111, '工单管理', '', 0, 'wo', '/wo', NULL, NULL, 0, 0, 0, 6, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1806950505004236802, 1111111111111111111, 1806949939763052546, '请假管理', 'Leave', 1, 'leave', '/leave', '/wo/leave/index', 'wo:leave:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1807352428140244993, 1111111111111111111, 1581966349440581634, 'bpmnViewer', 'BpmnViewer', 1, NULL, '/bpmnViewer', '/test/bpmnViewer/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1810587679377408001, 1111111111111111111, 1813418484919291905, '邮箱配置管理', 'EmailConfig', 1, 'email_config', '/config', '/system/email/config/index', 'sys:emailConfig:list', 0, 0, 0, 7, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1811244854244306945, 1111111111111111111, 1810587679377408001, '添加', '', 2, NULL, NULL, NULL, 'sys:emailConfig:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
@@ -833,26 +814,21 @@ INSERT INTO `sys_menu` VALUES (1812002047382114305, 1111111111111111111, 1813418
 INSERT INTO `sys_menu` VALUES (1813418484919291905, 1111111111111111111, 1637297406628823041, '邮箱管理', '', 0, 'email', '/email', NULL, NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1813427994547273729, 1111111111111111111, 1578702340666851329, '数据权限', '', 0, 'permission', '/permission', NULL, NULL, 0, 0, 0, 12, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1813429194697031681, 1111111111111111111, 1813427994547273729, '菜单加密列管理', 'MenuColumn', 1, 'column_permission', '/menuColumn', '/auth/permission/menuColumn/index', 'auth:menuColumn:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1814127259431047169, 1111111111111111111, 1111111111111111111, '开发管理', '', 0, 'dev', '/dev', NULL, 'auth:db:tables', 0, 0, 0, 9, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:17', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1814127259431047169, 1111111111111111111, 1111111111111111111, '开发管理', '', 0, 'dev', '/dev', NULL, 'auth:db:tables', 0, 0, 0, 5, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:15', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1814127396630925314, 1111111111111111111, 1814127259431047169, '表结构管理', 'Tables', 1, 'tables', '/tables', '/dev/tables/index', 'dev:tables:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1814129777775054850, 1111111111111111111, 1814127396630925314, '字段查询', '', 2, NULL, NULL, NULL, 'auth:db:columns', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1818527209413775362, 1111111111111111111, 1633285580421271553, '查看', '', 2, NULL, NULL, NULL, 'bpm:instance:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1818527280947630081, 1111111111111111111, 1633285580421271553, '删除', '', 2, NULL, NULL, NULL, 'bpm:instance:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1818532399135133698, 1111111111111111111, 1633285580421271553, '挂起', '', 2, NULL, NULL, NULL, 'bpm:instance:suspended', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1820728998888316929, 1111111111111111111, 1581966349440581634, 'todoTask', 'TodoTask', 1, NULL, '/todoTask', '/test/todoTask/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1821000447351885826, 1111111111111111111, 1806941904676159490, '审批', '', 2, NULL, NULL, NULL, 'task:todo:approval', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1823638956944486401, 1111111111111111111, 1806941904676159490, '用户列表', '', 2, NULL, NULL, NULL, 'bpm:user:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1823645296190382081, 1111111111111111111, 1806941904676159490, '用户组列表', '', 2, NULL, NULL, NULL, 'bpm:group:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (1826078313903144962, 1111111111111111111, 1581966349440581634, 'VTable', 'Vtable', 1, NULL, '/vTable', '/test/vTable/index', NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840590870386941953, 1111111111111111111, 1578702340666851329, 'SSO中心管理', '', 0, 'sso-config', '/sso', NULL, NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840591490338627586, 1111111111111111111, 1840590870386941953, 'sso客户端', 'ssoClient', 1, 'sso-client', '/ssoClient', '/auth/sso/ssoClient/index', 'auth:ssoClient:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638453574615041, 1111111111111111111, 1840591490338627586, '详情', '', 2, NULL, NULL, NULL, 'auth:ssoClient:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638543223668737, 1111111111111111111, 1840591490338627586, '添加', '', 2, NULL, NULL, NULL, 'auth:ssoClient:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638658072100865, 1111111111111111111, 1840591490338627586, '修改', '', 2, NULL, NULL, NULL, 'auth:ssoClient:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (1840638745858883586, 1111111111111111111, 1840591490338627586, '删除', '', 2, NULL, NULL, NULL, 'auth:ssoClient:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-10-13 15:25:18', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840590870386941953, 1111111111111111111, 1578702340666851329, 'SSO中心管理', '', 0, 'sso-config', '/sso', NULL, NULL, 0, 0, 0, 13, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:15', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840591490338627586, 1111111111111111111, 1840590870386941953, 'sso客户端', 'ssoClient', 1, 'sso-client', '/ssoClient', '/auth/sso/ssoClient/index', 'auth:ssoClient:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638453574615041, 1111111111111111111, 1840591490338627586, '详情', '', 2, NULL, NULL, NULL, 'auth:ssoClient:info', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638543223668737, 1111111111111111111, 1840591490338627586, '添加', '', 2, NULL, NULL, NULL, 'auth:ssoClient:create', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638658072100865, 1111111111111111111, 1840591490338627586, '修改', '', 2, NULL, NULL, NULL, 'auth:ssoClient:modify', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1840638745858883586, 1111111111111111111, 1840591490338627586, '删除', '', 2, NULL, NULL, NULL, 'auth:ssoClient:delete', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1853666596229042178, 1111111111111111111, 1855883083916333058, '登录日志', 'LoginLog', 1, 'log', '/loginLog', '/system/log/loginLog/index', 'sys:loginLog:list', 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:15', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1854351672843489281, 1111111111111111111, 1578702340666851329, '在线用户', 'OnlineUser', 1, 'dept', '/onlineUser', '/auth/onlineUser/index', NULL, 0, 0, 0, 11, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:15', 0, NULL, 1);
+INSERT INTO `sys_menu` VALUES (1855883083916333058, 1111111111111111111, 1637297406628823041, '日志管理', '', 0, 'log', '/log', NULL, NULL, 0, 0, 0, 1, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-11-12 16:34:15', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775119, 1111111111111111111, 1753664334832967682, '消息公告', 'Msg', 1, 'msg_template', '/msg', '/system/messages/msg/index', 'sys:msg:list', 0, 0, 0, 3, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775120, 1111111111111111111, 1753664334832967682, '用户消息', 'UserMsg', 1, 'user_msg', '/msgUser', '/system/messages/msgUser/index', 'sys:msgUser:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
-INSERT INTO `sys_menu` VALUES (9223372036854775121, 1111111111111111111, 1580357263003439106, '流程定义', 'Definition', 1, 'bpm_definition', '/definition', '/bpm/def/definition/index', 'bpm:definition:list', 0, 0, 0, 2, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_menu` VALUES (9223372036854775807, 1111111111111111111, 1813427994547273729, '行数据权限', 'RowPermission', 1, 'row_permission', '/rowPermission', '/auth/permission/rowPermission/index', 'auth:rowPermission:list', 0, 0, 0, 8, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 
 -- ----------------------------
@@ -872,7 +848,9 @@ CREATE TABLE `sys_menu_column`  (
 -- ----------------------------
 -- Records of sys_menu_column
 -- ----------------------------
-INSERT INTO `sys_menu_column` VALUES (2, 'User', 'id_card', 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_menu_column` VALUES (1856551414012940290, 'Job', 'jobMessage', 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_menu_column` VALUES (1856551418299518977, 'Job', 'jobStatus', 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_menu_column` VALUES (1856551632720728066, 'Job', 'exceptionInfo', 'admin', 'admin', '2024-09-01 10:04:48');
 
 -- ----------------------------
 -- Table structure for sys_msg
@@ -922,7 +900,7 @@ CREATE TABLE `sys_msg_user`  (
   `create_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人姓名',
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1830854606590873605 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户消息' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1856508964674289667 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户消息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_msg_user
@@ -1011,7 +989,7 @@ CREATE TABLE `sys_quartz_job`  (
 -- ----------------------------
 -- Records of sys_quartz_job
 -- ----------------------------
-INSERT INTO `sys_quartz_job` VALUES (1565314987957145601, '样例-Bean名五种不同参数', 'DEFAULT', '0/10 * * * * ? *', 'breezeJobs.demoJob(\"test\", 1, 3D, 4L, true, false)', 1, 0, 0, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
+INSERT INTO `sys_quartz_job` VALUES (1565314987957145601, '样例-Bean名五种不同参数', 'DEFAULT', '0/10 * * * * ? *', 'breezeJobs.demoJob(\"test\", 1, 3D, 4L, true, false)', 1, 0, 0, NULL, NULL, NULL, 'admin', 'admin', '2024-11-12 16:18:28', 0, NULL, 1);
 INSERT INTO `sys_quartz_job` VALUES (1565314987957145602, '样例-Bean名调用单个参数', 'DEFAULT', '0/20 * * * * ? *', 'breezeJobs.demoJob(\"test\")', 2, 0, 0, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 INSERT INTO `sys_quartz_job` VALUES (1565314987957145603, '样例-全类名-五种不同参数', 'DEFAULT', '0/15 * * * * ? *', 'com.breeze.cloud.quartz.job.BreezeJobs.demoJob(\"test\", 1, 3D, 4L, true, false)', -1, 0, 0, 'admin', 'admin', '2024-09-01 10:04:48', 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 
@@ -1127,30 +1105,6 @@ INSERT INTO `sys_role_menu` VALUES (1813449294644875269, 1793490122163617793, 16
 INSERT INTO `sys_role_menu` VALUES (1813449294644875270, 1582607135668621314, 1644533464768704514, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1813449294644875271, 1581965904601088001, 1644533464768704514, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1813449294644875272, 1581965904601088002, 1644533464768704514, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710721, 1580357263003439106, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710722, 1580357773622202370, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710723, 1632642093459935234, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710724, 1632642093459935235, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710725, 1632642093459935256, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034663710726, 9223372036854775121, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625282, 1795361472646008833, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625283, 1632950163226464257, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625284, 1795343069638156290, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625285, 1632925792583757826, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625286, 1633338860669214722, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625287, 1632925687029903361, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625288, 1633285580421271553, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625289, 1818532399135133698, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625290, 1818527209413775362, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625291, 1818527280947630081, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625292, 1635920329879056385, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625293, 1806128900648783874, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625295, 1806941904676159490, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625296, 1821000447351885826, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625297, 1806942129591517186, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625298, 1806942202333331457, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625299, 1806949939763052546, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625300, 1806950505004236802, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625301, 1582554585967800321, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625302, 1664159611618799618, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625303, 1582555155344568321, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
@@ -1161,250 +1115,141 @@ INSERT INTO `sys_role_menu` VALUES (1821740034726625307, 1773244571417575425, 15
 INSERT INTO `sys_role_menu` VALUES (1821740034726625308, 1807352428140244993, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625310, 1793490122163617793, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625311, 1582607135668621314, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1821740034726625312, 1820728998888316929, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625313, 1581965904601088001, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu` VALUES (1821740034726625314, 1581965904601088002, 1589074115103707138, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133251956738, 1632925687029903361, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871298, 1633285580421271553, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871299, 1818532399135133698, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871300, 1818527209413775362, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871301, 1818527280947630081, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871302, 1806128900648783874, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871303, 1806941904676159490, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871304, 1821000447351885826, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871305, 1823645296190382081, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871306, 1823638956944486401, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871307, 1806942129591517186, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658133314871308, 1806942202333331457, 1821474143493505026, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664257, 1580357263003439106, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664258, 1580357773622202370, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664259, 1632642093459935234, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664260, 1632642093459935235, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664261, 1632642093459935256, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664262, 9223372036854775121, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664263, 1795361472646008833, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664264, 1632950163226464257, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664265, 1795343069638156290, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664266, 1632925792583757826, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664267, 1633338860669214722, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664268, 1632925687029903361, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664269, 1633285580421271553, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171021664270, 1818532399135133698, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578818, 1818527209413775362, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578819, 1818527280947630081, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578820, 1635920329879056385, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578821, 1806128900648783874, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578822, 1806941904676159490, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578823, 1821000447351885826, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578824, 1823645296190382081, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578825, 1823638956944486401, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578826, 1806942129591517186, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658171084578827, 1806942202333331457, 1821474216864464898, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326658, 1580357263003439106, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326659, 1580357773622202370, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326660, 1632642093459935234, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326661, 1632642093459935235, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326662, 1632642093459935256, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326663, 9223372036854775121, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326664, 1795361472646008833, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326665, 1632950163226464257, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326666, 1795343069638156290, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326667, 1632925792583757826, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326668, 1633338860669214722, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326669, 1632925687029903361, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326670, 1633285580421271553, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326671, 1818532399135133698, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326672, 1818527209413775362, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326673, 1818527280947630081, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326674, 1635920329879056385, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326675, 1806128900648783874, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326676, 1806941904676159490, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326677, 1821000447351885826, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326678, 1823645296190382081, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191888326679, 1823638956944486401, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191959629826, 1806942129591517186, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658191959629827, 1806942202333331457, 1821474319369060354, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644097, 1580357263003439106, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644098, 1580357773622202370, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644099, 1632642093459935234, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644100, 1632642093459935235, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644101, 1632642093459935256, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644102, 9223372036854775121, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644103, 1795361472646008833, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644104, 1632950163226464257, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644105, 1795343069638156290, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644106, 1632925792583757826, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644107, 1633338860669214722, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644108, 1632925687029903361, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644109, 1633285580421271553, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644110, 1818532399135133698, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644111, 1818527209413775362, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644112, 1818527280947630081, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644113, 1635920329879056385, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644114, 1806128900648783874, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644115, 1806941904676159490, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644116, 1821000447351885826, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644117, 1823645296190382081, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644118, 1823638956944486401, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644119, 1806942129591517186, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1823658212272644120, 1806942202333331457, 1821724954446331906, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640485299666945, 1578702340666851329, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640485995921410, 1578702340671045634, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640486574735361, 1578702340671045635, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640487128383490, 1761982923168129025, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640487744946178, 1578702340679434241, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640488424423426, 1578702340679434243, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640489003237377, 1840590870386941953, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640489573662722, 1840591490338627586, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640490131505154, 1840638453574615041, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640490668376065, 1840638543223668737, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640491305910273, 1840638658072100865, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640491851169793, 1840638745858883586, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640492429983745, 1648569698801393666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640493067517954, 1657464120406532098, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640493726023682, 1658346521789206529, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640494363557890, 1762353732504084481, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640494942371842, 1657464313466150914, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640495521185794, 1657464432802488321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640496104194049, 1578702340683628545, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640496657842177, 1586717542633123841, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640497232461825, 1599935876379897858, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640497890967553, 1599936405688479746, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640498486558722, 1578702340624908290, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640499056984065, 1578702340620713988, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640499610632193, 1587692336744742913, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640500235583489, 1578702340620713987, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640500818591746, 1601081152259891202, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640501409988609, 1578702340683628546, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640502072688642, 1578702340624908293, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640502727000065, 1761982833619738625, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640503389700097, 1578702340624908291, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640503993679874, 1578702340624908292, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640504593465346, 1578702340654268416, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640505180667906, 1589181822230048770, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640505767870465, 1762353074732359681, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640506355073025, 1589181822230048771, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640506938081281, 1589181822230048772, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640507504312322, 1578702340654268418, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640508041183234, 1578702340650074114, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640508590637058, 1762353132718612482, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640509131702273, 1769913478174011393, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640509702127617, 1769932578489217025, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640510255775745, 1771092462060519425, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640510826201090, 1578702340641685505, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640511388237826, 1578702340641685506, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640511954468865, 1578702340662657026, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640512529088514, 1581843318345035778, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640513070153730, 1761982995855417346, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640513640579074, 1578702340633296899, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640514198421505, 1578702340633296898, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640514743681026, 1578702340654268412, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640515293134850, 1589181822230048781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640515846782978, 1762353511967580162, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640516404625409, 1589181822230048782, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640516933107713, 1589181822230048783, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640517771968514, 1813427994547273729, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640518334005250, 1813429194697031681, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640518942179330, 1762353207431749631, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640519625850881, 1598222373868695551, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640520187887617, 9223372036854775807, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640520783478786, 1589789746153263106, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640521362292738, 1762353207431749633, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640521911746562, 1598222575933485057, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640522511532034, 1598222373868695553, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640523073568770, 1637297406628823041, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640523681742849, 1676117949968084994, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640524252168193, 1813418484919291905, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640524805816322, 1810587679377408001, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640525359464449, 1811244854244306945, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640525938278401, 1811245062084653057, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640526475149314, 1811245262626910210, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640527091712001, 1811276032536031234, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640527632777218, 1811295279165304834, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640528173842433, 1811295626692751361, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640528752656385, 1811295707286302721, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640529390190594, 1811295805265244162, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640529943838722, 1811295880271982594, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640530518458369, 1812002047382114305, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640531009191937, 1753664334832967682, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640531659309058, 9223372036854775120, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640532187791362, 1589181822230018782, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640532770799617, 1589181822230048178, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640533358002178, 9223372036854775119, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640534008119298, 1589181822230049781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640534532407298, 1769605991864541186, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640535182524417, 1772119073333514242, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640535966859266, 1589181822230018781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640536562450433, 1589181822230048172, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640537082544130, 1594135789623984129, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640537661358081, 1594532038764326666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640538315669506, 1764834376870072321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640538856734722, 1594532038764326913, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640539477491713, 1594531945449451666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640540056305666, 1589181822230048778, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640540643508226, 1594135789623184129, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640541234905090, 1632642093459935231, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640541754998785, 1762353800099487746, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640542606442497, 1637647486464438273, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640543252365314, 1632642093459935232, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640543961202689, 1632642093459935239, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640544477102081, 1578702340612321378, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640545064304642, 1632642093459915239, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640545584398337, 1632642093459935236, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640546167406594, 1578702340662657027, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640546750414849, 1578702340650074115, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640547333423106, 1762353849600663553, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640547857711105, 1578702340650074116, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640548444913665, 1578702340650074117, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640549023727617, 1586717542633123843, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640549556404225, 1762354008057274370, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640550143606786, 1578702340612325378, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640550726615042, 1578702340654268411, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640551313817601, 1762353899760345089, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640551892631553, 1578702340654268417, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640552530165761, 1580357263003439106, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640553050259458, 1580357773622202370, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640553700376578, 1632642093459935234, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640554291773441, 1632642093459935235, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640554811867137, 1632642093459935256, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640555399069698, 9223372036854775121, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640556053381121, 1632925687029903361, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640556640583682, 1632925792583757826, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640557160677378, 1632950163226464257, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640557747879937, 1633338860669214722, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640558276362242, 1795343069638156290, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640558922285058, 1795361472646008833, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640559438184450, 1633285580421271553, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640560033775617, 1818527209413775362, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640560549675009, 1818527280947630081, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640561203986433, 1818532399135133698, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640561728274434, 1635920329879056385, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640562374197249, 1806128900648783874, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640562890096642, 1806941904676159490, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640563544408065, 1821000447351885826, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640564127416321, 1823638956944486401, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640564710424577, 1823645296190382081, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640565364736001, 1806942129591517186, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640565960327170, 1806942202333331457, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640566543335426, 1806949939763052546, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640567130537986, 1806950505004236802, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640567713546241, 1582554585967800321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640568372051970, 1582555155344568321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640568887951362, 1664159611618799618, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640569475153922, 1582558188828790785, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640570112688129, 1581966349440581634, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640570704084994, 1582607135668621314, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640571354202113, 1773244400852008961, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640571933016065, 1773244571417575425, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640572448915458, 1793490122163617793, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640573031923714, 1807352428140244993, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640573614931969, 1820728998888316929, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640574269243394, 1826078313903144962, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640574852251649, 1581965904601088001, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640575506563074, 1581965904601088002, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640576093765634, 1814127259431047169, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640576739688449, 1814127396630925314, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu` VALUES (1840640577507246082, 1814129777775054850, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883887310098433, 1578702340666851329, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883887855357954, 1578702340671045634, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883888392228865, 1578702340671045635, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883888912322562, 1761982923168129025, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883889444999170, 1578702340679434241, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883890262888449, 1578702340679434243, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883890799759362, 1840590870386941953, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883891315658753, 1840591490338627586, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883891860918273, 1840638453574615041, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883892372623362, 1840638543223668737, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883892896911362, 1840638658072100865, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883893437976577, 1840638745858883586, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883893987430402, 1648569698801393666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883894507524098, 1657464120406532098, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883895023423489, 1658346521789206529, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883895556100097, 1762353732504084481, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883896130719746, 1657464313466150914, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883896663396354, 1657464432802488321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883897196072961, 1854351672843489281, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883897703583746, 1578702340683628545, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883898244648961, 1586717542633123841, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883898777325569, 1599935876379897858, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883899326779394, 1599936405688479746, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883899901399042, 1578702340624908290, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883900417298434, 1578702340620713988, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883901008695298, 1587692336744742913, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883901532983298, 1578702340620713987, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883902053076993, 1601081152259891202, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883902568976386, 1578702340683628546, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883903080681473, 1578702340624908293, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883903600775170, 1761982833619738625, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883904104091649, 1578702340624908291, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883904632573954, 1578702340624908292, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883905169444865, 1578702340654268416, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883905727287297, 1589181822230048770, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883906251575297, 1762353074732359681, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883906763280385, 1589181822230048771, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883907249819650, 1589181822230048772, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883907761524738, 1578702340654268418, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883908294201346, 1578702340650074114, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883908873015298, 1762353132718612482, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883909384720385, 1769913478174011393, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883909971922945, 1769932578489217025, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883910475239426, 1771092462060519425, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883910986944514, 1578702340641685505, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883911502843906, 1578702340641685506, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883912043909121, 1578702340662657026, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883912547225601, 1581843318345035778, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883913130233857, 1761982995855417346, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883913709047809, 1578702340633296899, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883914220752898, 1578702340633296898, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883914736652290, 1578702340654268412, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883915248357377, 1589181822230048781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883916091412481, 1762353511967580162, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883916611506178, 1589181822230048782, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883917119016961, 1589181822230048783, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883917639110658, 1813427994547273729, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883918209536001, 1813429194697031681, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883918788349953, 1762353207431749631, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883919308443649, 1598222373868695551, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883919820148738, 9223372036854775807, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883920336048129, 1589789746153263106, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883920851947521, 1762353207431749633, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883921355264002, 1598222575933485057, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883921875357697, 1598222373868695553, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883922408034305, 1637297406628823041, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883922915545089, 1676117949968084994, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883923502747649, 1813418484919291905, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883924077367297, 1810587679377408001, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883924622626818, 1811244854244306945, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883925113360386, 1811245062084653057, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883925625065474, 1811245262626910210, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883926199685122, 1811276032536031234, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883926723973121, 1811295279165304834, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883927218900993, 1811295626692751361, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883927797714946, 1811295707286302721, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883928313614338, 1811295805265244162, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883928842096642, 1811295880271982594, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883929374773249, 1812002047382114305, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883929886478337, 1855883083916333058, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883930393989121, 1578702340612325378, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883930914082817, 1578702340654268411, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883931488702465, 1762353899760345089, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883932273037313, 1853666596229042178, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883932784742401, 1578702340654268417, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883933296447489, 1753664334832967682, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883933808152578, 9223372036854775120, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883934391160834, 1589181822230018782, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883934902865921, 1589181822230048178, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883935490068481, 9223372036854775119, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883936064688129, 1589181822230049781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883936588976129, 1769605991864541186, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883937100681218, 1772119073333514242, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883937616580609, 1589181822230018781, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883938136674305, 1589181822230048172, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883938711293953, 1594135789623984129, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883939235581954, 1594532038764326666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883939751481346, 1764834376870072321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883940342878210, 1594532038764326913, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883940862971906, 1594531945449451666, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883941399842817, 1589181822230048778, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883941903159298, 1594135789623184129, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883942481973250, 1632642093459935231, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883942993678337, 1762353800099487746, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883943559909377, 1637647486464438273, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883944071614465, 1632642093459935232, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883944520404993, 1632642093459935239, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883945032110081, 1578702340612321378, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883945610924033, 1632642093459915239, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883946059714562, 1632642093459935236, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883946588196865, 1578702340662657027, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883947095707649, 1578702340650074115, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883947682910210, 1762353849600663553, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883948198809602, 1578702340650074116, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883948781817858, 1578702340650074117, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883949293522946, 1586717542633123843, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883949801033729, 1762354008057274370, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883950388236290, 1582554585967800321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883950895747073, 1582555155344568321, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883951495532545, 1664159611618799618, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883952015626241, 1582558188828790785, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883952590245890, 1581966349440581634, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883953160671234, 1582607135668621314, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883953684959233, 1773244400852008961, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883954251190274, 1773244571417575425, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883954779672578, 1793490122163617793, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883955366875138, 1807352428140244993, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883956390285313, 1826078313903144962, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883956914573313, 1581965904601088001, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883957434667010, 1581965904601088002, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883958017675266, 1814127259431047169, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883958546157570, 1814127396630925314, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
+INSERT INTO `sys_role_menu` VALUES (1855883959116582913, 1814129777775054850, 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 
 -- ----------------------------
 -- Table structure for sys_role_menu_column
@@ -1434,7 +1279,6 @@ INSERT INTO `sys_role_menu_column` VALUES (1818128686977486864, 'EmailConfig', 1
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486866, 'UserEmail', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486868, 'Msg', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486869, 'File', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
-INSERT INTO `sys_role_menu_column` VALUES (1818128686977486870, 'Job', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486871, 'JLog', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486872, 'Dict', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
 INSERT INTO `sys_role_menu_column` VALUES (1818128686977486873, 'DictItem', 1565322827518140417, 'admin', 'admin', '2024-09-01 10:04:48');
@@ -1519,7 +1363,7 @@ CREATE TABLE `sys_sso_client`  (
 -- ----------------------------
 -- Records of sys_sso_client
 -- ----------------------------
-INSERT INTO `sys_sso_client` VALUES (1844561602670309377, 'sso-client1', 'DMS', 'DMS', 'http://localhost:3001/#/sso-login', 'http://localhost:3001/#/sso?redirect=/home', 'admin', 'admin', '2024-10-13 15:26:38', 'admin', 'admin', '2024-10-13 15:26:43', 0, 'admin', 1);
+INSERT INTO `sys_sso_client` VALUES (1844561602670309377, 'sso-client1', 'DMS', 'DMS', 'http://localhost:3001/#/sso-login', 'http://localhost:3001/#/sso?redirect=/home', NULL, NULL, NULL, 'admin', 'admin', '2024-09-01 10:04:48', 0, NULL, 1);
 
 -- ----------------------------
 -- Table structure for sys_tenant
@@ -1576,7 +1420,7 @@ CREATE TABLE `sys_user`  (
   `delete_by` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '删除人编码',
   `tenant_id` bigint NOT NULL COMMENT '租户ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1823526671223726083 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1856541702760550403 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user

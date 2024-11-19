@@ -46,6 +46,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CoreConstants.ROOT;
+import static com.breeze.boot.core.enums.ResultCode.FAIL;
+import static com.breeze.boot.core.enums.ResultCode.IS_USED;
 
 /**
  * 系统菜单服务impl
@@ -151,9 +153,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public Result<Boolean> deleteById(Long id) {
         List<SysMenu> menuEntityList = this.list(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getParentId, id));
-        AssertUtil.isTrue(CollUtil.isEmpty(menuEntityList), ResultCode.IS_USED);
+        AssertUtil.isTrue(CollUtil.isEmpty(menuEntityList), IS_USED);
         boolean remove = this.removeById(id);
-        AssertUtil.isTrue(remove, ResultCode.FAIL);
+        AssertUtil.isTrue(remove, FAIL);
         // 删除已经关联的角色的菜单
         this.sysRoleMenuService.remove(Wrappers.<SysRoleMenu>lambdaQuery().eq(SysRoleMenu::getMenuId, id));
         return Result.ok(Boolean.TRUE, "删除成功");

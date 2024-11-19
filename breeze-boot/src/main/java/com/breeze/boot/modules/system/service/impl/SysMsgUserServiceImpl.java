@@ -38,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.breeze.boot.core.enums.ResultCode.NOT_FOUND;
+
 /**
  * 系统用户消息服务impl
  *
@@ -130,7 +132,7 @@ public class SysMsgUserServiceImpl extends ServiceImpl<SysMsgUserMapper, SysMsgU
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeUserMsgByIds(List<Long> ids) {
         List<SysMsgUser> sysMsgUserList = this.listByIds(ids);
-        AssertUtil.isTrue(CollUtil.isNotEmpty(sysMsgUserList), ResultCode.NOT_FOUND);
+        AssertUtil.isTrue(CollUtil.isNotEmpty(sysMsgUserList), NOT_FOUND);
         boolean remove = this.removeByIds(ids);
         AssertUtil.isTrue(remove, ResultCode.FAIL);
         return Result.ok(Boolean.TRUE, "删除成功");

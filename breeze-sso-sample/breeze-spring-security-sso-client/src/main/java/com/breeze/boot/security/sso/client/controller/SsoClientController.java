@@ -17,6 +17,7 @@
 package com.breeze.boot.security.sso.client.controller;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.exception.SaSignException;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -135,7 +136,7 @@ public class SsoClientController {
         String calcSign = SsoRequestUtil.getSignByLogoutCall(loginId, autoLogout, timestamp, nonce);
         if (!calcSign.equals(sign)) {
             log.error("无效签名，拒绝应答：" + sign);
-            return Result.fail("无效签名，拒绝应答" + sign);
+            throw new SaSignException("无效签名，拒绝应答" + sign);
         }
 
         // 注销这个账号id TODO

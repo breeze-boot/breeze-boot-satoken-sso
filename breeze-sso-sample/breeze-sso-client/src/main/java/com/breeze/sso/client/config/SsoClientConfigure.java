@@ -19,7 +19,6 @@ package com.breeze.sso.client.config;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.config.SaSsoClientConfig;
 import cn.dev33.satoken.stp.StpUtil;
-import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.sso.client.model.User;
 import com.breeze.sso.client.service.UserService;
@@ -32,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Optional;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
+import static com.breeze.boot.core.enums.ResultCode.USER_NOT_FOUND;
 
 @Slf4j
 @Configuration
@@ -61,7 +61,7 @@ public class SsoClientConfigure {
             User user = userService.loadUserByClientId(id);
 
             // 如果找不到，说明是首次登录本系统的新用户，提示异常信息或注册一个新账号
-            AssertUtil.isNotNull(user, ResultCode.USER_NOT_FOUND);
+            AssertUtil.isNotNull(user, USER_NOT_FOUND);
 
             // 进行登录
             StpUtil.login(user.getId(), ctr.remainSessionTimeout);

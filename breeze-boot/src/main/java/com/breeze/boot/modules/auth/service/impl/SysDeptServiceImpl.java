@@ -46,6 +46,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CoreConstants.ROOT;
+import static com.breeze.boot.core.enums.ResultCode.IS_USED;
 
 /**
  * 系统部门服务impl
@@ -85,7 +86,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                     if (Objects.equals(deptQuery.getId(), sysDept.getId())) {
                         leafMap.put("disabled", Boolean.TRUE);
                     }
-                    leafMap.put("isChecked", Boolean.FALSE);
                     leafMap.put("value", sysDept.getId());
                     leafMap.put("label", sysDept.getDeptName());
                     treeNode.setExtra(leafMap);
@@ -117,7 +117,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public Result<Boolean> deleteById(Long id) {
         List<SysDept> deptEntityList = this.list(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id));
-        AssertUtil.isTrue(CollUtil.isNotEmpty(deptEntityList), ResultCode.IS_USED);
+        AssertUtil.isTrue(CollUtil.isEmpty(deptEntityList), IS_USED);
         boolean remove = this.removeById(id);
         AssertUtil.isTrue(remove, ResultCode.FAIL);
         return Result.ok(Boolean.TRUE, "删除成功");

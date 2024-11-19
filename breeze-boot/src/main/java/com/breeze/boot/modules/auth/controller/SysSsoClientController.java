@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -87,8 +88,7 @@ public class SysSsoClientController {
     @Operation(summary = "详情")
     @GetMapping("/info/{ssoClientId}")
     @SaCheckPermission("auth:ssoClient:info")
-    public Result<SsoClientVO> info(@Parameter(description = "客户端ID")
-                                    @NotNull(message = "客户端ID不能为空")
+    public Result<SsoClientVO> info(@Parameter(description = "客户端ID") @NotNull(message = "客户端ID不能为空")
                                     @PathVariable("ssoClientId") Long ssoClientId) {
         return Result.ok(this.sysSsoClientService.getInfoById(ssoClientId));
     }
@@ -150,7 +150,8 @@ public class SysSsoClientController {
     @DeleteMapping
     @SaCheckPermission("auth:ssoClient:delete")
     @BreezeSysLog(description = "客户端信息删除", type = LogType.DELETE)
-    public Result<Boolean> delete(@Parameter(description = "客户端IDS") @NotNull(message = "参数不能为空") @RequestBody List<Long> ids) {
+    public Result<Boolean> delete(@Parameter(description = "客户端IDS")
+                                  @NotEmpty(message = "参数不能为空") @RequestBody List<Long> ids) {
         return this.sysSsoClientService.removeSsoClientByIds(ids);
     }
 

@@ -20,14 +20,13 @@ import cn.dev33.satoken.config.SaSignConfig;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.sign.SaSignTemplate;
 import cn.dev33.satoken.sso.template.SaSsoServerTemplate;
-import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.sso.model.BaseSysRegisteredClient;
 import com.breeze.boot.sso.spt.IClientService;
 import lombok.RequiredArgsConstructor;
 
-import java.util.function.Supplier;
+import static com.breeze.boot.core.enums.ResultCode.CLIENT_IS_NOT_EXISTS;
 
 /**
  * 自定义 SaSsoServerTemplate 子类
@@ -38,22 +37,22 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class BreezeSaSsoServerTemplate extends SaSsoServerTemplate {
 
-    private final Supplier<IClientService> clientServiceSupplier;
-    private final Supplier<AesSecretProperties> aesSecretPropertiesSupplier;
+    private final IClientService clientService;
+    private final AesSecretProperties aesSecretProperties;
 
     /**
      * 重写 [获取授权回调地址] 方法，改为从数据库中读取
      */
     @Override
     public String getAllowUrl() {
-        return clientServiceSupplier.get().getAllRedirectUris();
+        return this.clientService.getAllRedirectUris();
     }
 
     @Override
     public SaSignTemplate getSignTemplate(String client) {
-        BaseSysRegisteredClient registeredClient = clientServiceSupplier.get().getByClientId(client);
-        AssertUtil.isNotNull(registeredClient, ResultCode.CLIENT_IS_NOT_EXISTS);
+        BaseSysRegisteredClient registeredClient = this.clientService.getByClientId(client);
+        AssertUtil.isNotNull(registeredClient, CLIENT_IS_NOT_EXISTS);
         // 从数据库中获取
-        return new SaSignTemplate(new SaSignConfig(SaSecureUtil.aesDecrypt(aesSecretPropertiesSupplier.get().getAesSecret(), registeredClient.getClientSecret())));
+        return new SaSignTemplate(new SaSignConfig(SaSecureUtil.aesDecrypt(this.aesSecretProperties.getAesSecret(), registeredClient.getClientSecret())));
     }
 }

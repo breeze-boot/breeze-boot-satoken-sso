@@ -21,10 +21,11 @@ import com.anji.captcha.model.common.ResponseModel;
 import com.anji.captcha.model.vo.CaptchaVO;
 import com.anji.captcha.service.CaptchaService;
 import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
+import com.breeze.boot.log.events.PublisherSaveSysLogEvent;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
 import com.breeze.boot.modules.auth.service.SysUserService;
-import com.breeze.boot.sso.config.SaTokenSsoServerConfigure;
 import com.breeze.boot.sso.config.BreezeSaSsoServerTemplate;
+import com.breeze.boot.sso.config.SaTokenSsoServerConfigure;
 import com.breeze.boot.sso.config.SsoClientConfigure;
 import com.breeze.boot.sso.spt.StpInterfaceImpl;
 import io.swagger.v3.oas.models.Components;
@@ -57,29 +58,42 @@ public class ResourceServerConfiguration {
     private final SysRegisteredClientService sysRegisteredClientService;
 
     private final AesSecretProperties aesSecretProperties;
+
+    private final PublisherSaveSysLogEvent publisherSaveSysLogEvent;
+
     @Bean
     public BreezeSaSsoServerTemplate saSsoServerTemplate() {
-        return new BreezeSaSsoServerTemplate(() -> sysRegisteredClientService, () -> aesSecretProperties);
+        return new BreezeSaSsoServerTemplate(this.sysRegisteredClientService, this.aesSecretProperties);
     }
+
     @Bean
     public SsoClientConfigure ssoClientConfigure() {
-        return new SsoClientConfigure(() -> userService);
-    }
-    public String getActiveProfile() {
-        return context.getEnvironment().getActiveProfiles()[0];
+        return new SsoClientConfigure();
     }
 
     @Bean
     public StpInterfaceImpl stpInterfaceImpl() {
-        return new StpInterfaceImpl(() -> userService);
+        return new StpInterfaceImpl(this.userService);
     }
 
     @Bean
     public SaTokenSsoServerConfigure saTokenOauthConfigure() {
-        return new SaTokenSsoServerConfigure(() -> userService, this::check, () -> aesSecretProperties);
+        return new SaTokenSsoServerConfigure(this.userService, this.aesSecretProperties, this.publisherSaveSysLogEvent, this::checkCapture);
     }
 
-    private boolean check(HttpServletRequest contextRequest) {
+    @Bean
+    public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
+        return new OpenAPI()
+                .components(new Components())
+                .info(new Info().title("").version(appVersion)
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
+    }
+
+    public String getActiveProfile() {
+        return this.context.getEnvironment().getActiveProfiles()[0];
+    }
+
+    private boolean checkCapture(HttpServletRequest contextRequest) {
         if (getActiveProfile().endsWith("dev")) {
             return true;
         }
@@ -89,7 +103,7 @@ public class ResourceServerConfiguration {
             return false;
         }
         captchaVO.setCaptchaVerification(captchaVerification);
-        ResponseModel response = captchaService.verification(captchaVO);
+        ResponseModel response = this.captchaService.verification(captchaVO);
         //验证码校验失败，返回信息告诉前端
         //repCode  0000  无异常，代表成功
         //repCode  9999  服务器内部异常
@@ -100,13 +114,6 @@ public class ResourceServerConfiguration {
         return response.isSuccess();
     }
 
-    @Bean
-    public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
-        return new OpenAPI()
-                .components(new Components())
-                .info(new Info().title("").version(appVersion)
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-    }
 }
 
 

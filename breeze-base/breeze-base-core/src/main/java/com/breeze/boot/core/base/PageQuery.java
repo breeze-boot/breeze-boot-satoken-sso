@@ -17,7 +17,6 @@
 package com.breeze.boot.core.base;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.breeze.boot.core.enums.ResultCode;

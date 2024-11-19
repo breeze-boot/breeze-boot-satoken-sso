@@ -14,39 +14,35 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.quartz.domain.query;
+package com.breeze.boot.quartz.domain.form;
 
-import com.alibaba.excel.annotation.format.DateTimeFormat;
-import com.breeze.boot.core.base.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * 任务查询
+ * 任务的添加修改表单
  *
  * @author gaoweixuan
- * @since 2023-03-16
+ * @since 2022-01-28
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Schema(description = "任务查询")
-public class JobQuery extends PageQuery {
+@Schema(description = "任务的添加修改表单")
+public class SysQuartzJobForm implements Serializable {
 
-    /**
-     * 任务ID
-     */
-    @Schema(description = "任务ID")
-    private Long jobId;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 任务名称
      */
-    @Schema(description = "任务名称")
+    @Schema(description = "任务名")
     private String jobName;
 
     /**
@@ -56,23 +52,33 @@ public class JobQuery extends PageQuery {
     private String jobGroupName;
 
     /**
-     * 状态
+     * cron表达式
      */
-    @Schema(description = "状态")
+    @Schema(description = "cron表达式")
+    private String cronExpression;
+
+    /**
+     * 任务类名
+     */
+    @Schema(description = "任务类名")
+    private String clazzName;
+
+    /**
+     * misfire策略 1 立即执行 2 执行一次 -1 放弃
+     */
+    @Schema(description = "misfire策略 1 立即执行 2 执行一次 -1 放弃")
+    private Integer misfirePolicy;
+
+    /**
+     * 是否并发 0 不并发 1 并发
+     */
+    @Schema(description = "是否并发 0 不并发 1 并发")
+    private Integer concurrent;
+
+    /**
+     * 状态 0 关闭 1 开启
+     */
+    @Schema(description = "状态 0关闭 1开启")
     private Integer status;
-
-    /**
-     * 开始时间
-     */
-    @Schema(description = "开始时间")
-    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startDate;
-
-    /**
-     * 结束时间
-     */
-    @Schema(description = "结束时间")
-    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endDate;
 
 }

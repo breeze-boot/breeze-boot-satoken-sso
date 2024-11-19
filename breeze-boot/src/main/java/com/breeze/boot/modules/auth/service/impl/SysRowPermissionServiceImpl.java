@@ -18,7 +18,6 @@
 package com.breeze.boot.modules.auth.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -44,7 +43,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +51,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.constants.CacheConstants.ROW_PERMISSION;
+import static com.breeze.boot.core.enums.ResultCode.IS_USED;
 
 /**
  * 系统行级数据权限服务 impl
@@ -219,8 +218,9 @@ public class SysRowPermissionServiceImpl extends ServiceImpl<SysRowPermissionMap
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> removeRowPermissionByIds(List<Long> ids) {
         Cache cache = cacheManager.getCache(ROW_PERMISSION);
-        List<SysRoleRowPermission> rolePermissionList = this.sysRoleRowPermissionService.list(Wrappers.<SysRoleRowPermission>lambdaQuery().in(SysRoleRowPermission::getPermissionId, ids));
-        AssertUtil.isTrue(CollUtil.isEmpty(rolePermissionList), ResultCode.IS_USED);
+        List<SysRoleRowPermission> rolePermissionList = this.sysRoleRowPermissionService.list(Wrappers.<SysRoleRowPermission>lambdaQuery()
+                .in(SysRoleRowPermission::getPermissionId, ids));
+        AssertUtil.isTrue(CollUtil.isEmpty(rolePermissionList), IS_USED);
         List<SysRowPermission> rowPermissionList = this.listByIds(ids);
         for (SysRowPermission rowPermission : rowPermissionList) {
             assert cache != null;

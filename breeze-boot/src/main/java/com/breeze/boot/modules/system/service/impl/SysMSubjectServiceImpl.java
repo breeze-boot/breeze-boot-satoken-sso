@@ -21,7 +21,6 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.breeze.boot.core.enums.ResultCode;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.mail.service.CustomJavaMailSender;
 import com.breeze.boot.modules.auth.model.entity.SysUser;
@@ -44,6 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.breeze.boot.core.enums.ResultCode.EMAIL_NOT_FOUND;
 
 /**
  * 系统邮箱主题服务impl
@@ -210,7 +211,7 @@ public class SysMSubjectServiceImpl extends ServiceImpl<SysEmailSubjectMapper, S
 
     private SysEmailSubject getSysEmailSubject(Long id) {
         SysEmailSubject sysEmailSubject = this.getById(id);
-        AssertUtil.isNotNull(sysEmailSubject, ResultCode.EMAIL_NOT_FOUND);
+        AssertUtil.isNotNull(sysEmailSubject, EMAIL_NOT_FOUND);
         return sysEmailSubject;
     }
 

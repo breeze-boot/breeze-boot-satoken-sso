@@ -41,8 +41,6 @@ public class SsoClientConfigure {
 
     private final static String BCRYPT = "{bcrypt}";
 
-    private final Supplier<IUserDetailService> userDetailServiceSupplier;
-
     /**
      * 配置SSO相关参数
      *
@@ -58,7 +56,6 @@ public class SsoClientConfigure {
             log.info("------ 请求结果：" + resStr);
             return resStr;
         };
-
     }
 
 }
