@@ -33,11 +33,14 @@ import com.breeze.boot.modules.auth.model.query.TenantQuery;
 import com.breeze.boot.modules.auth.model.vo.TenantVO;
 import com.breeze.boot.modules.auth.service.SysTenantService;
 import com.breeze.boot.modules.auth.service.SysUserService;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.breeze.boot.core.enums.ResultCode.IS_USED;
 
@@ -112,6 +115,20 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         return Result.ok(this.removeByIds(ids));
     }
 
+    /**
+     * 租户下拉框
+     *
+     * @return {@link Result}<{@link List}<{@link Map}<{@link String}, {@link Object}>>>
+     */
+    @Override
+    public Result<List<Map<String, Object>>> selectTenant() {
+        return Result.ok(this.list().stream().map(tenant -> {
+            Map<String, Object> tenantMap = Maps.newHashMap();
+            tenantMap.put("value", String.valueOf(tenant.getId()));
+            tenantMap.put("label", tenant.getTenantName());
+            return tenantMap;
+        }).collect(Collectors.toList()));
+    }
 }
 
 

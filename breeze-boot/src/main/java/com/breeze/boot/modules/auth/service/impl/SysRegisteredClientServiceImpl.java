@@ -33,6 +33,7 @@ import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
 import com.breeze.boot.modules.auth.service.SysRegisteredClientService;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -190,4 +191,18 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
         return registeredClientVO;
     }
 
+    /**
+     * 客户端下拉框
+     *
+     * @return {@link Result }<{@link List }<{@link Map }<{@link String }, {@link String }>>>
+     */
+    @Override
+    public Result<List<Map<String, String>>> selectRegisteredClient() {
+        return Result.ok(this.list().stream().map(sysRegisteredClient -> {
+            Map<String, String> roleMap = Maps.newHashMap();
+            roleMap.put("value", sysRegisteredClient.getClientId());
+            roleMap.put("label", sysRegisteredClient.getClientName());
+            return roleMap;
+        }).collect(Collectors.toList()));
+    }
 }
