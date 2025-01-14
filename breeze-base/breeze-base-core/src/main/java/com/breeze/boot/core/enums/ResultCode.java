@@ -149,6 +149,11 @@ public enum ResultCode {
      */
     NOT_LOGIN("result.not.login", "未登录"),
 
+    /**
+     * 验证码未通过
+     */
+    VERIFY_UN_PASS("result.verify.un.pass", "验证码未通过"),
+
     ;
 
     private final String key;

@@ -18,18 +18,25 @@ package com.breeze.boot.security.sso.client.controller;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.SaSignException;
+import cn.dev33.satoken.util.SaResult;
+import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
@@ -43,6 +50,9 @@ import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 @RestController
 @RequiredArgsConstructor
 public class SsoClientController {
+
+    private final BreezeJwsTokenProvider jwsTokenProvider;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * SSO-Client端：首页
@@ -59,14 +69,15 @@ public class SsoClientController {
      * @param back     back
      * @param request  请求
      * @param response 响应
-     * @param session  阶段
      * @return {@link Object }
      */
     @SneakyThrows
     @RequestMapping("/sso/login")
-    public Object ssoLogin(String ticket, @RequestParam(defaultValue = "/") String back, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public Object ssoLogin(String ticket, @RequestParam(defaultValue = "/") String back, HttpServletRequest request, HttpServletResponse response) {
         // 如果已经登录，则直接返回
-        if (session.getAttribute("userId") != null) {
+        String satoken = jwsTokenProvider.getTokenStr(request);
+        if (satoken != null) {
+            jwsTokenProvider.verifyHMACToken(satoken);
             response.sendRedirect(back);
             return null;
         }
@@ -92,39 +103,39 @@ public class SsoClientController {
      *
      * @param back     < 返回
      * @param response 响应
-     * @param session  阶段
+     * @param request  阶段
      * @return {@link Object }
      * @throws IOException IOException
      */
     @RequestMapping("/sso/logout")
-    public Object ssoLogout(@RequestParam(defaultValue = "/") String back, HttpServletResponse response, HttpSession session) throws IOException {
+    public Object ssoLogout(@RequestParam(defaultValue = "/") String back, HttpServletResponse response, HttpServletRequest request) throws IOException {
         // 如果未登录，则无需注销
-        if (session.getAttribute("userId") == null) {
+        String satoken = request.getParameter("satoken");
+        if (satoken == null) {
             response.sendRedirect(back);
             return null;
         }
 
         // 调用 sso-server 认证中心单点注销API
-        Object loginId = session.getAttribute("userId");  // 账号id
-        String XTenantId = "1";  // 租户ID
+        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "LOGIN_ID"); // 账号id
+        Object XTenantId = jwsTokenProvider.getTokenClaim(satoken, X_TENANT_ID);  // 租户ID
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
-        String sign = SsoRequestUtil.getSign(XTenantId, loginId, timestamp, nonce);    // 参数签名
+        String sign = SsoRequestUtil.getLogoutSign(String.valueOf(XTenantId), loginId, timestamp, nonce);    // 参数签名
 
-        String url = SsoRequestUtil.sloUrl + "?loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign;
-        Result<?> result = SsoRequestUtil.request(url);
+        String url = SsoRequestUtil.sloUrl + "?" + X_TENANT_ID + "=" + XTenantId + "&loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign + "&client=sso-client1";
+        SaResult result = SsoRequestUtil.request(url);
         // 校验响应状态码，0000 代表成功
-        if (result.getCode().equals("0000")) {
-
+        if (result.getCode() == 200) {
             // 极端场景下，sso-server 中心的单点注销可能并不会通知到此 client 端，所以这里需要再补一刀
-            session.removeAttribute("userId");
+            redisTemplate.opsForValue().set("jwt:blacklist:" + loginId + ":" + satoken, loginId, 24, TimeUnit.HOURS);
             // 返回 back 地址
             response.sendRedirect(back);
             return null;
 
         }
         // 将 sso-server 回应的消息作为异常抛出
-        throw new RuntimeException(result.getMessage());
+        throw new RuntimeException(result.getMsg());
     }
 
     /**
@@ -139,7 +150,7 @@ public class SsoClientController {
             throw new SaSignException("无效签名，拒绝应答" + sign);
         }
 
-        // 注销这个账号id TODO
+        // 注销这个账号id
         return Result.ok(null, "账号id=" + loginId + " 注销成功");
     }
 
@@ -149,19 +160,20 @@ public class SsoClientController {
      * 调用此接口的前提是 sso-server 的 /sso/userinfo
      * </p>
      *
-     * @param XTenantId 扩展租户ID
      * @return {@link Result }<{@link ? }>
      */
     @RequestMapping("/sso/userInfo")
-    public Result<?> userInfo(@RequestHeader(value = X_TENANT_ID, required = false, defaultValue = "1") String XTenantId) {
-        // 如果尚未登录
-        // TODO 校验token
-
+    public SaResult userInfo(HttpServletRequest request) {
         // 组织 url 参数
-        Object loginId = "1111111111111111111";  // 账号id token获取
+        String satoken = request.getParameter("satoken");
+        if (StrUtil.isEmpty(satoken)) {
+            return SaResult.ok();
+        }
+        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "LOGIN_ID"); // 账号id
+        Object XTenantId = jwsTokenProvider.getTokenClaim(satoken, X_TENANT_ID); // 账号id
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
-        String sign = SsoRequestUtil.getSign(XTenantId, loginId, timestamp, nonce);    // 参数签名
+        String sign = SsoRequestUtil.getSign(String.valueOf(XTenantId), loginId, timestamp, nonce);    // 参数签名
 
         String url = SsoRequestUtil.getDataUrl + "?loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign + "&client=sso-client1" + "&" + X_TENANT_ID + "=" + XTenantId;
         // 返回给前端

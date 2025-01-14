@@ -64,7 +64,7 @@
     </div>
 </form>
 
-<script src="/js/layui.min.js"></script>
+<script src="/js/layui.js"></script>
 <script src="/js/crypto-js.min.js"></script>
 <script src="/js/jquery.min.js"></script>
 
@@ -98,7 +98,7 @@
             layer.alert('未选择租户信息');
         }
         $.ajax({
-            url: '/sys/v1/common/selectTenant',
+            url: '/auth/v1/tenant/selectTenant',
             success: function (response) {
                 $.each(response.data, function (index, item) {
                     if (tenantId === item.value) {

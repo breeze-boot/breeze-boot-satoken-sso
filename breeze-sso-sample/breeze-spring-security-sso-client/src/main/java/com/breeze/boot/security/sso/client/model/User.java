@@ -33,6 +33,8 @@ public class User {
     @Getter
     private Long userId;
 
+    private Long ssoId;
+
     private String username;
 
     private String password;
@@ -47,4 +49,7 @@ public class User {
 
     private Integer status;
 
+    private Long tenantId;
+
+    private String ossId;
 }

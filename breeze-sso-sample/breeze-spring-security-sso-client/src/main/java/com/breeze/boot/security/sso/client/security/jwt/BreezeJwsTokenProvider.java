@@ -37,6 +37,8 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
+
 /**
  * 用于生成/校验/解析 JWS Token
  *
@@ -83,10 +85,10 @@ public class BreezeJwsTokenProvider {
     /**
      * 构建jwtClaimsSet
      *
-     * @param userDetails 用户详细信息
+     * @param userInfo 用户详细信息
      * @return {@link JWTClaimsSet }
      */
-    public JWTClaimsSet buildJWTClaimsSet(UserInfo userDetails) {
+    public JWTClaimsSet buildJWTClaimsSet(UserInfo userInfo) {
         Calendar signTime = Calendar.getInstance();
         Date signTimeTime = signTime.getTime();
         signTime.add(Calendar.MINUTE, expiration);
@@ -94,15 +96,17 @@ public class BreezeJwsTokenProvider {
 
         return new JWTClaimsSet.Builder()
                 .issuer("http://localhost:18080")
-                .subject(String.valueOf(userDetails.getUserId()))
+                .subject(String.valueOf(userInfo.getUserId()))
                 .audience(List.of("http://localhost:18080"))
                 .expirationTime(expireTime)
                 .notBeforeTime(signTimeTime)
                 .issueTime(signTimeTime)
                 .jwtID(UUID.randomUUID().toString())
-                .claim("USER_ID", userDetails.getUserId())
-                .claim("USERNAME", userDetails.getUsername())
-                .claim("DEPT_ID", userDetails.getDeptId())
+                .claim("LOGIN_ID", userInfo.getSsoId())
+                .claim("USER_ID", userInfo.getUserId())
+                .claim("USERNAME", userInfo.getUsername())
+                .claim("DEPT_ID", userInfo.getDeptId())
+                .claim(X_TENANT_ID, userInfo.getTenantId())
                 .build();
     }
 
@@ -114,9 +118,9 @@ public class BreezeJwsTokenProvider {
      */
     @SneakyThrows
     public String createJwtToken(Authentication authentication) {
-        UserInfo userDetails = (UserInfo) authentication.getPrincipal();
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
         // 传入header 和 payload
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build(), this.buildJWTClaimsSet(userDetails));
+        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build(), this.buildJWTClaimsSet(userInfo));
         // 进行签名
         signedJWT.sign(this.generateHmacJwsSigner());
 
@@ -168,7 +172,7 @@ public class BreezeJwsTokenProvider {
     /**
      * 获取身份验证
      *
-     * @param token 代币
+     * @param token token
      * @return {@link Authentication }
      */
     @SneakyThrows
@@ -176,14 +180,18 @@ public class BreezeJwsTokenProvider {
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
 
+        Long loginId = Convert.toLong(claimsSet.getClaim("LOGIN_ID"));
         Long userId = Convert.toLong(claimsSet.getClaim("USER_ID"));
         String username = Convert.toStr(claimsSet.getClaim("USERNAME"));
         Long deptId = Convert.toLong(claimsSet.getClaim("DEPT_ID"));
+        Long xTenantId = Convert.toLong(claimsSet.getClaim(X_TENANT_ID));
 
         UserInfo userDetails = new UserInfo();
         userDetails.setUserId(userId);
         userDetails.setUsername(username);
         userDetails.setDeptId(deptId);
+        userDetails.setTenantId(xTenantId);
+        userDetails.setSsoId(loginId);
 
         // 角色集合
         List<String> authorityList = (List<String>) Convert.toList(claimsSet.getClaim("AUTHORITIES"));
@@ -193,6 +201,21 @@ public class BreezeJwsTokenProvider {
                         .collect(Collectors.toSet()) : Collections.emptySet();
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+    }
+
+    /**
+     * 解析token参数
+     *
+     * @param token    token
+     * @param claimKey key
+     * @return {@link Authentication }
+     */
+    @SneakyThrows
+    public Object getTokenClaim(String token, String claimKey) {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+
+        return claimsSet.getClaim(claimKey);
     }
 
 }

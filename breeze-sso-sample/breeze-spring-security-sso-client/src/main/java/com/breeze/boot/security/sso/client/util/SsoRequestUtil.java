@@ -18,8 +18,8 @@ package com.breeze.boot.security.sso.client.util;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.util.SaFoxUtil;
+import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.RandomUtil;
-import com.breeze.boot.core.utils.Result;
 import com.dtflys.forest.Forest;
 
 import java.net.URLEncoder;
@@ -36,7 +36,7 @@ import static cn.dev33.satoken.SaManager.log;
 public class SsoRequestUtil {
 
     /**
-     * SSO-Server端主机地址
+     * SSO-server 端主机地址 正式直接使用后端地址，或提前准备好的nginx地址转发
      */
     public static String serverUrl = "http://sa-sso-server.com:9000";
 
@@ -76,9 +76,9 @@ public class SsoRequestUtil {
      * @param url 请求地址
      * @return 返回的结果
      */
-    public static Result<?> request(String url) {
+    public static SaResult request(String url) {
         log.info(url);
-        return Forest.post(url).execute(Result.class);
+        return Forest.post(url).execute(SaResult.class);
     }
 
     /**
@@ -92,6 +92,18 @@ public class SsoRequestUtil {
      */
     public static String getSign(String XTenantId, Object loginId, String timestamp, String nonce) {
         return SaSecureUtil.md5("X-Tenant-Id=" + XTenantId + "&client=sso-client1" + "&loginId=" + loginId + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
+    }
+    /**
+     * 根据参数计算签名
+     *
+     * @param XTenantId 租户
+     * @param loginId   账号id
+     * @param timestamp 当前时间戳，13位
+     * @param nonce     随机字符串
+     * @return 签名
+     */
+    public static String getLogoutSign(String XTenantId, Object loginId, String timestamp, String nonce) {
+        return SaSecureUtil.md5("client=sso-client1" + "&loginId=" + loginId + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
     }
 
     /**

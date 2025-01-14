@@ -48,6 +48,7 @@ public class JwsTokenFilter extends OncePerRequestFilter {
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         String token = breezeJwsTokenProvider.getTokenStr(request);
+        log.info("请求： {}", request.getRequestURL());
         try {
             if (StrUtil.isAllNotBlank(token)) {
                 breezeJwsTokenProvider.verifyHMACToken(token);

@@ -57,6 +57,10 @@ public class UserInfo implements UserDetails {
 
     private Long deptId;
 
+    private Long tenantId;
+
+    private Long ssoId;
+
     public UserInfo(User user) {
         this.userId = user.getUserId();
         Set<String> roles = user.getRoles();
@@ -74,6 +78,8 @@ public class UserInfo implements UserDetails {
         this.enabled = user.getStatus() == 1;
         this.perms = user.getPerms();
         this.deptId = user.getDeptId();
+        this.tenantId = user.getTenantId();
+        this.ssoId = user.getSsoId();
     }
 
     @Override
@@ -110,4 +116,6 @@ public class UserInfo implements UserDetails {
     public boolean isEnabled() {
         return this.enabled;
     }
+
+
 }

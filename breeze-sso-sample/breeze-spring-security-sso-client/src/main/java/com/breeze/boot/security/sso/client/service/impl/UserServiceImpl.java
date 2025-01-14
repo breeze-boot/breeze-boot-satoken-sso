@@ -31,12 +31,14 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User loadUserByUsername(String username) {
+    public User loadUserByLoginId(String loginId) {
         User user = new User();
         user.setUserId(1L);
-        user.setUsername(username);
+        user.setSsoId(Long.valueOf(loginId));
+        user.setUsername("username");
         user.setPassword("{bcrypt}$2a$10$An69KbzJaPxu/E60d/r/zO4Tgy2fa0svuMAu1XybtzPpDI2kwgqt6");
         user.setStatus(1);
+        user.setTenantId(1L);
         user.setRoles(Sets.newHashSet("ROLE_ADMIN"));
         return user;
     }

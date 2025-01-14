@@ -39,7 +39,7 @@ public class SysUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.loadUserByUsername(username);
+        User user = userService.loadUserByLoginId(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }

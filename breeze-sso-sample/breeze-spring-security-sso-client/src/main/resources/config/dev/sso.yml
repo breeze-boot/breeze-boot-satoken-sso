@@ -15,6 +15,6 @@ sa-token:
 forest:
   timeout: 10000
   # 关闭 forest 请求日志打印
-  log-enabled: false
+  log-enabled: true
 
 

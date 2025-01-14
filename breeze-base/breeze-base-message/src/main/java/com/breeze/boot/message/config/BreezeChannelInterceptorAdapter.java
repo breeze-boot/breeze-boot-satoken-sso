@@ -18,7 +18,6 @@ package com.breeze.boot.message.config;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.utils.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -31,6 +30,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import java.security.Principal;
 import java.util.List;
 
+import static com.breeze.boot.core.enums.ResultCode.NOT_LOGIN;
 import static com.breeze.boot.core.enums.ResultCode.SYSTEM_EXCEPTION;
 
 /**
@@ -41,14 +41,6 @@ import static com.breeze.boot.core.enums.ResultCode.SYSTEM_EXCEPTION;
  */
 @Slf4j
 public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
-
-    private static void checkUserPermission(List<String> nativeHeader) {
-        AssertUtil.isTrue(CollUtil.isNotEmpty(nativeHeader), SYSTEM_EXCEPTION);
-        String token = nativeHeader.get(0);
-        AssertUtil.isTrue(StrUtil.isNotBlank(token), SYSTEM_EXCEPTION);
-        Object id = StpUtil.getLoginIdByToken(token);
-        AssertUtil.isNotNull(id, SYSTEM_EXCEPTION);
-    }
 
     /**
      * 收到之前
@@ -77,23 +69,24 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
         log.info("[发送后拦截, 状态: {} 心跳： {}]", command, accessor.getHeartbeat());
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             List<String> nativeHeader = accessor.getNativeHeader("Authorization");
-            checkUserPermission(nativeHeader);
+            this.checkUserPermission(nativeHeader);
             List<String> usernameHeader = accessor.getNativeHeader("username");
             String username = usernameHeader.get(0);
             log.info("[发送前拦截{}请求]", username);
             Principal principal = () -> username;
             accessor.setUser(principal);
-
             return message;
         }
+
         // 检测用户订阅内容（防止用户订阅不合法频道）
         if (StompCommand.SUBSCRIBE.equals(command)) {
             log.debug("[订阅内容]");
         }
+
         // 检测用户发送内容
         if (StompCommand.SEND.equals(accessor.getCommand())) {
             List<String> nativeHeader = accessor.getNativeHeader("Authorization");
-            checkUserPermission(nativeHeader);
+            this.checkUserPermission(nativeHeader);
             List<String> usernameHeader = accessor.getNativeHeader("username");
             String username = usernameHeader.get(0);
             log.info("[发送前拦截{}请求]", username);
@@ -102,6 +95,11 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
             return message;
         }
         return message;
+    }
+
+    private void checkUserPermission(List<String> nativeHeader) {
+        AssertUtil.isTrue(CollUtil.isNotEmpty(nativeHeader), SYSTEM_EXCEPTION);
+        AssertUtil.isNotNull(StpUtil.getLoginIdByToken(nativeHeader.get(0)), NOT_LOGIN);
     }
 
     /**
@@ -118,4 +116,5 @@ public class BreezeChannelInterceptorAdapter implements ChannelInterceptor {
         StompCommand command = accessor.getCommand();
         log.info("[发送后拦截, 状态: {} 心跳： {}]", command, accessor.getHeartbeat());
     }
+
 }

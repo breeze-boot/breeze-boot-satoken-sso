@@ -28,13 +28,8 @@ import com.breeze.boot.sso.config.BreezeSaSsoServerTemplate;
 import com.breeze.boot.sso.config.SaTokenSsoServerConfigure;
 import com.breeze.boot.sso.config.SsoClientConfigure;
 import com.breeze.boot.sso.spt.StpInterfaceImpl;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,21 +76,13 @@ public class ResourceServerConfiguration {
         return new SaTokenSsoServerConfigure(this.userService, this.aesSecretProperties, this.publisherSaveSysLogEvent, this::checkCapture);
     }
 
-    @Bean
-    public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
-        return new OpenAPI()
-                .components(new Components())
-                .info(new Info().title("").version(appVersion)
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-    }
-
     public String getActiveProfile() {
         return this.context.getEnvironment().getActiveProfiles()[0];
     }
 
     private boolean checkCapture(HttpServletRequest contextRequest) {
         if (getActiveProfile().endsWith("dev")) {
-            return true;
+            return false;
         }
         CaptchaVO captchaVO = new CaptchaVO();
         String captchaVerification = contextRequest.getParameter("captchaVerification");

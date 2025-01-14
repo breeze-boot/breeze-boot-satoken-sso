@@ -14,7 +14,7 @@ sa-token:
 
   # sso-client 相关配置
   sso-client:
-    # sso-server 端主机地址
+    # sso-server 端主机地址 正式直接使用后端地址，或提前准备好的nginx地址转发
     server-url: http://sa-sso-server.com:9000
     # 使用 Http 请求校验ticket (模式三)
     is-http: true
@@ -26,6 +26,6 @@ sa-token:
 
 forest:
   # 关闭 forest 请求日志打印
-  log-enabled: false
+  log-enabled: true
 
 

@@ -16,20 +16,22 @@
 
 package com.breeze.boot.security.sso.client.controller;
 
+import cn.dev33.satoken.util.SaResult;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
-import com.breeze.boot.security.sso.client.security.model.LoginInfo;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
@@ -49,9 +51,24 @@ public class SsoWebController {
 
     private final BreezeJwsTokenProvider jwsTokenProvider;
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
     // 当前是否登录
     @RequestMapping("/sso/isLogin")
-    public Result<Boolean> isLogin() {
+    public Result<Boolean> isLogin(HttpServletRequest request) {
+        Object loginId;
+        try {
+            String tokenStr = jwsTokenProvider.getTokenStr(request);
+            jwsTokenProvider.verifyHMACToken(tokenStr);
+            loginId = jwsTokenProvider.getTokenClaim(tokenStr, "LOGIN_ID");
+            Object backListId = redisTemplate.opsForValue().get("jwt:blacklist:" + loginId + ":" + tokenStr);
+            if (Objects.nonNull(backListId)) {
+                return Result.ok(Boolean.FALSE);
+            }
+        } catch (Exception e) {
+            return Result.ok(Boolean.FALSE);
+        }
+        log.error("当前登录 {}", loginId);
         return Result.ok(Boolean.TRUE);
     }
 
@@ -72,8 +89,8 @@ public class SsoWebController {
     /**
      * 根据ticket进行登录
      *
-     * @param ticket   票
-     * @param request  请求
+     * @param ticket  票
+     * @param request 请求
      * @return {@link Result }<{@link ? }>
      */
     @SneakyThrows
@@ -98,18 +115,17 @@ public class SsoWebController {
                 "&ssoLogoutCall=" + ssoLogoutCall +
                 "&" + X_TENANT_ID + "=" + Optional.ofNullable(request.getHeader(X_TENANT_ID)).orElse("");
 
-        Result<?> result = SsoRequestUtil.request(checkUrl);
+        SaResult result = SsoRequestUtil.request(checkUrl);
 
         // 使用 satoken 的返回协议 状态200 成功
-        if (result.getCode().equals("200") && !SsoRequestUtil.isEmpty(result.getData())) {
+        if (result.getCode() == 200 && !SsoRequestUtil.isEmpty(result.getData())) {
             // 登录
             Object loginId = result.getData();
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginId, "123456");
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            String accessToken = jwsTokenProvider.createJwtToken(authentication);
-            return Result.ok(LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).build());
+            return Result.ok(jwsTokenProvider.createJwtToken(authentication));
         }
-        throw new RuntimeException(result.getMessage());
+        throw new RuntimeException(result.getMsg());
     }
 
 }
