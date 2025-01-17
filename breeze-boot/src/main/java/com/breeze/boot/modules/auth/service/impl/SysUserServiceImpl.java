@@ -31,7 +31,6 @@ import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.EasyExcelExport;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.modules.auth.mapper.SysUserMapper;
-import com.breeze.boot.modules.auth.model.bo.FlowUserBO;
 import com.breeze.boot.modules.auth.model.bo.SysDeptBO;
 import com.breeze.boot.modules.auth.model.bo.UserBO;
 import com.breeze.boot.modules.auth.model.bo.UserRoleBO;
@@ -333,28 +332,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return this.baseMapper.listUserByRole(roleCode);
     }
 
-    @Override
-    public void syncFlowableUser() {
-        List<SysUser> sysUserList = this.list();
-        List<SysRole> roles = this.sysRoleService.list();
-        List<FlowUserBO> syncUser = sysUserList.stream().map(item -> {
-            FlowUserBO flowUserBO = FlowUserBO.builder()
-                    .userId(item.getId())
-                    .username(item.getUsername())
-                    .displayName(item.getDisplayName())
-                    .email(item.getEmail())
-                    .build();
-            List<SysRole> userRoleList = this.sysUserRoleService.getSysRoleByUserId(item.getId());
-            if (CollUtil.isNotEmpty(userRoleList)) {
-                List<SysRole> sysRoleList = this.sysRoleService.listByIds(userRoleList.stream().map(SysRole::getId).collect(Collectors.toList()));
-                flowUserBO.setRoleList(sysRoleList);
-            }
-            return flowUserBO;
-        }).toList();
-    }
-
     /**
      * 用户列表
+     *
+     * @param deptId 部门ID
+     * @return {@link Result }<{@link List }<{@link SysUser }>>
      */
     @Override
     public Result<List<SysUser>> listDeptUser(Long deptId) {

@@ -145,10 +145,11 @@ public interface SysUserService extends IService<SysUser>, IUserDetailService {
     List<SysUser> listUserByRole(String roleCode);
 
     /**
-     * 同步用户角色和用户角色关系
+     * 用户列表
+     *
+     * @param deptId 部门ID
+     * @return {@link Result }<{@link List }<{@link SysUser }>>
      */
-    void syncFlowableUser();
-
     Result<List<SysUser>> listDeptUser(Long deptId);
 
 }

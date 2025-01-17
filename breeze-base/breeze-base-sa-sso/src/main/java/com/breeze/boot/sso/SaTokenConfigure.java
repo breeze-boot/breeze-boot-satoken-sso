@@ -39,12 +39,18 @@ import java.util.List;
 public class SaTokenConfigure implements WebMvcConfigurer {
 
     private final JumpAuthProperties jumpAuthProperties;
+
     private final List<String> formLoginJumpUrl = Lists.newArrayList("/login", "/error");
+
     private final List<String> captchaJumpUrl = Lists.newArrayList("/auth/v1/captcha/**");
+
     private final List<String> websocketJumpUrl = Lists.newArrayList("/ws/**");
+
     private final List<String> staticJumpUrl = Lists.newArrayList("/**/*.js", "/**/*.css", "/**/*.png", "/*.html", "/**/*.html", "/*.ico", "/favicon.ico", "/**/*.ico");
 
     private final List<String> swaggerJumpUrl = Lists.newArrayList("/webjars/**", "/doc.html", "/v3/api-docs/**", "/swagger-ui/**");
+
+    private final List<String> druidJumpUrl = Lists.newArrayList("/druid/login.html");
 
     /**
      * 注册 Sa-Token 拦截器打开注解鉴权功能
@@ -56,6 +62,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         jumpAuthProperties.getIgnoreUrls().addAll(websocketJumpUrl);
         jumpAuthProperties.getIgnoreUrls().addAll(staticJumpUrl);
         jumpAuthProperties.getIgnoreUrls().addAll(swaggerJumpUrl);
+        jumpAuthProperties.getIgnoreUrls().addAll(druidJumpUrl);
         // 注册 Sa-Token 拦截器，定义详细认证规则
         registry.addInterceptor(new SaInterceptor()).excludePathPatterns(jumpAuthProperties.getIgnoreUrls()).addPathPatterns("/**");
     }

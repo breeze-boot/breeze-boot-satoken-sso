@@ -54,6 +54,7 @@ import static com.breeze.boot.core.constants.CoreConstants.USER_TYPE;
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 import static com.breeze.boot.log.enums.LogEnum.LogType.LOGIN;
 import static com.breeze.boot.log.enums.LogEnum.Result.FAIL;
+import static com.breeze.boot.log.enums.LogEnum.Result.SUCCESS;
 
 /**
  * oauth令牌配置
@@ -110,6 +111,7 @@ public class SaTokenSsoServerConfigure {
                 UserPrincipal userPrincipal = this.userDetailService.loadUserByUsername(name);
                 String pw_hash = BCrypt.hashpw(pwd, BCrypt.gensalt());
                 if (BCrypt.checkpw(decodePwd, userPrincipal.getPassword().replace(BCRYPT, ""))) {
+                    sysLogBO.setResult(SUCCESS.getCode());
                     this.publisherSaveSysLogEvent.publisherEvent(new SysLogSaveEvent(sysLogBO));
                     StpUtil.login(userPrincipal.getId());
                     StpUtil.getSession().set(USER_TYPE, userPrincipal);

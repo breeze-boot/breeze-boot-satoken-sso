@@ -50,11 +50,6 @@ public enum ResultCode {
     HTTP_MESSAGE_NOT_READABLE_EXCEPTION("result.http.message.not.readable.exception", "参数异常"),
 
     /**
-     * 请求参数校验失败
-     */
-    HANDLER_METHOD_VALIDATION_EXCEPTION("result.handler.method.validation.exception", "请求失败"),
-
-    /**
      * 演示环境
      */
     PREVIEW("result.preview", "演示环境不可删除修改"),
@@ -63,6 +58,11 @@ public enum ResultCode {
      * 未授权资源
      */
     SC_FORBIDDEN("result.sc.forbidden", "未授权资源"),
+
+    /**
+     * 资源未发现
+     */
+    RESOURCE_NO_FOUND("result.resource.not.found", "资源未发现"),
 
     /**
      * 认证失败
@@ -138,6 +138,11 @@ public enum ResultCode {
      * 分页过大
      */
     PAGE_EXCEPTION("result.page.exception", "分页过大"),
+
+    /**
+     * 登录失败
+     */
+    LOGIN_EXCEPTION("result.login.exception", "登录失败"),
 
     /**
      * http消息转换异常

@@ -112,7 +112,7 @@ public class SysUserController {
     @PutMapping("/{id}")
     @SaCheckPermission("auth:user:modify")
     @BreezeSysLog(description = "用户信息修改", type = LogType.EDIT)
-    public Result<Boolean> modify(@Parameter(description = "用户ID") @NotNull(message = "用户ID不能为空") Long id,
+    public Result<Boolean> modify(@Parameter(description = "用户ID") @NotNull(message = "用户ID不能为空") @PathVariable Long id,
                                   @Valid @RequestBody UserForm userForm) {
         return Result.ok(sysUserService.modifyUser(id, userForm));
     }
@@ -208,15 +208,6 @@ public class SysUserController {
     @PostMapping("/export")
     public void export(@RequestBody UserQuery userQuery, HttpServletResponse response) {
         this.sysUserService.export(userQuery, response);
-    }
-
-    /**
-     * 同步用户角色和用户角色关系
-     */
-    @Operation(summary = "同步用户角色和用户角色关系")
-    @GetMapping("/syncFlowableUser")
-    public void syncFlowableUser() {
-        this.sysUserService.syncFlowableUser();
     }
 
     /**

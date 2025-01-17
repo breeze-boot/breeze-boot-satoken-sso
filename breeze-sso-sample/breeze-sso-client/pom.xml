@@ -113,7 +113,7 @@
         <!-- Http请求工具 -->
         <dependency>
             <groupId>com.dtflys.forest</groupId>
-            <artifactId>forest-spring-boot-starter</artifactId>
+            <artifactId>forest-spring-boot3-starter</artifactId>
         </dependency>
 
     </dependencies>
