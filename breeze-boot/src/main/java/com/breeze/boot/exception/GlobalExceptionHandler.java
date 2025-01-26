@@ -220,19 +220,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * SaSsoException
-     *
-     * @param ex 异常
-     * @return {@link Result}<{@link ?}>
-     */
-    @ExceptionHandler(SaSsoException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result<?> saSsoException(SaSsoException ex) {
-        log.error("SaSsoException ：", ex);
-        return Result.fail(ex.getMessage());
-    }
-
-    /**
      * 系统异常
      *
      * @param ex 错误
@@ -296,4 +283,18 @@ public class GlobalExceptionHandler {
         String message = MessageUtil.getMessage(ResultCode.RESOURCE_NO_FOUND.getKey());
         return Result.fail(message);
     }
+
+    /**
+     * SaSsoException
+     *
+     * @param ex 异常
+     * @return {@link Result}<{@link ?}>
+     */
+    @ExceptionHandler(SaSsoException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result<?> saSsoException(SaSsoException ex) {
+        log.error("SaSsoException ：", ex);
+        return Result.fail(ex.getMessage());
+    }
+
 }
