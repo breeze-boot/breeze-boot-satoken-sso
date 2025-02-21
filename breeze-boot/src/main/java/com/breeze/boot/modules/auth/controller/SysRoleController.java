@@ -76,9 +76,9 @@ public class SysRoleController {
      * @return {@link Result}<{@link Page}<{@link RoleVO}>>
      */
     @Operation(summary = "列表")
-    @GetMapping
+    @PostMapping("/page")
     @SaCheckPermission("auth:role:list")
-    public Result<Page<RoleVO>> list(RoleQuery roleQuery) {
+    public Result<Page<RoleVO>> list(@RequestBody RoleQuery roleQuery) {
         return Result.ok(this.sysRoleService.listPage(roleQuery));
     }
 
@@ -200,7 +200,7 @@ public class SysRoleController {
     @SaCheckPermission(value = "auth:menu:permission:modify", orRole = "ROLE_ADMIN")
     @BreezeSysLog(description = "编辑菜单权限", type = LogType.EDIT)
     public Result<Boolean> modifyMenuPermission(@Valid @RequestBody MenuPermissionForm menuPermissionForm) {
-        return this.sysRoleMenuService.modifyMenuPermission(menuPermissionForm);
+        return this.sysRoleService.modifyMenuPermission(menuPermissionForm);
     }
 
     /**

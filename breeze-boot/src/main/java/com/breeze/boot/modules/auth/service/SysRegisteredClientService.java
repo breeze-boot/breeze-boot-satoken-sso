@@ -24,8 +24,8 @@ import com.breeze.boot.modules.auth.model.form.RegisteredClientForm;
 import com.breeze.boot.modules.auth.model.form.ResetClientSecretForm;
 import com.breeze.boot.modules.auth.model.query.RegisteredClientQuery;
 import com.breeze.boot.modules.auth.model.vo.RegisteredClientVO;
-import com.breeze.boot.sso.model.BaseSysRegisteredClient;
-import com.breeze.boot.sso.spt.IClientService;
+import com.breeze.boot.satoken.model.BaseSysRegisteredClient;
+import com.breeze.boot.satoken.spt.IClientService;
 
 import java.util.List;
 import java.util.Map;

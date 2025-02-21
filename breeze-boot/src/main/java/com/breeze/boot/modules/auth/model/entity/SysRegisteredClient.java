@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.auth.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.sso.model.BaseSysRegisteredClient;
+import com.breeze.boot.satoken.model.BaseSysRegisteredClient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -41,31 +41,37 @@ public class SysRegisteredClient extends BaseSysRegisteredClient {
     /**
      * 客户端ID
      */
+    @Schema(description = "客户端的唯一标识符")
     private String clientId;
 
     /**
      * 客户id发布时间
      */
+    @Schema(description = "客户ID的发布时间")
     private LocalDateTime clientIdIssuedAt;
 
     /**
      * 客户秘密
      */
+    @Schema(description = "客户端的秘密信息")
     private String clientSecret;
 
     /**
      * 客户秘密到期时间
      */
+    @Schema(description = "客户秘密的到期时间")
     private LocalDateTime clientSecretExpiresAt;
 
     /**
      * 客户端名称
      */
+    @Schema(description = "客户端的名称")
     private String clientName;
 
     /**
      * 重定向uri
      */
+    @Schema(description = "重定向的统一资源标识符")
     private String redirectUris;
 
 }

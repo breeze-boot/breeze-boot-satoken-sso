@@ -17,7 +17,7 @@
 package com.breeze.boot.modules.auth.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.breeze.boot.core.base.BaseModel;
+import com.breeze.boot.core.base.IdBaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -37,7 +37,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "sys_sso_client")
 @Schema(description = "系统sso客户端实体")
-public class SysSsoClient extends BaseModel<SysSsoClient> implements Serializable {
+public class SysSsoClient extends IdBaseModel<SysSsoClient> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

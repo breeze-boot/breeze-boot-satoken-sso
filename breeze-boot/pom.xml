@@ -74,7 +74,7 @@
         <!--安全-->
         <dependency>
             <groupId>com.breeze</groupId>
-            <artifactId>breeze-base-sa-sso</artifactId>
+            <artifactId>breeze-base-sa-token</artifactId>
         </dependency>
 
         <!--定时任务-->

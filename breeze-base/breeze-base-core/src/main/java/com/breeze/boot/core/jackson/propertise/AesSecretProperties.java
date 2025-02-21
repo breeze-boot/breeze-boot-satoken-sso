@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * aes��������
+ * aes
  *
  * @author gaoweixuan
  * @since 2023/05/25

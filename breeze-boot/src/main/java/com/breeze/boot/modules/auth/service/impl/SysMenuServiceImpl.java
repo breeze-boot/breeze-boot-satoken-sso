@@ -36,7 +36,7 @@ import com.breeze.boot.modules.auth.model.mappers.SysMenuMapStruct;
 import com.breeze.boot.modules.auth.model.query.MenuQuery;
 import com.breeze.boot.modules.auth.service.SysMenuService;
 import com.breeze.boot.modules.auth.service.SysRoleMenuService;
-import com.breeze.boot.sso.utils.BreezeStpUtil;
+import com.breeze.boot.satoken.utils.BreezeStpUtil;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -215,6 +215,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 }
         ).collect(Collectors.toList());
         return Result.ok(TreeUtil.build(treeNodeList, ROOT));
+    }
+
+    /**
+     * 按角色编码列出用户权限
+     *
+     * @param roleCode 角色代码
+     * @return {@link List }<{@link String }>
+     */
+    @Override
+    public List<String> listUserPermissionByRoleCode(String roleCode) {
+        return this.baseMapper.listUserPermissionByRoleCode(roleCode);
     }
 
     /**

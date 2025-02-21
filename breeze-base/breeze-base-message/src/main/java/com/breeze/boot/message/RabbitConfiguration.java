@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
@@ -43,7 +42,7 @@ public class RabbitConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setHost(rabbitProperties.getAddresses());
+        cachingConnectionFactory.setHost(rabbitProperties.getAddresses().get(0));
         cachingConnectionFactory.setPort(rabbitProperties.getPort());
         cachingConnectionFactory.setUsername(rabbitProperties.getUsername());
         cachingConnectionFactory.setPassword(rabbitProperties.getPassword());
@@ -58,9 +57,4 @@ public class RabbitConfiguration {
         return rabbitAdmin;
     }
 
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return rabbitTemplate;
-    }
 }

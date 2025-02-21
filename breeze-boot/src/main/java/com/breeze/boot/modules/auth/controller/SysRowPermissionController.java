@@ -74,9 +74,9 @@ public class SysRowPermissionController {
      * @return {@link Result}<{@link Page}<{@link RowPermissionVO}>>
      */
     @Operation(summary = "列表")
-    @GetMapping
+    @PostMapping("/page")
     @SaCheckPermission("auth:rowPermission:list")
-    public Result<Page<RowPermissionVO>> list(RowPermissionQuery rowPermissionQuery) {
+    public Result<Page<RowPermissionVO>> list(@RequestBody RowPermissionQuery rowPermissionQuery) {
         return Result.ok(this.sysRowPermissionService.listPage(rowPermissionQuery));
     }
 
@@ -89,7 +89,8 @@ public class SysRowPermissionController {
     @Operation(summary = "详情")
     @GetMapping("/info/{permissionId}")
     @SaCheckPermission("auth:rowPermission:info")
-    public Result<RowPermissionVO> info(@Parameter(description = "权限ID") @NotNull(message = "参数不能为空") @PathVariable("permissionId") Long permissionId) {
+    public Result<RowPermissionVO> info(@Parameter(description = "权限ID") @NotNull(message = "参数不能为空")
+                                        @PathVariable("permissionId") Long permissionId) {
         return Result.ok(this.sysRowPermissionService.getInfoById(permissionId));
     }
 
@@ -130,7 +131,7 @@ public class SysRowPermissionController {
     /**
      * 修改
      *
-     * @param id              ID
+     * @param id                ID
      * @param rowPermissionForm 数据权限表单
      * @return {@link Result}<{@link Boolean}>
      */

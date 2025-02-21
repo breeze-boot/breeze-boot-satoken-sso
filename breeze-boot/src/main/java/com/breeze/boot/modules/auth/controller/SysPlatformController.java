@@ -20,6 +20,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.core.lock.annotation.RedissonLock;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.log.annotation.BreezeSysLog;
@@ -79,9 +80,10 @@ public class SysPlatformController {
      * @return {@link Result}<{@link Page}<{@link PlatformVO}>>
      */
     @Operation(summary = "列表")
-    @GetMapping
+    @PostMapping("/page")
     @SaCheckPermission("auth:platform:list")
-    public Result<Page<PlatformVO>> list(PlatformQuery platformQuery) {
+    @RedissonLock(value = "'lock_' + #platformQuery.platformCode")
+    public Result<Page<PlatformVO>> list(@RequestBody PlatformQuery platformQuery) {
         return Result.ok(this.sysPlatformService.listPage(platformQuery));
     }
 

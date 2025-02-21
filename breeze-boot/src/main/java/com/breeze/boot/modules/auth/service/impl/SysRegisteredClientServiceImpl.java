@@ -76,7 +76,8 @@ public class SysRegisteredClientServiceImpl extends ServiceImpl<SysRegisteredCli
      */
     @Override
     public Page<RegisteredClientVO> listPage(RegisteredClientQuery registeredClientQuery) {
-        Page<RegisteredClientVO> registeredClientPage = this.baseMapper.listPage(new Page<>(registeredClientQuery.getCurrent(), registeredClientQuery.getSize()), registeredClientQuery);
+        Page<SysRegisteredClient> page = new Page<>(registeredClientQuery.getCurrent(), registeredClientQuery.getSize());
+        Page<RegisteredClientVO> registeredClientPage = this.baseMapper.listPage(page, registeredClientQuery);
         return registeredClientPage.setRecords(registeredClientPage.getRecords().stream().peek(this::getClientVO).collect(Collectors.toList()));
     }
 

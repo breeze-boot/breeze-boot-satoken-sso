@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.breeze.boot.core.enums;
 
 import lombok.Getter;
@@ -48,6 +64,11 @@ public enum ResultCode {
      * 参数异常
      */
     HTTP_MESSAGE_NOT_READABLE_EXCEPTION("result.http.message.not.readable.exception", "参数异常"),
+
+    /**
+     * 请求参数校验失败
+     */
+    HANDLER_METHOD_VALIDATION_EXCEPTION("result.handler.method.validation.exception", "请求失败"),
 
     /**
      * 演示环境
@@ -159,7 +180,15 @@ public enum ResultCode {
      */
     VERIFY_UN_PASS("result.verify.un.pass", "验证码未通过"),
 
-    ;
+    /**
+     * json格式错误
+     */
+    JSON_ERROR("result.json.error", "json格式错误"),
+
+    /**
+     * sql转换错误
+     */
+    SQL_PARSE_EXCEPTION("result.sql.parse.exception", "sql转换错误" );
 
     private final String key;
 
