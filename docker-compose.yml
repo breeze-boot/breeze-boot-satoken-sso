@@ -1,125 +1,151 @@
-version: '3'
+# Docker Compose 版本定义
+version: '3.8'
+
+# 服务定义部分
 services:
-  # 数据库
+  # MySQL 数据库服务
   breeze-mysql:
     build:
-      context: ./docker/db
-    container_name: breeze-mysql
-    hostname: breeze-mysql
-    restart: always
+      context: ./docker/db  # Docker构建上下文路径
+    container_name: breeze-mysql  # 容器名称（固定命名）
+    hostname: breeze-mysql  # 容器主机名
+    restart: always  # 总是自动重启
     environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: root
-      TZ: Asia/Shanghai
+      MYSQL_ROOT_HOST: "%"  # 允许root账户远程访问
+      MYSQL_ROOT_PASSWORD: root  # root账户密码
+      TZ: Asia/Shanghai  # 时区设置
     ports:
-      - "3306:3306"
-    expose:
-      - "3306"
+      - "3306:3306"  # 暴露数据库默认端口
     volumes:
-      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf
-      - ./docker/mysql/data/:/var/lib/mysql
-      - ./docker/mysql/logs:/var/log/mysql
-      - /etc/localtime:/etc/localtime:ro
+      - ./docker/mysql/conf/my.cnf:/etc/mysql/my.cnf  # 配置文件挂载
+      - ./docker/mysql/data/:/var/lib/mysql  # 数据持久化存储
+      - ./docker/mysql/logs:/var/log/mysql  # 日志文件存储
+      - /etc/localtime:/etc/localtime:ro  # 同步宿主机时间
     command:
-      # 可以配置在mysql的 my.cnf 中
-      --default-authentication-plugin=mysql_native_password
-    privileged: true
+      --default-authentication-plugin=mysql_native_password  # 指定认证插件
+    privileged: true  # 开启特权模式
     networks:
-      - breeze-net
+      - breeze-net  # 接入自定义网络
+    healthcheck:  # 健康检查配置
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # 检查命令
+      interval: 5s   # 检查间隔
+      timeout: 3s    # 超时时间
+      retries: 5     # 失败重试次数
 
-  # redis
+  # Redis 缓存服务
   breeze-redis:
-    image: redis:7.2.5
+    image: redis:7.2.5  # 使用官方Redis镜像
     container_name: breeze-redis
     hostname: breeze-redis
     restart: always
     ports:
-      - "6379:6379"
-    expose:
-      - "6379"
+      - "6379:6379"  # 暴露Redis默认端口
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./docker/redis/data/:/data
-      - ./docker/redis/logs/:/logs
+      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf  # Redis配置文件
+      - ./docker/redis/data/:/data  # 数据持久化目录
       - /etc/localtime:/etc/localtime:ro
-    command:
-      redis-server /etc/redis/redis.conf
+    command: redis-server /etc/redis/redis.conf  # 启动时加载配置文件
     privileged: true
     networks:
       - breeze-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]  # Redis健康检查命令
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
-  # rabbitMq服务
+  # RabbitMQ 消息队列服务
   breeze-rabbitmq:
-    image: rabbitmq:3.10.25-management
+    image: rabbitmq:3.10.25-management  # 带管理界面的镜像
     container_name: breeze-rabbitmq
     hostname: breeze-rabbitmq
     ports:
-      - "4369:4369"
-      - "15672:15672" # client端通信口
-      - "5672:5672" # 管理界面ui端口
-      - "25672:25672" # server间内部通信口
+      - "4369:4369"  # Erlang端口映射
+      - "15672:15672" # 管理界面端口
+      - "5672:5672" # AMQP协议端口
     volumes:
-      - ./docker/rabbitmq/data:/var/lib/rabbitmq
-      - ./docker/rabbitmq/conf.d:/etc/rabbitmq/conf.d
-      - ./docker/rabbitmq/log:/var/log/rabbitmq/log
-    #环境变量
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq  # 消息持久化存储
+      - ./docker/rabbitmq/conf.d:/etc/rabbitmq/conf.d  # 配置文件目录
     environment:
-      RABBITMQ_DEFAULT_VHOST: /
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: 123456
+      RABBITMQ_DEFAULT_VHOST: /  # 默认虚拟主机
+      RABBITMQ_DEFAULT_USER: admin  # 管理账户
+      RABBITMQ_DEFAULT_PASS: 123456  # 管理密码
     privileged: true
     restart: always
     networks:
       - breeze-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]  # 端口连通性检查
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # MinIO 对象存储服务
   breeze-minio:
     container_name: breeze-minio
-    image: minio/minio:RELEASE.2024-01-18T22-51-28Z
+    image: minio/minio:RELEASE.2024-01-18T22-51-28Z  # 指定版本镜像
     hostname: breeze-minio
     ports:
-      - "9092:9092" # api端口
-      - "9091:9091" # 控制台端口
+      - "9092:9092"  # API访问端口
+      - "9091:9091"  # 控制台端口
     environment:
-      MINIO_ACCESS_KEY: admin     #管理平台用户名
-      MINIO_SECRET_KEY: 12345678    #管理平台密码
+      MINIO_ACCESS_KEY: admin  # 访问密钥
+      MINIO_SECRET_KEY: 12345678  # 密钥
       TZ: Asia/Shanghai
     volumes:
-      - ./docker/minio/data:/data
-      - ./docker/minio/config:/root/.minio/
+      - ./docker/minio/data:/data  # 存储数据目录
+      - ./docker/minio/config:/root/.minio/  # 配置文件目录
       - /etc/localtime:/etc/localtime:ro
-    command: server --console-address ':9091' --address ':9092' /data  #指定容器中的目录 /data
+    command: server --console-address ':9091' --address ':9092' /data  # 启动命令
     privileged: true
     restart: always
     networks:
       - breeze-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/minio/health/live"]  # 健康检查端点
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
+  # 主应用服务
   breeze-boot-satoken-sso-server:
     build:
-      context: ./breeze-boot
+      context: ./breeze-boot  # 应用构建路径
     restart: always
     container_name: breeze-boot-satoken-sso-server
     ports:
-      - "9000:9000"
+      - "9000:9000"  # 暴露应用端口
     volumes:
-      - ./docker/logs:/usr/local/boot/logs
+      - ./docker/logs:/usr/local/boot/logs  # 日志目录映射
       - /etc/localtime:/etc/localtime:ro
     hostname: breeze-boot
     image: breeze-boot-satoken-sso-server
-    depends_on:
-      - breeze-minio
-      - breeze-mysql
-      - breeze-redis
+    depends_on:  # 服务依赖关系
+      breeze-minio:
+        condition: service_healthy  # 等待minio健康
+      breeze-mysql:
+        condition: service_healthy  # 等待mysql健康
+      breeze-redis:
+        condition: service_healthy  # 等待redis健康
     networks:
       - breeze-net
+    deploy:  # 资源分配配置
+      resources:
+        limits:
+          cpus: '2.00'  # 最大CPU限制
+          memory: 2G     # 最大内存限制
+        reservations:
+          memory: 1G    # 保留内存配额
 
+  # 监控服务
   breeze-monitor:
     build:
-      context: ./breeze-monitor
+      context: ./breeze-monitor  # 监控服务构建路径
     restart: always
     ports:
-      - "10000:10000"
+      - "10000:10000"  # 监控服务端口
     volumes:
       - ./docker/logs:/usr/local/boot/logs
       - /etc/localtime:/etc/localtime:ro
@@ -127,30 +153,37 @@ services:
     hostname: breeze-monitor
     image: breeze-monitor
     depends_on:
-      - breeze-boot
+      breeze-boot-satoken-sso-server:
+        condition: service_started  # 等待主应用启动完成
     networks:
       - breeze-net
 
+  # XXL-JOB 任务调度服务
   breeze-job-admin:
     container_name: breeze-job-admin
     hostname: breeze-job-admin
-    image: xuxueli/xxl-job-admin:2.2.0
+    image: xuxueli/xxl-job-admin:2.2.0  # 官方调度中心镜像
     environment:
       TZ: Asia/Shanghai
-      PARAMS: "--spring.datasource.url=jdbc:mysql://breeze-mysql:3306/breeze_xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
-       --spring.datasource.username=root
-       --spring.datasource.password=root"
+      PARAMS: >-  # 数据库连接参数（多行参数）
+        --spring.datasource.url=jdbc:mysql://breeze-mysql:3306/breeze_xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+        --spring.datasource.username=root
+        --spring.datasource.password=root
     volumes:
-      - ./docker/xxljob/applogs:/data/applogs
+      - ./docker/xxljob/applogs:/data/applogs  # 任务日志存储
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "18080:8080"
-    restart: on-failure
+      - "18080:8080"  # 调度中心访问端口
+    restart: on-failure  # 失败时自动重启
     privileged: true
     networks:
       - breeze-net
+    depends_on:
+      breeze-mysql:
+        condition: service_healthy  # 等待数据库健康
 
+# 网络配置
 networks:
   breeze-net:
-    # 如果要创建外部隔离的覆盖网络，您可以将此internal选项设置为true
-    external: true
+    driver: bridge  # 使用桥接网络模式
+    attachable: true  # 允许其他容器动态接入
