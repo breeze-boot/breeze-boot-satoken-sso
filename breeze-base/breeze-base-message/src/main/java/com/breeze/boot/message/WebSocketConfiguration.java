@@ -135,7 +135,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         //定义一对一推送的时候前缀
         registry.setUserDestinationPrefix("/user/");
         //客户端需要把消息发送到/message/xxx地址
-        registry.setApplicationDestinationPrefixes("/message");
+        registry.setApplicationDestinationPrefixes("/send");
     }
 
     /**

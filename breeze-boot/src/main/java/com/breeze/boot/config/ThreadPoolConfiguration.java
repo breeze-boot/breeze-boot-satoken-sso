@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.core.config;
+package com.breeze.boot.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Configuration
-public class ThreadPoolConfig {
+public class ThreadPoolConfiguration {
 
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {

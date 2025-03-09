@@ -14,30 +14,14 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.core.lock.annotation;
+package com.breeze.boot.core.lock.exception;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.breeze.boot.core.enums.ResultCode;
+import com.breeze.boot.core.utils.MessageUtil;
 
-/**
- * 分布式锁
- *
- * @author gaoweixuan
- * @since 2025/02/19
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface RedissonLock {
+public class BreezeLockException extends RuntimeException {
 
-    // 锁的名称
-    String value() default "defaultLock";
-
-    // 等待获取锁的最大时间，单位：秒
-    long waitTime() default 5;
-
-    // 锁的自动释放时间，单位：秒
-    long leaseTime() default 10;
-
+    public BreezeLockException() {
+        super(MessageUtil.getMessage(ResultCode.LOCK_EXCEPTION.getKey()));
+    }
 }
