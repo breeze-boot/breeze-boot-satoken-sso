@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.breeze</groupId>
-    <artifactId>breeze</artifactId>
+    <artifactId>breeze-boot</artifactId>
     <version>1.0</version>
 
     <name>${project.artifactId}</name>
@@ -31,12 +31,13 @@
     </organization>
 
     <modules>
-        <module>breeze-boot</module>
+        <module>breeze</module>
         <module>breeze-base</module>
-        <module>breeze-quartz</module>
-        <module>breeze-gen</module>
         <module>breeze-monitor</module>
+        <module>breeze-modules</module>
         <module>breeze-sso-sample</module>
+        <module>breeze-system</module>
+        <module>breeze-auth</module>
     </modules>
 
     <properties>

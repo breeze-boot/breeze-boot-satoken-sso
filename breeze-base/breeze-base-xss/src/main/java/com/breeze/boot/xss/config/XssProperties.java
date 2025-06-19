@@ -16,13 +16,13 @@
 
 package com.breeze.boot.xss.config;
 
-import com.breeze.boot.core.base.BaseProperties;
+import com.breeze.boot.core.model.BaseProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 租户白名单属性
+ * xss白名单属性
  *
  * @author gaoweixuan
  * @since 2023-03-06

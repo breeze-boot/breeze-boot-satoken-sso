@@ -106,6 +106,7 @@ public class SsoWebController {
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
         String sign = SsoRequestUtil.getSignByTicket(ticket, ssoLogoutCall, timestamp, nonce);    // 参数签名
+        String tenantId = Optional.ofNullable(request.getHeader(X_TENANT_ID)).orElse("");
         String checkUrl = SsoRequestUtil.checkTicketUrl +
                 "?timestamp=" + timestamp +
                 "&client=sso-client1" +
@@ -113,7 +114,7 @@ public class SsoWebController {
                 "&sign=" + sign +
                 "&ticket=" + ticket +
                 "&ssoLogoutCall=" + ssoLogoutCall +
-                "&" + X_TENANT_ID + "=" + Optional.ofNullable(request.getHeader(X_TENANT_ID)).orElse("");
+                "&" + X_TENANT_ID + "=" + tenantId;
 
         SaResult result = SsoRequestUtil.request(checkUrl);
 

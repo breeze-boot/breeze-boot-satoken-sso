@@ -28,7 +28,7 @@ public class CacheConstants {
     /**
      * 验证电话号码
      */
-    public static final String VALIDATE_SMS_CODE = "breeze:login:validate_sms_code:";
+    public static final String SMS_LOGIN = "breeze:login:validate_sms_code:";
 
     /**
      * 验证电子邮件代码

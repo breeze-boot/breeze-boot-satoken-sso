@@ -20,6 +20,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.SaSignException;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.druid.support.json.JSONUtils;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
@@ -127,6 +128,7 @@ public class SsoClientController {
         SaResult result = SsoRequestUtil.request(url);
         // 校验响应状态码，0000 代表成功
         if (result.getCode() == 200) {
+            log.info("单点注销成功：{}", JSONUtils.toJSONString(result));
             // 极端场景下，sso-server 中心的单点注销可能并不会通知到此 client 端，所以这里需要再补一刀
             redisTemplate.opsForValue().set("jwt:blacklist:" + loginId + ":" + satoken, loginId, 24, TimeUnit.HOURS);
             // 返回 back 地址

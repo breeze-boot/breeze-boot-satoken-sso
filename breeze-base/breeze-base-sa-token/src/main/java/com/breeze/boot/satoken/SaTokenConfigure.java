@@ -17,6 +17,7 @@
 package com.breeze.boot.satoken;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
+import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
 import com.breeze.boot.satoken.spt.JumpAuthProperties;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 @Configuration
 @RequiredArgsConstructor
-@Import(JumpAuthProperties.class)
+@Import({AesSecretProperties.class,JumpAuthProperties.class})
 public class SaTokenConfigure implements WebMvcConfigurer {
 
     private final JumpAuthProperties jumpAuthProperties;

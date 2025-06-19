@@ -1,0 +1,44 @@
+/*
+ * Copyright (c) 2023, gaoweixuan (breeze-cloud@foxmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.breeze.boot.auth.model.converter;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.breeze.boot.auth.model.entity.SysSsoClient;
+import com.breeze.boot.auth.model.form.SsoClientForm;
+import com.breeze.boot.auth.model.vo.SsoClientVO;
+import org.mapstruct.Mapper;
+
+import java.util.List;
+
+/**
+ * SSO客户端转换器
+ *
+ * @author gaoweixuan
+ * @since 2024-07-14
+ */
+@Mapper(componentModel = "spring")
+public interface SysSsoClientConverter {
+
+    List<SsoClientVO> listEntity2ListVO(List<SysSsoClient> list);
+
+    Page<SsoClientVO> page2PageVO(Page<SysSsoClient> page);
+
+    SysSsoClient form2Entity(SsoClientForm ssoClientForm);
+
+    SsoClientVO entity2VO(SysSsoClient byId);
+
+}

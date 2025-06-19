@@ -20,7 +20,7 @@ import cn.dev33.satoken.config.SaSignConfig;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.sign.SaSignTemplate;
 import cn.dev33.satoken.sso.template.SaSsoServerTemplate;
-import com.breeze.boot.core.jackson.propertise.AesSecretProperties;
+import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.satoken.model.BaseSysRegisteredClient;
 import com.breeze.boot.satoken.spt.IClientService;

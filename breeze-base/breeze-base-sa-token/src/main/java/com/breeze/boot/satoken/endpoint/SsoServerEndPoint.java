@@ -18,7 +18,7 @@ package com.breeze.boot.satoken.endpoint;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.processor.SaSsoServerProcessor;
-import com.breeze.boot.core.base.UserPrincipal;
+import com.breeze.boot.core.model.UserPrincipal;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.satoken.spt.IUserDetailService;
 import lombok.RequiredArgsConstructor;
