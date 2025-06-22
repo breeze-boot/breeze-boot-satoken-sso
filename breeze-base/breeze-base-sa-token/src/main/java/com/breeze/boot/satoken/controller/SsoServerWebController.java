@@ -16,7 +16,7 @@
 
 package com.breeze.boot.satoken.controller;
 
-import cn.dev33.satoken.sso.template.SaSsoUtil;
+import cn.dev33.satoken.sso.template.SaSsoServerUtil;
 import cn.dev33.satoken.sso.util.SaSsoConsts;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaFoxUtil;
@@ -52,11 +52,11 @@ public class SsoServerWebController {
         redirect = SaFoxUtil.decoderUrl(redirect);
         if (SaSsoConsts.MODE_SIMPLE.equals(mode)) {
             // 模式一
-            SaSsoUtil.checkRedirectUrl(redirect);
+            SaSsoServerUtil.checkRedirectUrl(client, redirect);
             return SaResult.data(redirect);
         }
         // 模式二或模式三
-        String redirectUrl = SaSsoUtil.buildRedirectUrl(StpUtil.getLoginId(), client, redirect);
+        String redirectUrl = SaSsoServerUtil.buildRedirectUrl(client, redirect, StpUtil.getLoginId(), StpUtil.getTokenValue());
         return SaResult.data(redirectUrl);
     }
 

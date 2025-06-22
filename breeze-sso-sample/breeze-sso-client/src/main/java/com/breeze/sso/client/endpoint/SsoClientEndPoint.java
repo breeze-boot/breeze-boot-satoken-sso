@@ -16,9 +16,11 @@
 
 package com.breeze.sso.client.endpoint;
 
+import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.SaSsoManager;
+import cn.dev33.satoken.sso.message.SaSsoMessage;
 import cn.dev33.satoken.sso.processor.SaSsoClientProcessor;
-import cn.dev33.satoken.sso.template.SaSsoUtil;
+import cn.dev33.satoken.sso.template.SaSsoClientUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +28,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
@@ -51,6 +50,7 @@ public class SsoClientEndPoint {
      */
     @RequestMapping("/sso/*")
     public Object ssoRequest() {
+        log.info("---------------- sso client 请求地址：{}", SaHolder.getRequest().getRequestPath());
         return SaSsoClientProcessor.instance.dister();
     }
 
@@ -72,17 +72,13 @@ public class SsoClientEndPoint {
      */
     @RequestMapping("/sso/userInfo")
     public Object userInfo(@RequestHeader(X_TENANT_ID) String XTenantId) {
-        // 组织请求参数
-        Map<String, Object> map = new HashMap<>();
-        map.put("apiType", "userinfo");
-        map.put("loginId", StpUtil.getLoginId());
-        map.put("client", SaSsoManager.getClientConfig().getClient());
-        map.put(X_TENANT_ID, XTenantId);
-        // 发起请求
-        Object resData = SaSsoUtil.getData(map);
-        log.info("sso-server 返回的用户信息：{}", resData);
-
-        return resData;
+        // 推送消息
+        SaSsoMessage message = new SaSsoMessage();
+        message.setType("userInfo");
+        message.set("loginId", StpUtil.getLoginId());
+        message.set("client", SaSsoManager.getClientConfig().getClient());
+        message.set(X_TENANT_ID, XTenantId);
+        return SaSsoClientUtil.pushMessageAsSaResult(message);
     }
 
     /**

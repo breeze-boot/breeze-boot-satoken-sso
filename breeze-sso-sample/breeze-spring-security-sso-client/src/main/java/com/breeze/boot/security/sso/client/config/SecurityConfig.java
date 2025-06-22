@@ -21,19 +21,23 @@ import com.breeze.boot.security.sso.client.security.exception.BreezeAccessDenied
 import com.breeze.boot.security.sso.client.security.exception.BreezeAuthenticationEntryPoint;
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
 import com.breeze.boot.security.sso.client.security.jwt.JwsTokenFilter;
+import com.breeze.boot.security.sso.client.security.mobile.code.MobileCodeAuthenticationProvider;
+import com.breeze.boot.security.sso.client.security.mobile.password.MobilePasswordAuthenticationProvider;
+import com.breeze.boot.security.sso.client.security.service.SysUserDetailsService;
+import com.breeze.boot.security.sso.client.security.thrid.ThirdIdAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -51,13 +55,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Import(MessageUtil.class)
 public class SecurityConfig {
 
+    public final PasswordEncoder passwordEncoder;
     private final BreezeJwsTokenProvider breezeJwsTokenProvider;
     private final BreezeAuthenticationEntryPoint authenticationEntryPoint;
     private final BreezeAccessDeniedHandler accessDeniedHandler;
+    public final SysUserDetailsService sysUserDetailsService;
+    public final MobileCodeAuthenticationProvider mobileCodeAuthenticationProvider;
+    public final MobilePasswordAuthenticationProvider mobilePasswordAuthenticationProvider;
+    public final ThirdIdAuthenticationProvider thirdIdAuthenticationProvider;
+
+    /**
+     * 定义AuthenticationManager，加入两种AuthenticationProvider
+     */
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(sysUserDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(daoAuthenticationProvider, mobileCodeAuthenticationProvider, mobilePasswordAuthenticationProvider, thirdIdAuthenticationProvider);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry.requestMatchers("/auth/login", "/sso/*", "/").permitAll()
+        http.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry.requestMatchers("/auth/**", "/sso/*", "/").permitAll()
                         .anyRequest().authenticated())
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -96,23 +116,14 @@ public class SecurityConfig {
         return (web) -> web.ignoring().requestMatchers("/webjars/**", "/doc.html", "/swagger-resources/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/ws/**", "/ws-app/**");
     }
 
-    /**
-     * 密码编码器
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-
-    /**
-     * AuthenticationManager 手动注入
-     *
-     * @param authenticationConfiguration 认证配置
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    /**
+//     * AuthenticationManager 手动注入
+//     *
+//     * @param authenticationConfiguration 认证配置
+//     */
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
 }

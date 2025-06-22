@@ -37,6 +37,8 @@ public class User {
 
     private String username;
 
+    private String mobile;
+
     private String password;
 
     private Boolean enabled;

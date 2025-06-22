@@ -41,6 +41,14 @@ public interface IUserDetailService {
     UserPrincipal loadUserByUserId(String userId);
 
     /**
+     * 加载用户通过用户ID
+     *
+     * @param dingOpenId 钉钉OpenId
+     * @return {@link UserPrincipal}
+     */
+    UserPrincipal loadUserByDingOpenId(String dingOpenId);
+
+    /**
      * 加载权限通过角色编码
      *
      * @param roleCode 角色编码

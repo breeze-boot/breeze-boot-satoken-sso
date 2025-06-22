@@ -16,14 +16,12 @@
 
 package com.breeze.boot.satoken.config;
 
-import cn.dev33.satoken.context.SaHolder;
-import cn.dev33.satoken.sso.config.SaSsoClientConfig;
+import cn.dev33.satoken.sso.template.SaSsoClientTemplate;
+import com.breeze.boot.core.utils.BreezeTenantHolder;
 import com.dtflys.forest.Forest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
@@ -35,22 +33,21 @@ import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class SsoClientConfigure {
-
-    private final static String BCRYPT = "{bcrypt}";
+public class SaTokenSsoClientConfigure {
 
     /**
      * 配置SSO相关参数
      *
-     * @param ssoClient sso客户端
+     * @param saSsoClientTemplate sso客户端
      */
     @Autowired
-    private void configSsoClient(SaSsoClientConfig ssoClient) {
+    private void configSsoClient(SaSsoClientTemplate saSsoClientTemplate) {
 
         // 配置Http请求处理器
-        ssoClient.sendHttp = url -> {
+        saSsoClientTemplate.strategy.sendRequest = url -> {
             log.info("------ 发起请求：" + url);
-            String resStr = Forest.get(url + "&" + X_TENANT_ID + "=" + Optional.ofNullable(SaHolder.getRequest().getHeader(X_TENANT_ID)).orElse("")).executeAsString();
+            Long tenantId = BreezeTenantHolder.getTenant();
+            String resStr = Forest.get(url).addHeader(X_TENANT_ID, tenantId).executeAsString();
             log.info("------ 请求结果：" + resStr);
             return resStr;
         };

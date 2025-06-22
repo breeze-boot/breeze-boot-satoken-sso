@@ -17,13 +17,13 @@
 package com.breeze.boot.satoken.config;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.context.model.SaRequest;
 import cn.dev33.satoken.secure.BCrypt;
-import cn.dev33.satoken.sso.config.SaSsoServerConfig;
 import cn.dev33.satoken.sso.exception.SaSsoException;
+import cn.dev33.satoken.sso.template.SaSsoServerTemplate;
 import cn.dev33.satoken.stp.StpUtil;
-import com.breeze.boot.core.model.UserPrincipal;
 import com.breeze.boot.core.enums.ResultCode;
-import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
+import com.breeze.boot.core.model.UserPrincipal;
 import com.breeze.boot.core.utils.AesUtil;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.BreezeTenantHolder;
@@ -32,8 +32,8 @@ import com.breeze.boot.log.bo.SysLogBO;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.log.events.PublisherSaveSysLogEvent;
 import com.breeze.boot.log.events.SysLogSaveEvent;
+import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
 import com.breeze.boot.satoken.spt.IUserDetailService;
-import com.dtflys.forest.Forest;
 import com.google.common.collect.Maps;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +41,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -76,15 +73,15 @@ public class SaTokenSsoServerConfigure {
     /**
      * 配置SSO相关参数
      *
-     * @param ssoServer 单点登录服务器
+     * @param ssoServerTemplate 单点登录服务器
      */
     @Autowired
-    private void configSsoServer(SaSsoServerConfig ssoServer) {
+    private void configSsoServer(SaSsoServerTemplate ssoServerTemplate) {
         // 配置：Ticket校验函数
-        ssoServer.checkTicketAppendData = (loginId, result) -> {
+        ssoServerTemplate.strategy.checkTicketAppendData = (loginId, result) -> {
             log.info("-------- 追加返回信息到 sso-client --------");
             try {
-                String tenantId = SaHolder.getRequest().getParam(X_TENANT_ID);
+                String tenantId = SaHolder.getRequest().getHeader(X_TENANT_ID);
                 AssertUtil.isNotNull(tenantId, ResultCode.TENANT_NOT_FOUND);
                 BreezeTenantHolder.setTenant(Long.valueOf(tenantId));
                 // 在校验 ticket 后，给 sso-client 端追加返回信息的函数
@@ -98,13 +95,11 @@ public class SaTokenSsoServerConfigure {
         };
 
         // 配置：未登录时返回的View
-        ssoServer.notLoginView = () -> new ModelAndView("sa-login.html");
+        ssoServerTemplate.strategy.notLoginView = () -> new ModelAndView("sa-login.html");
 
         // 配置：登录处理函数
-        ssoServer.doLoginHandle = (name, pwd) -> {
-            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            Assert.notNull(requestAttributes, "requestAttributes is null");
-            SysLogBO sysLogBO = this.buildLog(requestAttributes.getRequest(), name);
+        ssoServerTemplate.strategy.doLoginHandle = (name, pwd) -> {
+            SysLogBO sysLogBO = this.buildLog(name);
             try {
                 // AssertUtil.isTrue(captchaServiceFunction.apply(requestAttributes.getRequest()), ResultCode.VERIFY_UN_FOUND);
                 String decodePwd = AesUtil.decryptStr(pwd, this.aesSecretProperties.getAesSecret());
@@ -128,36 +123,31 @@ public class SaTokenSsoServerConfigure {
             throw new SaSsoException(EXCEPTION);
         };
 
-        // 配置 Http 请求处理器 （在模式三的单点注销功能下用到，如不需要可以注释掉）
-        ssoServer.sendHttp = url -> {
-            try {
-                log.info("------ 发起请求：" + url);
-                String resStr = Forest.get(url).executeAsString();
-                log.info("------ 请求结果：" + resStr);
-                return resStr;
-            } catch (Exception e) {
-                log.error("", e);
-                return null;
-            }
-        };
+        // 添加消息处理器：userinfo (获取用户资料) （用于为 client 端开放拉取数据的接口）
+        ssoServerTemplate.messageHolder.addHandle("userInfo", (ssoTemplate, message) -> {
+            UserPrincipal userPrincipal = userDetailService.loadUserByUserId(message.getString("loginId"));
+            // 自定义返回结果（模拟）
+            return Result.ok(userPrincipal);
+        });
+
     }
 
     /**
      * 执行日志 业务
      *
-     * @param request  请求
      * @param username 参数
      * @return {@link SysLogBO }
      */
     @SneakyThrows
-    private SysLogBO buildLog(HttpServletRequest request, String username) {
+    private SysLogBO buildLog(String username) {
+        SaRequest request = SaHolder.getRequest();
         String userAgent = request.getHeader("User-Agent");
         return SysLogBO.builder()
                 .system(userAgent)
                 .logTitle(LogType.USERNAME_LOGIN.getName())
                 .doType(LogType.USERNAME_LOGIN.getCode())
                 .logType(LOGIN.getCode())
-                .ip(request.getRemoteAddr())
+                .ip(request.getHost())
                 .requestType(request.getMethod())
                 .paramContent(username)
                 .createTime(LocalDateTime.now())

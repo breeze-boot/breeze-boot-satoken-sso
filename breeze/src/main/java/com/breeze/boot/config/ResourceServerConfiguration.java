@@ -26,7 +26,7 @@ import com.breeze.boot.auth.service.SysRegisteredClientService;
 import com.breeze.boot.auth.service.SysUserService;
 import com.breeze.boot.satoken.config.BreezeSaSsoServerTemplate;
 import com.breeze.boot.satoken.config.SaTokenSsoServerConfigure;
-import com.breeze.boot.satoken.config.SsoClientConfigure;
+import com.breeze.boot.satoken.config.SaTokenSsoClientConfigure;
 import com.breeze.boot.satoken.spt.StpInterfaceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +62,8 @@ public class ResourceServerConfiguration {
     }
 
     @Bean
-    public SsoClientConfigure ssoClientConfigure() {
-        return new SsoClientConfigure();
+    public SaTokenSsoClientConfigure ssoClientConfigure() {
+        return new SaTokenSsoClientConfigure();
     }
 
     @Bean

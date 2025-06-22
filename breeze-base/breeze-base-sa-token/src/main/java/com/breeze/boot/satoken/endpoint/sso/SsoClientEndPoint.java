@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.satoken.endpoint;
+package com.breeze.boot.satoken.endpoint.sso;
 
+import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.SaSsoManager;
+import cn.dev33.satoken.sso.exception.SaSsoException;
+import cn.dev33.satoken.sso.message.SaSsoMessage;
 import cn.dev33.satoken.sso.processor.SaSsoClientProcessor;
-import cn.dev33.satoken.sso.template.SaSsoUtil;
+import cn.dev33.satoken.sso.template.SaSsoClientUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
@@ -52,9 +52,19 @@ public class SsoClientEndPoint {
      * http://{host}:{port}/sso/logout			-- Client端单点注销地址（isSlo=true时打开），接受参数：back=注销后的跳转地址
      * http://{host}:{port}/sso/logoutCall		-- Client端单点注销回调地址（isSlo=true时打开），此接口为框架回调，开发者无需关心
      */
-    @RequestMapping({"/sso/login", "/sso/logout", "/sso/logoutCall"})
+    @RequestMapping({"/sso/login", "/sso/pushC", "/sso/logout", "/sso/logoutCall"})
     public Object ssoClientRequest() {
+        log.info("---------------- sso client 请求地址：{}", SaHolder.getRequest().getRequestPath());
         return SaSsoClientProcessor.instance.dister();
+    }
+
+    /**
+     * 当前应用独自注销 (不退出其它应用)
+     */
+    @RequestMapping("/sso/logoutByAlone")
+    public Object logoutByAlone() {
+        StpUtil.logout();
+        return SaSsoClientProcessor.instance._ssoLogoutBack(SaHolder.getRequest(), SaHolder.getResponse());
     }
 
     /**
@@ -68,22 +78,22 @@ public class SsoClientEndPoint {
     }
 
     /**
-     * 查询我的账号信息
+     * 查询我的账号信息：sso-client 前端 -> sso-center 后端 -> sso-server 后端
      *
      * @return {@link Object }
      */
     @RequestMapping("/sso/userInfo")
     public Object userInfo(@RequestHeader(X_TENANT_ID) String XTenantId) {
-        // 组织请求参数
-        Map<String, Object> map = new HashMap<>();
-        map.put("apiType", "userinfo");
-        map.put("loginId", StpUtil.getLoginId());
-        map.put("client", SaSsoManager.getClientConfig().getClient());
-        map.put(X_TENANT_ID, XTenantId);
-
-        // 发起请求
-        Object resData = SaSsoUtil.getData(map);
-        log.info("sso-server 返回的信息: {}", resData);
-        return resData;
+        // 如果尚未登录
+        if (!StpUtil.isLogin()) {
+            throw new SaSsoException("尚未登录");
+        }
+        // 推送消息
+        SaSsoMessage message = new SaSsoMessage();
+        message.setType("userInfo");
+        message.set("loginId", StpUtil.getLoginId());
+        message.set("client", SaSsoManager.getClientConfig().getClient());
+        message.set(X_TENANT_ID, XTenantId);
+        return SaSsoClientUtil.pushMessageAsSaResult(message);
     }
 }

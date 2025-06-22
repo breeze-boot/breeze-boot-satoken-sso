@@ -52,7 +52,7 @@ public class BreezeJwsTokenProvider {
     /**
      * 签名密钥，用于签名 Access Token
      */
-    @Value("${spring.security.jwt.secret-key:890u8u8s9j10ks01ks8j34qnd91902uee1982je1ue89j182je1892j991j12je23}")
+    @Value("${spring.security.jwt.secret-key:je1ue89j1823234je1892j123991j12312312je23}")
     private String sharedSecret;
 
     @Value("${spring.security.jwt.expiration:7200}")
@@ -102,7 +102,7 @@ public class BreezeJwsTokenProvider {
                 .notBeforeTime(signTimeTime)
                 .issueTime(signTimeTime)
                 .jwtID(UUID.randomUUID().toString())
-                .claim("LOGIN_ID", userInfo.getSsoId())
+                .claim("SSO_ID", userInfo.getSsoId())
                 .claim("USER_ID", userInfo.getUserId())
                 .claim("USERNAME", userInfo.getUsername())
                 .claim("DEPT_ID", userInfo.getDeptId())
@@ -120,7 +120,9 @@ public class BreezeJwsTokenProvider {
     public String createJwtToken(Authentication authentication) {
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
         // 传入header 和 payload
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build(), this.buildJWTClaimsSet(userInfo));
+        JWTClaimsSet claimsSet = this.buildJWTClaimsSet(userInfo);
+        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build();
+        SignedJWT signedJWT = new SignedJWT(jwsHeader, claimsSet);
         // 进行签名
         signedJWT.sign(this.generateHmacJwsSigner());
 
@@ -180,7 +182,7 @@ public class BreezeJwsTokenProvider {
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
 
-        Long loginId = Convert.toLong(claimsSet.getClaim("LOGIN_ID"));
+        Long ssoId = Convert.toLong(claimsSet.getClaim("SSO_ID"));
         Long userId = Convert.toLong(claimsSet.getClaim("USER_ID"));
         String username = Convert.toStr(claimsSet.getClaim("USERNAME"));
         Long deptId = Convert.toLong(claimsSet.getClaim("DEPT_ID"));
@@ -188,10 +190,10 @@ public class BreezeJwsTokenProvider {
 
         UserInfo userDetails = new UserInfo();
         userDetails.setUserId(userId);
+        userDetails.setSsoId(ssoId);
         userDetails.setUsername(username);
         userDetails.setDeptId(deptId);
         userDetails.setTenantId(xTenantId);
-        userDetails.setSsoId(loginId);
 
         // 角色集合
         List<String> authorityList = (List<String>) Convert.toList(claimsSet.getClaim("AUTHORITIES"));

@@ -39,9 +39,25 @@ public class SysUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.loadUserByLoginId(username);
+        User user = userService.loadUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
+        }
+        return new UserInfo(user);
+    }
+
+    public UserDetails loadUserByLoginId(String loginId) {
+        User user = userService.loadUserByLoginId(loginId);
+        if (user == null) {
+            throw new UsernameNotFoundException(loginId);
+        }
+        return new UserInfo(user);
+    }
+
+    public UserDetails loadUserByMobile(String mobile) {
+        User user = userService.loadUserByMobile(mobile);
+        if (user == null) {
+            throw new UsernameNotFoundException(mobile);
         }
         return new UserInfo(user);
     }

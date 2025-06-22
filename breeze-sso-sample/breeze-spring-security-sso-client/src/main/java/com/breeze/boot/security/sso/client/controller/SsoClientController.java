@@ -16,18 +16,17 @@
 
 package com.breeze.boot.security.sso.client.controller;
 
-import cn.dev33.satoken.context.SaHolder;
-import cn.dev33.satoken.exception.SaSignException;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.druid.support.json.JSONUtils;
+import com.breeze.boot.core.utils.BreezeTenantHolder;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.sso.client.security.exception.BizException;
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
@@ -72,31 +70,34 @@ public class SsoClientController {
      * @param response 响应
      * @return {@link Object }
      */
-    @SneakyThrows
     @RequestMapping("/sso/login")
     public Object ssoLogin(String ticket, @RequestParam(defaultValue = "/") String back, HttpServletRequest request, HttpServletResponse response) {
-        // 如果已经登录，则直接返回
-        String satoken = jwsTokenProvider.getTokenStr(request);
-        if (satoken != null) {
-            jwsTokenProvider.verifyHMACToken(satoken);
-            response.sendRedirect(back);
-            return null;
-        }
+        try {
+            // 如果已经登录，则直接返回
+            String satoken = jwsTokenProvider.getTokenStr(request);
+            if (satoken != null) {
+                jwsTokenProvider.verifyHMACToken(satoken);
+                response.sendRedirect(back);
+                return null;
+            }
 
-        /*
-         * 此时有两种情况:
-         * 情况1：ticket无值，说明此请求是Client端访问，需要重定向至SSO认证中心
-         * 情况2：ticket有值，说明此请求从SSO认证中心重定向而来，需要根据ticket进行登录，改为前后端分离模式
-         */
-        if (ticket == null) {
-            String currUrl = request.getRequestURL().toString();
-            String clientLoginUrl = currUrl + "?back=" + SsoRequestUtil.encodeUrl(back) + "&" + X_TENANT_ID + "=" + Optional.ofNullable(SaHolder.getRequest().getHeader(X_TENANT_ID)).orElse("");
-            String serverAuthUrl = SsoRequestUtil.authUrl + "?redirect=" + clientLoginUrl;
-            response.sendRedirect(serverAuthUrl);
-            return null;
+            /*
+             * 此时有两种情况:
+             * 情况1：ticket无值，说明此请求是Client端访问，需要重定向至SSO认证中心
+             * 情况2：ticket有值，说明此请求从SSO认证中心重定向而来，需要根据ticket进行登录，改为前后端分离模式
+             */
+            if (ticket == null) {
+                String currUrl = request.getRequestURL().toString();
+                String tenantId = String.valueOf(BreezeTenantHolder.getTenant());
+                String clientLoginUrl = currUrl + "?back=" + SsoRequestUtil.encodeUrl(back) + "&" + X_TENANT_ID + "=" + tenantId;
+                String serverAuthUrl = SsoRequestUtil.authUrl + "?redirect=" + clientLoginUrl;
+                response.sendRedirect(serverAuthUrl);
+                return null;
+            }
+        } catch (Exception e) {
+            throw new BizException("ticket=" + ticket);
         }
-        // 将 sso-server 回应的消息作为异常抛出
-        throw new RuntimeException();
+        return SaResult.ok();
     }
 
     /**
@@ -118,26 +119,30 @@ public class SsoClientController {
         }
 
         // 调用 sso-server 认证中心单点注销API
-        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "LOGIN_ID"); // 账号id
-        Object XTenantId = jwsTokenProvider.getTokenClaim(satoken, X_TENANT_ID);  // 租户ID
+        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "SSO_ID"); // 账号id
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
-        String sign = SsoRequestUtil.getLogoutSign(String.valueOf(XTenantId), loginId, timestamp, nonce);    // 参数签名
+        String sign = SsoRequestUtil.getSignoutSign(loginId, timestamp, nonce);    // 参数签名
 
-        String url = SsoRequestUtil.sloUrl + "?" + X_TENANT_ID + "=" + XTenantId + "&loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign + "&client=sso-client1";
+        String url = SsoRequestUtil.sloUrl
+                + "?msgType=signout"
+                + "&loginId=" + loginId
+                + "&timestamp=" + timestamp
+                + "&nonce=" + nonce
+                + "&sign=" + sign
+                + "&client=sso-client1";
         SaResult result = SsoRequestUtil.request(url);
         // 校验响应状态码，0000 代表成功
         if (result.getCode() == 200) {
             log.info("单点注销成功：{}", JSONUtils.toJSONString(result));
             // 极端场景下，sso-server 中心的单点注销可能并不会通知到此 client 端，所以这里需要再补一刀
-            redisTemplate.opsForValue().set("jwt:blacklist:" + loginId + ":" + satoken, loginId, 24, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set("security:jwt:blacklist:" + loginId + ":" + satoken, loginId, 24, TimeUnit.HOURS);
             // 返回 back 地址
             response.sendRedirect(back);
             return null;
-
         }
         // 将 sso-server 回应的消息作为异常抛出
-        throw new RuntimeException(result.getMsg());
+        throw new BizException(result.getMsg());
     }
 
     /**
@@ -146,10 +151,26 @@ public class SsoClientController {
     @RequestMapping("/sso/logoutCall")
     public Object ssoLogoutCall(String loginId, String autoLogout, String timestamp, String nonce, String sign) {
         // 校验签名
-        String calcSign = SsoRequestUtil.getSignByLogoutCall(loginId, autoLogout, timestamp, nonce);
+        String calcSign = SsoRequestUtil.getLogoutCallSign(loginId, autoLogout, timestamp, nonce);
         if (!calcSign.equals(sign)) {
             log.error("无效签名，拒绝应答：" + sign);
-            throw new SaSignException("无效签名，拒绝应答" + sign);
+            throw new BizException("无效签名，拒绝应答" + sign);
+        }
+
+        // 注销这个账号id
+        return Result.ok(null, "账号id=" + loginId + " 注销成功");
+    }
+
+    /**
+     * SSO-Client端：单点注销回调地址
+     */
+    @RequestMapping("/sso/pushC")
+    public Object pushC(String loginId, String autoLogout, String timestamp, String nonce, String sign) {
+        // 校验签名
+        String calcSign = SsoRequestUtil.getLogoutCallSign(loginId, autoLogout, timestamp, nonce);
+        if (!calcSign.equals(sign)) {
+            log.error("无效签名，拒绝应答：" + sign);
+            throw new BizException("无效签名，拒绝应答" + sign);
         }
 
         // 注销这个账号id
@@ -171,13 +192,20 @@ public class SsoClientController {
         if (StrUtil.isEmpty(satoken)) {
             return SaResult.ok();
         }
-        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "LOGIN_ID"); // 账号id
+        Object loginId = jwsTokenProvider.getTokenClaim(satoken, "SSO_ID"); // SSO中心用户id
         Object XTenantId = jwsTokenProvider.getTokenClaim(satoken, X_TENANT_ID); // 账号id
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
-        String sign = SsoRequestUtil.getSign(String.valueOf(XTenantId), loginId, timestamp, nonce);    // 参数签名
+        String sign = SsoRequestUtil.getUserInfoSign(String.valueOf(XTenantId), loginId, timestamp, nonce);    // 参数签名
 
-        String url = SsoRequestUtil.getDataUrl + "?loginId=" + loginId + "&timestamp=" + timestamp + "&nonce=" + nonce + "&sign=" + sign + "&client=sso-client1" + "&" + X_TENANT_ID + "=" + XTenantId;
+        String url = SsoRequestUtil.getDataUrl
+                + "?msgType=userInfo"
+                + "&loginId=" + loginId
+                + "&timestamp=" + timestamp
+                + "&nonce=" + nonce
+                + "&sign=" + sign
+                + "&client=sso-client1"
+                + "&" + X_TENANT_ID + "=" + XTenantId;
         // 返回给前端
         return SsoRequestUtil.request(url);
     }

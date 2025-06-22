@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.satoken.endpoint;
+package com.breeze.boot.satoken.endpoint.sso;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.processor.SaSsoServerProcessor;
-import com.breeze.boot.core.model.UserPrincipal;
-import com.breeze.boot.core.utils.Result;
-import com.breeze.boot.satoken.spt.IUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SsoServerEndPoint {
 
-    private final IUserDetailService userDetailService;
-
     /**
      * SSO-Server端：处理所有SSO相关请求
      * <p>
@@ -48,25 +43,10 @@ public class SsoServerEndPoint {
      * http://{host}:{port}/sso/signout		-- 单点注销地址（isSlo=true时打开），接受参数：loginId=账号id、sign=参数签名
      * </p>
      */
-    @RequestMapping({"/sso/auth", "/sso/doLogin", "/sso/checkTicket", "/sso/signout"})
+    @RequestMapping({"/sso/auth", "/sso/pushS", "/sso/doLogin", "/sso/checkTicket", "/sso/signout"})
     public Object ssoServerRequest() {
-        log.debug(SaHolder.getRequest().getRequestPath());
+        log.info("---------------- sso server 请求地址：{}", SaHolder.getRequest().getRequestPath());
         return SaSsoServerProcessor.instance.dister();
-    }
-
-    /**
-     * 获取数据接口（用于在模式三下，为 client 端开放拉取数据的接口）
-     */
-    @RequestMapping("/sso/getData")
-    public Result<UserPrincipal> userInfoData(String apiType, String loginId) {
-        log.info("---------------- 获取数据 ----------------");
-        // 校验签名：只有拥有正确秘钥发起的请求才能通过校验
-        String client = SaHolder.getRequest().getParam("client");
-        SaSsoServerProcessor.instance.ssoServerTemplate.getSignTemplate(client).checkRequest(SaHolder.getRequest());
-
-        UserPrincipal userPrincipal = userDetailService.loadUserByUserId(loginId);
-        // 自定义返回结果（模拟）
-        return Result.ok(userPrincipal);
     }
 
 }

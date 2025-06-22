@@ -20,12 +20,14 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.util.SaFoxUtil;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.RandomUtil;
+import com.breeze.boot.core.utils.BreezeTenantHolder;
 import com.dtflys.forest.Forest;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static cn.dev33.satoken.SaManager.log;
+import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
 /**
  * 封装一些 sso 共用方法
@@ -33,6 +35,7 @@ import static cn.dev33.satoken.SaManager.log;
  * @author gaoweixuan
  * @since 2024/09/24
  */
+@Slf4j
 public class SsoRequestUtil {
 
     /**
@@ -46,19 +49,30 @@ public class SsoRequestUtil {
     public static String authUrl = serverUrl + "/sso/auth";
 
     /**
+     * X-Tenant-Id=1
+     * &client=sso-client1
+     * &msgType=checkTicket
+     * &nonce=BXM41m0YR1KHvdZNaY6L
+     * &ssoLogoutCall=http://127.0.0.1:9002/sso/doLoginByTicket
+     * &ticket=FHdA3G44xjQCxiNMETcFSQRsRMEN0Bh5AQtQo59DPi3SSXj9Rw8Du2gShIHHEClD
+     * &timestamp=1750240101933
+     * &key=breeze
+     * <p>
      * SSO-Server端 ticket校验地址
      */
-    public static String checkTicketUrl = serverUrl + "/sso/checkTicket";
+    public static String checkTicketUrl = serverUrl + "/sso/pushS";
 
     /**
+     * msgType=signout&client=sso-client1&loginId=1111111111111111111
+     * &timestamp=1750297085905&nonce=y4TsMtsNGHZm8Gg2dm1Zlu0DJBjqtzdl&sign=bcae81f35a51efbc2a0ae5cf8c36a2d5
      * 单点注销地址
      */
-    public static String sloUrl = serverUrl + "/sso/signout";
+    public static String sloUrl = serverUrl + "/sso/pushS";
 
     /**
      * SSO-Server端 查询userinfo地址
      */
-    public static String getDataUrl = serverUrl + "/sso/getData";
+    public static String getDataUrl = serverUrl + "/sso/pushS";
 
     /**
      * 打开单点注销功能
@@ -77,8 +91,7 @@ public class SsoRequestUtil {
      * @return 返回的结果
      */
     public static SaResult request(String url) {
-        log.info(url);
-        return Forest.post(url).execute(SaResult.class);
+        return Forest.post(url).connectTimeout(100000).readTimeout(100000).addHeader(X_TENANT_ID, BreezeTenantHolder.getTenant()).execute(SaResult.class);
     }
 
     /**
@@ -90,20 +103,20 @@ public class SsoRequestUtil {
      * @param nonce     随机字符串
      * @return 签名
      */
-    public static String getSign(String XTenantId, Object loginId, String timestamp, String nonce) {
-        return SaSecureUtil.md5("X-Tenant-Id=" + XTenantId + "&client=sso-client1" + "&loginId=" + loginId + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
+    public static String getUserInfoSign(String XTenantId, Object loginId, String timestamp, String nonce) {
+        return SaSecureUtil.md5("X-Tenant-Id=" + XTenantId + "&client=sso-client1" + "&loginId=" + loginId + "&msgType=userInfo" + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
     }
+
     /**
      * 根据参数计算签名
      *
-     * @param XTenantId 租户
      * @param loginId   账号id
      * @param timestamp 当前时间戳，13位
      * @param nonce     随机字符串
      * @return 签名
      */
-    public static String getLogoutSign(String XTenantId, Object loginId, String timestamp, String nonce) {
-        return SaSecureUtil.md5("client=sso-client1" + "&loginId=" + loginId + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
+    public static String getSignoutSign(Object loginId, String timestamp, String nonce) {
+        return SaSecureUtil.md5("client=sso-client1" + "&loginId=" + loginId + "&msgType=signout" + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
     }
 
     /**
@@ -115,7 +128,7 @@ public class SsoRequestUtil {
      * @param nonce      nonce
      * @return {@link String }
      */
-    public static String getSignByLogoutCall(Object loginId, String autoLogout, String timestamp, String nonce) {
+    public static String getLogoutCallSign(Object loginId, String autoLogout, String timestamp, String nonce) {
         return SaSecureUtil.md5("client=sso-client1" + "&autoLogout=" + autoLogout + "&loginId=" + loginId + "&nonce=" + nonce + "&timestamp=" + timestamp + "&key=" + secretKey);
     }
 
@@ -123,13 +136,12 @@ public class SsoRequestUtil {
      * 校验ticket 时构建签名
      *
      * @param ticket        票
-     * @param ssoLogoutCall sso注销调用
      * @param timestamp     时间戳
      * @param nonce         nonce
      * @return {@link String }
      */
-    public static String getSignByTicket(String ticket, String ssoLogoutCall, String timestamp, String nonce) {
-        return SaSecureUtil.md5("client=sso-client1" + "&nonce=" + nonce + "&ssoLogoutCall=" + ssoLogoutCall + "&ticket=" + ticket + "&timestamp=" + timestamp + "&key=" + secretKey);
+    public static String getCheckTicketSign(String ticket, String timestamp, String nonce) {
+        return SaSecureUtil.md5("client=sso-client1" + "&msgType=checkTicket" + "&nonce=" + nonce + "&ticket=" + ticket + "&timestamp=" + timestamp + "&key=" + secretKey);
     }
 
     /**

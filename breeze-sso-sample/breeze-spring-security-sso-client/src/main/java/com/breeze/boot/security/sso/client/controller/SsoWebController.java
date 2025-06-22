@@ -18,11 +18,11 @@ package com.breeze.boot.security.sso.client.controller;
 
 import cn.dev33.satoken.util.SaResult;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.security.sso.client.security.exception.BizException;
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
 import com.breeze.boot.security.sso.client.util.SsoRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,11 +30,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Objects;
-import java.util.Optional;
-
-import static com.breeze.boot.core.constants.CoreConstants.X_TENANT_ID;
 
 /**
  * 前后台分离SSO
@@ -61,15 +56,12 @@ public class SsoWebController {
             String tokenStr = jwsTokenProvider.getTokenStr(request);
             jwsTokenProvider.verifyHMACToken(tokenStr);
             loginId = jwsTokenProvider.getTokenClaim(tokenStr, "LOGIN_ID");
-            Object backListId = redisTemplate.opsForValue().get("jwt:blacklist:" + loginId + ":" + tokenStr);
-            if (Objects.nonNull(backListId)) {
-                return Result.ok(Boolean.FALSE);
-            }
+            redisTemplate.opsForValue().get("jwt:blacklist:" + loginId + ":" + tokenStr);
+            log.error("当前登录 {}", loginId);
+            return Result.ok(Boolean.TRUE);
         } catch (Exception e) {
             return Result.ok(Boolean.FALSE);
         }
-        log.error("当前登录 {}", loginId);
-        return Result.ok(Boolean.TRUE);
     }
 
     /**
@@ -93,28 +85,25 @@ public class SsoWebController {
      * @param request 请求
      * @return {@link Result }<{@link ? }>
      */
-    @SneakyThrows
     @RequestMapping("/sso/doLoginByTicket")
     public Result<?> doLoginByTicket(String ticket, HttpServletRequest request) {
         // 获取当前 client 端的单点注销回调地址
-        String ssoLogoutCall = "";
         if (SsoRequestUtil.isSlo) {
-            ssoLogoutCall = request.getRequestURL().toString().replace("/sso/login", "/sso/logoutCall");
+            String url = request.getRequestURL().toString();
+            log.info("当前请求地址: {}", url);
         }
 
         // 校验 ticket
         String timestamp = String.valueOf(System.currentTimeMillis());    // 时间戳
         String nonce = SsoRequestUtil.getRandomString(20);        // 随机字符串
-        String sign = SsoRequestUtil.getSignByTicket(ticket, ssoLogoutCall, timestamp, nonce);    // 参数签名
-        String tenantId = Optional.ofNullable(request.getHeader(X_TENANT_ID)).orElse("");
+        String sign = SsoRequestUtil.getCheckTicketSign(ticket, timestamp, nonce);    // 参数签名
         String checkUrl = SsoRequestUtil.checkTicketUrl +
-                "?timestamp=" + timestamp +
-                "&client=sso-client1" +
+                "?client=sso-client1" +
+                "&msgType=checkTicket" +
                 "&nonce=" + nonce +
-                "&sign=" + sign +
                 "&ticket=" + ticket +
-                "&ssoLogoutCall=" + ssoLogoutCall +
-                "&" + X_TENANT_ID + "=" + tenantId;
+                "&timestamp=" + timestamp +
+                "&sign=" + sign;
 
         SaResult result = SsoRequestUtil.request(checkUrl);
 
@@ -126,7 +115,7 @@ public class SsoWebController {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             return Result.ok(jwsTokenProvider.createJwtToken(authentication));
         }
-        throw new RuntimeException(result.getMsg());
+        throw new BizException(result.getMsg());
     }
 
 }

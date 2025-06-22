@@ -129,6 +129,12 @@ public class SysUser extends IdBaseModel<SysUser> implements Serializable {
     private Integer isLock;
 
     /**
+     * 钉钉OpenId
+     */
+    @Schema(description = "钉钉OpenId")
+    private String dingOpenId;
+
+    /**
      * 租户ID
      */
     @Schema(description = "租户ID")

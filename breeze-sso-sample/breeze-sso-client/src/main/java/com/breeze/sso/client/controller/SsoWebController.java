@@ -16,9 +16,10 @@
 
 package com.breeze.sso.client.controller;
 
+import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.sso.model.SaCheckTicketResult;
 import cn.dev33.satoken.sso.processor.SaSsoClientProcessor;
-import cn.dev33.satoken.sso.template.SaSsoUtil;
+import cn.dev33.satoken.sso.template.SaSsoClientUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.breeze.boot.core.utils.Result;
@@ -50,7 +51,7 @@ public class SsoWebController {
      */
     @RequestMapping("/sso/getSsoAuthUrl")
     public Result<String> getSsoAuthUrl(String clientLoginUrl) {
-        String serverAuthUrl = SaSsoUtil.buildServerAuthUrl(clientLoginUrl, "");
+        String serverAuthUrl = SaSsoClientUtil.getSsoTemplate().buildServerAuthUrl(clientLoginUrl, "");
         return Result.ok(serverAuthUrl);
     }
 
@@ -67,6 +68,12 @@ public class SsoWebController {
         return Result.ok(StpUtil.getTokenValue());
     }
 
+    // 当前应用独自注销 (不退出其它应用)
+    @RequestMapping("/sso/logoutByAlone")
+    public Object logoutByAlone() {
+        StpUtil.logout();
+        return SaSsoClientProcessor.instance._ssoLogoutBack(SaHolder.getRequest(), SaHolder.getResponse());
+    }
     /**
      * 全局异常拦截
      *

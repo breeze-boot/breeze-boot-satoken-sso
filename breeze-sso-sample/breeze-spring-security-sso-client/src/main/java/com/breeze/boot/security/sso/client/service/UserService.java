@@ -26,6 +26,10 @@ import com.breeze.boot.security.sso.client.model.User;
  */
 public interface UserService {
 
+    User loadUserByUsername(String username);
+
     User loadUserByLoginId(String loginId);
+
+    User loadUserByMobile(String mobile);
 
 }

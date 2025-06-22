@@ -52,9 +52,6 @@ import com.google.common.collect.Sets;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -514,11 +511,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = this.getById(userId);
         AssertUtil.isNotNull(sysUser, USER_NOT_FOUND);
         UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        Assert.notNull(requestAttributes, "requestAttributes is null");
         return convertResponseUserInfo(userInfoDTO);
     }
 
+    @Override
+    public UserPrincipal loadUserByDingOpenId(String dingOpenId) {
+        SysUser sysUser = this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDingOpenId, dingOpenId));
+        AssertUtil.isNotNull(sysUser, USER_NOT_FOUND);
+        UserInfoDTO userInfoDTO = this.buildLoginUserInfo(sysUser);
+        return convertResponseUserInfo(userInfoDTO);
+    }
     /**
      * 按角色编码列出用户权限
      *

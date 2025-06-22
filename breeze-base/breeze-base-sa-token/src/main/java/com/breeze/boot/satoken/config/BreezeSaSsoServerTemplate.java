@@ -16,15 +16,21 @@
 
 package com.breeze.boot.satoken.config;
 
-import cn.dev33.satoken.config.SaSignConfig;
 import cn.dev33.satoken.secure.SaSecureUtil;
-import cn.dev33.satoken.sign.SaSignTemplate;
+import cn.dev33.satoken.sign.config.SaSignConfig;
+import cn.dev33.satoken.sign.template.SaSignTemplate;
+import cn.dev33.satoken.sso.config.SaSsoClientModel;
+import cn.dev33.satoken.sso.error.SaSsoErrorCode;
+import cn.dev33.satoken.sso.exception.SaSsoException;
 import cn.dev33.satoken.sso.template.SaSsoServerTemplate;
-import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
+import cn.dev33.satoken.util.SaFoxUtil;
 import com.breeze.boot.core.utils.AssertUtil;
+import com.breeze.boot.satoken.config.propertise.AesSecretProperties;
 import com.breeze.boot.satoken.model.BaseSysRegisteredClient;
 import com.breeze.boot.satoken.spt.IClientService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 import static com.breeze.boot.core.enums.ResultCode.CLIENT_IS_NOT_EXISTS;
 
@@ -41,11 +47,36 @@ public class BreezeSaSsoServerTemplate extends SaSsoServerTemplate {
     private final AesSecretProperties aesSecretProperties;
 
     /**
-     * 重写 [获取授权回调地址] 方法，改为从数据库中读取
+     * 校验配置的 AllowUrl 是否合规，如果不合规则抛出异常
+     *
+     * @param allowUrlList 待校验的 allow-url 地址列表
      */
-    @Override
-    public String getAllowUrl() {
-        return this.clientService.getAllRedirectUris();
+    public void checkAllowUrlList(List<String> allowUrlList) {
+        checkAllowUrlListStaticMethod(allowUrlList);
+
+        String allRedirectUris = this.clientService.getAllRedirectUris();
+        if (allRedirectUris == null || allRedirectUris.trim().isEmpty()) {
+            return; // 空值直接返回，避免后续异常
+        }
+
+        for (String url : allRedirectUris.split(",")) {
+            String trimmedUrl = url.trim();
+            if (!isValidUrl(trimmedUrl)) {
+                throw new IllegalArgumentException("发现非法 RedirectUri: " + trimmedUrl);
+            }
+        }
+    }
+
+    /**
+     * 校验 URL 是否合法（示例简单校验）
+     */
+    private boolean isValidUrl(String url) {
+        try {
+            new java.net.URL(url);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -53,6 +84,31 @@ public class BreezeSaSsoServerTemplate extends SaSsoServerTemplate {
         BaseSysRegisteredClient registeredClient = this.clientService.getByClientId(client);
         AssertUtil.isNotNull(registeredClient, CLIENT_IS_NOT_EXISTS);
         // 从数据库中获取
-        return new SaSignTemplate(new SaSignConfig(SaSecureUtil.aesDecrypt(this.aesSecretProperties.getAesSecret(), registeredClient.getClientSecret())));
+        String secretKey = SaSecureUtil.aesDecrypt(this.aesSecretProperties.getAesSecret(), registeredClient.getClientSecret());
+        SaSignConfig signConfig = new SaSignConfig(secretKey);
+        return new SaSignTemplate(signConfig);
+    }
+
+    @Override
+    public SaSsoClientModel getClientNotNull(String client) {
+        if (SaFoxUtil.isEmpty(client)) {
+            if (getConfigOfAllowAnonClient()) {
+                return getAnonClient();
+            } else {
+                throw new SaSsoException("client 标识不可为空");
+            }
+        } else {
+            BaseSysRegisteredClient registeredClient = this.clientService.getByClientId(client);
+            if (registeredClient == null) {
+                throw new SaSsoException("未能获取应用信息，client=" + client).setCode(SaSsoErrorCode.CODE_30013);
+            }
+            return new SaSsoClientModel()
+                    .setClient(registeredClient.getClientId())
+                    .setSecretKey(registeredClient.getClientSecret())
+                    .setAllow(registeredClient.getRedirectUris().split(","))
+                    .setIsSlo(true)
+                    .setIsPush(true)
+                    ;
+        }
     }
 }

@@ -17,12 +17,16 @@
 package com.breeze.boot.security.sso.client.controller;
 
 import com.breeze.boot.security.sso.client.security.jwt.BreezeJwsTokenProvider;
+import com.breeze.boot.security.sso.client.security.mobile.code.MobileCodeAuthenticationToken;
+import com.breeze.boot.security.sso.client.security.mobile.password.MobilePasswordAuthenticationToken;
 import com.breeze.boot.security.sso.client.security.model.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,19 +46,52 @@ public class LoginController {
 
     private final BreezeJwsTokenProvider jwsTokenProvider;
 
+    @Value("${spring.security.jwt.expiration:7200}")
+    private int expiration;
+
     /**
-     * 登录
+     * 用户名密码登录
      *
      * @param username 用户名
      * @param password 密码
      * @return {@link LoginInfo }
      */
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public LoginInfo login(String username, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         String accessToken = jwsTokenProvider.createJwtToken(authentication);
-        return LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).build();
+        return LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).expires((long) expiration).build();
+    }
+
+    /**
+     * 手机号验证码登录
+     *
+     * @param mobile 手机号
+     * @param code   验证码
+     * @return {@link LoginInfo }
+     */
+    @PostMapping("/mobileCodeLogin")
+    public LoginInfo mobileCodeLogin(String mobile, String code) {
+        MobileCodeAuthenticationToken authenticationToken = new MobileCodeAuthenticationToken(mobile.toLowerCase().trim(), code);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        String accessToken = jwsTokenProvider.createJwtToken(authentication);
+        return LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).expires((long) expiration).build();
+    }
+
+    /**
+     * 手机号密码登录
+     *
+     * @param mobile   手机号
+     * @param password 密码
+     * @return {@link LoginInfo }
+     */
+    @PostMapping("/mobilePasswordLogin")
+    public LoginInfo mobilePasswordLogin(String mobile, String password) {
+        MobilePasswordAuthenticationToken authenticationToken = new MobilePasswordAuthenticationToken(mobile.toLowerCase().trim(), password);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        String accessToken = jwsTokenProvider.createJwtToken(authentication);
+        return LoginInfo.builder().tokenType("Bearer").accessToken(accessToken).expires((long) expiration).build();
     }
 
 }

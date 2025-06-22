@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.breeze.boot.config;
+package com.breeze.sso.client.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.breeze.boot.core.enums.ResultCode;

@@ -45,6 +45,8 @@ public enum LogType {
      * 用户名登录
      */
     USERNAME_LOGIN(3, "用户名登录"),
+
+    DING_LOGIN(4, "钉钉登录"),
     /**
      * 手机登录
      */
