@@ -73,7 +73,7 @@ public class SysSsoClientController {
      * @return {@link Result}<{@link Page}<{@link SsoClientVO}>>
      */
     @Operation(summary = "列表")
-    @GetMapping
+    @PostMapping("/page")
     @SaCheckPermission("auth:ssoClient:list")
     public Result<Page<SsoClientVO>> list(SsoClientQuery ssoClientQuery) {
         return Result.ok(this.sysSsoClientService.listPage(ssoClientQuery));

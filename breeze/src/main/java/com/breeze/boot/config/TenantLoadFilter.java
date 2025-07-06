@@ -56,12 +56,12 @@ public class TenantLoadFilter extends GenericFilterBean {
         try {
             String headerTenantId = request.getHeader(X_TENANT_ID);
             String paramTenantId = request.getParameter(X_TENANT_ID);
-            if (StrUtil.isNotBlank(headerTenantId)) {
+            if (StrUtil.equals("undefined", headerTenantId) || StrUtil.equals("undefined", paramTenantId)) {
+                throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
+            } else if (StrUtil.isNotBlank(headerTenantId)) {
                 BreezeTenantHolder.setTenant(Long.parseLong(headerTenantId));
             } else if (StrUtil.isAllNotBlank(paramTenantId)) {
                 BreezeTenantHolder.setTenant(Long.parseLong(paramTenantId));
-            } else if (StrUtil.equals("undefined", headerTenantId) || StrUtil.equals("undefined", paramTenantId)) {
-                throw new BreezeBizException(ResultCode.TENANT_NOT_FOUND);
             }
             log.info("当前进入的请求： {}  系统租户： {}  {} ", request.getRequestURI(), paramTenantId, headerTenantId);
             filterChain.doFilter(request, response);
