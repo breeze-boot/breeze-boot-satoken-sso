@@ -27,7 +27,6 @@ import com.breeze.boot.log.bo.SysLogBO;
 import com.breeze.boot.log.enums.LogType;
 import com.breeze.boot.log.events.PublisherSaveSysLogEvent;
 import com.breeze.boot.log.events.SysLogSaveEvent;
-import com.google.common.collect.Lists;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -40,6 +39,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.breeze.boot.core.constants.CoreConstants.USER_TYPE;
@@ -70,15 +70,15 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         for (String logId : logIds) {
             SaSession session = StpUtil.getSessionBySessionId(logId);
             UserPrincipal userPrincipal = session.getModel(USER_TYPE, UserPrincipal.class);
-            String token = session.getToken();
+            List<String> tokenSignList = Collections.singletonList(session.getToken());
             resultList.add(
                     OnlineUserVO.builder()
                             .userId(userPrincipal.getId())
                             .userCode(userPrincipal.getUserCode())
                             .username(userPrincipal.getUsername())
                             .displayName(userPrincipal.getDisplayName())
-                            .loginDeviceCount(1)
-                            .loginDevice(Lists.newArrayList(token))
+                            .loginDeviceCount(tokenSignList.size())
+                            .loginDevice(tokenSignList)
                             .sessionCreateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(session.getCreateTime()), ZoneId.systemDefault()))
                             .build()
             );

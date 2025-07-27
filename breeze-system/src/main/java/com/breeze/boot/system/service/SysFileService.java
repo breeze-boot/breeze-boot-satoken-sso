@@ -18,8 +18,8 @@ package com.breeze.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.breeze.boot.core.model.FileInfo;
 import com.breeze.boot.core.utils.Result;
+import com.breeze.boot.system.model.dto.FileInfo;
 import com.breeze.boot.system.model.entity.SysFile;
 import com.breeze.boot.system.model.form.FileBizForm;
 import com.breeze.boot.system.model.query.FileQuery;

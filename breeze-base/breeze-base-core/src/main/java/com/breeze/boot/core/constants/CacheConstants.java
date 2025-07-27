@@ -24,6 +24,7 @@ package com.breeze.boot.core.constants;
  */
 public class CacheConstants {
 
+    public static final String CONFIG_KEY_PREFIX = "config:";
 
     /**
      * 验证电话号码

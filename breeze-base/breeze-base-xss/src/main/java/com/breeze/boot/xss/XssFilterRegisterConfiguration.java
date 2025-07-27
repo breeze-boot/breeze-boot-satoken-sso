@@ -16,18 +16,17 @@
 
 package com.breeze.boot.xss;
 
+import com.breeze.boot.core.utils.LoadAnnotationUtils;
 import com.breeze.boot.xss.config.XssProperties;
 import com.breeze.boot.xss.filters.XssFilter;
-import jakarta.annotation.Resource;
-import jakarta.servlet.DispatcherType;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
@@ -36,19 +35,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @author gaoweixuan
  * @since 2022-10-21
  */
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(XssProperties.class)
+@EnableConfigurationProperties({XssProperties.class})
 public class XssFilterRegisterConfiguration {
 
-    /**
-     * xss属性
-     */
     private final XssProperties xssProperties;
-
-    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
-
     private final ApplicationContext applicationContext;
+    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     /**
      * xss过滤器登记
@@ -56,10 +51,12 @@ public class XssFilterRegisterConfiguration {
      * @return {@link XssFilter }
      */
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE + 1)
     public XssFilter xssFilter() {
-        return new XssFilter(this.xssProperties,
-                this.requestMappingHandlerMapping,
-                this.applicationContext);
+        log.info("----- 初始化xss需要被过滤的路径开始 -----");
+        LoadAnnotationUtils.loadControllerMapping(xssProperties, applicationContext, requestMappingHandlerMapping.getHandlerMethods());
+        log.info("----- 初始化xss需要被过滤的路径结束 -----");
+        return new XssFilter(this.xssProperties);
     }
 
 }

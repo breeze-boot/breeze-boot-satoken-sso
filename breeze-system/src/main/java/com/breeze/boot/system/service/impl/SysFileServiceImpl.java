@@ -24,12 +24,12 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.breeze.boot.core.enums.ContentType;
-import com.breeze.boot.core.model.FileInfo;
 import com.breeze.boot.core.utils.AssertUtil;
 import com.breeze.boot.core.utils.Result;
 import com.breeze.boot.local.operation.LocalStorageTemplate;
 import com.breeze.boot.oss.operation.MinioOssTemplate;
 import com.breeze.boot.system.mapper.SysFileMapper;
+import com.breeze.boot.system.model.dto.FileInfo;
 import com.breeze.boot.system.model.entity.SysFile;
 import com.breeze.boot.system.model.form.FileBizForm;
 import com.breeze.boot.system.model.query.FileQuery;

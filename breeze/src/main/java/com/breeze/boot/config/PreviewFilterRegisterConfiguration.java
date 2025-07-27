@@ -37,7 +37,7 @@ public class PreviewFilterRegisterConfiguration {
     public FilterRegistrationBean<Filter> previewRegisterConfiguration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         // 过滤器要设置最先执行
-        registration.setOrder(Integer.MAX_VALUE - 1);
+        registration.setOrder(Integer.MAX_VALUE - 3);
         registration.setDispatcherTypes(DispatcherType.REQUEST);
         registration.setFilter(new PreviewFilter());
         registration.addUrlPatterns("/*");
